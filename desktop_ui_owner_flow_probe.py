@@ -91,7 +91,7 @@ def test_case(source_kind):
 def main():
     assert test_case("csv")=="csv"
     assert test_case("xlsx")=="xlsx"
-    print("HOSTED_WINDOWS_TK_OWNER_ACTUAL_BUTTON_FLOW_PASS csv+xlsx file→sheet→SHA→mapping→rights/privacy→fresh folder→whole folder verification; not physical Win10/11 owner signoff")
+    print("HOSTED_WINDOWS_TK_OWNER_ACTUAL_BUTTON_FLOW_PASS csv+xlsx file-sheet-SHA-mapping-rights/privacy-new_folder-whole_folder_verification; not physical Win10/11 owner signoff")
 
 if __name__=="__main__":
     main()
