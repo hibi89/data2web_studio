@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 85% 공식 완료 판정 왜 보류되는가 (산정 근거 확정 대기)
+- **최종설계 공식 완성률: UNASSESSED / 사용자 목표85 미인증.** 33개 정본 요구의 소유자 승인 가중치가 존재하지 않고, 12개 항목에는 실환경/법적·고객 수용이 남아 있음. 70→85 UI·ZIP 단계 기술 통과와 전체 공식85% 완료는 별개.
+- [**소유자 승인 최소 개입 결정안**](docs/OWNER_85_COMPLETION_DECISION_20261114.md)을 새로 작성. 전수 33개를 누락 없이 두 대안 A=동등비중 21/33(기술 증거 63.6%), B=입력18·전처리20·생성26·납품20·비기능16(기술 증거 69/100)으로 **시험만** 수행. 둘 다 **사용자 미승인/비공식/고객 법적 수용 미인증**; 85를 맞추기 위한 가중치 재조정 금지. B를 승인해도 추가 최소 16점 수용 근거가 필요.
+- 형이 직접 결정해야 할 최소 사항: 가중치 A/B 또는 수정안 승인, 실제 Win10/11 PC에서 `python studio.py self-check --browsers` 실행 증거; 실제 상용 판매 전 데이터권/개인정보·LICENSE/NOTICE·SKU·지원/환불은 **별도 명시 승인**. 코딩·QA·문서·크몽 원장 동기화는 AI 담당.
+- 최신 검증 기능 SHA `441506eda275b1e3766a4d018741ebfa1ae030b7`, [Actions #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) Windows/Ubuntu 249×2 PASS, 4/4 SUCCESS, hosted Tk CSV/XLSX 실제 GUI 클릭·네이티브 Chrome/Edge 합성 PASS. **실 고객 OS·권리 승인으로 전용하지 않음.**
+- [작업중]·RELEASE HOLD/SALE NO-GO 유지, 원본 및 고객자료/기존 브랜치 보존, Production/Vercel 미적용. 문서 제안은 공식률 변경이나 판매 승인 아님.
+
+## 이전 상태 이력
 ## 2026-11-14 KST · 최종설계 R01–R33 전체85% 목표 추가 개발
 - **공식 최종완성률 UNASSESSED, 전체 85% 미인증.** 사용자 승인 합100 요구 가중치·실고객 Win10/11/Excel·사용권/사업자 인수 부족. 내부 기술 단계 85%와 혼용 금지.
 - **기능 SHA 441506eda275b1e3766a4d018741ebfa1ae030b7** [Actions #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) **4/4 SUCCESS**, Windows2025/Ubuntu24.04 Python3.11 각각 249/249 PASS·0 FAIL/0 SKIP, hosted Tk 실제 CSV/XLSX UI 버튼 전경로 PASS, 설치 Chrome/Edge 네이티브 headless self-check PASS, Playwright Chrome/Edge/Chromium·Lite 원본 골든·10k×20 합성 PASS.

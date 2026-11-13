@@ -1,3 +1,7 @@
+## 2026-11-14 · 공식 전체 85% 미도달 원인 및 사용자 결정안
+
+[33개 최종설계 요구의 A/B 산정 기준과 최소 사용자 개입](docs/OWNER_85_COMPLETION_DECISION_20261114.md)을 작성했다. **가중치와 임시 시뮬레이션은 미승인**이며 공식 완성률은 `UNASSESSED`. 동일 합성/호스팅 실행 증거를 85%로 바꾸지 않는다. 실고객 Windows10/11·고객 Excel·상업 사용권·SKU/지원·환불/개인정보 보유 정책은 별도.
+
 ## 2026-11-14 · 고객PC 합성 자체검증·소스변경 방어 추가
 
 기능 SHA 441506eda275b1e3766a4d018741ebfa1ae030b7 [실검증 CI #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) Win/Ubuntu 각249 PASS, hosted Windows Tk CSV/XLSX 실제 버튼 E2E 및 Chrome·Edge 네이티브 headless 합성 HTML PASS.
