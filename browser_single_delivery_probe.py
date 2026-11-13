@@ -9,6 +9,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright, expect
 from verify_delivery import verify_zip
+from verify_customer_folder import verify_customer_folder
 
 ROOT=Path(__file__).resolve().parent
 def main():
@@ -31,6 +32,7 @@ def main():
         assert metadata["rows"]==3
         assert not metadata["sale_approved"]
         assert verify_zip(destination/"delivery.zip")["rows"]==3
+        assert verify_customer_folder(destination)["rows"]==3
         receipt=json.loads((destination/"receipt.json").read_text(encoding="utf-8"))
         assert receipt["source_sha256"]==digest
         again=subprocess.run(command,cwd=ROOT,text=True,encoding="utf-8",capture_output=True)

@@ -52,6 +52,8 @@ def main():
         assert process.returncode==0,process.stdout+process.stderr
         assert json.loads(process.stdout)["rows"]==4
         assert verify_zip(zipped)["rows"]==4
+        # Individual new package files do not form a full customer folder here.
+        # The complete folder verifier is covered by deliver-append CI unit tests.
         assert json.loads(receipt.read_text(encoding="utf-8"))["source_receipts"][2]["sheet"]=="Approved"
         changed=directory/"changed.csv"
         changed.write_text('id,title,category,amount\nR-1,"Replaced local CSV",Z,11\n',encoding="utf-8")
