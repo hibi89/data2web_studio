@@ -28,6 +28,8 @@ def deliver_single(source, new_directory, *,
             any(c not in "0123456789abcdef" for c in expected_sha256)):
         raise ValueError("Exact lowercase source SHA256 required")
     source=Path(source)
+    if source.suffix.lower()==".xlsx" and not sheet:
+        raise ValueError("XLSX delivery requires owner-selected worksheet")
     assert_no_links(source)
     # Preflight all content/mapping/size and current source before making a folder.
     columns,records,digest=read_table(source,sheet=sheet,header_row=header_row,
