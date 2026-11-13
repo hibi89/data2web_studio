@@ -1,5 +1,11 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 소유자 실제 Windows PC에서 EXE + Chrome·Edge 합성 자체검증 PASS 보고
+- **사용자 제공 PowerShell 5.1 콘솔:** `DATA2WEB-LOCAL.exe self-check --browsers` → `PASS_SYNTHETIC_ONLY`; `chrome=PASS_SYNTHETIC_LOCAL_FILE`, `edge=PASS_SYNTHETIC_LOCAL_FILE`, `local_folder_verified=true`, `platform_family=Windows`. 외부 데이터 업로드 필요0; 고객 원본·상업 권리 미승인 필드 `false` 그대로.
+- 이는 기존 [native workflow #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029)의 hosted 검사와 구별되는 **사용자 제공 실PC 검사 결과**. **Windows10/11 정확 버전과 설치 EXE SHA256은 아직 미제공**, 실제 고객·소유권 독립 수용은 미검증. 정본 exe 해시 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`(hosted CI 원본), 사용자 값과 대조 대기.
+- R23/R32 수용 관련 증거 진전은 있으나 고정 R01–33 전체 **72/100 그대로**, 목표85까지13점 부족, `[작업중]`·RELEASE HOLD·SALE NO-GO. 보안·권리·실고객 수용은 대체 불가. 개인 계정명/PC 경로를 GitHub에 저장하지 않음. [상세/다음 OS·SHA 확인](docs/R23_R32_OWNER_WINDOWS_SELF_CHECK_20261114.md).
+
+
 ## 2026-11-14 KST · R32 독립 Windows EXE 시범판 최초 성공 (Python 경로 의존성 축소)
 - **정확 제품 소스 SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d`**, [hosted Windows native EXE workflow #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) **1/1 SUCCESS**, PyInstaller6.22.3 onedir 빌드 + 합성 Chrome/Edge + ZIP·receipt 검증 + no-clobber/tamper HOLD + 실제 Tk GUI 창 검사 PASS. 비공개 시범 artifact `DATA2WEB-UNSIGNED-OWNER-PREVIEW-WINDOWS` ID14085058847, 7일 보존(2026-11-21 08:27 KST 만료). Python 바이너리가 기본 PATH에 없는 조건에서 독립 EXE 실행 검증.
 - 같은 정확 SHA [Windows/Ubuntu/browser CI #43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) **4/4 SUCCESS** (Win Python291PASS, Ubuntu290PASS/1SKIP, Chrome·Edge/Chromium E2E PASS), [R01–33 최종설계 게이트 #43527161439](https://github.com/hibi89/data2web_studio/actions/runs/43527161439) SUCCESS.

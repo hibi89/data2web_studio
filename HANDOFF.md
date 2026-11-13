@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 사용자 PC 증거 인수인계 — 2026-11-14 KST
+1. **목표·용도·정본:** DATA2WEB Studio CSV/JSON/TSV/XLSX→오프라인 HTML/ZIP/로컬 Windows EXE; R01~R33 고정100점, 목표85점.
+2. **변경·진전:** 사용자 실Windows PC PowerShell5.1에서 unsigned native EXE `self-check --browsers` 실행 후 `PASS_SYNTHETIC_ONLY`, Chrome·Edge `PASS_SYNTHETIC_LOCAL_FILE`, `local_folder_verified=true` 사용자 전달. 코드/가중치/고객데이터 변경 없음.
+3. **테스트:** 소유자 실PC 합성 self-check **PASS(사용자 제공 로그)**. 기존 native hosted SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d` [run #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) 1/1, Python/browser [#43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) 4/4. 실PC EXE SHA/OS10·11 정확 버전·고객 원본 검증은 **아직 없음**.
+4. **현재:** 72/100 Verified·11 PENDING28점·85까지13점. `[작업중]`, RELEASE HOLD/SALE NO-GO/크몽 미등록.
+5. **장애·대안:** GitHub hosted 검증과 사용자 제공 실PC 스모크는 출처 구분. 실PC SHA256/OS Caption·Build 미확인 → 사용자에게 2줄 PowerShell로 확인 요청. 원본 고객 데이터 업로드 금지.
+6. **저장소/브랜치/기준:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113` 이전 검증 문서 HEAD `396c0206f7c8580e9d83f1d2ec396a57b5778cd6`. EXE 소스 `96e2e1df`; SHA256 정본 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`. PR#4 Draft.
+7. **환경·Production:** 소유자 PC Windows, PowerShell5.1, Chrome·Edge 로컬 파일 검사 PASS. Python 추가 설치 없이 Windows EXE. Production/Vercel 미적용.
+8. **원본·백업·보안:** 고객 데이터 자동 수집0, 원본·점수표 수정0, 사용자 경로·계정명 GitHub 기록0; 최신 안전 소스는 이전 `396c0206`. 판매·실 고객 권리/서명 미승인.
+9. **다음 순서:** OS+EXE SHA값 회신 확인→사용자 소유 합성 파일만으로 GUI 납품 추가 점검→라이선스/개인정보/운영 조건의 명시 승인→조건 만족 요구만 점수 인정, 85 미달시 HOLD 유지.
+10. **검증 시점/범위:** 2026-11-14 KST 사용자 제공 실PC 터미널 출력 1건; **제삼자 attestation 및 정확 OS/EXE SHA 미검증**, 본 보고 문서 커밋은 별도 HEAD 확인. [세부 근거](docs/R23_R32_OWNER_WINDOWS_SELF_CHECK_20261114.md).
+
 ## 최신 인수인계 — 2026-11-14 KST · 네이티브 EXE 실구동 PASS / 85점 외부 수용 대기
 1. **제품·기술·정본:** DATA2WEB Studio; CSV/JSON/TSV/XLSX → 로컬 GUI·HTML/ZIP, R01–R33 고정 배점 100점·목표85점.
 2. **완료·근거:** source `96e2e1dff9976773bf3d3b2670ba6763ee69292d`에서 PyInstaller6.22.3 onedir native Windows `.exe` 신규 빌드, `native_windows_entry.py`, `native_windows_acceptance.py`, `.github/workflows/native-windows-owner-preview.yml` 추가. Python PATH 없는 native CLI/GUI·브라우저·synthetic deliver·verify·tamper/overwrite 거부 검증.
