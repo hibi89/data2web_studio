@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 소유자 PC의 Windows 11 Pro 빌드 및 EXE 정본 SHA256 일치 확인
+- **사용자 제공 실제 Windows 명령:** `Get-CimInstance Win32_OperatingSystem` 출력 `Microsoft Windows 11 Pro`, `Version=10.0.26200`, `BuildNumber=26200` → **Windows 11 Pro 26200 확인**(Windows 시스템의 내부 버전 10.0은 Windows11과 모순 아님).
+- `Get-FileHash .\\DATA2WEB-LOCAL.exe -Algorithm SHA256` 소유자 출력 `87D0D28222A052CD5C8F4DA48922376EC72A604283B8021A775199F4FA0F4718`; GitHub native workflow [#43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) EXE `sha256=87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`와 **대소문자 무시한 64자리 완전 일치**. 출처와 실행물 버전 동일성 사용자 제공 증거 확보.
+- 앞선 소유자 PC `self-check --browsers`의 Windows/Chrome/Edge 합성 스모크 `PASS_SYNTHETIC_ONLY`와 **연결된 정본 EXE**임이 확인됨. **소유자 Windows11 실제 PC의 로컬 합성 자가검사는 PASS**, 고객 실원본/실납품/Windows10/macOS/서명·판매 적합성/독립 보안감사는 미검증. 콘솔 출력은 사용자 보고값이며 기기 원격 직접 제어·제3자 attestation 아님.
+- **가중 최종완성률 72/100 유지 (85까지13, 11항목 PENDING).** R23/32에 실제 Win11 실장비 증거를 추가하였으나 개별 항목의 *전체* 수용조건(Win10/macOS, 고객 독립 인수, 권리/서명/지원)을 충족하지 못해 각 점수는 0. `[작업중]`/RELEASE HOLD/SALE NO-GO, PR#4 Draft, 원본·점수표 수정0.
+- 검증된 기초 제품 문서 SHA `37d4ee803c88c302c3a7d82838cb8717aecfb911`: [Python+browser CI #43528997740](https://github.com/hibi89/data2web_studio/actions/runs/43528997740) **4/4 SUCCESS**, [blueprint gate #43528998070](https://github.com/hibi89/data2web_studio/actions/runs/43528998070) SUCCESS. 다음: 실제 소유자 GUI `DATA2WEB-LOCAL.exe desktop` 사용성 검증, 고객 사용권/운영 정책 명시 승인 별도.
+
+
 ## 2026-11-14 KST · 소유자 실제 Windows PC에서 EXE + Chrome·Edge 합성 자체검증 PASS 보고
 - **사용자 제공 PowerShell 5.1 콘솔:** `DATA2WEB-LOCAL.exe self-check --browsers` → `PASS_SYNTHETIC_ONLY`; `chrome=PASS_SYNTHETIC_LOCAL_FILE`, `edge=PASS_SYNTHETIC_LOCAL_FILE`, `local_folder_verified=true`, `platform_family=Windows`. 외부 데이터 업로드 필요0; 고객 원본·상업 권리 미승인 필드 `false` 그대로.
 - 이는 기존 [native workflow #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029)의 hosted 검사와 구별되는 **사용자 제공 실PC 검사 결과**. **Windows10/11 정확 버전과 설치 EXE SHA256은 아직 미제공**, 실제 고객·소유권 독립 수용은 미검증. 정본 exe 해시 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`(hosted CI 원본), 사용자 값과 대조 대기.

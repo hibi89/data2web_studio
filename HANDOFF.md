@@ -1,5 +1,18 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 보충 · 2026-11-14 KST · 소유자 Windows11/실 EXE 정본 해시 일치
+1. **목표/정본:** DATA2WEB Studio, R01–R33 고정 100점/85목표, 오프라인 데이터→HTML·ZIP, Windows 로컬 EXE 시범.
+2. **완료/변경:** 사용자 PowerShell에서 `Microsoft Windows 11 Pro`, `Version=10.0.26200`, `Build=26200` 확인. 실행 중인 `DATA2WEB-LOCAL.exe` SHA256=`87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`가 hosted native CI artifact 원본과 정확 일치, 앞선 Windows11 소유자 Chrome/Edge synthetic `PASS_SYNTHETIC_ONLY`와 동일 EXE.
+3. **검증:** 사용자 제공 OS/EXE hash와 synthetic self-check 출력은 **현장 소유자 PC PASS**, 다른 사람 고객 PC/Win10/macOS/코드서명/실 고객 원본은 **NOT VERIFIED**. 제품 이전 HEAD `37d4ee803c88c302c3a7d82838cb8717aecfb911` [Actions#43528997740](https://github.com/hibi89/data2web_studio/actions/runs/43528997740) 4/4 PASS, [gate#43528998070](https://github.com/hibi89/data2web_studio/actions/runs/43528998070) PASS.
+4. **상태:** 고정점수 72/100(22 VERIFIED), 11 PENDING 28점, 목표85 부족13점. R23/R32는 일부 실장비 증거 진척되나 전체조건 미충족. `[작업중]`/RELEASE HOLD/SALE NO-GO.
+5. **오류/차단:** EXE 매칭·OS 버전 미확인 문제 해결. 현장 GUI/실업무 자료·권리/상업 사용 승인/외부 침투/Windows10/macOS는 미확인. 반복 동일 self-check 불필요.
+6. **저장소:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR#4 Draft, EXE 기준 소스 `96e2e1dff9976773bf3d3b2670ba6763ee69292d`; 문서 반영 전 HEAD `37d4ee803c88c302c3a7d82838cb8717aecfb911`.
+7. **Production/환경:** 사용자 Win11 Pro build26200, GitHub hosted Win PyInstaller 6.22.3, EXE unsigned; `DATA2WEB-LOCAL.exe desktop`는 다음 소유자 현장 GUI 검증. Vercel Production 미적용.
+8. **원본/보안/백업:** R01–33/점수표/고객자료/원본 소스 불변; 사용자 계정명·사용자 로컬 경로 저장 안 함. 버전 대조는 SHA256만 기록, 고객 데이터 제출 없음.
+9. **우선순위:** 소유자 PC GUI 창/로컬 시각 검수 → Windows10/macOS 실제 수용·LICENSE/NOTICE·개인정보/보존·지원 환불/권리 소유자 승인 → 가중 요구별 진척 재산정. 검증 없는 85점 금지.
+10. **기준 시점/범위:** 2026-11-14 KST 사용자 제공 PowerShell OS/파일 해시, GitHub Actions 운영 이력 검증. 문서 신규 HEAD/CI는 커밋 후 확인.
+
+
 ## 최신 사용자 PC 증거 인수인계 — 2026-11-14 KST
 1. **목표·용도·정본:** DATA2WEB Studio CSV/JSON/TSV/XLSX→오프라인 HTML/ZIP/로컬 Windows EXE; R01~R33 고정100점, 목표85점.
 2. **변경·진전:** 사용자 실Windows PC PowerShell5.1에서 unsigned native EXE `self-check --browsers` 실행 후 `PASS_SYNTHETIC_ONLY`, Chrome·Edge `PASS_SYNTHETIC_LOCAL_FILE`, `local_folder_verified=true` 사용자 전달. 코드/가중치/고객데이터 변경 없음.
