@@ -65,7 +65,6 @@ def verify_zip(path):
                 raise ValueError("Embedded data and manifest disagree")
             sources=manifest.get("source_receipts")
             if sources is not None:
-                import hashlib
                 if (not isinstance(sources,list) or not 2<=len(sources)<=10 or
                         not all(isinstance(x,dict) and x.get("position")==i+1 and
                                 isinstance(x.get("sha256"),str) and
