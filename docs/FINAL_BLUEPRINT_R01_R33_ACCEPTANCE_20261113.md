@@ -4,6 +4,11 @@
 
 **실행 증거:** 소스 441506eda275b1e3766a4d018741ebfa1ae030b7, [GitHub Actions #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) 4/4 SUCCESS. 호스팅 Windows Server2025 Python3.11 249/249 PASS, Ubuntu24.04 Python3.11 249/249 PASS. Windows 실제 Tkinter UI에서 합성 CSV/XLSX 두 경로를 파일선택·시트·열·권리/개인정보 승인·고객폴더 생성까지 버튼 클릭 PASS. Windows 설치 Chrome·Edge에서 Playwright와 네이티브 headless HTML 직접 렌더 PASS; Ubuntu Chromium 및 실제 upstream REA Lite pinned golden PASS. 고객 Windows10/11 PC/실업무 Excel/상용 권리는 미검증.
 
+## 2026-11-14 KST · R16 인쇄·접근성 실검증 보강 (공식률 미확정)
+- 정확 소스 `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85` [GitHub CI #43506243118](https://github.com/hibi89/data2web_studio/actions/runs/43506243118) **4/4 SUCCESS**. Win/Ubuntu Python 각249 PASS, Chromium·Chrome·Edge에서 실제 A4 PDF 1/3·2/3 화면 페이징/키보드 Space 확인, 파일 외부요청0. 현재 페이지 50행 출력 범위 명시, 실 고객 프린터 육안/Win10/11 인수 미검증.
+- 기존 R16 '부분'에 추가 기술 근거 확보. R01–R33 최종설계 전체/사용자 승인 가중치 원칙은 그대로며, **가중치 B안 72/100·A안 22/33은 미승인 참고 시뮬레이션**. 공식 최종률 `UNASSESSED`.
+- [R16 증거와 실패 복구 기록](R16_PRINT_AND_KEYBOARD_ACCEPTANCE_20261114.md).
+
 ## 최종설계 전체 33개 요구별 검증표
 
 | 요구 | 사용자 정본 수용 범위 | 승인 가중치 | 코드·실행근거 | 확인된 범위 | 남은 한계 |
@@ -23,7 +28,7 @@
 | R13 | 최대 10개 파일 개별 SHA·승인·동일 순서 헤더 append만, JOIN 금지 | **미승인** | `data2web_append.py, test_final_blueprint.py, browser_final_blueprint_probe.py` | 합성·브라우저 PASS | 고객 실제 다중파일 승인 필요 |
 | R14 | 완전 독립 오프라인 HTML/CSS/JS | **미승인** | `data2web_web.py, browser_p85_probe.py` | 실브라우저 합성 PASS | 실고객 전달 하드웨어 검증 별도 |
 | R15 | 검색/다중 카테고리/정렬/상세/페이지/반응형 | **미승인** | `data2web_web.py, browser_p85_probe.py` | 실브라우저 합성 PASS | 복수 선택 UX 실구매자 검수 미실시 |
-| R16 | 3테마/제목/메타/한국어 인쇄 | **미승인** | `data2web_web.py, test_acceptance.py, browser_p85_probe.py` | 부분 | 실 프린터/인쇄 PDF 검증 미완 |
+| R16 | 3테마/제목·메타/한국어 A4 인쇄 대응 | **미승인** | `data2web_web.py`, `browser_print_accessibility_probe.py`, `test_acceptance.py` (3테마·A4 PDF 인쇄·최대50행 현재페이지 범위 명시, Space/Enter 키 상세보기) | **Chromium·Win Chrome·Edge 실제 file:// A4 PDF·DOM 출력 PASS**, 코드 `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85`, Actions #43506243118 | 실제 고객 Win10/11/종이 프린터·한글 글리프 시각 확인은 미검증, 전체 행 PDF 인쇄 기능은 계약 범위 밖 |
 | R17 | 동일 헤더 CSV 교체·명시 승인·새 HTML 저장/재열기 | **미승인** | `browser_probe.py, browser_final_blueprint_probe.py` | 실브라우저 합성 PASS | 변경자료는 원본 SHA/소유권 새로 확인 필요 |
 | R18 | 선택형 설명 가능 막대차트·요약·출처/계산법 | **미승인** | `data2web_web.py, browser_p85_probe.py` | 실브라우저 합성 PASS | 금액 합계는 JS 부동소수 근사; 회계 정확성 미보장 |
 | R19 | 평문 포함 경고와 동의 | **미승인** | `studio.py, data2web_web.py` | 합성·실브라우저 PASS | 개인정보 실 사용권 확인 별도 |

@@ -1,5 +1,15 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 사용자 전체 최종설계 85% 목표 진행(기술 R16 추가 검증)
+- **사용자 정본 전체 R01~R33 기준 공식 완성률 `UNASSESSED` · 85% 미인증.** 최초 21개 합성 기술 근거에서 **R16 인쇄·키보드 기능**이 실브라우저 QA PASS를 확보해 **22개 기술 범위**로 증가. 사용자 승인 가중치 없으므로 기술 근거 수를 공식률로 환산하지 않는다.
+- 정확 기능 SHA `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85` [Actions #43506243118](https://github.com/hibi89/data2web_studio/actions/runs/43506243118) **4/4 SUCCESS**, Windows Server2025/Ubuntu24.04 Python3.11 각 249/249 PASS. 실제 file:// Chromium/Win Chrome·Edge **A4 PDF 생성·화면 페이지별 50행 범위·Space/Enter·ARIA 및 원격요청0 PASS**. 기존 실제 Tk CSV/XLSX·입력 SHA·고객폴더 ZIP+영수증·원본 Lite golden·1만행 성능 회귀도 PASS.
+- 변경 기능: `data2web_web.py` A4 @page, 인쇄 테이블 줄바꿈/반복 헤더 및 범위 고지, 출력 시 이전 선택 상세 숨김, 키보드 Space/Enter 및 행 접근성 라벨. `browser_print_accessibility_probe.py` 실제 페이지 1/2 PDF 구조·A4·pdf text extraction과 키보드 E2E. **실물 프린터 시각 검증/실구매자 OS는 미검증**.
+- **실패 복구:** 최초 Actions #43505858144는 PDF 텍스트 추출 순서와 이전 선택 상세를 잘못 가정하여 브라우저 QA FAIL. 검증방법과 인쇄 콘텐츠를 분리 개선하여 #43506243118 PASS. [자세한 실증](docs/R16_PRINT_AND_KEYBOARD_ACCEPTANCE_20261114.md).
+- **미승인 참고 산정안만:** A 동등 22/33≈66.7%, B 가중 72/100 기술 근거 상한. 둘 다 **공식률 아님**, 형의 가중치 확정과 실 고객/권리 수용 전에는 `UNASSESSED` 유지. B안 시뮬레이션상 남은 13점 추가 수용 증거 필요, 사용자 의사로 사후 가중치 변경 금지.
+- 남은 필수 R06/R07/R21/R23/R25/R26/R27/R29/R30/R32/R33의 일부·외부 승인/실장비 수용. `[작업중]`·`RELEASE HOLD/SALE NO-GO` 유지; 기존 원본/브랜치/main·판매정보 변경0, Production/Vercel 미적용.
+- [최종 R01–R33 전수 감사](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md), [가중치 승인안](docs/OWNER_85_COMPLETION_DECISION_20261114.md). 개발 기능/문서 증거 GitHub 및 중앙 크몽 상품 원장 동기화 예정.
+
+## 이전 진행 기록(보존)
 ## 2026-11-14 KST · 85% 공식 완료 판정 왜 보류되는가 (산정 근거 확정 대기)
 - **최종설계 공식 완성률: UNASSESSED / 사용자 목표85 미인증.** 33개 정본 요구의 소유자 승인 가중치가 존재하지 않고, 12개 항목에는 실환경/법적·고객 수용이 남아 있음. 70→85 UI·ZIP 단계 기술 통과와 전체 공식85% 완료는 별개.
 - [**소유자 승인 최소 개입 결정안**](docs/OWNER_85_COMPLETION_DECISION_20261114.md)을 새로 작성. 전수 33개를 누락 없이 두 대안 A=동등비중 21/33(기술 증거 63.6%), B=입력18·전처리20·생성26·납품20·비기능16(기술 증거 69/100)으로 **시험만** 수행. 둘 다 **사용자 미승인/비공식/고객 법적 수용 미인증**; 85를 맞추기 위한 가중치 재조정 금지. B를 승인해도 추가 최소 16점 수용 근거가 필요.

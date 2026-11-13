@@ -1,3 +1,9 @@
+## 2026-11-14 KST · 인쇄·키보드 R16 실제 브라우저 검증
+
+- A4 PDF(인쇄 현재 화면 최대50행 범위 명시)·표 줄바꿈/반복헤더, Chromium·Chrome·Edge `file://` PDF 생성·페이지/키보드 Space/ARIA E2E **실제 PASS**. [CI #43506243118](https://github.com/hibi89/data2web_studio/actions/runs/43506243118) 코드 SHA `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85`, Windows/Ubuntu Python 각249 PASS, 4/4 SUCCESS.
+- **최종설계 전체 공식률 `UNASSESSED`**; 소유자 미승인 B안 기술 상한72/100(이전69+R16 3), A안22/33 참고. 형의 가중치 승인 및 실 고객 PC·실 Excel/라이선스·고객인수 전 전체85% 달성 주장 금지.
+- [R16 PDF/키보드 실증 및 실패 수정](docs/R16_PRINT_AND_KEYBOARD_ACCEPTANCE_20261114.md) · [전체 정본33요구](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md).
+
 ## 2026-11-14 · 공식 전체 85% 미도달 원인 및 사용자 결정안
 
 [33개 최종설계 요구의 A/B 산정 기준과 최소 사용자 개입](docs/OWNER_85_COMPLETION_DECISION_20261114.md)을 작성했다. **가중치와 임시 시뮬레이션은 미승인**이며 공식 완성률은 `UNASSESSED`. 동일 합성/호스팅 실행 증거를 85%로 바꾸지 않는다. 실고객 Windows10/11·고객 Excel·상업 사용권·SKU/지원·환불/개인정보 보유 정책은 별도.
