@@ -57,9 +57,9 @@ def _headless_browser(binary, html, temp):
         return "HOLD_EXECUTION_FAILED"
     if process.returncode!=0:
         return "HOLD_NONZERO_EXIT"
-    if b'<span id="count">2' not in process.stdout:
-        # Unicode characters may be UTF-8, Korean count label after "2".
-        # The ready marker and two generated row titles are necessary too.
+    # The actual DATA2WEB HTML uses <p id="count" role="status">,
+    # not a span. Verify live DOM text after executing inline JS.
+    if not re.search(rb'<p\s+id="count"\s+role="status">2[^<]*</p>',process.stdout):
         return "HOLD_BROWSER_RENDER_NOT_CONFIRMED"
     if b"LOCAL-ITEM-1" not in process.stdout or b"LOCAL-ITEM-2" not in process.stdout:
         return "HOLD_BROWSER_CONTENT_NOT_VISIBLE"
