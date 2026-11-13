@@ -2,7 +2,7 @@
 import hashlib
 import tempfile
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 from data2web import build
 
 def main():
@@ -26,7 +26,7 @@ def main():
             page.on("pageerror",lambda e:faults.append(str(e)))
             page.on("request",lambda r:requests.append(r.url) if r.url.startswith(("https:","http:")) else None)
             page.goto(target.as_uri())
-            page.wait_for_function("window.DATA2WEB_READY === true")
+            expect(page.locator("#count")).to_have_text("115건")
             assert page.locator("#count").inner_text()=="115건"
             assert page.locator("#page").inner_text()=="1 / 3"
             page.locator("#next").click()
@@ -47,7 +47,7 @@ def main():
             assert page.locator("#count").inner_text()=="115건"
             page.locator("#ack").check()
             page.locator("#replace").click()
-            page.wait_for_function("document.getElementById('count').textContent === '2건'", timeout=10000)
+            expect(page.locator("#count")).to_have_text("2건", timeout=10000)
             assert page.locator("img").count()==0
             with page.expect_download() as started:
                 page.locator("#save").click()
@@ -58,7 +58,7 @@ def main():
             reopened.on("pageerror",lambda e:faults.append(str(e)))
             reopened.on("request",lambda r:requests.append(r.url) if r.url.startswith(("https:","http:")) else None)
             reopened.goto(saved.as_uri())
-            reopened.wait_for_function("window.DATA2WEB_READY === true")
+            expect(reopened.locator("#count")).to_have_text("2건")
             assert reopened.locator("#count").inner_text()=="2건"
             reopened.locator("#search").fill("Changed")
             assert reopened.locator("#count").inner_text()=="1건"
