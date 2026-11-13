@@ -58,6 +58,11 @@
 | R32 | 3 | 미검증·수용 대기 | 0 |
 | R33 | 3 | 미검증·수용 대기 | 0 |
 
+## 최종 채점기 실실행 CI (2026-11-14 KST)
+- 정확 SHA `6ce083ef763257b9ccb03bd3d81caad9a4ce4f66` [Actions #43515052630](https://github.com/hibi89/data2web_studio/actions/runs/43515052630) **4/4 SUCCESS**; Windows Python **280/280**, Ubuntu Python **279 PASS+1 Windows CMD SKIP**, 설치 Windows Chrome·Edge 및 Ubuntu Chromium 합성 브라우저 E2E PASS, final blueprint evidence gate #43515053057 SUCCESS.
+- `python blueprint_score.py`를 Windows/Ubuntu에서 직접 실행해 **정본33개/가중합100/인정72/대기28/목표85/차이13** JSON 확인. Windows cp1252 콘솔 한글 출력 실패 #43514788415를 재현한 뒤 ASCII-safe JSON으로 수정하고 Windows 인코딩 회귀 시험 추가.
+- 이는 채점 산술/고정 배점·기존 증거 집계를 확인한 것일 뿐, 실제 고객 Win10/11·고객 원본권리/개인정보·상업 LICENSE/NOTICE·실고객 인수를 PASS로 바꾸지 않는다.
+
 ## 검증 근거와 안전 한계
 - 기능 검증 기준 `23a2d1293755294a58a20b98dc34e229a1e54f82` [Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS**. hosted Windows Python269/269 PASS, Ubuntu268 PASS+Windows CMD1SKIP, Chrome·Edge/Chromium file://, Tk CSV+XLSX owner GUI, A4 PDF 인쇄, source/ZIP/receipt 무결성, 원본 Lite 실제 golden 등 이전 검증 자료. 새 정본 평가기 `blueprint_score.py`와 `test_blueprint_score.py`, `data/final_blueprint_scorecard_v1.json`은 **총점100·33행 중복/누락·무단배점·증거없는 완료·무단 판매 GO를 거부**한다. 실행은 `python blueprint_score.py`.
 - **정본 R01–R33을 분모**로 하는 수용 가중치 계산과 **실 고객 수용/상용 출시 승인**을 명확히 구분한다. 72점의 증거는 주로 합성·호스팅 및 실제 브라우저이며, 고객 Windows10/11·실업무 Excel·개인/민감 자료 계약/상용 저작권·NOTICE·환불/지원/고객 인수가 포함된 11개 요구는 여전히 대기다.

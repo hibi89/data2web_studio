@@ -1,5 +1,10 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 100점 만점 평가기 Windows 콘솔 회귀 최종 PASS
+- 정확 채점기 SHA `6ce083ef763257b9ccb03bd3d81caad9a4ce4f66` [Actions #43515052630](https://github.com/hibi89/data2web_studio/actions/runs/43515052630) **4/4 SUCCESS**, Windows Python3.11 **280/280 PASS**, Ubuntu Python3.11 **279 PASS/1 Windows CMD-only SKIP**, Windows Chrome·Edge/Ubuntu Chromium 합성 file:// E2E PASS. Final blueprint evidence gate #43515053057 SUCCESS.
+- `blueprint_score.py`의 stdout JSON 한글 `[작업중]` 때문에 일부 Windows PowerShell cp1252에서 `UnicodeEncodeError` 발생한 failed run #43514788415 원인을 ASCII-safe JSON으로 수정. `test_blueprint_score.py`에 cp1252 출력·JSON 재파싱 회귀 추가, `python blueprint_score.py` 양 OS 직접 실행에서 72/100·목표85·차이13/RELEASE HOLD 확인.
+- 사용자 위임 R01–R33 전체 **100점/B안 고정 배점** 유지, 검증 가중치 **72/100**, 85 목표 미달 **13점**. 고객·법적·상업 승인 별개. **[작업중]**, RELEASE HOLD/SALE NO-GO, Draft PR 미병합. 원본/고객파일 변경0.
+
 ## 2026-11-14 KST · 실제 Windows 콘솔 채점 출력 회귀 수정
 - `1f590d18f2448c294f23150f485c4278912613d6` [Actions #43514788415](https://github.com/hibi89/data2web_studio/actions/runs/43514788415) Windows Python 단위 테스트는 통과했지만 추가 `python blueprint_score.py` 직접 실행에서 Windows 콘솔 cp1252가 JSON의 `[작업중]` 한글을 출력하지 못해 UnicodeEncodeError/CI failure 발생. **점수 72/100 산정 오류 아님, Windows 출력 인코딩 문제**.
 - `blueprint_score.py` CLI를 ASCII-safe `json.dumps(...,ensure_ascii=True)`로 수정하고 `test_blueprint_score.py`에 cp1252 환경 출력/파싱 회귀 추가. Linux 일반 유니코드 JSON 읽기 및 구조는 그대로. **정확 수정 SHA와 최신 CI 결과는 별도 검증 전 성공 주장 금지**.
