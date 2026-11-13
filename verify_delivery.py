@@ -3,11 +3,22 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from io import BytesIO
 from pathlib import Path
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 from zipfile import ZipFile, ZIP_STORED, BadZipFile
 
 ALLOWED = {"index.html", "manifest.json", "README_KO.txt"}
+def _object_no_duplicate_keys(pairs):
+    result={}
+    for key,value in pairs:
+        if key in result:
+            raise ValueError("Duplicate ZIP manifest or embedded dataset JSON key")
+        result[key]=value
+    return result
+
+def _reject_nonfinite_constant(value):
+    raise ValueError("Nonfinite JSON values forbidden: "+value)
 MAX_ARCHIVE = 24_000_000
 MAX_HTML = 20_000_000
 
@@ -16,8 +27,11 @@ def verify_zip(path):
     assert_no_links(path)
     if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_ARCHIVE:
         raise ValueError("Missing, linked, or oversized package")
+    # One verified, bounded file-descriptor snapshot. Never validate one ZIP and
+    # hash a separately re-opened version of the same untrusted path.
+    raw=read_bounded_source(path,max_bytes=MAX_ARCHIVE)
     try:
-        with ZipFile(path, "r") as archive:
+        with ZipFile(BytesIO(raw), "r") as archive:
             info = archive.infolist()
             names = [x.filename for x in info]
             if len(info) != 3 or set(names) != ALLOWED or len(set(names)) != 3:
@@ -32,7 +46,7 @@ def verify_zip(path):
                     raise ValueError("Linked ZIP entry")
             if archive.testzip() is not None:
                 raise ValueError("ZIP CRC failure")
-            manifest = json.loads(archive.read("manifest.json"))
+            manifest = json.loads(archive.read("manifest.json"),object_pairs_hook=_object_no_duplicate_keys,parse_constant=_reject_nonfinite_constant)
             html = archive.read("index.html")
             guide = archive.read("README_KO.txt")
             if (manifest.get("contract") != "DATA2WEB_PACKAGE_V1"
@@ -56,7 +70,7 @@ def verify_zip(path):
             match = re.search(rb'<script type="application/json" id="dataset">([^<]+)</script>', html)
             if not match:
                 raise ValueError("Embedded source metadata missing")
-            embedded = json.loads(match.group(1))
+            embedded = json.loads(match.group(1),object_pairs_hook=_object_no_duplicate_keys,parse_constant=_reject_nonfinite_constant)
             if (embedded.get("contract") != "DATA2WEB_HTML_V1" or
                     embedded.get("source_sha256") != manifest["source_sha256"] or
                     embedded.get("source_sheet") != manifest["sheet"] or
@@ -82,7 +96,7 @@ def verify_zip(path):
                     raise ValueError("Append provenance digest mismatch")
             return {"verified": True, "status": "INTEGRITY_VERIFIED_NOT_SALE_APPROVED",
                     "rows": manifest["rows"], "source_sha256": manifest["source_sha256"],
-                    "zip_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                    "zip_sha256": hashlib.sha256(raw).hexdigest()}
     except (BadZipFile, KeyError, UnicodeError, json.JSONDecodeError) as e:
         raise ValueError("Invalid package structure") from e
 

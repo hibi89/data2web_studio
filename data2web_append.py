@@ -33,9 +33,7 @@ def read_approval_manifest(path):
     assert_no_links(p)
     if p.is_symlink() or not p.is_file() or p.suffix.lower() != ".json" or p.stat().st_size>64000:
         raise ValueError("Unsafe approval manifest")
-    raw=p.read_bytes()
-    if len(raw)>64000:
-        raise ValueError("Oversized approval manifest")
+    raw=read_bounded_source(p,max_bytes=64000)
     doc=json.loads(raw.decode("utf-8-sig"),object_pairs_hook=unique_keys)
     if not isinstance(doc,dict) or doc.get("contract") != CONTRACT:
         raise ValueError("Invalid approval manifest contract")

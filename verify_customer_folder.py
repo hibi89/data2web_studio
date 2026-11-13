@@ -8,11 +8,12 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
 
-from path_policy import assert_no_links
-from verify_delivery import verify_zip
+from path_policy import assert_no_links, read_bounded_source
+from verify_delivery import verify_zip, MAX_ARCHIVE
 
 EXPECTED={"index.html","delivery.zip","receipt.json"}
 RECEIPT_FIELDS={
@@ -54,10 +55,10 @@ def verify_customer_folder(destination):
         if not path.is_file():
             raise ValueError("Customer folder contains a non-file entry")
 
-    html=(root/"index.html").read_bytes()
+    html=read_bounded_source(root/"index.html",max_bytes=20_000_000)
     if not html.startswith(b"<!doctype html>") or len(html)>20_000_000:
         raise ValueError("Invalid or oversized local HTML")
-    rbytes=(root/"receipt.json").read_bytes()
+    rbytes=read_bounded_source(root/"receipt.json",max_bytes=256_000)
     receipt=_load_json(rbytes)
     if (set(receipt)!=RECEIPT_FIELDS or
             receipt.get("contract")!="DATA2WEB_RECEIPT_V1" or
@@ -74,7 +75,10 @@ def verify_customer_folder(destination):
     verified=verify_zip(root/"delivery.zip")
     if not verified["verified"]:
         raise ValueError("Independent ZIP verification failed")
-    with ZipFile(root/"delivery.zip","r") as z:
+    zip_snapshot=read_bounded_source(root/"delivery.zip",max_bytes=MAX_ARCHIVE)
+    if hashlib.sha256(zip_snapshot).hexdigest()!=verified["zip_sha256"]:
+        raise ValueError("Delivery ZIP changed between independent checks")
+    with ZipFile(BytesIO(zip_snapshot),"r") as z:
         if z.read("index.html")!=html:
             raise ValueError("Delivery HTML is not the exact ZIP member")
         manifest=_load_json(z.read("manifest.json"))
