@@ -49,7 +49,7 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 </section>
 <section class="surface" aria-label="표 검색">
 <div class="controls"><label>검색 <input id="search" type="search" placeholder="모든 열에서 검색"></label>
-<label>분류 <select id="category"><option value="">전체</option></select></label>
+<label>분류 (Ctrl/⌘ 다중 선택) <select id="category" multiple size="4" aria-label="분류 여러 개 선택"><option value="" selected>전체</option></select></label>
 <label>정렬 <select id="sort"></select></label>
 <button id="direction" type="button">오름차순</button></div>
 <p id="count" role="status"></p><div class="table-scroll"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
@@ -136,12 +136,18 @@ $("sort").value=titleKey;
 const header=document.createElement("tr");
 for(const name of state.columns){const th=document.createElement("th");th.textContent=name;header.append(th)}
 $("head").replaceChildren(header);
-function categoryOptions(){const current=$("category").value;$("category").replaceChildren();const all=document.createElement("option");all.value="";all.textContent="전체";$("category").append(all);
-for(const name of [...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare)){const opt=document.createElement("option");opt.value=name;opt.textContent=name;$("category").append(opt)}
-$("category").value=[...$("category").options].some(x=>x.value===current)?current:""}
+function categoryOptions(){
+const previous=[...$("category").selectedOptions].map(x=>x.value).filter(Boolean);
+$("category").replaceChildren();
+const names=[...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare);
+const effective=previous.filter(x=>names.includes(x));
+const all=document.createElement("option");all.value="";all.textContent="전체";all.selected=!effective.length;$("category").append(all);
+for(const name of names){const opt=document.createElement("option");opt.value=name;opt.textContent=name;opt.selected=effective.includes(name);$("category").append(opt)}
+}
 function render(){const query=$("search").value.toLocaleLowerCase();
+const activeCategories=[...$("category").selectedOptions].map(x=>x.value).filter(Boolean);
 const sortKey=$("sort").value;
-const filtered=state.rows.filter(r=>(!$("category").value||r[categoryKey]===$("category").value)&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
+const filtered=state.rows.filter(r=>(!activeCategories.length||activeCategories.includes(r[categoryKey]))&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
 filtered.sort((a,b)=>{let v=collator.compare(a[sortKey],b[sortKey]);if(v===0)v=collator.compare(a[idKey],b[idKey]);return descending?-v:v});
 renderChart(filtered);
 const locallyReplaced=state.changed||d.import_status==="USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED";

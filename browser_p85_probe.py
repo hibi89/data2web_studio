@@ -58,6 +58,8 @@ def main():
             assert page.locator("#chart-bars img").count()==0
             page.locator("#metric").select_option("amount")
             expect(page.locator("#chart-summary")).to_contain_text("724")
+            page.locator("#category").select_option(["A","B"])
+            expect(page.locator("#count")).to_have_text("160건")
             page.locator("#category").select_option("B")
             expect(page.locator("#count")).to_have_text("80건")
             expect(page.locator("#filtered-rows")).to_have_text("80")
