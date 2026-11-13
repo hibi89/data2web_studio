@@ -63,7 +63,7 @@ class P70XlsxTsv(unittest.TestCase):
         with self.assertRaises(ValueError):self.load_xlsx(sheet="other")
 
     def test_xlsx_hidden_sheet(self):
-        self.load_xlsx(workbook_bytes(hidden=True))
+        with self.assertRaises(ValueError):self.load_xlsx(workbook_bytes(hidden=True))
         with self.assertRaises(ValueError):self.load_xlsx(sheet="Inventory")
 
     def test_xlsx_header_row_three(self):
@@ -271,7 +271,7 @@ class P70XlsxTsv(unittest.TestCase):
         self.tsv.write_text('id\ttitle\tcategory\n1\t"safe title"\tA\n2\t"</script>"\tB\n',encoding="utf-8")
         r=build(self.tsv,self.html,"id","title","category",True)
         self.assertEqual(r["rows"],2)
-        self.assertNotIn("</script><",self.html.read_text(encoding="utf-8"))
+        self.assertIn(r"\u003c/script\u003e",self.html.read_text(encoding="utf-8"))
 
     def test_tsv_duplicate_columns_hold(self):
         self.tsv.write_text('id\tid\tcategory\n1\tB\tX\n',encoding="utf-8")
