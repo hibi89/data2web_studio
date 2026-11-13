@@ -21,6 +21,14 @@ def _reject_nonfinite_constant(value):
     raise ValueError("Nonfinite JSON values forbidden: "+value)
 MAX_ARCHIVE = 24_000_000
 MAX_HTML = 20_000_000
+PACKAGE_KEYS = {"contract", "source_sha256", "html_sha256", "guide_sha256",
+                "rows", "sheet", "header_row", "cached_formulas",
+                "source_receipts", "plaintext_ack", "sale_approved", "status"}
+_HEX = set("0123456789abcdef")
+
+def _is_sha256(value):
+    return (isinstance(value, str) and len(value) == 64
+            and all(char in _HEX for char in value))
 
 def verify_zip(path):
     path = Path(path)
@@ -30,10 +38,25 @@ def verify_zip(path):
     # One verified, bounded file-descriptor snapshot. Never validate one ZIP and
     # hash a separately re-opened version of the same untrusted path.
     raw=read_bounded_source(path,max_bytes=MAX_ARCHIVE)
+    # The builder emits a plain ZIP, never a self-extracting/polyglot prefix,
+    # trailing payload or archive comment. Do not endorse altered containers.
+    if (len(raw) < 22 or not raw.startswith(b"PK\\x03\\x04")
+            or raw[-22:-18] != b"PK\\x05\\x06" or raw[-2:] != b"\\x00\\x00"):
+        raise ValueError("Non-canonical ZIP envelope")
     try:
         with ZipFile(BytesIO(raw), "r") as archive:
             info = archive.infolist()
             names = [x.filename for x in info]
+            if archive.comment or not info or info[0].header_offset != 0:
+                raise ValueError("ZIP prefix or comment forbidden")
+            expected_offset = 0
+            for member in info:
+                if (member.header_offset != expected_offset or member.extra
+                        or member.comment or member.flag_bits != 0):
+                    raise ValueError("Non-canonical ZIP member metadata")
+                expected_offset += 30 + len(member.filename.encode("ascii")) + member.compress_size
+            if expected_offset != archive.start_dir:
+                raise ValueError("Unexpected hidden ZIP payload")
             if len(info) != 3 or set(names) != ALLOWED or len(set(names)) != 3:
                 raise ValueError("Unexpected, duplicated, or unsafe ZIP members")
             for part in info:
@@ -49,20 +72,23 @@ def verify_zip(path):
             manifest = json.loads(archive.read("manifest.json"),object_pairs_hook=_object_no_duplicate_keys,parse_constant=_reject_nonfinite_constant)
             html = archive.read("index.html")
             guide = archive.read("README_KO.txt")
-            if (manifest.get("contract") != "DATA2WEB_PACKAGE_V1"
+            if (not isinstance(manifest, dict) or set(manifest) != PACKAGE_KEYS
+                    or manifest.get("contract") != "DATA2WEB_PACKAGE_V1"
+                    or manifest.get("status") != "RELEASE_HOLD"
                     or manifest.get("sale_approved") is not False
-                    or manifest.get("plaintext_ack") is not True):
-                raise ValueError("Invalid manifest contract")
+                    or manifest.get("plaintext_ack") is not True
+                    or not _is_sha256(manifest.get("source_sha256"))):
+                raise ValueError("Invalid or unauthorized package manifest")
             for key, content in (("html_sha256", html), ("guide_sha256", guide)):
                 if manifest.get(key) != hashlib.sha256(content).hexdigest():
                     raise ValueError("Member integrity mismatch")
             if not html.startswith(b"<!doctype html>") or b"DATA2WEB" not in html:
                 raise ValueError("Invalid standalone HTML")
-            if not isinstance(manifest.get("rows"), int) or manifest["rows"] < 0:
+            if type(manifest.get("rows")) is not int or manifest["rows"] < 0:
                 raise ValueError("Invalid manifest row count")
             if manifest.get("sheet") is not None and not isinstance(manifest["sheet"], str):
                 raise ValueError("Invalid sheet identity")
-            if not isinstance(manifest.get("header_row"), int) or not 1 <= manifest["header_row"] <= 50:
+            if type(manifest.get("header_row")) is not int or not 1 <= manifest["header_row"] <= 50:
                 raise ValueError("Invalid header row")
             if not isinstance(manifest.get("cached_formulas"), bool):
                 raise ValueError("Invalid formula approval flag")
@@ -71,6 +97,8 @@ def verify_zip(path):
             if not match:
                 raise ValueError("Embedded source metadata missing")
             embedded = json.loads(match.group(1),object_pairs_hook=_object_no_duplicate_keys,parse_constant=_reject_nonfinite_constant)
+            if not isinstance(embedded, dict) or not isinstance(embedded.get("rows"), list):
+                raise ValueError("Embedded dataset must be a table object")
             if (embedded.get("contract") != "DATA2WEB_HTML_V1" or
                     embedded.get("source_sha256") != manifest["source_sha256"] or
                     embedded.get("source_sheet") != manifest["sheet"] or
@@ -83,9 +111,8 @@ def verify_zip(path):
             if sources is not None:
                 if (not isinstance(sources,list) or not 2<=len(sources)<=10 or
                         not all(isinstance(x,dict) and x.get("position")==i+1 and
-                                isinstance(x.get("sha256"),str) and
-                                len(x["sha256"])==64 and
-                                isinstance(x.get("rows"),int) and x["rows"]>=0
+                                _is_sha256(x.get("sha256")) and
+                                type(x.get("rows")) is int and x["rows"]>=0
                                 for i,x in enumerate(sources))):
                     raise ValueError("Invalid append provenance")
                 if sum(x["rows"] for x in sources)!=manifest["rows"]:

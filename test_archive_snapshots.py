@@ -42,6 +42,72 @@ class ArchiveSnapshotSafety(unittest.TestCase):
                 out.writestr(name,content)
         return target
 
+    def test_manifest_release_hold_cannot_be_spoofed_with_valid_crc(self):
+        def mutate(data):
+            document=json.loads(data["manifest.json"])
+            self.assertEqual(document["status"],"RELEASE_HOLD")
+            document["status"]="APPROVED_FOR_SALE"
+            data["manifest.json"]=json.dumps(document,sort_keys=True).encode("utf-8")
+        bad=self._forge(mutate)
+        with self.assertRaises(ValueError):
+            verifier.verify_zip(bad)
+
+    def test_manifest_rejects_unauthorized_extra_field(self):
+        def mutate(data):
+            document=json.loads(data["manifest.json"])
+            document["vendor_signature_valid"]=True
+            data["manifest.json"]=json.dumps(document,sort_keys=True).encode("utf-8")
+        with self.assertRaises(ValueError):
+            verifier.verify_zip(self._forge(mutate))
+
+    def test_manifest_boolean_row_count_rejected(self):
+        def mutate(data):
+            document=json.loads(data["manifest.json"])
+            document["rows"]=True
+            data["manifest.json"]=json.dumps(document,sort_keys=True).encode("utf-8")
+        with self.assertRaises(ValueError):
+            verifier.verify_zip(self._forge(mutate))
+
+    def test_append_arbitrary_zip_comment_refused(self):
+        changed=self.base/"commented.zip"
+        with ZipFile(self.archive) as source, ZipFile(changed,"w",compression=ZIP_STORED) as target:
+            for member in source.infolist():
+                target.writestr(member,source.read(member.filename))
+            target.comment=b"APPROVED FOR SALE"  # not a verified signature
+        with self.assertRaises(ValueError):
+            verifier.verify_zip(changed)
+
+    def test_hidden_zip_prefix_and_trailer_refused(self):
+        raw=self.archive.read_bytes()
+        for index,content in enumerate((b"PREFIX"+raw,raw+b"HIDDEN_TRAILER")):
+            with self.subTest(index=index):
+                changed=self.base/("noncanonical-"+str(index)+".zip")
+                changed.write_bytes(content)
+                with self.assertRaises(ValueError):
+                    verifier.verify_zip(changed)
+        self.assertTrue(verifier.verify_zip(self.archive)["verified"])
+
+    def test_package_rechecks_bounded_html_snapshot(self):
+        import delivery
+        receipt=json.loads((self.out/"receipt.json").read_text(encoding="utf-8"))
+        target=self.base/"replica.zip"
+        with patch.object(delivery,"read_bounded_source",
+                          wraps=delivery.read_bounded_source) as reader:
+            delivery.package_html(self.out/"index.html",target,receipt)
+        reader.assert_called_once_with(self.out/"index.html",max_bytes=20_000_000)
+        self.assertTrue(verifier.verify_zip(target)["verified"])
+
+    def test_oversized_html_refused_without_creating_archive(self):
+        import delivery
+        receipt=json.loads((self.out/"receipt.json").read_text(encoding="utf-8"))
+        oversized=self.base/"oversized.html"
+        with oversized.open("wb") as stream:
+            stream.truncate(20_000_001)
+        newzip=self.base/"not-created.zip"
+        with self.assertRaises(ValueError):
+            delivery.package_html(oversized,newzip,receipt)
+        self.assertFalse(newzip.exists())
+
     def test_verify_zip_hashes_once_from_same_snapshot(self):
         expected=self.archive.read_bytes()
         with patch.object(verifier,"read_bounded_source",return_value=expected) as read:

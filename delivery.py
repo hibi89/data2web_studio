@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 from verify_delivery import verify_zip
 
@@ -23,8 +23,8 @@ def package_html(html_path, zip_path, receipt):
             or zip_path.exists() or not zip_path.parent.is_dir()
             or zip_path.parent.is_symlink() or zip_path.suffix.lower() != ".zip"):
         raise ValueError("Package output must be a fresh, safe ZIP path")
-    html = html_path.read_bytes()
-    if len(html) > 20_000_000 or hashlib.sha256(html).hexdigest() != receipt.get("output_sha256"):
+    html = read_bounded_source(html_path,max_bytes=20_000_000)
+    if hashlib.sha256(html).hexdigest() != receipt.get("output_sha256"):
         raise ValueError("HTML receipt/hash mismatch")
     manifest = {
         "contract":"DATA2WEB_PACKAGE_V1", "source_sha256":receipt["source_sha256"],

@@ -7,7 +7,7 @@ from __future__ import annotations
 import hashlib
 import os
 from pathlib import Path
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 from zipfile import ZIP_STORED, ZipFile, ZipInfo
 
 RUNTIME=(
@@ -30,7 +30,7 @@ def create_portable(output, *, source_directory=None):
         assert_no_links(file)
         if not file.is_file() or file.is_symlink() or file.stat().st_size>1_000_000:
             raise ValueError("Unsafe or missing portable source module")
-        contents.append((name,file.read_bytes()))
+        contents.append((name,read_bounded_source(file,max_bytes=1_000_000)))
     file_descriptor=os.open(output,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     with os.fdopen(file_descriptor,"wb") as file:
         with ZipFile(file,"w",compression=ZIP_STORED,allowZip64=False) as archive:
@@ -39,7 +39,7 @@ def create_portable(output, *, source_directory=None):
                 member.compress_type=ZIP_STORED
                 member.external_attr=0o100600<<16
                 archive.writestr(member,data)
-    digest=hashlib.sha256(output.read_bytes()).hexdigest()
+    digest=hashlib.sha256(read_bounded_source(output,max_bytes=2_000_000)).hexdigest()
     return {"created":True,"sha256":digest,"requires":"Python 3.11+",
             "runtime_dependencies":[],"sale_approved":False}
 
