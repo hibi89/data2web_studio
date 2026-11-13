@@ -1,5 +1,11 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · ZIP 승인 위조·숨은 데이터·메모리 상한 보안 실증 (4/4 CI PASS)
+- **기능/테스트 SHA `0cb09f86280f860b008e008da6ccaea8be068e29`** [CI #43524908011](https://github.com/hibi89/data2web_studio/actions/runs/43524908011) **4/4 SUCCESS** (Win 291/291 PASS, Ubuntu 290 PASS/1 Windows 전용 SKIP, hosted Chrome·Edge·Chromium E2E PASS), [final gate #43524908506](https://github.com/hibi89/data2web_studio/actions/runs/43524908506) SUCCESS.
+- `verify_delivery` ZIP의 `RELEASE_HOLD` 상태/허용된 manifest keys 고정, 거짓 판매허가와 불필요한 signer 플래그·ZIP 댓글·앞뒤 숨은 데이터·비정형 member offset 거부. `delivery` 20MB bounded FD로 HTML 처리, `package_portable` 제한된 source/pyz 스냅샷. **악성/경계 회귀 7개 추가**, 기존 통과 기능 보존 확인. 중간 실패 `914c0e1d` 이스케이프 결함 수정 후 정확 SHA CI PASS.
+- R01–R33 **공식 72/100 유지**: R06/R21/R29/R32 등 실장비·외부 라이선스/독립 감사의 잔여 수용 조건 변함 없음, 85까지13점. `[작업중]`/RELEASE HOLD/SALE NO-GO. 원본·기존 사업 상품 상태/배점 변경0. [상세](docs/R22_R29_R32_HARDENED_ZIP_ACCEPTANCE_20261114.md).
+
+
 ## 2026-11-14 KST · GitHub Actions 한도 해소 후 정확 SHA CI 복구 검증
 - **코드/문서 정확 SHA `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`**, [GitHub Actions #43520777896 attempt 2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) **4/4 SUCCESS**, [final-blueprint evidence gate #43520778342 attempt 2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) **SUCCESS**.
 - Windows Python3.11 **284/284 PASS**, Ubuntu Python3.11 **283 PASS/1 Windows 전용 SKIP**, Ubuntu Chromium `file://` E2E PASS, Windows 설치 Chrome·Edge의 `file://` E2E 및 Tk GUI/브라우저 자체검증 PASS. 이번에 추가한 synthetic self-check의 create-only JSON/sha 결과와 비유한 receipt JSON 차단 회귀 시험도 포함.

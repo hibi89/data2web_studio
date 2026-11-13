@@ -1,3 +1,9 @@
+## 2026-11-14 · ZIP 무결성 보안 강화, 고정 72점 유지
+
+정확 소스 SHA `0cb09f86280f860b008e008da6ccaea8be068e29` [CI #43524908011](https://github.com/hibi89/data2web_studio/actions/runs/43524908011) **4/4 SUCCESS**, Windows291 PASS, Ubuntu290 PASS/1 SKIP, 브라우저 E2E PASS. 승인 상태 변조/가짜 서명·ZIP 앞뒤 숨은 데이터/댓글 거부, HTML/pyz 사전 bounded FD 점검 및 신규 보안회귀 7개. [보안 검증과 잔여 수용 게이트](docs/R22_R29_R32_HARDENED_ZIP_ACCEPTANCE_20261114.md).
+
+**최종설계 R01~R33 72/100, 85점까지13점 미달.** 실 Windows10/11, 고객 원본·외부 라이선스/NOTICE·상업 승인·독립 보안감사는 별도. `[작업중]`, RELEASE HOLD/SALE NO-GO 유지. 비공개 소스/고객자료 외부 송신 없음.
+
 ## 2026-11-14 · Actions 한도 복구 및 동일 SHA 4/4 검증 완료
 
 GitHub Actions 한도 문제 해결 후 정확 검증 HEAD `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`에서 [Python/브라우저 #43520777896 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) **4/4 SUCCESS**, [final blueprint #43520778342 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) SUCCESS. Windows 284 PASS, Ubuntu 283 PASS/1 SKIP; Windows Chrome·Edge, Ubuntu Chromium file:// E2E PASS.

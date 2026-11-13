@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · ZIP 보안 강화·정확 CI SHA
+1. **제품/정본/기술:** DATA2WEB Studio, CSV/JSON/XLSX/TSV → 서버 없는 HTML/ZIP, R01–R33 고정 100점.
+2. **변경:** `verify_delivery` 승인 상태 정확 대조·숨은 ZIP 구조 차단; `delivery` bounded HTML 스냅샷; `package_portable` bounded src/pyz; 악성 패키지 7개 회귀 추가. 선택 stdlib strict ZIP, 서명 방식은 인증서/배포권 부재로 보류.
+3. **검증:** 정확 코드 SHA `0cb09f86280f860b008e008da6ccaea8be068e29`, [Actions #43524908011](https://github.com/hibi89/data2web_studio/actions/runs/43524908011) **4/4 SUCCESS** (Windows291 PASS, Ubuntu290 PASS/1SKIP, Win Chrome/Edge 및 Ubuntu Chromium E2E PASS), [gate #43524908506](https://github.com/hibi89/data2web_studio/actions/runs/43524908506) SUCCESS.
+4. **상태:** 72/100 VERIFIED/85목표13미달, 11개28점 PENDING, `[작업중]`·RELEASE HOLD·SALE NO-GO.
+5. **실패/회복:** 구현 SHA `914c0e1d`에서 ZIP raw magic byte 이스케이프 오류로 Python 테스트 실패; SHA `0cb09f86`에서 보정 후 합성/브라우저 CI PASS. Actions 계정 한도는 직전 턴에서 복구되어 이번 실행 정상.
+6. **저장소/브랜치:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR#4 Draft 미병합, 소스 SHA `0cb09f86280f860b008e008da6ccaea8be068e29`. 수정경로 `verify_delivery.py`, `delivery.py`, `package_portable.py`, `test_archive_snapshots.py`.
+7. **Production/실행:** 로컬 Python3.11+; `python -m unittest discover -v`, `python blueprint_score.py`, `python studio.py self-check --browsers`. Vercel/Production 미적용.
+8. **원본/복구:** 정본 요구·점수표·main·원본 입력변경0. 직전 안정 SHA `3d5d2d657738ae27df8a527275a1e5381f36c52e`, 현재 성공 소스 `0cb09f86`, 고객 PII·키 업로드0, 무삭제/no-clobber.
+9. **다음:** 실제 Win10/11·macOS 고객 인수, Excel 소유자 검수, 서명/권리/NOTICE, 상업 운영·법률 승인; 수용조건 충족 후에만 점수 재산정. 목표 미달시 `[작업중]` 유지.
+10. **기준:** 2026-11-14 KST 정확 GitHub Actions SHA 기반, 마지막 문서 커밋은 이후 별도 확인. [실증/미검증](docs/R22_R29_R32_HARDENED_ZIP_ACCEPTANCE_20261114.md).
+
 ## 최신 인수인계 갱신 — 2026-11-14 KST · Actions 용량 복구 및 검증 4/4 SUCCESS
 1. **용도/정본:** CSV·JSON·XLSX·TSV → 독립 오프라인 HTML/ZIP, R01–R33 전체 고정 100점.
 2. **변경:** 기존 기능 SHA `b524cec21c670f4696fc469fe96ed96bfd3cf562`(로컬 합성 보고서 create-only/SHA, 영수증 비유한 JSON 거부, 신규 회귀), 검증 대상 제품 문서 HEAD `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`. 정본 점수표/기존 원본 변화 없음.
