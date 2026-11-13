@@ -149,7 +149,7 @@ $("import-warning").hidden=!locallyReplaced;
 $("sheet-warning").hidden=locallyReplaced||d.source_sheet===null;
 $("formula-warning").hidden=locallyReplaced||!d.cached_formulas;
 $("source-line").textContent=locallyReplaced?"현재 출처: 사용자 로컬 CSV 교체 · 새 SHA 검증 필요":
- "승인 원본 SHA256: "+String(d.source_sha256||"미제공").slice(0,20)+"…"+(d.source_sheet?" · 시트: "+d.source_sheet:"");
+ "승인 "+(d.source_receipts?"다중 원본 종합 SHA256: ":"원본 SHA256: ")+String(d.source_sha256||"미제공").slice(0,20)+"…"+(d.source_sheet?" · 시트: "+d.source_sheet:"");
 const pages=Math.max(1,Math.ceil(filtered.length/PAGE));page=Math.max(0,Math.min(page,pages-1));$("body").replaceChildren();
 for(const record of filtered.slice(page*PAGE,(page+1)*PAGE)){const tr=document.createElement("tr");tr.tabIndex=0;
 for(const key of state.columns){const td=document.createElement("td");td.textContent=record[key];tr.append(td)}
@@ -203,7 +203,7 @@ $("save").onclick=()=>{
  try{
  if(!state.changed||!$("ack").checked)throw Error("명시적으로 승인된 CSV 교체 후에만 저장합니다");
  const doc={...d,rows:state.rows,source_sha256:null,source_sheet:null,source_header_row:1,
-  cached_formulas:false,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
+  cached_formulas:false,source_receipts:null,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
  $("dataset").textContent=safeJSON(doc);
  const blob=new Blob(["<!doctype html>\n"+document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});
  const a=document.createElement("a");const url=URL.createObjectURL(blob);a.href=url;a.download="DATA2WEB-local-updated.html";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -214,7 +214,7 @@ categoryOptions();numericMetrics();render();window.DATA2WEB_READY=true;
 })();
 </script></body></html>'''
 
-def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False):
+def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False, source_receipts=None):
     if theme not in THEMES or not name.strip() or len(name) > 100:
         raise ValueError("Invalid theme/title")
     payload = {
@@ -223,6 +223,7 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
         "import_status": "OWNER_APPROVED_LOCAL_BUILD",
         "source_sheet": source_sheet, "source_header_row": source_header_row,
         "cached_formulas": cached_formulas,
+        "source_receipts": source_receipts,
     }
     safe_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     for original, escaped in (("&", r"\u0026"), ("<", r"\u003c"), (">", r"\u003e"),

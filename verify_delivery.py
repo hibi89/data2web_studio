@@ -60,8 +60,25 @@ def verify_zip(path):
                     embedded.get("source_sheet") != manifest["sheet"] or
                     embedded.get("source_header_row") != manifest["header_row"] or
                     embedded.get("cached_formulas") != manifest["cached_formulas"] or
-                    len(embedded.get("rows",[])) != manifest["rows"]):
+                    len(embedded.get("rows",[])) != manifest["rows"] or
+                    embedded.get("source_receipts") != manifest.get("source_receipts")):
                 raise ValueError("Embedded data and manifest disagree")
+            sources=manifest.get("source_receipts")
+            if sources is not None:
+                import hashlib
+                if (not isinstance(sources,list) or not 2<=len(sources)<=10 or
+                        not all(isinstance(x,dict) and x.get("position")==i+1 and
+                                isinstance(x.get("sha256"),str) and
+                                len(x["sha256"])==64 and
+                                isinstance(x.get("rows"),int) and x["rows"]>=0
+                                for i,x in enumerate(sources))):
+                    raise ValueError("Invalid append provenance")
+                if sum(x["rows"] for x in sources)!=manifest["rows"]:
+                    raise ValueError("Append row count disagrees with sources")
+                derivation=json.dumps({"contract":"DATA2WEB_APPENDED_SOURCE_V1","sources":sources},
+                                      ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")
+                if hashlib.sha256(derivation).hexdigest()!=manifest["source_sha256"]:
+                    raise ValueError("Append provenance digest mismatch")
             return {"verified": True, "status": "INTEGRITY_VERIFIED_NOT_SALE_APPROVED",
                     "rows": manifest["rows"], "source_sha256": manifest["source_sha256"],
                     "zip_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}

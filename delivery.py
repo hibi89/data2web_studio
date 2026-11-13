@@ -29,6 +29,7 @@ def package_html(html_path, zip_path, receipt):
         "rows":receipt["rows"], "sheet":receipt.get("sheet"),
         "header_row":receipt.get("header_row",1),
         "cached_formulas":receipt.get("cached_formulas",False),
+        "source_receipts":receipt.get("source_receipts"),
         "plaintext_ack":True, "sale_approved":False,
         "status":"RELEASE_HOLD",
     }

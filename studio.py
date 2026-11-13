@@ -24,8 +24,16 @@ def main(argv=None):
     pb.add_argument("--confirm",choices=["APPROVE"],required=True)
     pb.add_argument("--ack-plaintext",action="store_true",required=True)
     pb.add_argument("--zip-path",type=Path)
+    pb.add_argument("--receipt-path",type=Path)
     pb.add_argument("--name",default="DATA2WEB")
     pb.add_argument("--theme",choices=["office","cafe","inventory"],default="office")
+    pa=sub.add_parser("append")
+    pa.add_argument("approval_manifest",type=Path)
+    pa.add_argument("output",type=Path)
+    pa.add_argument("--confirm",choices=["APPROVE"],required=True)
+    pa.add_argument("--ack-plaintext",action="store_true",required=True)
+    pa.add_argument("--zip-path",type=Path)
+    pa.add_argument("--receipt-path",type=Path)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
@@ -44,9 +52,11 @@ def main(argv=None):
             else:
                 cols,rows,digest=read_table(args.source,sheet=args.sheet,
                     header_row=args.header_row,allow_cached_formulas=args.allow_cached_formulas)
+                from data2web_profile import profile_table
                 result={"status":"LOCAL_INSPECT_NOT_APPROVED","source_sha256":digest,
                         "columns":cols,"rows":len(rows),"sheet":args.sheet,
                         "header_row":args.header_row,"cached_formulas":args.allow_cached_formulas,
+                        "profile":profile_table(cols,rows),
                         "plaintext_warning":True,"source_modified":False}
         elif args.action=="build":
             if not args.ack_plaintext:
@@ -57,6 +67,14 @@ def main(argv=None):
                          header_row=args.header_row,allow_cached_formulas=args.allow_cached_formulas)
             result["status"]="LOCAL_HTML_BUILT_NOT_RELEASE_APPROVED"
             if args.zip_path: result["package"]=package_html(args.output,args.zip_path,result)
+            if args.receipt_path:
+                from receipt_utils import write_receipt
+                result["receipt_file"]=write_receipt(args.receipt_path,result)
+        elif args.action=="append":
+            from data2web_append import build_approved_append
+            result=build_approved_append(args.approval_manifest,args.output,
+                        confirm=args.confirm,ack_plaintext=args.ack_plaintext,
+                        zip_path=args.zip_path,receipt_path=args.receipt_path)
         else:
             result=verify_zip(args.zip_path)
         print(json.dumps(result,ensure_ascii=True,sort_keys=True))
