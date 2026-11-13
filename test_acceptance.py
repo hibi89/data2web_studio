@@ -44,6 +44,18 @@ class Acceptance(unittest.TestCase):
         self.assertIn('id="sort"',content)
         self.assertIn('id="csv"',content)
 
+    def test_owner_theme_and_escaped_title(self):
+        for theme in ("office","cafe","inventory"):
+            with self.subTest(theme=theme):
+                target=self.root/(theme+".html")
+                result=build(self.src,target,**self.kw,name="<DATA2WEB>",theme=theme)
+                self.assertEqual(result["theme"],theme)
+                s=target.read_text(encoding="utf-8")
+                self.assertIn('data-theme="'+theme+'"',s)
+                self.assertIn("&lt;DATA2WEB&gt;",s)
+                self.assertEqual(result["mapping"]["id"],"식별자")
+                self.assertFalse(result["sale_approved"])
+
     def test_expected_sha_rejected(self):
         with self.assertRaises(ValueError): self.golden_build(expected_sha256="0"*64)
         self.assertFalse(self.html.exists())

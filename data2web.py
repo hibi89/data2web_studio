@@ -67,7 +67,7 @@ def read_table(path):
         raise ValueError("Input changed during read")
     return fields, normalized, digest
 
-def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None):
+def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office'):
     if not approved:
         raise ValueError("Explicit plaintext/ownership approval required")
     fields, rows, digest = read_table(input_file)
@@ -83,12 +83,19 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     if target.suffix.lower() != ".html" or target.is_symlink() or target.exists() or not target.parent.is_dir() or target.parent.is_symlink():
         raise FileExistsError("Output must be a new file in an existing directory")
     from data2web_web import render_html
-    markup = render_html(fields, rows, mapping, digest)
+    markup = render_html(fields, rows, mapping, digest, name=name, theme=theme)
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     fd = os.open(target, flags, 0o600)
     with os.fdopen(fd, "w", encoding="utf-8") as stream:
         stream.write(markup)
-    return {"source_sha256": digest, "output_sha256": hashlib.sha256(target.read_bytes()).hexdigest(), "rows": len(rows)}
+    if hashlib.sha256(Path(input_file).read_bytes()).hexdigest() != digest:
+        raise ValueError("Source modified after generation; output HOLD")
+    output_digest = hashlib.sha256(target.read_bytes()).hexdigest()
+    if output_digest != hashlib.sha256(markup.encode("utf-8")).hexdigest():
+        raise ValueError("Output integrity mismatch; output HOLD")
+    return {"source_sha256": digest, "output_sha256": output_digest, "rows": len(rows),
+            "columns": fields, "mapping": {"id": id_column, "title": title_column, "category": category_column},
+            "theme": theme, "sale_approved": False}
 
 def main():
     parser = argparse.ArgumentParser()
