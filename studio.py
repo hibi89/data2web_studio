@@ -54,11 +54,18 @@ def main(argv=None):
     ps.add_argument("--theme",choices=["office","cafe","inventory"],default="office")
     ps.add_argument("--name",default="DATA2WEB")
     sub.add_parser("desktop",help="Open optional local Tkinter owner-review UI (no server)")
+    selfcheck=sub.add_parser("self-check",help="Run redacted local synthetic acceptance checks")
+    selfcheck.add_argument("--browsers",action="store_true")
     pc=sub.add_parser("verify-customer",help="Independently verify a full local customer folder")
     pc.add_argument("directory",type=Path)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
+        if args.action=="self-check":
+            from client_local_rehearsal import self_check
+            result=self_check(with_browsers=args.browsers)
+            print(json.dumps(result,ensure_ascii=False,sort_keys=True))
+            return 0 if result["status"]=="PASS_SYNTHETIC_ONLY" else 2
         if args.action=="desktop":
             from data2web_desktop import desktop_main
             desktop_main()

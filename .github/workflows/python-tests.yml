@@ -20,6 +20,8 @@ jobs:
           python-version: '3.11'
       - name: Run standalone synthetic and packaging regressions
         run: python -m unittest discover -v
+      - name: Stdlib-only synthetic customer-device preparation (no real user data)
+        run: python studio.py self-check
   browser:
     runs-on: ubuntu-24.04
     steps:
@@ -81,3 +83,5 @@ jobs:
         run: python desktop_ui_smoke.py
       - name: Actual Tkinter customer button flow with CSV and XLSX, no cloud
         run: python desktop_ui_owner_flow_probe.py
+      - name: Native installed Chrome Edge self-check with no Playwright at runtime
+        run: python studio.py self-check --browsers
