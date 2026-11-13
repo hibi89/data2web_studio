@@ -1,5 +1,24 @@
 # DATA2WEB Studio — 오프라인 XLSX / TSV / CSV / JSON 웹앱 생성기
 
+## 사용자 최종설계 R01–R33 기준 재감사 · 2026-11-13 16:52 KST
+
+**공식 최종완성률은 UNASSESSED, 최종설계 85% 미인증.** 기존의 '85% 기술 단계 완료'는 사용자가 요구한 최종설계 전체 85%가 아니었다. 이번엔 전체 33 요구를 재분해하고 R08/R13/R15/R24/R29/R32 등 실제 미구현 기능을 보완하여 [Windows/Ubuntu 190 PASS·브라우저 3종 합성 실제 실행 4/4 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43388705727)를 확인했다. **실고객 Win10/11·원본 Lite 실코드 full golden·가격/환불/지원·자료권리·가중치 사용자 승인 미충족이므로 판매·완료 주장 금지**. [요구별 증거/미충족](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) · [고객자료/납품 HOLD 체크리스트](docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md).
+
+### 신규 복수 파일 고객 납품 명령
+
+```bash
+python studio.py inspect first.csv
+python studio.py inspect second.tsv
+# 파일별 실제 SHA256, 동일 헤더와 사용권/민감정보를 확인한 후 approval.json 생성
+python studio.py deliver-append approval.json ./new-customer-folder --confirm APPROVE --ack-plaintext
+python studio.py verify ./new-customer-folder/delivery.zip
+python package_portable.py local-builder.pyz
+python local-builder.pyz inspect first.csv
+```
+
+승인 JSON 샘플/보안 한도/필수 입력은 [사용자 승인 대기 운영 가이드](docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md)에 있다. 파일 경로·SHA/원본 권리/민감정보 검토 없이 위 명령을 바로 실행하면 안 된다. 개별 파일은 같은 순서의 헤더만 append하며 JOIN·자동 추정/외부 업로드는 하지 않는다. `local-builder.pyz`는 **Python3.11이 반드시 필요한 서명되지 않은 zipapp**, Windows 설치형 EXE가 아니다.
+
+
 **CSV·평면 JSON·TSV·보수적 Excel `.xlsx` 값 파일**을 사용자 PC에서 명시적 검수 후 독립 검색/분류/정렬/상세 HTML과 검증 ZIP으로 전환. 기존 REA_Web 웹사이트 분석 제품과 무관하며 원본 데이터를 서버/AI로 전송하지 않습니다. Python 3.11+ 기본 모듈만 사용하며 인터넷·계정·결제·데이터베이스 불필요.
 
 > **2026-11-13 P85 검증:** [Windows145/145, Ubuntu145/145, Windows Google Chrome·Microsoft Edge, Ubuntu Chromium `file://` 전 경로 PASS(총 4/4 CI jobs)](https://github.com/hibi89/data2web_studio/actions/runs/43385035408), 정확 기능 SHA `709b2e5d5540893b9f7ad1b391584c6400899672`. **기술 85% 단계 검증**, 최종설계 전체 **공식 완성률 UNASSESSED**, 판매/납품 **RELEASE HOLD**. 고객 실제 Win10/11과 라이선스는 미검증.

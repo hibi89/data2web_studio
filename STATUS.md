@@ -1,5 +1,16 @@
 # DATA2WEB Studio — STATUS
 
+## 최신: 2026-11-13 16:52 KST · 사용자가 지정한 최종설계 85% 재검증 작업
+- **최종설계 전체 공식 완성률 = UNASSESSED / 85% 미인증(목표 미달 판정).** 이전 '85% 기술단계 완료' 답변을 정식 최종완성률 85%로 해석한 것은 오류였다. 사용자 최종설계 `REQUIREMENTS.md` R01~R33 전체/소유자 확정 가중치/실고객 인수를 기준으로만 공식 산정한다.
+- **R01~R33 전수 추적:** [docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) 완성. 모든 행의 가중치는 승인 전으로 비워두었고 합성 CI/실 고객/법적 승인/미검증 구분. 전체 85% 수치를 임의 생성하지 않는다.
+- **실 기능 추가:** R08 개인정보 자동 통과를 주장하지 않는 원문 미출력 컬럼 프로파일·NULL/중복/형 힌트; R13 각 원본의 실 SHA·권리/평문·개인정보 수동 분류 승인 후 동일 순서 헤더 최대10개 CSV/JSON/XLSX/TSV append(추정 JOIN 금지), 파일 간 ID 중복/경로/시트 SHA 오류 HOLD; R15 Ctrl/⌘ 다중 분류 필터; R24 신규 고객 폴더에만 HTML+ZIP+SHA 영수증 생성·무덮어쓰기; R29 입력/출력 전체 경로 symlink/reparse/junction `..` 거부; R32 Python3.11 표준 라이브러리만 쓰는 결정적 `.pyz` 빌더/실행 검증. 기존 P50/P70/P85 구현과 REA_Web 원본 불변.
+- **실제 CI 증거:** 기능 검증 정확 SHA `0ee4a9d8810d78c47b35cbd41bc69725674db4cc`, [Actions #43388705727](https://github.com/hibi89/data2web_studio/actions/runs/43388705727) **4/4 SUCCESS**. Windows Server2025 Python3.11 **190 PASS/0 FAIL/0 SKIP**, Ubuntu24.04 Python3.11 **190 PASS/0 FAIL/0 SKIP**. Windows 설치 Chrome·Edge와 Linux Chromium에서 CSV/XLSX/TSV→HTML·ZIP·요약 차트·복수 원본/파일별 SHA·CSV 재교체/재열기와 출처 무효화 실제 `file://` E2E PASS, 외부 HTTP(S)0/pageerror0. 합성 10,000×20 성능 시험 PASS(자세한 값 CI 로그).
+- **아직 충족하지 못한 수용 조건:** R23/R30 실제 사용자의 Windows10/11 Chrome·Edge/macOS 독립 인수, R31 원본 REA Lite full actual-runtime 비교, R21/R27/R33 LICENSE·판매·재배포·가격·지원·환불/고객자료 실제 소유권 승인, R25 개인정보 보유·파기 정책 승인, R32 실제 고객용 포터블 패키지/EXE 서명·지원. XLSX strict OOXML 범위 밖 Excel 서식·캐시 실제 호환은 실고객 미검증. R24 단일파일 새 폴더 workflow 등도 부분.
+- **보안·운영:** RELEASE HOLD/SALE NO-GO, `[작업중]` 유지. `main` 및 `feature/lite-independent-migration`, `feature/xlsx-tsv-import`, `feature/p85-ui-crossbrowser-20261113` 변경하지 않음. Vercel/Production 미적용(단일 HTML 로컬 제품).
+- **현재 개발 브랜치:** `feature/final-blueprint-p85-evidence-20261113`. 사용자 개입 없이 가능한 기능 보완과 합성/호스팅 브라우저 CI는 완료. 사용자 승인/실 고객 PC/권리 검증은 **검증 대기**. 실행·법적 승인 없는 85% 달성 주장 금지.
+- **운영정책:** [소유자 고객자료·납품 보류 체크리스트](docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md), 다음 단계는 요구/승인/고객 현장 근거가 마련되면 검증한 범위만 갱신. 해총 크몽 브랜치 상품 원장은 별도 커밋/HEAD 확인 후 동기화.
+
+## 과거 개발 이력 (역사 자료로 보존, 최신 판정 아님)
 ## 2026-11-13 16:21 KST · P85 기술 단계 구현·실기능 검증
 - **공식 최종설계 완성률 UNASSESSED**. 사용자 지시 P70→P85 **기술 단계 검증 통과**; 전체 `REQUIREMENTS.md` R01–R33의 소유자 확정 가중치·실고객 인수가 없어 최종 85%를 공식 수치로 대체하지 않는다.
 - **GitHub:** `hibi89/data2web_studio@feature/p85-ui-crossbrowser-20261113` 기능 검증 `709b2e5d5540893b9f7ad1b391584c6400899672`. `main`, P50, P70 기존 원본 기능은 그대로 보존, 미병합.
