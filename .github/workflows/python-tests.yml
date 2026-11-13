@@ -41,6 +41,8 @@ jobs:
         run: python browser_perf_probe.py
       - name: Multi-source CSV TSV XLSX approval and browser re-export provenance
         run: python browser_final_blueprint_probe.py --channel chromium
+      - name: Single-source local customer folder and JSON acceptance
+        run: python browser_single_delivery_probe.py --channel chromium
   windows-browsers:
     runs-on: windows-latest
     steps:
@@ -62,3 +64,7 @@ jobs:
         run: python browser_final_blueprint_probe.py --channel chrome
       - name: Real Windows Edge multi-source append browser flow
         run: python browser_final_blueprint_probe.py --channel msedge
+      - name: Single-source folder Chrome file local owner acceptance
+        run: python browser_single_delivery_probe.py --channel chrome
+      - name: Single-source folder Edge file local owner acceptance
+        run: python browser_single_delivery_probe.py --channel msedge
