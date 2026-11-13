@@ -40,8 +40,8 @@ def verify_zip(path):
     raw=read_bounded_source(path,max_bytes=MAX_ARCHIVE)
     # The builder emits a plain ZIP, never a self-extracting/polyglot prefix,
     # trailing payload or archive comment. Do not endorse altered containers.
-    if (len(raw) < 22 or not raw.startswith(b"PK\\x03\\x04")
-            or raw[-22:-18] != b"PK\\x05\\x06" or raw[-2:] != b"\\x00\\x00"):
+    if (len(raw) < 22 or not raw.startswith(b"PK\x03\x04")
+            or raw[-22:-18] != b"PK\x05\x06" or raw[-2:] != b"\x00\x00"):
         raise ValueError("Non-canonical ZIP envelope")
     try:
         with ZipFile(BytesIO(raw), "r") as archive:
