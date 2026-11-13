@@ -52,7 +52,8 @@ def main():
             with page.expect_download() as started:
                 page.locator("#save").click()
             downloaded=started.value
-            saved=Path(downloaded.path())
+            saved=root/"reopened.html"
+            downloaded.save_as(str(saved))
             assert saved.exists()
             reopened=context.new_page()
             reopened.on("pageerror",lambda e:faults.append(str(e)))
