@@ -1,5 +1,11 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 소유자 실제 Win11 Pro GUI 시각검수 PASS (미선택 초기 화면)
+- 사용자가 Windows11 Pro Build26200에서 `DATA2WEB-LOCAL.exe desktop`을 실행해 **실제 Tk GUI 스크린샷**을 전달. `DATA2WEB Studio — 로컬 데이터 검수` 제목의 창·한글 레이블·파일선택·XLSX 시트·헤더/수식 캐시·SHA/열 중복검수·ID/제목/분류 매핑·앱 제목·테마·고객 폴더·권리/평문 체크박스·개인정보 검수 분류·생성/독립검증 버튼이 화면에 표시됨을 육안 확인. 초기 메시지 `원본을 선택하세요`는 빈 파일 상태의 정상 안내로 판단, 실행 오류로 오인 금지.
+- 동일 EXE 원본 SHA256 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`와 소유자 검산값 일치·Chrome/Edge 합성 self-check PASS(직전 기록). 이번 스크린샷은 창 표시/레이아웃 **육안 확인만**이며 파일 선택·시트 파싱·고객폴더 실제 생성·버튼 클릭·원본 보존·권리 승인·실고객 인수는 **실행 증거 아님**.
+- **R01–R33 고정72/100 유지**, 목표85까지13점; R23/R32 일부 환경·GUI 수용 근거 강화하였으나 전체 요구 아직 미충족. `[작업중]`/RELEASE HOLD/SALE NO-GO. 스크린샷 원본·개인 경로·브라우저 정보는 GitHub에 업로드하지 않음. 다음: 개인/고객자료가 아닌 합성 CSV를 사용한 현장 폴더 납품·검증까지 1회 확인.
+
+
 ## 2026-11-14 KST · 소유자 PC의 Windows 11 Pro 빌드 및 EXE 정본 SHA256 일치 확인
 - **사용자 제공 실제 Windows 명령:** `Get-CimInstance Win32_OperatingSystem` 출력 `Microsoft Windows 11 Pro`, `Version=10.0.26200`, `BuildNumber=26200` → **Windows 11 Pro 26200 확인**(Windows 시스템의 내부 버전 10.0은 Windows11과 모순 아님).
 - `Get-FileHash .\\DATA2WEB-LOCAL.exe -Algorithm SHA256` 소유자 출력 `87D0D28222A052CD5C8F4DA48922376EC72A604283B8021A775199F4FA0F4718`; GitHub native workflow [#43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) EXE `sha256=87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`와 **대소문자 무시한 64자리 완전 일치**. 출처와 실행물 버전 동일성 사용자 제공 증거 확보.

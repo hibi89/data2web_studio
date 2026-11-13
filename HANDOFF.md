@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · Win11 소유자 실제 GUI 스크린샷 확인
+1. **제품 목적/정본:** DATA2WEB Studio 로컬 표형 자료→HTML/ZIP, Python 없이 Windows native EXE 검증, R01~R33 100점·목표85.
+2. **이번 증거:** 사용자 Win11 Pro build26200에서 `DATA2WEB-LOCAL.exe desktop` 구동해 Tk 창과 한글 UI/원본·시트·열 매핑/고객폴더·개인정보 승인 컨트롤이 보이는 스크린샷 제공, **초기화면 표시 PASS**. 기존 EXE SHA256 원본 매칭 + Chrome·Edge self-check PASS 이력과 연결.
+3. **테스트:** 직접 전달 스크린샷의 시각 확인만 PASS; Windows hosted native GUI 자동검증 [#43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) PASS, 최근 이전 제품 SHA `e83953f7b1ba5af14456dde782a7c461ed91e04c`에서 GitHub [Python/browser #43529507138](https://github.com/hibi89/data2web_studio/actions/runs/43529507138) 4/4 SUCCESS, [gate #43529507384](https://github.com/hibi89/data2web_studio/actions/runs/43529507384) SUCCESS. 현장 파일 파싱/실납품/동의/Win10/macOS **NOT VERIFIED**.
+4. **현재:** 정본 최종점수72/100(22 VERIFIED), 11 PENDING28점, 85점까지13점. `[작업중]`·RELEASE HOLD·SALE NO-GO; PR#4 Draft 미병합.
+5. **장애·근거·다음:** 처음 뜬 붉은 안내 `원본을 선택하세요`는 선택이 없는 초기상태 유도 문구; 실제 오류나 테스트 실패 아님. 다음 소유자 synthetic CSV 1개를 직접 생성→GUI 선택/검수→새 폴더 납품→독립 검증하는 제한된 실사용 흐름; 원본·고객데이터 불필요. 보안위험으로 차단되면 강제 우회 금지.
+6. **저장소/브랜치:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 변경 전 HEAD `e83953f7b1ba5af14456dde782a7c461ed91e04c`, 실행 EXE 기준 `96e2e1dff9976773bf3d3b2670ba6763ee69292d`, SHA256 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`.
+7. **Production:** Windows11 Pro desktop; production/Vercel 미적용. RUN `DATA2WEB-LOCAL.exe desktop`, 또는 `self-check --browsers`.
+8. **원본/복구:** 원본·기존 기능·점수표·main 변경0, 화면 원본 이미지는 저장소에 저장하지 않음, 개인정보·PC 경로·브라우저 북마크 기록하지 않음. 이전 안정 소스 HEAD `e83953f7b1ba5af14456dde782a7c461ed91e04c`.
+9. **우선순위:** 현장 GUI의 합성 표형 파일 승인·생성/독립검증 확인, 권리/NOTICE/보존·지원·환불 정책 명시 승인, 고객/Windows10/macOS 독립 인수 등 개별 요구 전체 충족 후 점수 갱신. GUI 표시만으로 85 주장 금지.
+10. **확인시점:** 2026-11-14 KST, 사용자 제공 이미지 및 기존 원격 빌드증거 비교. 현재 기록 커밋은 별도 확인 대상.
+
 ## 최신 인수인계 보충 · 2026-11-14 KST · 소유자 Windows11/실 EXE 정본 해시 일치
 1. **목표/정본:** DATA2WEB Studio, R01–R33 고정 100점/85목표, 오프라인 데이터→HTML·ZIP, Windows 로컬 EXE 시범.
 2. **완료/변경:** 사용자 PowerShell에서 `Microsoft Windows 11 Pro`, `Version=10.0.26200`, `Build=26200` 확인. 실행 중인 `DATA2WEB-LOCAL.exe` SHA256=`87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`가 hosted native CI artifact 원본과 정확 일치, 앞선 Windows11 소유자 Chrome/Edge synthetic `PASS_SYNTHETIC_ONLY`와 동일 EXE.
