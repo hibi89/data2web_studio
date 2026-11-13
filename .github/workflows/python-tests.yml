@@ -1,7 +1,7 @@
 name: DATA2WEB Python and browser acceptance
 on:
   push:
-    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import"]
+    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import", "feature/p85-ui-crossbrowser-20261113"]
   pull_request:
     branches: [main]
 permissions:
@@ -35,3 +35,24 @@ jobs:
         run: python browser_probe.py
       - name: Real XLSX TSV file:// Chromium end-to-end
         run: python browser_tabular_probe.py
+      - name: Real P85 dashboard and local download acceptance
+        run: python browser_p85_probe.py --channel chromium
+      - name: Synthetic 10k x 20 performance envelope
+        run: python browser_perf_probe.py
+  windows-browsers:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test-only Playwright library
+        run: python -m pip install playwright==1.56.0
+      - name: Real installed Google Chrome file:// owner flow
+        run: python browser_p85_probe.py --channel chrome
+      - name: Real installed Microsoft Edge file:// owner flow
+        run: python browser_p85_probe.py --channel msedge
+      - name: Real Chrome XLSX TSV OOXML file:// flow
+        run: python browser_tabular_probe.py --channel chrome
+      - name: Real Edge XLSX TSV OOXML file:// flow
+        run: python browser_tabular_probe.py --channel msedge
