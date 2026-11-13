@@ -36,7 +36,7 @@ def main(argv=None):
             if args.zip_path: result["package"]=package_html(args.output,args.zip_path,result)
         else:
             result=verify_zip(args.zip_path)
-        print(json.dumps(result,ensure_ascii=False,sort_keys=True))
+        print(json.dumps(result,ensure_ascii=True,sort_keys=True))
         return 0
     except (OSError,ValueError,FileExistsError) as e:
         # Never print row contents or customer paths into logs.

@@ -179,14 +179,14 @@ class Acceptance(unittest.TestCase):
         with self.assertRaises(ValueError):read_table(self.src)
 
     def test_injection_formula_is_text(self):
-        self.src.write_text("식별자,이름,분류,비고\nA-01,=HYPERLINK(a),커피,@SUM(A1)\n")
+        self.src.write_text("식별자,이름,분류,비고\nA-01,=HYPERLINK(a),커피,@SUM(A1)\n",encoding="utf-8")
         self.golden_build()
         s=self.html.read_text(encoding="utf-8")
         self.assertIn("=HYPERLINK",s)
         self.assertIn("textContent",s)
 
     def test_html_escape_bad_script(self):
-        self.src.write_text('식별자,이름,분류,비고\nA-01,"</script><img src=x onerror=alert(1)>",커피,x\n')
+        self.src.write_text('식별자,이름,분류,비고\nA-01,"</script><img src=x onerror=alert(1)>",커피,x\n',encoding="utf-8")
         self.golden_build()
         s=self.html.read_text(encoding="utf-8")
         self.assertNotIn("</script><img",s)
@@ -199,11 +199,11 @@ class Acceptance(unittest.TestCase):
         self.assertEqual(len(rows),2)
 
     def test_reject_missing_id(self):
-        self.src.write_text("식별자,이름,분류\n,zero,x\n")
+        self.src.write_text("식별자,이름,분류\n,zero,x\n",encoding="utf-8")
         with self.assertRaises(ValueError):self.golden_build()
 
     def test_reject_duplicate_id(self):
-        self.src.write_text("식별자,이름,분류\nA1,one,x\nA1,two,y\n")
+        self.src.write_text("식별자,이름,분류\nA1,one,x\nA1,two,y\n",encoding="utf-8")
         with self.assertRaises(ValueError):self.golden_build()
 
     def test_json_nested_array_refused(self):
