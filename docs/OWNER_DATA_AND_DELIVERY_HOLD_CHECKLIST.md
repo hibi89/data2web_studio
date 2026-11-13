@@ -59,3 +59,22 @@ python studio.py verify new-client-folder/delivery.zip
 - `NO_PERSONAL_DATA_REVIEWED`는 실제 소유자 스스로 개인정보 검수를 했다는 **선언값일 뿐** 시스템의 법적 적합성 판정이 아니다. 개인정보가 존재하면 법적·고객 승인 없는 상용 납품 금지.
 - 새 폴더만 생성, HTML·ZIP·영수증 파일을 create-only로 출력. XLSX는 `--sheet 실제시트명` 명시가 없으면 폴더를 만들기 **전** HOLD. 실제 고객 Win10/11 Chrome/Edge·업무 Excel 원본 샘플 인수는 미검증. Python3.11 .pyz 지원도 **서명/EXE가 아니다**.
 - 원본 공용 REA Lite의 pinned SHA 실제 실행 및 `file://` 비교는 합성 데이터 범위 [최종설계 85 재검증](FINAL_BLUEPRINT_85_REASSESSMENT_20261113.md)에 기록했다. 상업 라이선스 승인 증명과 무관하다.
+
+## 새 로컬 데스크톱 검수 및 폴더 전체 검증 (2026-11-13)
+
+```bash
+# Python 3.11+ 및 Tcl/Tk 포함 로컬 PC에서 실행 (외부 서버 없음)
+python studio.py desktop
+# 또는
+python data2web_desktop.py
+
+# GUI/CLI가 새로 만든 customer 폴더에 HTML·ZIP·영수증이 모두 일치하는지 검증
+python studio.py verify-customer ./new-client-folder
+python tool.pyz verify-customer ./new-client-folder
+```
+
+- 데스크톱 GUI는 현재 **단일 입력 파일**만 처리한다. 다중파일 `deliver-append`는 기존 수동 승인 매니페스트 기반 CLI를 사용한다. GUI가 고객의 파일 권리·민감정보를 법적으로 검사하거나 자동으로 판매를 승인하지 않는다.
+- Windows 호스팅 환경의 실제 Tk GUI 렌더와 데이터 선택/동의/생성 컨트롤 headless 계약 테스트는 PASS, **실제 구매자 Win10/11 GUI 클릭 시나리오와 배포 서명 EXE는 미검증**. UI 구성요소가 설치된 Python에서만 실행 가능하다.
+- `verify-customer`는 서명이 아니라 `index.html`, `delivery.zip`, `receipt.json`의 **같은 폴더 내부 무결성 일치**만 확인한다. 원본/실구매자 계약·개인정보 동의·상업권리·신원은 확인하지 않는다. 추가 파일·불일치 데이터는 HOLD.
+- GUI 방식 선택 이유/제약 및 변조 시험: [docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md](docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md). 소유자 가중치 미승인으로 공식 85% 여전히 미인증.
+

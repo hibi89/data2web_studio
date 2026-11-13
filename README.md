@@ -1,3 +1,30 @@
+# DATA2WEB Studio — 데이터 파일을 오프라인 웹앱으로
+
+**로컬 PC에서 CSV·JSON·TSV·제한 XLSX 입력 → 명시 권리/개인정보 검수 → 오프라인 HTML·ZIP·영수증.** 서버/원격 API 없이 작동. 모든 사용자 자료는 출력물에 평문 포함될 수 있다.
+
+## 새 로컬 데스크톱 검수 및 폴더 전체 검증 (2026-11-13)
+
+```bash
+# Python 3.11+ 및 Tcl/Tk 포함 로컬 PC에서 실행 (외부 서버 없음)
+python studio.py desktop
+# 또는
+python data2web_desktop.py
+
+# GUI/CLI가 새로 만든 customer 폴더에 HTML·ZIP·영수증이 모두 일치하는지 검증
+python studio.py verify-customer ./new-client-folder
+python tool.pyz verify-customer ./new-client-folder
+```
+
+- 데스크톱 GUI는 현재 **단일 입력 파일**만 처리한다. 다중파일 `deliver-append`는 기존 수동 승인 매니페스트 기반 CLI를 사용한다. GUI가 고객의 파일 권리·민감정보를 법적으로 검사하거나 자동으로 판매를 승인하지 않는다.
+- Windows 호스팅 환경의 실제 Tk GUI 렌더와 데이터 선택/동의/생성 컨트롤 headless 계약 테스트는 PASS, **실제 구매자 Win10/11 GUI 클릭 시나리오와 배포 서명 EXE는 미검증**. UI 구성요소가 설치된 Python에서만 실행 가능하다.
+- `verify-customer`는 서명이 아니라 `index.html`, `delivery.zip`, `receipt.json`의 **같은 폴더 내부 무결성 일치**만 확인한다. 원본/실구매자 계약·개인정보 동의·상업권리·신원은 확인하지 않는다. 추가 파일·불일치 데이터는 HOLD.
+- GUI 방식 선택 이유/제약 및 변조 시험: [docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md](docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md). 소유자 가중치 미승인으로 공식 85% 여전히 미인증.
+
+
+**검증된 최신 코드 SHA `74f5f5a6b4625be3d510be5f59f1983be150b26e`** [Actions #43395679294](https://github.com/hibi89/data2web_studio/actions/runs/43395679294) GitHub 호스팅 Windows/Ubuntu 각 235 Python 테스트·Windows Tk GUI 41개 UI 컨트롤 렌더, Chrome/Edge/Chromium file:// QA 통과. **그러나 고객 실제 Win10/11, Excel 실문서, 권리/상용 라이선스 및 출시 전 최종 85% 승인 가중치 미완료.** `RELEASE HOLD`, `[작업중]`, 공식 `UNASSESSED` 유지.
+
+## 기존 기능·전체 프로젝트 실행 지침(이력 보존)
+
 ## 최신 최종설계 전체 기준 개발·검증 (2026-11-13 KST)
 
 **공식 최종완성률은 여전히 UNASSESSED; 전체 최종설계 85% 미인증**. 단, [정확 코드 `d311c47f1b85382f1d4ce43dfacdabcdc7e85612`의 CI #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159)에서 **Windows·Ubuntu Python 각 210 PASS, Chrome·Edge·Chromium 실 `file://` 단일·다중 고객 폴더 HTML/ZIP·영수증 E2E PASS**, 원본 공개 REA Lite pinned commit `7b6b6811...`의 실제 런타임과 공통 CSV/JSON·테마·검색/분류·CSV 교체/재저장·거부 테스트 비교 PASS를 검증했다.

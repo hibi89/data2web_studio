@@ -1,4 +1,4 @@
-# DATA2WEB Studio — 최종설계 R01–R33 전수 수용 감사 · 2026-11-13 KST
+| R32 | Python·의존성잠금·QA·실행/포터블 배포·재현 빌드 | **미승인** | `package_portable.py`, `data2web_desktop.py`, `test_desktop_controller.py`·호스팅 Win Tk41 화면·Python zipapp | 235x2 OS+Win GUI smoke PASS | Python/Tk 실제 구매자 설치·서명 EXE·실고객 인수 미검증 |
 
 ## 계산 기준: 사용자 확정 원본 100% 전체
 - **정본:** `REQUIREMENTS.md`(2026-11-12), `docs/FINAL_DESIGN.md`(v1), owner 정책 `OWNER-FINAL-BLUEPRINT-100`. R01–R33을 완전히 포함하며 요구 범위/상용 조건을 축소하지 않았다.
@@ -45,6 +45,12 @@
 | R33 | 상업적 재배포·자료권리·실고객 인수·구매/환불 승인 | **미승인** | `docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md` | 대기 | 사용자/법무/고객의 실제 승인 필요 |
 
 여기서 '합성 PASS'는 QA 목적으로 직접 만든 합성 데이터에 대한 **GitHub CI 실제 실행**이다. '실브라우저 합성 PASS'는 호스팅 Windows Chrome/Edge 및 Ubuntu Chromium에서 실제 `file://` URL을 연 결과지만 **실고객 파일·디바이스 사용자 인수는 아니다**. `부분`·`대기`에 대해 완료 점수는 배정하지 않는다.
+
+## 2026-11-13 추가 데스크톱·고객폴더 독립 검증 (공식 85% 미확정)
+- `74f5f5a6b4625be3d510be5f59f1983be150b26e` [CI #43395679294](https://github.com/hibi89/data2web_studio/actions/runs/43395679294) Windows·Ubuntu **각 235 PASS**, hosted Windows Tkinter 실제 41개 UI 렌더링, Chrome·Edge/Chromium local file://, 원본 Lite 실제 golden 기존 경로 PASS.
+- R08/R09/R19/R24/R26: Python Tkinter 로컬 검수·명시 승인 GUI, 실제 고객 파일 SHA/시트 변경은 새 폴더 생성 전에 HOLD; 데이터 브라우저·외부 API 전송0.
+- R21/R22/R24: 전체 고객 폴더 HTML+ZIP+receipt 내부 SHA/행수/매핑 출처 대조, receipt 바꿔치기/중복/누락/추가 파일 거부; 독립 서명·판매권 승인과 구분.
+- 사용자 승인 가중치 합100·실 고객 Win10/11/권리/판매/지원 미충족으로 **공식 전체 85% UNASSESSED 유지**. [완전한 실증과 미검증](FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md).
 
 ## 2026-11-13 후속 정확 QA 추가 (공식 점수 미산정)
 - **추가 기능 검증 SHA** `d311c47f1b85382f1d4ce43dfacdabcdc7e85612` [GitHub Actions #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159) Windows/Ubuntu **210 PASS 각각**, 실제 Windows Chrome·Edge 및 Ubuntu Chromium `file://` 단일 고객 새 폴더 HTML/ZIP/receipt, 소유자 SHA·PII 동의, 이전 다중결합·검색/차트·CSV 교체 PASS.

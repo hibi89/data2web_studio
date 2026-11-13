@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-13 KST · 최종설계 전체 85% 실작업(추가) · 정확 기능 SHA 74f5f5a6b462
+- **공식 최종완성률 UNASSESSED / 전체 정본 85% 미인증.** 사용자 최종설계 전부 `REQUIREMENTS.md` R01–R33을 100%로 하는 공통 `OWNER-FINAL-BLUEPRINT-100` 준수. 승인 가중치 합100, 실제 고객/권리·판매 수용 없이 합성 테스트 건수를 퍼센트 환산하지 않음.
+- **이번 구현:** 선택형 독립 로컬 Tkinter GUI(`data2web_desktop.py`, `studio.py desktop`)에서 소스/시트/컬럼/원본 SHA/권리·평문·개인정보 수동 검수→기존 SHA pinned single-file HTML·ZIP·JSON receipt 고객 신규폴더 생성. `verify_customer_folder.py`는 전체 고객 폴더 HTML/ZIP/receipt 교차검증, 불일치/추가파일/영수증 변조/ZIP 교체 등을 HOLD. `studio.py verify-customer`, `.pyz` 동일 실행.
+- **검증 SHA `74f5f5a6b4625be3d510be5f59f1983be150b26e`** [Actions #43395679294](https://github.com/hibi89/data2web_studio/actions/runs/43395679294): Win Server2025/Ubuntu24.04 Python3.11 **각 235 PASS / 0 FAIL / 0 SKIP**, Linux Chromium·Windows 실제 Chrome/Edge의 합성 CSV/JSON/XLSX/TSV 단일/복수 데이터 `file://` 테스트/원본 Lite golden, 호스팅 Windows Tkinter 실제 41 컨트롤 생성 PASS. 독립 GUI 컨트롤/승인기 계약·파일 바꿔치기 경계 테스트 포함.
+- **남은 수용:** 실제 구매자 Win10/11 Chrome/Edge와 GUI 직접 조작·고객 Excel 워크북/영수증, macOS 기기, R25 보유/삭제 정책, R21 LICENSE/NOTICE·R27 SKU/가격/지원/환불·R33 고객 파일 사용권/상용 재배포/실 고객 인수, R06/29 경합·외부 보안감사·실장비 테스트, R32 Python/Tk 설치 지원/서명 EXE. 출시 `RELEASE HOLD/SALE NO-GO`.
+- **사용자 [작업중] 유지:** 승인된 요구가 충족됐다는 전체 최종설계 85% 증거가 없어 마커 해제 금지. `main`, P50/P70/P85 baseline, 원본 REA_Web 수정 없음. [전체 33요구 추적](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md), [GUI/고객 폴더 수용근거](docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md). Production/Vercel **미적용**(오프라인 제품).
+
+## 과거 상태 (보존, 현행 공식률 아님)
 ## 2026-11-13 KST — 사용자 지정 전체 최종설계 85% 목표 후속 결과
 - **정식 전체 최종완성률 UNASSESSED, 최종 85% 미인증**. 확인된 개발 기능이 많아져도 최종설계 R01–R33 승인 가중치·실 고객/권리 수락 없이는 퍼센트 임의 산정 금지.
 - 정확 검증 **코드 SHA `d311c47f1b85382f1d4ce43dfacdabcdc7e85612`**, [GitHub Actions #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159) **4/4 SUCCESS**; Python Windows/Ubuntu **각 210 PASS·0 FAIL·0 SKIP**, Windows Chrome·Edge / Linux Chromium에서 CSV/JSON/XLSX/TSV 단일/다중 납품 및 검색·교체·재저장 실제 `file://` QA PASS. 데이터 외부전송0.
