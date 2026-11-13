@@ -1,23 +1,21 @@
-| R32 | Python·의존성잠금·QA·실행/포터블 배포·재현 빌드 | **미승인** | `package_portable.py`, `data2web_desktop.py`, `test_desktop_controller.py`·호스팅 Win Tk41 화면·Python zipapp | 235x2 OS+Win GUI smoke PASS | Python/Tk 실제 구매자 설치·서명 EXE·실고객 인수 미검증 |
+# DATA2WEB Studio — 전체 최종설계 R01–R33 수용 감사 (2026-11-14 KST)
 
-## 계산 기준: 사용자 확정 원본 100% 전체
-- **정본:** `REQUIREMENTS.md`(2026-11-12), `docs/FINAL_DESIGN.md`(v1), owner 정책 `OWNER-FINAL-BLUEPRINT-100`. R01–R33을 완전히 포함하며 요구 범위/상용 조건을 축소하지 않았다.
-- **공식 최종완성률: `UNASSESSED`(85% 미인증).** 전체 33개 요구에 대한 소유자의 `가중치 합계100` 확정 문서가 없고, 실 고객·Win10/11·이용권/법적 승인/원본 full golden/제품 납품 수용이 미충족이다. 아래 합성 기술 테스트 PASS 수를 85%로 나누지 않는다.
-- **기능 검증 소스 SHA:** `d311c47f1b85382f1d4ce43dfacdabcdc7e85612`, [Actions #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43388705727) **4/4 SUCCESS**, Win·Ubuntu Python3.11 각각 **210/210 PASS**, Linux Chromium+Windows Chrome/Edge 실제 `file://` 합성 데이터 E2E PASS. GitHub hosted Windows Server 2025이지 실제 구매자 Win10/11이 아니다.
-- **사용자 요청 재해석:** 본 작업은 기술단계85가 아닌 정본 전체 final-design 85를 목표로 시작. 아래의 미충족 사항이 남으므로 **최종설계 85% 완료라고 주장하지 않는다.**
-- **가중치 정책:** `승인 가중치` 열은 **모두 미승인**이다. 추정 균등 가중치 1/33을 지정하지 않는다. 부분 구현/미검증에는 임의 점수 없음.
+**공식 최종완성률 UNASSESSED, 사용자 지정 전체 최종설계 85% 인증 보류.** 분모는 REQUIREMENTS.md R01–R33 및 docs/FINAL_DESIGN.md 전체이며 합계100의 사용자 승인 요구별 가중치가 아직 없다. 합성 테스트 249회 성공을 85%라고 환산하지 않는다.
 
-## 전체 33개 요구, 누락 없이 대조
-| ID | 정본 요구/수용조건 | 소유자 승인 가중치 | 실제 구현·실행 근거 | 상태 | 반드시 남길 한계 |
+**실행 증거:** 소스 441506eda275b1e3766a4d018741ebfa1ae030b7, [GitHub Actions #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) 4/4 SUCCESS. 호스팅 Windows Server2025 Python3.11 249/249 PASS, Ubuntu24.04 Python3.11 249/249 PASS. Windows 실제 Tkinter UI에서 합성 CSV/XLSX 두 경로를 파일선택·시트·열·권리/개인정보 승인·고객폴더 생성까지 버튼 클릭 PASS. Windows 설치 Chrome·Edge에서 Playwright와 네이티브 headless HTML 직접 렌더 PASS; Ubuntu Chromium 및 실제 upstream REA Lite pinned golden PASS. 고객 Windows10/11 PC/실업무 Excel/상용 권리는 미검증.
+
+## 최종설계 전체 33개 요구별 검증표
+
+| 요구 | 사용자 정본 수용 범위 | 승인 가중치 | 코드·실행근거 | 확인된 범위 | 남은 한계 |
 |---|---|---|---|---|---|
 | R01 | CSV UTF-8/BOM·RFC4180 인용/개행 | **미승인** | `data2web.py, test_acceptance.py` | 합성 PASS | 실고객 손상 CSV 별도 |
 | R02 | 평면 JSON 배열·객체형 레코드 검수 | **미승인** | `data2web.py, test_single_delivery.py`, 단일 평면 객체 또는 평면 객체 배열·NaN/중첩 HOLD | 합성 PASS | 임의 중첩 records wrapper 자동추정/객체 키 기반 JOIN 미지원 |
 | R03 | XLSX 시트/헤더 위치·수식/외부링크·캐시 HOLD | **미승인** | `data2web_tabular.py, test_tabular.py` | 제한 XLSX 합성 PASS | 실제 Excel 다양한 서식/날짜 형식·사용자 실제 검수 |
 | R04 | TSV 인코딩·탭·인용 | **미승인** | `data2web_tabular.py, test_tabular.py` | 합성 PASS | 실고객 파일 호환 |
 | R05 | 원본 파일/행·열·셀/ZIP 상한 | **미승인** | `data2web.py, data2web_tabular.py` | 합성 PASS | OS별 전체 공격 표면 독립 감사 |
-| R06 | 경로·크기·바이트·SHA 변경확인 | **미승인** | `path_policy.py, data2web.py, test_path_policy.py` | 부분 | 대상 교체경합·전구간 TOCTOU 보장 미검증 |
+| R06 | 파일핸들/O_NOFOLLOW 가능 환경 및 fstat/lstat로 원본 ID·용량·mtime 검증 | **미승인** | path_policy.py / data2web.py / data2web_append.py / test_snapshot_safety.py | 호스팅 Win+Ubuntu 원본 바꿔치기·변경 시뮬레이션 PASS | 고급 운영체제 TOCTOU 공격 완전 방어·실 Win10/11 미증명 |
 | R07 | 원본 보존·사용권·개인/공유 데이터 동의 | **미승인** | `data2web_append.py, studio.py` | 부분 | 실제 소유자 권리와 개인정보 사용동의 외부 승인 없음 |
-| R08 | 원문 미노출 헤더·형힌트·NULL/중복·범주 검수 | **미승인** | `data2web_profile.py, test_final_blueprint.py` | 합성 PASS | 실 고객 개인정보 안전성 자동 판정 불가 |
+| R08 | 로컬 컬럼명·형 힌트/NULL·중복/분류 검수 | **미승인** | data2web_profile.py / data2web_desktop.py / desktop_ui_owner_flow_probe.py | Windows 호스팅 실제 Tk CSV+XLSX 파일·시트 선택/검수 PASS | 고객 민감정보의 법적 분류 자동 보증 불가 |
 | R09 | ID/제목/분류 3열 사용자 명시 매핑 | **미승인** | `data2web.py, data2web_append.py` | 합성 PASS | 실고객 매핑 확인 필요 |
 | R10 | 원본 SHA·시트·행·헤더·매핑 승인 영수증 | **미승인** | `receipt_utils.py, delivery.py, verify_delivery.py` | 합성 PASS | 해시/매니페스트는 법적 서명 아님 |
 | R11 | 데이터/시트/중복/인코딩/변경 오류 HOLD | **미승인** | `test_tabular.py, test_final_blueprint.py` | 합성 PASS | 경합·대규모 실원본 추가 검증 |
@@ -30,48 +28,25 @@
 | R18 | 선택형 설명 가능 막대차트·요약·출처/계산법 | **미승인** | `data2web_web.py, browser_p85_probe.py` | 실브라우저 합성 PASS | 금액 합계는 JS 부동소수 근사; 회계 정확성 미보장 |
 | R19 | 평문 포함 경고와 동의 | **미승인** | `studio.py, data2web_web.py` | 합성·실브라우저 PASS | 개인정보 실 사용권 확인 별도 |
 | R20 | 외부 요청/로그인/광고 기본 0 | **미승인** | `browser_p85_probe.py, browser_final_blueprint_probe.py` | 실브라우저 합성 PASS | 개별 구매자 확장프로그램 간섭 미검증 |
-| R21 | 결정적 create-only ZIP·manifest·안내/실제 승인 LICENSE/NOTICE | **미승인** | `delivery.py, test_final_blueprint.py` | 부분 | 고객 상용 LICENSE/NOTICE 최종 승인 미실시 |
-| R22 | 독립 ZIP SHA/CRC/멤버·중복/zip-slip/변조 거부 | **미승인** | `verify_delivery.py, test_final_blueprint.py` | 합성 PASS | 배포자 신원서명과 구별 |
-| R23 | Windows10/11 Chrome·Edge file:// 최종 수용, macOS/Linux 확인 | **미승인** | `browser_p85_probe.py, browser_final_blueprint_probe.py` | 부분 | CI는 Windows Server2025·Ubuntu Chromium; 실제 Win10/11/macOS 사용자 검증 없음 |
-| R24 | 고객 새 폴더 납품·충돌 무삭제 HOLD·복구 영수증 | **미승인** | `data2web_single.py, data2web_append.py, receipt_utils.py, test_single_delivery.py, browser_single_delivery_probe.py` | 합성/호스팅 실브라우저 PASS | 고객 직접 Win10/11 PC 실제 인수 미검증, 실패 후 남은 폴더 수동 HOLD |
-| R25 | 원본·임시·결과 무자동삭제/보유정책 | **미승인** | `docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md` | 부분 | 실 운영 개인정보 보존기간·파기 책임 승인 대기 |
-| R26 | 개인정보/민감범위 명시 검수·승인 | **미승인** | `data2web_profile.py, data2web_append.py` | 부분 | 실 고객 자료 개인/민감 범주 및 동의 법적 확인 미실시 |
+| R21 | 결정적 create-only ZIP·manifest·안내와 승인된 LICENSE/NOTICE만 납품 | **미승인** | delivery.py / verify_delivery.py / verify_customer_folder.py | 샘플 HTML·ZIP·영수증 무결성 PASS | 상용 LICENSE/NOTICE 아직 사용자 승인 없음 |
+| R22 | 독립 ZIP SHA/CRC/멤버·바꿔치기/변조 거부 | **미승인** | verify_delivery.py / verify_customer_folder.py / test_customer_folder.py | Win/Ubuntu 합성 tamper/HOLD PASS | SHA는 신원·법적 서명이 아님 |
+| R23 | 실제 Win10/11 Chrome·Edge 및 macOS/Linux 실제 수용 | **미승인** | client_local_rehearsal.py / browser_p85_probe.py / desktop_ui_owner_flow_probe.py | hosted Win2025 Chrome·Edge Playwright+네이티브 HTML, Linux Chromium PASS | 고객 실 Win10/11 및 macOS 독립 인수 미확인 |
+| R24 | 새 고객 폴더 create-only HTML+ZIP+receipt·충돌시 HOLD | **미승인** | data2web_single.py / data2web_append.py / verify_customer_folder.py / desktop_ui_owner_flow_probe.py | 호스팅 실제 Tk 파일 선택→검수→명시 승인→생성·독립검증 PASS | 고객 PC 파일/권한·실고객 인수 미검증 |
+| R25 | 원본/결과 무단 삭제 금지·보유기간/책임 고지 | **미승인** | OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md / create-only 코드 | 기존 고객파일 무삭제 테스트 PASS | 실제 보존기간·고객자료 파기/책임 정책 사용자 미승인 |
+| R26 | 고객 민감·개인정보 범위/평문/사용권 명시 승인 | **미승인** | data2web_desktop.py / data2web_append.py / test_desktop_controller.py | 실제 Tk 승인 체크박스와 검수 경로 hosted PASS | 법적 사용권/개인정보 적합성 자동 인증 아님 |
 | R27 | SKU별 판매·수정·지원·환불 조건 승인 전 판매 금지 | **미승인** | `docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md` | 대기 | 사용자 판매 조건 승인·실 크몽 상품등록 없음 |
 | R28 | 10k×20 메모리·정렬/검색 응답 실측 | **미승인** | `browser_perf_probe.py` | 합성 CI PASS | GH Ubuntu 단일 벤치마크; 실고객 PC 재측정 필요 |
-| R29 | XSS/CSP/CSV·XLSX 폭탄/경로·재검증 테스트 | **미승인** | `test_tabular.py, test_path_policy.py, browser_p85_probe.py` | 합성/브라우저 PASS | 물리 Win10/11 junction/TOCTOU, 외부 보안감사 미실시 |
-| R30 | Win/Linux 실제 경로 E2E, Chrome/Edge, 독립 사용자·패키지/서명·라이선스 감사 | **미승인** | `GitHub Actions 4 jobs, browser_final_blueprint_probe.py` | 부분 | CI hosted 환경만; 구매자 독립 시험·서명·라이선스 별도 |
-| R31 | 원본 Lite 대비 각 지원 기능의 실제 golden 결과 비교 | **미승인** | `upstream_runtime_golden.py`, 공개 REA Lite 원본 정확 `7b6b68111efd906f9d929b5e2f577699b26399ee` 실 CLI·Chromium CSV/JSON 정규 데이터·SHA/테마·검색/분류·CSV 업데이트·저장/재열기/오류 HOLD | 공통 지원 기능 실제 원본 PASS(범위 제한) | 페이지 길이·기능 추가·픽셀 일치는 계약상 별개; 모든 고객 데이터/원본 프로덕트 판매 동등성 검증 아님 |
-| R32 | 새 저장소 Python·의존성 잠금·자동QA·실행/포터블 배포·재현 빌드 | **미승인** | `package_portable.py, test_portable.py, test_single_delivery.py`, 결정적 `.pyz` 단일/다중 파일 CLI 실행 CI PASS | 합성·호스팅 CI PASS/구매자 부분 | 고객 Python 설치/포터블 배포 서명 EXE·지원 정책 미검증 |
-| R33 | 상업적 재배포·자료권리·실고객 인수·구매/환불 승인 | **미승인** | `docs/OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md` | 대기 | 사용자/법무/고객의 실제 승인 필요 |
+| R29 | XSS/CSP·비정상 XLSX·경로경합/압축 해제 보호 | **미승인** | data2web_tabular.py / path_policy.py / test_snapshot_safety.py / browser_p85_probe.py | Windows/Ubuntu 단위·브라우저 악성 입력 HOLD PASS | 악의적 실제 OS 경쟁조건·외부 보안감사 미검증 |
+| R30 | Win/Linux 실제 E2E·Chrome/Edge·독립 사용자·패키지/서명/권리 감사 | **미승인** | Actions #43501097784 / desktop_ui_owner_flow_probe.py | 호스팅 Windows/Linux 브라우저·GUI·자가검증 PASS | 실제 고객 Win10/11·서명 EXE·라이선스 독립 감사 미검증 |
+| R31 | REA Lite 원본 공통 기능 실제 golden 비교 | **미승인** | upstream_runtime_golden.py 공개 pin 7b6b68111efd906f9d929b5e2f577699b26399ee | 실제 원본 CLI·Chromium CSV/JSON/테마/교체/재열기 PASS | 픽셀 일치/확장 기능·실업무 파일 동등성 미검증 |
+| R32 | Python3.11 자동 QA·GUI/포터블·네이티브 브라우저 로컬 자가검증 | **미승인** | package_portable.py / client_local_rehearsal.py / desktop_ui_owner_flow_probe.py | 249 tests×2 OS PASS, Tk 실제 버튼·Chrome/Edge native PASS | 고객 Python/Tk 설치·서명 EXE·사용자 실장비 미검증 |
+| R33 | 저작권/자료권·실고객 수용·재배포·구매/환불 운영 승인 | **미승인** | OWNER_DATA_AND_DELIVERY_HOLD_CHECKLIST.md | 사용자 외부 승인 대기 | 판매 GO 주장 금지 |
 
-여기서 '합성 PASS'는 QA 목적으로 직접 만든 합성 데이터에 대한 **GitHub CI 실제 실행**이다. '실브라우저 합성 PASS'는 호스팅 Windows Chrome/Edge 및 Ubuntu Chromium에서 실제 `file://` URL을 연 결과지만 **실고객 파일·디바이스 사용자 인수는 아니다**. `부분`·`대기`에 대해 완료 점수는 배정하지 않는다.
+## 추가 개발·판정 근거
 
-## 2026-11-13 추가 데스크톱·고객폴더 독립 검증 (공식 85% 미확정)
-- `74f5f5a6b4625be3d510be5f59f1983be150b26e` [CI #43395679294](https://github.com/hibi89/data2web_studio/actions/runs/43395679294) Windows·Ubuntu **각 235 PASS**, hosted Windows Tkinter 실제 41개 UI 렌더링, Chrome·Edge/Chromium local file://, 원본 Lite 실제 golden 기존 경로 PASS.
-- R08/R09/R19/R24/R26: Python Tkinter 로컬 검수·명시 승인 GUI, 실제 고객 파일 SHA/시트 변경은 새 폴더 생성 전에 HOLD; 데이터 브라우저·외부 API 전송0.
-- R21/R22/R24: 전체 고객 폴더 HTML+ZIP+receipt 내부 SHA/행수/매핑 출처 대조, receipt 바꿔치기/중복/누락/추가 파일 거부; 독립 서명·판매권 승인과 구분.
-- 사용자 승인 가중치 합100·실 고객 Win10/11/권리/판매/지원 미충족으로 **공식 전체 85% UNASSESSED 유지**. [완전한 실증과 미검증](FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md).
+- 소스 파일은 최대 8 MB bounded 파일핸들 읽기로 전환, 운영체제 지원 시 O_NOFOLLOW 사용, fd의 파일식별자·mtime·ctime·크기와 종료 시 경로 정보를 비교한다. 변경 전/도중 파일바꿔치기 시험을 Windows/Ubuntu에서 실제 통과했지만, 모든 TOCTOU 공격 방지를 보증하지 않는다.
+- 고객 파일을 읽지 않는 python studio.py self-check --browsers 는 내부 합성 CSV 2행으로 납품폴더·ZIP·영수증을 검증하고, 설치된 Chrome·Edge로 file:// DOM 렌더를 확인한다. 누락·오류는 PARTIAL_HOLD, 성공해도 PASS_SYNTHETIC_ONLY이며 고객 사용권·상용 출시의 증거가 아니다.
+- GUI는 호스팅 Windows에서 실제 파일/시트/매핑·승인 컨트롤을 자동 조작했다. 실제 고객 Windows10/11 설치/사용자 조작 수용은 별도 미확인.
+- 원본 REA_Web 공개 SHA 7b6b68111efd906f9d929b5e2f577699b26399ee는 CI 임시 읽기전용 실행 비교만 했고 코드/사용자자료 복사·수정 없음. 상용 라이선스를 승계했다는 뜻이 아니다.
 
-## 2026-11-13 후속 정확 QA 추가 (공식 점수 미산정)
-- **추가 기능 검증 SHA** `d311c47f1b85382f1d4ce43dfacdabcdc7e85612` [GitHub Actions #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159) Windows/Ubuntu **210 PASS 각각**, 실제 Windows Chrome·Edge 및 Ubuntu Chromium `file://` 단일 고객 새 폴더 HTML/ZIP/receipt, 소유자 SHA·PII 동의, 이전 다중결합·검색/차트·CSV 교체 PASS.
-- **원본 실제 실행 골든:** 원본 `hibi89/REA_Web@7b6b68111efd906f9d929b5e2f577699b26399ee` public SHA를 임시 checkout하여 `rea.lite_builder` 원본 Python과 JS `file://`를 **직접 실행**, 새 구현 CSV/JSON 75행/2행·테마·정렬/검색/필터·CSV 업데이트/HTML 내보내기/재열기·승인 오류를 실제 비교 PASS. 고객자료0/원본 Git write0, 동일 픽셀 복제 주장 금지.
-- **추가 입력:** JSON 평면 단일 객체(1행), nonfinite JSON 거절; XLSX 단일 납품 시 explicit sheet 빠지면 새 고객 폴더 생성 **전** HOLD.
-- **최종판정 유지:** 전체 R01–R33 소유자 가중치 미승인, 고객 Win10/11·판매 LICENSE/PII 실 승인 미충족이므로 **공식 85% 미인증/UNASSESSED**.
-
-## 이번 최종설계 기준 실제 신설 항목
-- **R08**: `data2web_profile.py`가 데이터 셀을 출력하지 않고 컬럼별 형 힌트·빈 셀·중복/고유수·전체 중복행을 검사; 개인정보 자동 허용 아님.
-- **R13**: `data2web_append.py`는 문서 내 파일별 SHA와 권리·평문·개인정보 범위의 명시적 소유자 확인이 모두 있어야 **같은 순서 헤더**로만 append. CSV/JSON/XLSX/TSV 혼합 가능, 외부 JOIN/업로드/수식 실행·스키마 추측 없음, 중복 ID/변경 원본/비인가 입력 즉시 HOLD. ZIP manifest→HTML source receipts 합동 해시·원본 행수 독립 검증, 브라우저에서 CSV 재수정하면 이전 승인 출처 무효화.
-- **R15**: 단일 분류에 머물렀던 기존 UI를 Ctrl/⌘ 다중 분류 선택으로 확장. Chrome/Edge/Chromium 실제 DOM 검색·복수 분류 검증.
-- **R24**: `studio.py deliver-append`로 신규 고객 폴더 생성 후 `index.html`, `delivery.zip`, `receipt.json` 파일을 **create-only** 제공; 기존 폴더·고객 파일 덮어쓰기 거부, 잘못된 사전 SHA는 폴더 생성 전 거부. 실패 후 생성물이 있으면 자동 삭제하지 않고 재검수 대상.
-- **R26**: 승인 매니페스트에 `rights_and_plaintext_ack=true` 및 `privacy_classification=NO_PERSONAL_DATA_REVIEWED|OWNER_APPROVED_LOCAL_ONLY`을 필수로 지정. 이는 **서명이 아닌 소유자 자기 확인**, 실제 법적 승인·민감정보 검사 자동 보증 아님.
-- **R29**: `path_policy.py`에서 Python3.11 Linux symlink/Windows reparse/junction 속성 및 `..` 경로 별칭을 막고 소스·출력·ZIP·receipt·portable 파일에 결합. 경로 교체 경합·실 Windows10/11 junction은 추가 점검.
-- **R32**: `package_portable.py`로 동일 소스 바이트에서 항상 같은 단일 Python `.pyz`를 create-only 생성, Python3.11+ 설치 PC에서 `inspect`, `build`, `deliver-append` 실행. 코드 서명/실제 구매자 설치 보증 아님.
-
-## 해소 불가 또는 미실행 의존성
-- **소유자 외부 승인 필요:** R07/R26/R27/R33의 실제 원본 파일 권리·개인정보 사용허가·크몽 판매 범위/가격/지원/환불/상업 재배포 정책.
-- **구매자 환경 실제 검증 필요:** R03 실제 Microsoft Excel 복잡 시트/서식/캐시, R23/R30 사용자 Windows 10/11 설치된 Chrome/Edge·macOS, 성능 R28 고객 PC.
-- **원본 접근 실실행 과제:** R31 `hibi89/REA_Web@feature/lite-owner-delivery-p95-20261112`에서 `rea.lite_builder` + `rea.mvp`를 **동일 합성 입력과 동일 실제 환경으로 원본 직접 실행**한 full golden 결과. 현행은 소스 열람 및 대표 2행 계약 fixture에 불과.
-- **납품/품질 최종:** R21 라이선스/NOTICE(사용자 승인 자료만), R32 고객 독립 설치/실행 번들·서명/지원, R25 파기·보유기간 확정. URL/Vercel **미적용**(오프라인 앱).
-- 제품 `[작업중]` 및 `RELEASE HOLD/SALE NO-GO`는 해총 원장에 유지하며 등록완료로 표시하지 않는다.
-
-**판정:** 신규 기능 실행검증은 실질 진전. **정본 전체 85%는 미산정·미인증**이며, 소유자 승인 가중치와 미검증 항목을 증거 없이 PASS로 전환하지 않는다.
+**최종 상태:** [작업중] 유지, RELEASE HOLD/SALE NO-GO, main/기존 P50/P70/P85/REA_Web 원본 불변, Vercel/Production 미적용. 실제 구매자 PC·실 Excel·상품 가격/지원/환불·개인정보 보유/파기·사용권/LICENSE/NOTICE 및 R별 가중치 사용자 승인 전 공식85 달성 주장 금지. 상세 근거: [2026-11-14 파일 안정성 및 로컬 자체검증](FINAL_BLUEPRINT_P85_INPUT_RACE_NATIVE_BROWSER_20261114.md).

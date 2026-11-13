@@ -78,3 +78,6 @@ python tool.pyz verify-customer ./new-client-folder
 - `verify-customer`는 서명이 아니라 `index.html`, `delivery.zip`, `receipt.json`의 **같은 폴더 내부 무결성 일치**만 확인한다. 원본/실구매자 계약·개인정보 동의·상업권리·신원은 확인하지 않는다. 추가 파일·불일치 데이터는 HOLD.
 - GUI 방식 선택 이유/제약 및 변조 시험: [docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md](docs/FINAL_BLUEPRINT_GUI_DELIVERY_20261113.md). 소유자 가중치 미승인으로 공식 85% 여전히 미인증.
 
+
+## 2026-11-14 고객 PC 자기검증(합성 데이터만)
+python studio.py self-check --browsers 를 실행하면 자동으로 2행 합성 CSV→새 고객폴더 HTML·ZIP·receipt→독립 검증 및 설치 Chrome/Edge 헤드리스 렌더를 확인한다. 실제 고객 파일을 건드리지 않으며 출력은 플랫폼 종류·브라우저별 PASS/HOLD만 포함한다. 브라우저 미설치/렌더 오류는 PARTIAL_HOLD, 통과해도 PASS_SYNTHETIC_ONLY, 상업권리/실 고객자료/계약 승인 아님. 실제 Windows10/11에서 사용자 승인 후 실행한 결과만 해당 PC 근거로 채택. Windows hosted 자동시험만으로 실제 Win10/11 인수확정 금지.

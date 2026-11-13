@@ -1,5 +1,14 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 최종설계 R01–R33 전체85% 목표 추가 개발
+- **공식 최종완성률 UNASSESSED, 전체 85% 미인증.** 사용자 승인 합100 요구 가중치·실고객 Win10/11/Excel·사용권/사업자 인수 부족. 내부 기술 단계 85%와 혼용 금지.
+- **기능 SHA 441506eda275b1e3766a4d018741ebfa1ae030b7** [Actions #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) **4/4 SUCCESS**, Windows2025/Ubuntu24.04 Python3.11 각각 249/249 PASS·0 FAIL/0 SKIP, hosted Tk 실제 CSV/XLSX UI 버튼 전경로 PASS, 설치 Chrome/Edge 네이티브 headless self-check PASS, Playwright Chrome/Edge/Chromium·Lite 원본 골든·10k×20 합성 PASS.
+- **신규:** path_policy bounded file handle/O_NOFOLLOW+fstat/lstat 원본 식별 및 변경확인, data2web/append/desktop 독립 읽기에 적용; test_snapshot_safety 경로 교체/파싱변경 HOLD. 고객 파일 없는 client_local_rehearsal + studio.py self-check --browsers + portable .pyz, test_client_rehearsal. Windows Tk 실제 소유자 버튼 탐색 desktop_ui_owner_flow_probe 추가.
+- **실패·수정:** append 출력 HTML 잘못 치환 NameError 회귀 10건 수정, Chrome/Edge native 셀프체크 존재하지 않는 span 검색 수정, 동일 입력/반대 사례 추가 후 최신 SHA 정상 PASS. 원본 데이터/REA_Web/main/P50/P70/P85 보존.
+- **전수 감사:** [docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) R01~R33 손상된 상단 행/이전 테스트 수치를 수정하고 정확한 최신 근거로 재구성. [이번 구현 증거](docs/FINAL_BLUEPRINT_P85_INPUT_RACE_NATIVE_BROWSER_20261114.md).
+- **미검증·보류:** 실제 고객 Win10/11·macOS Tk/Chrome/Edge, 업무 Excel, 고급 OS TOCTOU 공격, 상업적 LICENSE/NOTICE, 고객자료 권리·개인정보 보유/파기, 상품 가격/지원/환불·독립 인수·서명 EXE. [작업중] / RELEASE HOLD / SALE NO-GO 유지. Vercel·Production 미적용.
+
+## 과거 상태 이력
 ## 2026-11-13 KST · 최종설계 전체 85% 실작업(추가) · 정확 기능 SHA 74f5f5a6b462
 - **공식 최종완성률 UNASSESSED / 전체 정본 85% 미인증.** 사용자 최종설계 전부 `REQUIREMENTS.md` R01–R33을 100%로 하는 공통 `OWNER-FINAL-BLUEPRINT-100` 준수. 승인 가중치 합100, 실제 고객/권리·판매 수용 없이 합성 테스트 건수를 퍼센트 환산하지 않음.
 - **이번 구현:** 선택형 독립 로컬 Tkinter GUI(`data2web_desktop.py`, `studio.py desktop`)에서 소스/시트/컬럼/원본 SHA/권리·평문·개인정보 수동 검수→기존 SHA pinned single-file HTML·ZIP·JSON receipt 고객 신규폴더 생성. `verify_customer_folder.py`는 전체 고객 폴더 HTML/ZIP/receipt 교차검증, 불일치/추가파일/영수증 변조/ZIP 교체 등을 HOLD. `studio.py verify-customer`, `.pyz` 동일 실행.

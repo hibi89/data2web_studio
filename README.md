@@ -1,3 +1,13 @@
+## 2026-11-14 · 고객PC 합성 자체검증·소스변경 방어 추가
+
+기능 SHA 441506eda275b1e3766a4d018741ebfa1ae030b7 [실검증 CI #43501097784](https://github.com/hibi89/data2web_studio/actions/runs/43501097784) Win/Ubuntu 각249 PASS, hosted Windows Tk CSV/XLSX 실제 버튼 E2E 및 Chrome·Edge 네이티브 headless 합성 HTML PASS.
+
+    python studio.py self-check --browsers
+    python studio.py desktop
+    python studio.py verify-customer ./new-client-folder
+
+self-check는 고객 파일/개인정보를 열거나 업로드하지 않고 **합성 샘플만** 시험한다. 결과 PASS_SYNTHETIC_ONLY 는 해당 장비에서의 합성 기술점검이 통과했다는 뜻이지 사용자 권리·법률/상품 판매/실 Excel 수용이 아니다. [안전성·결과 근거](docs/FINAL_BLUEPRINT_P85_INPUT_RACE_NATIVE_BROWSER_20261114.md) / [R01–R33 전체 수용](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md). 공식 전체 85% 미인증/UNASSESSED, RELEASE HOLD 유지.
+
 # DATA2WEB Studio — 데이터 파일을 오프라인 웹앱으로
 
 **로컬 PC에서 CSV·JSON·TSV·제한 XLSX 입력 → 명시 권리/개인정보 검수 → 오프라인 HTML·ZIP·영수증.** 서버/원격 API 없이 작동. 모든 사용자 자료는 출력물에 평문 포함될 수 있다.
