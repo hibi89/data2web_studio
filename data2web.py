@@ -6,7 +6,7 @@ import html
 import json
 import os
 from pathlib import Path
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 
 MAX_BYTES = 8_000_000
 MAX_ROWS = 10000
@@ -20,9 +20,7 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
         raise ValueError("Unsupported or unsafe input")
     if path.stat().st_size > MAX_BYTES:
         raise ValueError("Input too large")
-    raw = path.read_bytes()
-    if len(raw) > MAX_BYTES:
-        raise ValueError("Input too large")
+    raw = read_bounded_source(path,max_bytes=MAX_BYTES)
     digest = hashlib.sha256(raw).hexdigest()
     if path.suffix.lower() == ".csv":
         from io import StringIO
@@ -79,8 +77,8 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 raise ValueError("Cell too large")
             record[key] = cell
         normalized.append(record)
-    if path.read_bytes() != raw:
-        raise ValueError("Input changed during read")
+    if read_bounded_source(path,max_bytes=MAX_BYTES) != raw:
+        raise ValueError("Input changed during parsing")
     return fields, normalized, digest
 
 def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office', sheet=None, header_row=1, allow_cached_formulas=False):
@@ -112,7 +110,7 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     fd = os.open(target, flags, 0o600)
     with os.fdopen(fd, "wb") as stream:
         stream.write(markup.encode("utf-8"))
-    if hashlib.sha256(Path(input_file).read_bytes()).hexdigest() != digest:
+    if hashlib.sha256(read_bounded_source(input_file,max_bytes=MAX_BYTES)).hexdigest() != digest:
         raise ValueError("Source modified after generation; output HOLD")
     output_digest = hashlib.sha256(target.read_bytes()).hexdigest()
     if output_digest != hashlib.sha256(markup.encode("utf-8")).hexdigest():

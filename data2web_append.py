@@ -9,11 +9,11 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from data2web import read_table, MAX_ROWS, MAX_COLS
+from data2web import read_table, MAX_ROWS, MAX_COLS, MAX_BYTES
 from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt, assert_receipt_path_available
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 
 CONTRACT="DATA2WEB_INPUT_APPROVALS_V1"
 COMBINED="DATA2WEB_APPENDED_SOURCE_V1"
@@ -99,7 +99,7 @@ def approved_sources(manifest_path, doc):
             raise ValueError("Explicit worksheet choice required per XLSX")
         if path.suffix.lower()!=".xlsx" and (sheet is not None or header!=1 or allow_cache):
             raise ValueError("Non-XLSX source cannot use spreadsheet-only options")
-        actual=hashlib.sha256(path.read_bytes()).hexdigest()
+        actual=hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()
         if actual!=expected:
             raise ValueError("Source SHA changed since approval")
         names,rows,digest=read_table(path,sheet=sheet,header_row=header,
@@ -160,15 +160,15 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
     if len(raw)>MAX_OUTPUT:
         raise ValueError("HTML output exceeds offline delivery limit")
     for path,sha in files:
-        if hashlib.sha256(path.read_bytes()).hexdigest()!=sha:
+        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
             raise ValueError("Input mutated before publish")
     fd=os.open(html_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     with os.fdopen(fd,"wb") as output:
         output.write(raw)
     for path,sha in files:
-        if hashlib.sha256(path.read_bytes()).hexdigest()!=sha:
+        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
             raise ValueError("Input mutated after publish; output HOLD")
-    outsha=hashlib.sha256(html_path.read_bytes()).hexdigest()
+    outsha=hashlib.sha256(html_read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()
     if outsha!=hashlib.sha256(raw).hexdigest():
         raise ValueError("Output differs from generated HTML")
     receipt={

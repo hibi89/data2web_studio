@@ -13,7 +13,7 @@ from pathlib import Path
 from data2web import MAX_BYTES, read_table
 from data2web_profile import profile_table
 from data2web_single import deliver_single
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 
 PRIVACY_CHOICES=("NO_PERSONAL_DATA_REVIEWED","OWNER_APPROVED_LOCAL_ONLY")
 THEMES=("office","cafe","inventory")
@@ -37,9 +37,7 @@ def inspect_sheets(path):
     if p.suffix.lower()!=".xlsx" or not p.is_file() or p.stat().st_size>MAX_BYTES:
         raise ValueError("A regular, bounded XLSX file is required")
     from data2web_tabular import list_xlsx_sheets
-    data=p.read_bytes()
-    if len(data)>MAX_BYTES:
-        raise ValueError("Excel source exceeds the input size limit")
+    data=read_bounded_source(p,max_bytes=MAX_BYTES)
     return [s["name"] for s in list_xlsx_sheets(data) if s["state"]=="visible"]
 
 
