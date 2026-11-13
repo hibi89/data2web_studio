@@ -36,6 +36,27 @@ class LocalRehearsal(unittest.TestCase):
                 result=rehearsal.self_check(with_browsers=True)
         self.assertEqual(result["status"],"PARTIAL_HOLD")
 
+    def test_native_browser_result_matches_real_p_count_role(self):
+        from types import SimpleNamespace
+        fake=SimpleNamespace(returncode=0,stdout=(
+           b'<p id="count" role="status">2\xea\xb1\xb4</p>LOCAL-ITEM-1 LOCAL-ITEM-2'),
+           stderr=b"")
+        with patch.object(rehearsal.subprocess,"run",return_value=fake):
+            with tempfile.TemporaryDirectory() as folder:
+                result=rehearsal._headless_browser(Path("chrome.exe"),
+                         Path(folder)/"index.html",Path(folder))
+        self.assertEqual(result,"PASS_SYNTHETIC_LOCAL_FILE")
+
+    def test_native_browser_does_not_accept_unrendered_placeholder(self):
+        from types import SimpleNamespace
+        fake=SimpleNamespace(returncode=0,
+            stdout=b'<p id="count" role="status"></p>LOCAL-ITEM-1 LOCAL-ITEM-2',stderr=b"")
+        with patch.object(rehearsal.subprocess,"run",return_value=fake):
+            with tempfile.TemporaryDirectory() as folder:
+                result=rehearsal._headless_browser(Path("msedge.exe"),
+                         Path(folder)/"index.html",Path(folder))
+        self.assertEqual(result,"HOLD_BROWSER_RENDER_NOT_CONFIRMED")
+
     def test_cli_self_check_outputs_only_redacted_json(self):
         process=subprocess.run([sys.executable,"studio.py","self-check"],cwd=ROOT,
                 capture_output=True,text=True,encoding="utf-8",check=False)
