@@ -31,7 +31,7 @@ jobs:
           python-version: '3.11'
       - name: Install test-only Chromium and Playwright
         run: |
-          python -m pip install playwright==1.56.0
+          python -m pip install playwright==1.56.0 pypdf==5.9.0
           python -m playwright install --with-deps chromium
       - name: Real file:// Chromium end-to-end
         run: python browser_probe.py
@@ -39,6 +39,8 @@ jobs:
         run: python browser_tabular_probe.py
       - name: Real P85 dashboard and local download acceptance
         run: python browser_p85_probe.py --channel chromium
+      - name: A4 PDF print plus keyboard accessibility acceptance in Chromium
+        run: python browser_print_accessibility_probe.py --channel chromium
       - name: Synthetic 10k x 20 performance envelope
         run: python browser_perf_probe.py
       - name: Multi-source CSV TSV XLSX approval and browser re-export provenance
@@ -67,6 +69,10 @@ jobs:
         run: python browser_p85_probe.py --channel chrome
       - name: Real installed Microsoft Edge file:// owner flow
         run: python browser_p85_probe.py --channel msedge
+      - name: Real installed Chrome A4 PDF print and keyboard accessibility
+        run: python browser_print_accessibility_probe.py --channel chrome
+      - name: Real installed Edge A4 PDF print and keyboard accessibility
+        run: python browser_print_accessibility_probe.py --channel msedge
       - name: Real Chrome XLSX TSV OOXML file:// flow
         run: python browser_tabular_probe.py --channel chrome
       - name: Real Edge XLSX TSV OOXML file:// flow
