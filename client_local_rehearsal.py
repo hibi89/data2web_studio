@@ -130,7 +130,7 @@ def save_rehearsal_evidence(output_path, *, with_browsers=True):
         "network_upload_performed":False,
         "personal_device_identifiers_recorded":False,
     }
-    raw=(json.dumps(report,sort_keys=True,ensure_ascii=True,separators=(",",":"))+"\\n").encode("utf-8")
+    raw=(json.dumps(report,sort_keys=True,ensure_ascii=True,separators=(",",":"))+"\n").encode("utf-8")
     flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|getattr(os,"O_BINARY",0)|getattr(os,"O_NOFOLLOW",0)
     fd=os.open(output,flags,0o600)
     with os.fdopen(fd,"wb") as stream:
