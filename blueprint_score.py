@@ -115,7 +115,8 @@ def main():
     parser=argparse.ArgumentParser(description="Inspect the frozen R01-R33 whole-blueprint score")
     parser.add_argument("--path",type=Path,default=DEFAULT)
     args=parser.parse_args()
-    print(json.dumps(evaluate_scorecard(args.path),ensure_ascii=False,sort_keys=True))
+    # ASCII-safe JSON works on Windows legacy console code pages (e.g. cp1252).
+    print(json.dumps(evaluate_scorecard(args.path),ensure_ascii=True,sort_keys=True))
 
 
 if __name__=="__main__":

@@ -18,6 +18,20 @@ class ApprovedBlueprintScale(unittest.TestCase):
             out.write_text(json.dumps(self.doc,ensure_ascii=False),encoding="utf-8")
             return evaluate_scorecard(out)
 
+    def test_legacy_windows_console_cp1252_score_json_is_safe(self):
+        # The CLI is invoked in a Windows runner whose PowerShell output
+        # encoding can be cp1252, regardless of JSON data language.
+        import subprocess
+        import sys
+        process=subprocess.run([sys.executable,"blueprint_score.py"],
+             cwd=DEFAULT.parent.parent,capture_output=True,text=True,
+             encoding="cp1252",errors="strict",check=False)
+        self.assertEqual(process.returncode,0,process.stdout+process.stderr)
+        payload=json.loads(process.stdout)
+        self.assertEqual(payload["weighted_verified_score"],72)
+        self.assertEqual(payload["work_marker"],"[작업중]")
+        self.assertTrue(process.stdout.isascii())
+
     def test_true_full_denominator_and_locked_r_weights(self):
         score=evaluate_scorecard()
         self.assertEqual(score["all_requirements"],33)

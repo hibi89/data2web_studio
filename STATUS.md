@@ -1,5 +1,10 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 실제 Windows 콘솔 채점 출력 회귀 수정
+- `1f590d18f2448c294f23150f485c4278912613d6` [Actions #43514788415](https://github.com/hibi89/data2web_studio/actions/runs/43514788415) Windows Python 단위 테스트는 통과했지만 추가 `python blueprint_score.py` 직접 실행에서 Windows 콘솔 cp1252가 JSON의 `[작업중]` 한글을 출력하지 못해 UnicodeEncodeError/CI failure 발생. **점수 72/100 산정 오류 아님, Windows 출력 인코딩 문제**.
+- `blueprint_score.py` CLI를 ASCII-safe `json.dumps(...,ensure_ascii=True)`로 수정하고 `test_blueprint_score.py`에 cp1252 환경 출력/파싱 회귀 추가. Linux 일반 유니코드 JSON 읽기 및 구조는 그대로. **정확 수정 SHA와 최신 CI 결과는 별도 검증 전 성공 주장 금지**.
+- 배점 33개·총100, 인정 가중치72, 목표85/차이13, 출시 HOLD 상태/고객파일·원본 그대로.
+
 ## 2026-11-14 KST · 소유자 위임 100점 만점 최종설계 평가 확정
 - **평가 기준 최종 확정: 전체 R01–R33 = 100점, 기존 B안 33개 고정 정수 배점(2~5점)**. 사용자가 5/20/100 중 선택과 진행을 위임해 100점 선택. 분모: REQUIREMENTS.md + docs/FINAL_DESIGN.md **전체, 범위 축소 0**. 부문 배점 입력18·검수20·생성26·납품20·비기능16.
 - **현행 최종설계 기준 증거 가중치 72/100점, 85점 목표까지 13점 미달.** 22개 요구는 정확 SHA의 합성/호스팅·브라우저 증거로 해당 요구 범위 충족 처리; 11개 요구(외부 고객·권리/운영 수용 포함) 가중치 28점은 아직 0점. 72점은 판매가능성/고객 사용권/법률적 준수의 72% 증명 아님. 출시 `RELEASE HOLD/SALE NO-GO` 별개.
