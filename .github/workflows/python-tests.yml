@@ -1,7 +1,7 @@
 name: DATA2WEB Python and browser acceptance
 on:
   push:
-    branches: ["feature/lite-independent-migration"]
+    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import"]
   pull_request:
     branches: [main]
 permissions:
@@ -33,3 +33,5 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Real file:// Chromium end-to-end
         run: python browser_probe.py
+      - name: Real XLSX TSV file:// Chromium end-to-end
+        run: python browser_tabular_probe.py
