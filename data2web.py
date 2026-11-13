@@ -86,8 +86,8 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     markup = render_html(fields, rows, mapping, digest, name=name, theme=theme)
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     fd = os.open(target, flags, 0o600)
-    with os.fdopen(fd, "w", encoding="utf-8") as stream:
-        stream.write(markup)
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(markup.encode("utf-8"))
     if hashlib.sha256(Path(input_file).read_bytes()).hexdigest() != digest:
         raise ValueError("Source modified after generation; output HOLD")
     output_digest = hashlib.sha256(target.read_bytes()).hexdigest()
