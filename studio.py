@@ -39,6 +39,20 @@ def main(argv=None):
     pd.add_argument("new_directory",type=Path)
     pd.add_argument("--confirm",choices=["APPROVE"],required=True)
     pd.add_argument("--ack-plaintext",action="store_true",required=True)
+    ps=sub.add_parser("deliver")
+    ps.add_argument("source",type=Path)
+    ps.add_argument("new_directory",type=Path)
+    ps.add_argument("--source-sha256",required=True)
+    ps.add_argument("--id",required=True);ps.add_argument("--title",required=True)
+    ps.add_argument("--category",required=True)
+    ps.add_argument("--confirm",choices=["APPROVE"],required=True)
+    ps.add_argument("--ack-plaintext",action="store_true",required=True)
+    ps.add_argument("--privacy-classification",
+          choices=["NO_PERSONAL_DATA_REVIEWED","OWNER_APPROVED_LOCAL_ONLY"],required=True)
+    ps.add_argument("--sheet");ps.add_argument("--header-row",type=int,default=1)
+    ps.add_argument("--allow-cached-formulas",action="store_true")
+    ps.add_argument("--theme",choices=["office","cafe","inventory"],default="office")
+    ps.add_argument("--name",default="DATA2WEB")
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
@@ -86,6 +100,16 @@ def main(argv=None):
             from data2web_append import deliver_to_new_directory
             result=deliver_to_new_directory(args.approval_manifest,args.new_directory,
                                              confirm=args.confirm,ack_plaintext=args.ack_plaintext)
+        elif args.action=="deliver":
+            from data2web_single import deliver_single
+            result=deliver_single(args.source,args.new_directory,
+                    expected_sha256=args.source_sha256,
+                    id_column=args.id,title_column=args.title,category_column=args.category,
+                    confirm=args.confirm,ack_plaintext=args.ack_plaintext,
+                    privacy_classification=args.privacy_classification,
+                    sheet=args.sheet,header_row=args.header_row,
+                    allow_cached_formulas=args.allow_cached_formulas,
+                    name=args.name,theme=args.theme)
         else:
             result=verify_zip(args.zip_path)
         print(json.dumps(result,ensure_ascii=True,sort_keys=True))
