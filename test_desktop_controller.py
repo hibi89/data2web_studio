@@ -108,7 +108,10 @@ class DesktopController(unittest.TestCase):
         source=self.root/"workbook.xlsx"
         source.write_bytes(workbook_bytes())
         review=inspect_owner_input(source,sheet="Inventory")
-        source.write_bytes(workbook_bytes(cached=0))
+        source.write_bytes(workbook_bytes(sheets={"Inventory":[
+            ["id","title","category","amount"],
+            ["CHANGED-1","변경한 상품","상품",999]
+        ]}))
         with self.assertRaises(ValueError):
             deliver_reviewed(review,self.destination,self.mapping,
                         owner_has_rights=True,plaintext_ack=True,
