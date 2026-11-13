@@ -31,10 +31,14 @@ def _unique_pairs(pairs):
         target[k]=v
     return target
 
+def _reject_nonfinite_constant(value):
+    raise ValueError("Non-finite receipt or manifest JSON constant forbidden")
+
 def _load_json(data, *, max_bytes=256_000):
     if len(data)>max_bytes:
         raise ValueError("Receipt/manifest exceeds safe size")
-    doc=json.loads(data.decode("utf-8"),object_pairs_hook=_unique_pairs)
+    doc=json.loads(data.decode("utf-8"),object_pairs_hook=_unique_pairs,
+                   parse_constant=_reject_nonfinite_constant)
     if not isinstance(doc,dict):
         raise ValueError("Receipt/manifest must be a JSON object")
     return doc
