@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 사용자 위임: 3번 상품/데이터/환불/라이선스 운영안 설계
+- 사용자는 **3번 정책 판단·문서 작성을 AI에 위임**, 가중치 개념을 질문. 이번에 [상품화 운영 정책 초안](docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md) 신규 작성: 오프라인 HTML/ZIP **1회성 납품 대행형**을 초기 채택, 별도 판매자/고객 Python/Tk 설치가 필요한 **빌더 자체 라이선스 배포형**은 보류.
+- 제안 SKU(미게시/미확정 가격): BASIC **49,000원** 단일 CSV/JSON/TSV 1천행·20열·1수정·7일 결함지원, PRO **129,000원** XLSX 1시트 또는 3개 동일스키마 append·5천행·2수정·14일, BUSINESS **249,000원** 2~10개 동일스키마 append·1만행·3수정·30일. 일반 A4/브라우저/검색·차트·ZIP·영수증은 기존 제품 기능/요구 안에서만 제공. **실제 크몽 상품 등록·표시가격 확정 아님**; 원본 처리·현실 납기/세무/플랫폼 검토 전 판매 금지.
+- 데이터 기본안: 고객 실원본 제3자/AI/GitHub 자동 업로드0, 민감/PII·사용권 불분명한 자료 기본 HOLD, 고객 PC 원본 무삭제, 처리한 판매자 복제본은 목적달성/보존의무에 따라 별도 적법한 폐기 절차·기록 수립. 실제 프로그램에 자동 삭제/익명화 기능 있다고 홍보하지 않음. 상용 코드/출력 LICENSE·NOTICE는 권리 체인 검증 전 배포 승인 금지.
+- 환불: 주문/용역 개시 전 원칙적 전액환불, 진행 중에는 제공하지 않은 범위를 포함해 법령·크몽 운영규정에 따라 정산, 결함·계약 불이행 시 시정/재납품·법정 소비자 권리 보존. '디지털 결과물이니 무조건 환불 불가' 금지. [개인정보 보호법 제21조](https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029335641)와 [전자상거래법 제17조](https://www.law.go.kr/lsLawLinkInfo.do?chrClsCd=010202&lsJoLnkSeq=1027063323) 확인 근거를 정책 문서에 기록.
+- **요구 R25/R27/R33은 정책 초안을 작성했다는 이유만으로 구현/권리·판매 수용 PASS 처리하지 않음.** 공식 최종완성률 `UNASSESSED`, 기술 참고 B 72/100(사용자 미승인), `[작업중]`·RELEASE HOLD/SALE NO-GO 유지. 코어/CI 마지막 검증 SHA `23a2d1293755294a58a20b98dc34e229a1e54f82`, [Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) 4/4 SUCCESS, Win269/269·Ubuntu268+1 WinCMD SKIP. 이번 문서 변경은 별도 기능 테스트 진전이 아님.
+
 ## 2026-11-14 KST · 최종설계 전체 85% 목표 후속 R06/R22/R29/R32 실제 개발
 - **공식 최종완성률 UNASSESSED / 사용자 전체 R01–R33 85% 미인증.** 전체 사용자 정본 가중치 합100·실 고객/권리 수용 미승인, 내부 기술 테스트 건수로 공식 퍼센트 추정 금지.
 - 정확 기능 SHA 23a2d1293755294a58a20b98dc34e229a1e54f82, [GitHub Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS**. Windows Python3.11 **269/269 PASS 0FAIL/0SKIP**, Ubuntu3.11 **268 PASS/1 Windows CMD 전용 SKIP/0FAIL**. 기존 Chromium/Windows Chrome·Edge file:// GUI·A4 인쇄·원본 Lite golden·성능 회귀 PASS.

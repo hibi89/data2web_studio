@@ -1,3 +1,7 @@
+## 2026-11-14 · 소유자 위임 3번 정책 기본안
+
+최초 상용화는 **오프라인 HTML·ZIP 결과물의 1회성 납품 서비스**로 제안, 빌더 프로그램/서명 EXE 직접 판매는 보류. 내부 SKU 기본안 BASIC49,000원/PRO129,000원/BUSINESS249,000원(각 범위·수정/지원은 정책 참고), 원본·개인정보의 외부 업로드 기본 금지, 기밀/민감자료·사용권 불명확하면 HOLD, 원본 평문 복사 고지, 법정 소비자 권리를 제한하지 않는 환불/결함 시정. 실제 상업 저작권·LICENSE/NOTICE/약관·고객 자료 권리 확인/가격·출시 승인 전 **RELEASE HOLD**. [상품·데이터·권리·환불 운영 정책 초안](docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md).
+
 ## 2026-11-14 · R06/R22/R29/R32 고객 ZIP 검증/Windows 실행 개선
 
 검증 코드 SHA 23a2d1293755294a58a20b98dc34e229a1e54f82. [Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS, Win Python269 PASS/Ubuntu268 PASS·Windows CMD1 SKIP**. 결정적 unsigned Python3.11 Windows bundle + 단일 ZIP bounded snapshot 내부 SHA 검사.
