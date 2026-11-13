@@ -1,5 +1,6 @@
 """Real Chromium file:// E2E for OOXML workbook and TSV generated local HTML."""
 import hashlib
+import argparse
 import tempfile
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
@@ -10,6 +11,9 @@ from verify_delivery import verify_zip
 from test_xlsx_fixtures import workbook_bytes
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--channel",choices=["chromium","chrome","msedge"],default="chromium")
+    args=parser.parse_args()
     with tempfile.TemporaryDirectory() as temp:
         root=Path(temp)
         xlsx=root/"workbook.xlsx"
@@ -37,7 +41,8 @@ def main():
             assert verify_zip(package)["rows"]==2
             paths.append((root/(tag+".html"),tag))
         with sync_playwright() as p:
-            browser=p.chromium.launch(headless=True)
+            browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
+                     else p.chromium.launch(channel=args.channel,headless=True))
             context=browser.new_context()
             for html,tag in paths:
                 page=context.new_page()
@@ -63,6 +68,6 @@ def main():
                 assert not remote, remote
                 page.close()
             browser.close()
-    print("P70_BROWSER_PASS true XLSX+TSV file://, selected sheet, XSS, filter/search, ZIP verified, network0")
+    print("P70_BROWSER_PASS channel="+args.channel+" true XLSX+TSV file://, selected sheet, XSS, filter/search, ZIP verified, network0")
 
 if __name__=="__main__":main()
