@@ -1,7 +1,7 @@
 name: DATA2WEB Python and browser acceptance
 on:
   push:
-    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import", "feature/p85-ui-crossbrowser-20261113"]
+    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import", "feature/p85-ui-crossbrowser-20261113", "feature/final-blueprint-p85-evidence-20261113"]
   pull_request:
     branches: [main]
 permissions:
@@ -39,6 +39,8 @@ jobs:
         run: python browser_p85_probe.py --channel chromium
       - name: Synthetic 10k x 20 performance envelope
         run: python browser_perf_probe.py
+      - name: Multi-source CSV TSV XLSX approval and browser re-export provenance
+        run: python browser_final_blueprint_probe.py --channel chromium
   windows-browsers:
     runs-on: windows-latest
     steps:
@@ -56,3 +58,7 @@ jobs:
         run: python browser_tabular_probe.py --channel chrome
       - name: Real Edge XLSX TSV OOXML file:// flow
         run: python browser_tabular_probe.py --channel msedge
+      - name: Real Windows Chrome multi-source append browser flow
+        run: python browser_final_blueprint_probe.py --channel chrome
+      - name: Real Windows Edge multi-source append browser flow
+        run: python browser_final_blueprint_probe.py --channel msedge
