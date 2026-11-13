@@ -43,6 +43,15 @@ jobs:
         run: python browser_final_blueprint_probe.py --channel chromium
       - name: Single-source local customer folder and JSON acceptance
         run: python browser_single_delivery_probe.py --channel chromium
+      - name: Checkout read-only pinned public REA Lite source for live golden (no source copied into repository)
+        uses: actions/checkout@v4
+        with:
+          repository: hibi89/REA_Web
+          ref: 7b6b68111efd906f9d929b5e2f577699b26399ee
+          path: .upstream-rea-golden
+          persist-credentials: false
+      - name: Execute actual original Lite CLI and browser golden comparison
+        run: python upstream_runtime_golden.py
   windows-browsers:
     runs-on: windows-latest
     steps:
