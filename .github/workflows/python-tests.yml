@@ -79,3 +79,5 @@ jobs:
         run: python browser_single_delivery_probe.py --channel msedge
       - name: Render actual Tkinter owner desktop UI on hosted Windows
         run: python desktop_ui_smoke.py
+      - name: Actual Tkinter customer button flow with CSV and XLSX, no cloud
+        run: python desktop_ui_owner_flow_probe.py
