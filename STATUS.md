@@ -1,5 +1,16 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-13 16:21 KST · P85 기술 단계 구현·실기능 검증
+- **공식 최종설계 완성률 UNASSESSED**. 사용자 지시 P70→P85 **기술 단계 검증 통과**; 전체 `REQUIREMENTS.md` R01–R33의 소유자 확정 가중치·실고객 인수가 없어 최종 85%를 공식 수치로 대체하지 않는다.
+- **GitHub:** `hibi89/data2web_studio@feature/p85-ui-crossbrowser-20261113` 기능 검증 `709b2e5d5540893b9f7ad1b391584c6400899672`. `main`, P50, P70 기존 원본 기능은 그대로 보존, 미병합.
+- **UI:** 기존 CSV/JSON/XLSX/TSV → 승인 HTML/ZIP 유지. 범주별 상위9+기타 막대 차트·실시간 필터/검색·숫자열 비음수 합계(단위·회계 의미 추정 금지)/전체·표시·분류 KPI·모바일 반응형·인쇄 CSS 추가. `textContent`으로 카테고리 XSS 방어.
+- **보안:** 웹에서 CSV 교체 후 저장 시 원본 SHA·Excel 시트/수식 캐시 승인 메타 초기화, 출처 **재검증 필수** 경고; 원본 승인 ZIP 증거 재사용 금지. 외부 HTTP(S) 요청0·JS 오류0, 기존 create-only ZIP/독립 verifier 유지.
+- **검증:** [Actions #43385035408](https://github.com/hibi89/data2web_studio/actions/runs/43385035408) **4/4 SUCCESS**. Windows Server 2025 Python3.11 **145/145 PASS**, Ubuntu24.04 **145/145 PASS**, Windows 설치 Google Chrome·Microsoft Edge의 `file://` 차트/다운로드/재열기와 XLSX·TSV 각 E2E **PASS**, Ubuntu Chromium의 P50/P70/P85 경로 **PASS**.
+- **실측:** 10,000×20 합성 CSV **1,125,142B**, HTML **3,563,255B**, 빌드 0.784s·peak Python 31.85MiB, Chromium 초기0.256s·검색0.027s·정렬0.154s (GitHub runner **1회**, 고객 PC 성능 보장 아님). [상세 수용 감사](docs/P85_UI_CROSSBROWSER_ACCEPTANCE_20261113.md).
+- **남은 작업:** R13 다중 승인 파일 append, R23 실제 Windows10/11 Chrome·Edge 구매자 장비 시험, R31 REA Lite 원본 full real-runtime 비교, 고객 Microsoft Excel 복잡 워크북/날짜·서식·시트, 고급 UX/실고객 인수·외부 설치/서명/법적 상용권·고객 지원 약관. R18 요약 차트는 합성 검증 범위에 한정.
+- **운영:** `[작업중]`(공식 사용자 목표 미인증)·`RELEASE HOLD/SALE NO-GO` 유지. Vercel/Production **미적용**(완전 로컬 HTML 제품). 유료 API·클라우드/민감정보/인증변경/고객파일 업로드 없음.
+
+## 과거 P70 기록(보존)
 ## 최신 · 2026-11-13 KST · P70 기술 단계 검증
 - 대상 `hibi89/data2web_studio@feature/xlsx-tsv-import`. 과거 `feature/lite-independent-migration` 검증 P50 코드/원본 SHA `f613305dee8c8ceb8636632bce001b1c02532e35`는 병합 부모로 보존(이력상 P50 검증 기술 SHA `90da878ffa29926dda39f6c67913353ec7a3b390`).
 - **최종설계 공식 완성률 UNASSESSED(미산정)**, 사용자 **70% 목표의 기술 단계** 구현·검증 PASS. R01–R33 사용자 승인 가중치 미존재, 기술 마일스톤을 공식 퍼센트로 오인 금지.

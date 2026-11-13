@@ -5,7 +5,7 @@
 ## 역할과 절차
 - 사용자 목적: 기존 REA_Web은 웹사이트 분석·재구축으로 되돌리고, 본 저장소는 CSV/JSON/XLSX/TSV → 로컬 HTML 웹앱 생성 **독립 제품**으로 개발.
 - 시작: `HANDOFF.md` → `STATUS.md` → `AGENTS.md` → `REQUIREMENTS.md` → `docs/FINAL_DESIGN.md` → 실제 최신 원격 소스·GitHub CI.
-- 모든 %는 **새 DATA2WEB 정본 설계**의 항목·실행·인수 근거로만 산정. 구 REA_Web Lite 95%를 복사하지 않는다. P50 독립 CSV/JSON 파서·HTML·ZIP은 기능 검증 완료, P70 XLSX·TSV는 별도 기능 브랜치에서 테스트 검증 완료. 공식 최종완성률은 UNASSESSED.
+- 모든 %는 **새 DATA2WEB 정본 설계**의 항목·실행·인수 근거로만 산정. 구 REA_Web Lite 95%를 복사하지 않는다. P50 독립 CSV/JSON 파서·HTML·ZIP은 기능 검증 완료, P70 XLSX·TSV는 별도 기능 브랜치에서 테스트 검증 완료. 공식 최종완성률은 UNASSESSED. P85 UI·선택 차트·Windows CI Chrome/Edge·Linux Chromium은 `feature/p85-ui-crossbrowser-20261113`에서 합성 E2E 통과, 실제 고객 Win10/11 및 최종 설계 공식 85% 인증과 별개다.
 - GPT 담당 직접 설계/코드/테스트/검증, 실패 사유 분석 후 변경된 방식 1회 재시도, 두 번 무진전이면 중단·피벗.
 - 기존 REA_Web Pro/원본/Fable/Astra와 고객 원본을 **변경하지 않는다**. upstream/source SHA 보존, 새 기능 독립 브랜치에서 구현, Draft PR·원본 백업·실제 동등성 회귀.
 - 보안: 고객 파일 전송·실 API·유료 AI·보안권한/배포/환경변수 변경은 소유자 사전 승인. 출력/실패시 삭제 금지·HOLD, 비밀과 고객데이터 GitHub 업로드 금지.
