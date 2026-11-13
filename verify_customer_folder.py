@@ -30,8 +30,8 @@ def _unique_pairs(pairs):
         target[k]=v
     return target
 
-def _load_json(data):
-    if len(data)>256_000:
+def _load_json(data, *, max_bytes=256_000):
+    if len(data)>max_bytes:
         raise ValueError("Receipt/manifest exceeds safe size")
     doc=json.loads(data.decode("utf-8"),object_pairs_hook=_unique_pairs)
     if not isinstance(doc,dict):
@@ -95,7 +95,7 @@ def verify_customer_folder(destination):
     match=re.search(rb'<script type="application/json" id="dataset">([^<]+)</script>',html)
     if match is None:
         raise ValueError("Local HTML source table missing")
-    embedded=_load_json(match.group(1))
+    embedded=_load_json(match.group(1),max_bytes=20_000_000)
     columns=embedded.get("columns")
     mapping=embedded.get("mapping")
     if (not isinstance(columns,list) or not all(isinstance(x,str) for x in columns)
