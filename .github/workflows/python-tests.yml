@@ -64,7 +64,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install test-only Playwright library
-        run: python -m pip install playwright==1.56.0
+        run: python -m pip install playwright==1.56.0 pypdf==5.9.0
       - name: Real installed Google Chrome file:// owner flow
         run: python browser_p85_probe.py --channel chrome
       - name: Real installed Microsoft Edge file:// owner flow
