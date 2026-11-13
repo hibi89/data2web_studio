@@ -44,6 +44,24 @@ def verify_zip(path):
                 raise ValueError("Invalid standalone HTML")
             if not isinstance(manifest.get("rows"), int) or manifest["rows"] < 0:
                 raise ValueError("Invalid manifest row count")
+            if manifest.get("sheet") is not None and not isinstance(manifest["sheet"], str):
+                raise ValueError("Invalid sheet identity")
+            if not isinstance(manifest.get("header_row"), int) or not 1 <= manifest["header_row"] <= 50:
+                raise ValueError("Invalid header row")
+            if not isinstance(manifest.get("cached_formulas"), bool):
+                raise ValueError("Invalid formula approval flag")
+            import re
+            match = re.search(rb'<script type="application/json" id="dataset">([^<]+)</script>', html)
+            if not match:
+                raise ValueError("Embedded source metadata missing")
+            embedded = json.loads(match.group(1))
+            if (embedded.get("contract") != "DATA2WEB_HTML_V1" or
+                    embedded.get("source_sha256") != manifest["source_sha256"] or
+                    embedded.get("source_sheet") != manifest["sheet"] or
+                    embedded.get("source_header_row") != manifest["header_row"] or
+                    embedded.get("cached_formulas") != manifest["cached_formulas"] or
+                    len(embedded.get("rows",[])) != manifest["rows"]):
+                raise ValueError("Embedded data and manifest disagree")
             return {"verified": True, "status": "INTEGRITY_VERIFIED_NOT_SALE_APPROVED",
                     "rows": manifest["rows"], "source_sha256": manifest["source_sha256"],
                     "zip_sha256": hashlib.sha256(path.read_bytes()).hexdigest()}

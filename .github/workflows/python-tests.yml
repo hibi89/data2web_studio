@@ -1,7 +1,7 @@
 name: DATA2WEB Python and browser acceptance
 on:
   push:
-    branches: ["feature/lite-independent-migration"]
+    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import"]
   pull_request:
     branches: [main]
 permissions:

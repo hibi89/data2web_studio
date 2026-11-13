@@ -129,13 +129,15 @@ categoryOptions();render();window.DATA2WEB_READY=true;
 })();
 </script></body></html>'''
 
-def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office"):
+def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False):
     if theme not in THEMES or not name.strip() or len(name) > 100:
         raise ValueError("Invalid theme/title")
     payload = {
         "contract": "DATA2WEB_HTML_V1", "columns": columns, "rows": rows,
         "mapping": mapping, "source_sha256": source_sha256,
         "import_status": "OWNER_APPROVED_LOCAL_BUILD",
+        "source_sheet": source_sheet, "source_header_row": source_header_row,
+        "cached_formulas": cached_formulas,
     }
     safe_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     for original, escaped in (("&", r"\u0026"), ("<", r"\u003c"), (">", r"\u003e"),
