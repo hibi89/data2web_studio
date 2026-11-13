@@ -77,6 +77,8 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
 def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office', sheet=None, header_row=1, allow_cached_formulas=False):
     if not approved:
         raise ValueError("Explicit plaintext/ownership approval required")
+    if Path(input_file).suffix.lower() == ".xlsx" and not sheet:
+        raise ValueError("XLSX requires explicit owner sheet selection")
     fields, rows, digest = read_table(input_file, sheet=sheet, header_row=header_row,
                                      allow_cached_formulas=allow_cached_formulas)
     if expected_sha256 is not None and digest != expected_sha256:

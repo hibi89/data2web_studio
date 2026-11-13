@@ -77,6 +77,20 @@ class P70XlsxTsv(unittest.TestCase):
             with self.subTest(header_row=n):
                 with self.assertRaises(ValueError):self.load_xlsx(sheet="Inventory",header_row=n)
 
+    def test_xlsx_requires_explicit_sheet_for_delivery(self):
+        digest=hashlib.sha256(self.xlsx.read_bytes()).hexdigest()
+        with self.assertRaises(ValueError):
+            build(self.xlsx,self.html,"id","title","category",True,expected_sha256=digest)
+        self.assertFalse(self.html.exists())
+
+    def test_xlsx_explicit_raw_cache_warning(self):
+        data=workbook_bytes(formula="1+2",cached=3)
+        self.xlsx.write_bytes(data)
+        self.build_xlsx(allow_cached_formulas=True)
+        markup=self.html.read_text(encoding="utf-8")
+        self.assertIn("formula-warning",markup)
+        self.assertIn("수식은 계산되지 않았고",markup)
+
     def test_xlsx_real_html_build(self):
         r=self.build_xlsx()
         self.assertEqual(r["rows"],2)
