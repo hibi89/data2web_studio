@@ -1,5 +1,16 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 추가 인수인계 — 2026-11-14 KST · 소유자 실Windows GUI 합성 CSV 입력 검수
+1. 목표/정본: DATA2WEB Studio 로컬 XLSX/CSV/TSV/JSON→HTML/ZIP, 사용자 최종설계 고정100점·85목표.
+2. 사용자 제공 실PC GUI 스크린샷: 본인이 만든 합성 CSV `id,title,category`, 두 행, 3열. 실제 `파일 선택` 및 `SHA·열·중복 검수` 후 SHA256 `641fcfb8e6e4a522993e0894d2e0fac3d0d4784a19911e4a3f9e42ec25e15fd1`, 빈 셀0·중복0, ID/title/category 선택값 일치, 검수 완료 안내 확인.
+3. 검증 구분: 소유자 Windows11 Pro build26200, EXE SHA 정본 일치·Chrome/Edge self-check/실 GUI 파싱 표시 PASS. 스크린샷 기반 육안 확인에 한정; 고객 폴더 생성/verify, 브라우저 납품물 육안, 외부 고객 인수/Win10/macOS NOT VERIFIED. 원본 CSV byte에 대한 외부 재계산도 아직 안 함.
+4. 상태/평가: R01–R33 72/100(22 verified), 11 pending=28, 목표85까지13. [작업중]·RELEASE HOLD/SALE NO-GO.
+5. 장애: 없음. GUI 초기상태를 지난 실 입력의 실제 검수 증거 확보. 강제 입력이나 판매승인 없음.
+6. Repo: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 이전 HEAD `a80e6fca1a87f2853dbe4b6e1330a28685142ac4`, EXE 기준 코드 `96e2e1dff9976773bf3d3b2670ba6763ee69292d`, Draft PR#4.
+7. 환경/실행: Windows11 Pro 26200, `DATA2WEB-LOCAL.exe desktop`; Production/Vercel 미적용. GitHub CI 4/4 성공 기준 이전 SHA `e83953f7`.
+8. 원본/복구/보안: 사용자 CSV/스크린샷/개인 로컬 경로 저장소 커밋하지 않음. 기존 원본·100점 정본·main 변경0. 인증·비밀 불필요.
+9. 다음 작업: 사용자가 합성 CSV의 소유/평문 체크(실제로 알고 있는 자료에만)→NO_PERSONAL_DATA_REVIEWED → 다운로드 상위 폴더 선택→새 폴더로 `생성·독립 검증` 누르고 팝업/메시지 공유. 문제 시 증거에 따라 코드 수정·회귀. 고객/권리·운영 승인 남음.
+10. 기준: 2026-11-14 KST 사용자 제공 screenshot 시각 판독, 원격 실행 직접 제어 없음, 마지막 문서 HEAD·새 CI는 후속 검증.
 ## 최신 인수인계 — 2026-11-14 KST · Win11 소유자 실제 GUI 스크린샷 확인
 1. **제품 목적/정본:** DATA2WEB Studio 로컬 표형 자료→HTML/ZIP, Python 없이 Windows native EXE 검증, R01~R33 100점·목표85.
 2. **이번 증거:** 사용자 Win11 Pro build26200에서 `DATA2WEB-LOCAL.exe desktop` 구동해 Tk 창과 한글 UI/원본·시트·열 매핑/고객폴더·개인정보 승인 컨트롤이 보이는 스크린샷 제공, **초기화면 표시 PASS**. 기존 EXE SHA256 원본 매칭 + Chrome·Edge self-check PASS 이력과 연결.
