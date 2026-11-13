@@ -71,6 +71,20 @@ class CustomerFolderContract(unittest.TestCase):
         path.write_text(json.dumps(obj),encoding="utf-8")
         with self.assertRaises(ValueError):verify_customer_folder(self.folder)
 
+    def test_receipt_nonfinite_json_constant_rejected(self):
+        self.make()
+        from verify_customer_folder import _load_json
+        for token in (b"NaN",b"Infinity",b"-Infinity"):
+            with self.subTest(token=token):
+                with self.assertRaises(ValueError):
+                    _load_json(b'{"suspicious":'+token+b'}')
+        path=self.folder/"receipt.json"
+        obj=json.loads(path.read_text(encoding="utf-8"))
+        obj["header_row"]=float("nan")
+        path.write_text(json.dumps(obj,allow_nan=True),encoding="utf-8")
+        with self.assertRaises(ValueError):
+            verify_customer_folder(self.folder)
+
     def test_receipt_duplicate_json_key_rejected(self):
         self.make()
         path=self.folder/"receipt.json"
