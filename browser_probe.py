@@ -47,7 +47,7 @@ def main():
             assert page.locator("#count").inner_text()=="115건"
             page.locator("#ack").check()
             page.locator("#replace").click()
-            assert page.locator("#count").inner_text()=="2건", "count="+page.locator("#count").inner_text()+" notice="+page.locator("#notice").inner_text()
+            page.wait_for_function("document.getElementById('count').textContent === '2건'", timeout=10000)
             assert page.locator("img").count()==0
             with page.expect_download() as started:
                 page.locator("#save").click()
