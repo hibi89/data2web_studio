@@ -1,0 +1,76 @@
+"""Source file-handle identity, bounded snapshot and race-guard regressions."""
+import os
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+import data2web
+from path_policy import read_bounded_source
+
+
+class SnapshotSafety(unittest.TestCase):
+    def setUp(self):
+        temporary=tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root=Path(temporary.name)
+        self.source=self.root/"owner.csv"
+        self.source.write_text("id,title,category\n1,Original,A\n",encoding="utf-8")
+
+    def test_source_snapshot_exact_bytes(self):
+        self.assertEqual(read_bounded_source(self.source),self.source.read_bytes())
+
+    def test_bounded_read_rejects_oversize(self):
+        with self.assertRaises(ValueError):
+            read_bounded_source(self.source,max_bytes=4)
+
+    def test_source_symlink_rejected(self):
+        alias=self.root/"alias.csv"
+        try:alias.symlink_to(self.source)
+        except (OSError,NotImplementedError):self.skipTest("OS symlinks unavailable")
+        with self.assertRaises(ValueError):
+            read_bounded_source(alias)
+
+    def test_simulated_path_swap_before_open_detected(self):
+        replacement=self.root/"replacement.csv"
+        replacement.write_bytes(self.source.read_bytes())
+        original_open=os.open
+        called=[False]
+
+        def swap_and_open(path,flags,*args,**kwargs):
+            if Path(path)==self.source.absolute() and not called[0]:
+                called[0]=True
+                os.replace(replacement,self.source)
+            return original_open(path,flags,*args,**kwargs)
+
+        with patch("os.open",side_effect=swap_and_open):
+            with self.assertRaises(ValueError):
+                read_bounded_source(self.source)
+        self.assertTrue(called[0])
+
+    def test_read_table_rejects_source_mutated_during_parse(self):
+        original=self.source.read_bytes()
+        mutated=original.replace(b"Original",b"Changed!")
+        with patch.object(data2web,"read_bounded_source",side_effect=(original,mutated)):
+            with self.assertRaisesRegex(ValueError,"Input changed during parsing"):
+                data2web.read_table(self.source)
+
+    def test_build_preflight_sha_unchanged(self):
+        actual=self.source.read_bytes()
+        import hashlib
+        sha=hashlib.sha256(actual).hexdigest()
+        path=self.root/"result.html"
+        receipt=data2web.build(self.source,path,"id","title","category",True,
+                               expected_sha256=sha)
+        self.assertEqual(receipt["source_sha256"],sha)
+        self.assertTrue(path.exists())
+
+    def test_read_table_fails_if_file_is_replaced_with_different_same_size_bytes(self):
+        original=self.source.read_bytes()
+        data=self.source.read_bytes().replace(b"Original",b"Alternate")
+        with patch.object(data2web,"read_bounded_source",side_effect=(original,data)):
+            with self.assertRaises(ValueError):
+                data2web.read_table(self.source)
+
+if __name__=="__main__":
+    unittest.main()
