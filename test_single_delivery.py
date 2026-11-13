@@ -11,6 +11,7 @@ from data2web import read_table
 from data2web_single import deliver_single
 from package_portable import create_portable
 from verify_delivery import verify_zip
+from test_xlsx_fixtures import workbook_bytes
 
 ROOT=Path(__file__).resolve().parent
 class SingleDelivery(unittest.TestCase):
@@ -63,6 +64,20 @@ class SingleDelivery(unittest.TestCase):
               text=True,encoding="utf-8",capture_output=True)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         self.assertTrue(verify_zip(self.target/"delivery.zip")["verified"])
+    def test_single_xlsx_missing_sheet_creates_no_customer_folder(self):
+        self.source=self.root/"workbook.xlsx"
+        self.source.write_bytes(workbook_bytes())
+        with self.assertRaises(ValueError):self.make()
+        self.assertFalse(self.target.exists())
+
+    def test_single_xlsx_owner_selected_sheet_and_zip(self):
+        self.source=self.root/"workbook.xlsx"
+        self.source.write_bytes(workbook_bytes())
+        result=self.make(sheet="Inventory")
+        self.assertEqual(result["rows"],2)
+        self.assertEqual(result["sheet"],"Inventory")
+        self.assertTrue(verify_zip(self.target/"delivery.zip")["verified"])
+
     def test_source_sha_changed_preflight_keeps_folder_absent(self):
         with self.assertRaises(ValueError):
             self.make(expected_sha256="f"*64)
