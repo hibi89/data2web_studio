@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · GitHub Actions 한도 해소 후 정확 SHA CI 복구 검증
+- **코드/문서 정확 SHA `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`**, [GitHub Actions #43520777896 attempt 2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) **4/4 SUCCESS**, [final-blueprint evidence gate #43520778342 attempt 2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) **SUCCESS**.
+- Windows Python3.11 **284/284 PASS**, Ubuntu Python3.11 **283 PASS/1 Windows 전용 SKIP**, Ubuntu Chromium `file://` E2E PASS, Windows 설치 Chrome·Edge의 `file://` E2E 및 Tk GUI/브라우저 자체검증 PASS. 이번에 추가한 synthetic self-check의 create-only JSON/sha 결과와 비유한 receipt JSON 차단 회귀 시험도 포함.
+- 최초 attempts는 GitHub Actions 실행 단계 0개에서 조기 실패(한도 문제), 사용자가 한도 해결한 뒤 기존 failed jobs만 재실행하여 정상 PASS. 이전 failed attempts 기록 보존. **기존 문제를 앱 코드 오류로 오인하지 않음**.
+- **평가 72/100 그대로:** 정본 R01–R33 고정100·22 VERIFIED/11 PENDING (28점), 목표85까지13점. 이번 성공은 신규 코드·합성 GUI/브라우저 보안 회귀 검증이지 실제 고객 Windows10/11·실업무 Excel/상업권리·계약/고객 인수 충족이 아님. R06/R07/R21/R23/R25/R26/R27/R29/R30/R32/R33 계속 PENDING.
+- GitHub PR #4 Draft 미병합, 다른 소스·main·가중치 불변, `[작업중]`·RELEASE HOLD/SALE NO-GO. Vercel/Production 미적용. 다음은 사용자 승인·권리와 실제 기기/Excel 검증이 필요한 요구의 실수용 증거 수집 및 점수 재평가.
+
+
 ## 2026-11-14 KST · R23/R32 실장비 검증 증거 준비 및 영수증 JSON 안전성 보강 (신규 코드 CI 미검증)
 - **최신 코드/테스트 HEAD:** `b524cec21c670f4696fc469fe96ed96bfd3cf562` (Draft PR #4, feature/final-blueprint-p85-evidence-20261113, main 미병합). `client_local_rehearsal.py`에 `save_rehearsal_evidence()` 추가: 실제 입력파일은 읽지 않는 합성 self-check를 사용자가 지정한 **신규 로컬 JSON 경로에 create-only** 저장, 기존 파일 덮어쓰기 금지, 보고서 SHA256 계산, 네트워크 전송 기능 없음. CLI: `python studio.py self-check --browsers --evidence-output ./new-local-device-report.json`. Python 3.11+ Chrome/Edge 필요, 기존 .pyz에도 모듈 포함.
 - `verify_customer_folder.py` 고객 receipt/manifest JSON에서 NaN/Infinity/-Infinity 거부하도록 `parse_constant` 차단; 기존 중복키 거절 유지. `test_client_rehearsal.py` 및 `test_customer_folder.py`에 합성보고서 무덮어쓰기·HOLD·변조거부 회귀 테스트 추가. **해당 테스트는 신규 코드가 실제 성공했다는 증거가 아직 아님**.

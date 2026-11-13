@@ -1,5 +1,7 @@
 # DATA2WEB Studio · R23/R32 로컬 디바이스 증거 준비와 CI 실행 장애
 
+> **2026-11-14 최신 해소 판정:** 사용자 GitHub Actions 한도 조치 후 동일 정확 검증 SHA `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`에 대해 [#43520777896 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) 4/4 SUCCESS (Windows284 PASS, Ubuntu283PASS/1SKIP, Windows Chrome·Edge/Ubuntu Chromium 실브라우저 E2E PASS), [gate #43520778342 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) SUCCESS. 이하 '실행 장애'는 최초 attempt 당시 기록이며 현행 blocker는 아님. R23/R29/R32 실고객 수용 미충족, 최종72/100/출시 HOLD 불변.
+
 기록: 2026-11-14 KST. 기능 소스: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 코드 커밋 `b524cec21c670f4696fc469fe96ed96bfd3cf562`, Draft PR #4. **신규 코드 CI 검증 대기, 목표85 미달.**
 
 ## 결정 비교

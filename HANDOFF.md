@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 갱신 — 2026-11-14 KST · Actions 용량 복구 및 검증 4/4 SUCCESS
+1. **용도/정본:** CSV·JSON·XLSX·TSV → 독립 오프라인 HTML/ZIP, R01–R33 전체 고정 100점.
+2. **변경:** 기존 기능 SHA `b524cec21c670f4696fc469fe96ed96bfd3cf562`(로컬 합성 보고서 create-only/SHA, 영수증 비유한 JSON 거부, 신규 회귀), 검증 대상 제품 문서 HEAD `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`. 정본 점수표/기존 원본 변화 없음.
+3. **테스트:** [Actions #43520777896 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) **4/4 SUCCESS**; Windows 284/284, Ubuntu 283 PASS/1 SKIP, Windows Chrome·Edge 및 Ubuntu Chromium E2E PASS. [final gate #43520778342 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) SUCCESS.
+4. **현재:** 72/100점 VERIFIED, 목표85까지13, 11개 요구 28점 PENDING, `[작업중]` / RELEASE HOLD/SALE NO-GO.
+5. **장애:** 한도 상태에 빠진 GitHub Actions가 step0에서 FAILURE; 사용자가 한도 해결 후 동일 failed jobs 재실행하여 원인 계층 분리/복구. 코드 테스트 실패와 구별, 재시도 금지 항목 없음(무한 자동 재실행은 금지).
+6. **저장소:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; 검증 SHA `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`, PR#4 Draft. 해총 `hibi89/hackathon-command-center-2026@kmong-productization`에 결과 최신화.
+7. **운영 환경:** Python3.11+, 로컬 전용, `python studio.py self-check --browsers --evidence-output ./new-evidence.json`; `python blueprint_score.py`. Production/Vercel 미적용.
+8. **원본/복구:** 기존 CI 성공 `880586d7` 복구 지점. 원본·고객 파일/입력 데이터 변경0, 비밀/PII 자동 GitHub 업로드 금지, 정본 설계/고정 가중치 보존.
+9. **다음:** 실 Windows10/11·고객 유사 실제 XLSX/브라우저/보안·LICENSE/NOTICE·자료권리·운영 조건 별도 수용 후 요구별 점수 재평가, 승인 전 판매금지.
+10. **기준:** 2026-11-14 KST GitHub Actions 정확 SHA 재실행/원격 코드 검증, 실제 고객/법적 권리·판매 수용은 미검증. 이 문서 반영 커밋은 후속 검증 대상으로 구분.
+
 ## 최신 인수인계 보충 — 2026-11-14 KST · 코드 증거와 CI 장애
 1. **제품 목적/설계:** 정본 R01~R33/고정 100점, 데이터 파일→로컬 HTML/ZIP, 고객 원본 서버 전송 금지.
 2. **변경:** `b524cec2`까지 합성 디바이스 보고서 저장·create-only·SHA256, receipt JSON NaN/Infinity 거부, 회귀 4개 추가. 설계/가중치/원본 보존.

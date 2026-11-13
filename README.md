@@ -1,3 +1,9 @@
+## 2026-11-14 · Actions 한도 복구 및 동일 SHA 4/4 검증 완료
+
+GitHub Actions 한도 문제 해결 후 정확 검증 HEAD `880586d7e63f38bd2c5e20f73f5bf46aa87d5d49`에서 [Python/브라우저 #43520777896 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520777896) **4/4 SUCCESS**, [final blueprint #43520778342 attempt2](https://github.com/hibi89/data2web_studio/actions/runs/43520778342) SUCCESS. Windows 284 PASS, Ubuntu 283 PASS/1 SKIP; Windows Chrome·Edge, Ubuntu Chromium file:// E2E PASS.
+
+신규 로컬 보고서 저장·비유한 JSON 영수증 거부 회귀가 포함된 **코드 검증은 PASS**, 그러나 R01–R33 인정 가중치 **72/100** 유지(실고객·권리·상업 승인 별도). **[작업중]/RELEASE HOLD/SALE NO-GO**. 아래 '신규 CI 검증 대기'는 해결 이전의 작업이력이며 현행 CI 판정이 아닙니다.
+
 ## 2026-11-14 · 로컬 장비 합성 검증 기록(신규 CI 검증 대기)
 
 ```bash
