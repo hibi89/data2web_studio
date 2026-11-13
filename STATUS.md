@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 소유자 위임 100점 만점 최종설계 평가 확정
+- **평가 기준 최종 확정: 전체 R01–R33 = 100점, 기존 B안 33개 고정 정수 배점(2~5점)**. 사용자가 5/20/100 중 선택과 진행을 위임해 100점 선택. 분모: REQUIREMENTS.md + docs/FINAL_DESIGN.md **전체, 범위 축소 0**. 부문 배점 입력18·검수20·생성26·납품20·비기능16.
+- **현행 최종설계 기준 증거 가중치 72/100점, 85점 목표까지 13점 미달.** 22개 요구는 정확 SHA의 합성/호스팅·브라우저 증거로 해당 요구 범위 충족 처리; 11개 요구(외부 고객·권리/운영 수용 포함) 가중치 28점은 아직 0점. 72점은 판매가능성/고객 사용권/법률적 준수의 72% 증명 아님. 출시 `RELEASE HOLD/SALE NO-GO` 별개.
+- **고정 검산·회귀:** `data/final_blueprint_scorecard_v1.json`, `blueprint_score.py`, `test_blueprint_score.py`. 무단 요구 누락·배점 합 변경·증거없는 VERIFIED·판매 GO 거절. `python blueprint_score.py`로 전체 R01–R33 100점 평가 출력. 33요구/22근거/11대기 추적; 추가 검증 없이는 점수 증가 불가.
+- **기능 코드 기준 SHA `23a2d1293755294a58a20b98dc34e229a1e54f82`** [Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS**, hosted Windows269/269·Ubuntu268+1WinCMD skip, 이전 브라우저/실 Windows GUI/ZIP/원본 Lite golden PASS. 100점 채점기 첫 commit `380055beea7c92ad8dd58dd76b953654498eab08` 새 CI #43513559502 및 감사 게이트 #43513560012 확인. 채점 코드의 CI 수치/HEAD는 최종 GitHub 재조회 기준.
+- [현행 100점 배점과 목표차](docs/FINAL_BLUEPRINT_WEIGHTING_100_APPROVED_20261114.md), [요구별 실행 근거](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md), [3번 내부 정책](docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md). 배점 변경은 별도 명시적 재승인·버전 갱신 필요. **[작업중], RELEASE HOLD/SALE NO-GO**, 미서명 EXE·실고객 Win10/11/실Excel/저작권·개인정보·크몽 출시 승인 미검증.
+
+## 이전 기록(점수 기준 승인 전 이력 포함)
 ## 2026-11-14 KST · 사용자 위임: 3번 상품/데이터/환불/라이선스 운영안 설계
 - 사용자는 **3번 정책 판단·문서 작성을 AI에 위임**, 가중치 개념을 질문. 이번에 [상품화 운영 정책 초안](docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md) 신규 작성: 오프라인 HTML/ZIP **1회성 납품 대행형**을 초기 채택, 별도 판매자/고객 Python/Tk 설치가 필요한 **빌더 자체 라이선스 배포형**은 보류.
 - 제안 SKU(미게시/미확정 가격): BASIC **49,000원** 단일 CSV/JSON/TSV 1천행·20열·1수정·7일 결함지원, PRO **129,000원** XLSX 1시트 또는 3개 동일스키마 append·5천행·2수정·14일, BUSINESS **249,000원** 2~10개 동일스키마 append·1만행·3수정·30일. 일반 A4/브라우저/검색·차트·ZIP·영수증은 기존 제품 기능/요구 안에서만 제공. **실제 크몽 상품 등록·표시가격 확정 아님**; 원본 처리·현실 납기/세무/플랫폼 검토 전 판매 금지.

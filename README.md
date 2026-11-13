@@ -1,3 +1,14 @@
+## 2026-11-14 · 최종설계 전체 100점 고정 평가 기준
+
+사용자 지시로 점수 척도 선택을 위임받아 **5/20점 대신 100점 만점 + 기존 B안 가중치**를 고정 확정했다. REQUIREMENTS.md R01–R33 전체가 분모(축소0), 33개 가중치 합100, 22개 검증 요구 점수 합 **72/100**, 85 목표까지13점. 실사용/법적 판매·권리 수용과 구분하며 **[작업중]/RELEASE HOLD/SALE NO-GO**.
+
+```bash
+python blueprint_score.py
+python -m unittest test_blueprint_score -v
+```
+
+[가중치 확정·실증 범위·차액](docs/FINAL_BLUEPRINT_WEIGHTING_100_APPROVED_20261114.md) · [요구33개 전체 감사](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) · [기계 판독 점수표](data/final_blueprint_scorecard_v1.json).
+
 ## 2026-11-14 · 소유자 위임 3번 정책 기본안
 
 최초 상용화는 **오프라인 HTML·ZIP 결과물의 1회성 납품 서비스**로 제안, 빌더 프로그램/서명 EXE 직접 판매는 보류. 내부 SKU 기본안 BASIC49,000원/PRO129,000원/BUSINESS249,000원(각 범위·수정/지원은 정책 참고), 원본·개인정보의 외부 업로드 기본 금지, 기밀/민감자료·사용권 불명확하면 HOLD, 원본 평문 복사 고지, 법정 소비자 권리를 제한하지 않는 환불/결함 시정. 실제 상업 저작권·LICENSE/NOTICE/약관·고객 자료 권리 확인/가격·출시 승인 전 **RELEASE HOLD**. [상품·데이터·권리·환불 운영 정책 초안](docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md).
