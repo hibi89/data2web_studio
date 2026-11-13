@@ -16,8 +16,8 @@ class BuilderTests(unittest.TestCase):
     def test_build(self):
         result = build(self.src,self.out,"id","title","category",True)
         self.assertEqual(result["rows"],2)
-        self.assertIn("DATA2WEB",self.out.read_text())
-        self.assertNotIn("<script>alert(1)</script>",self.out.read_text())
+        self.assertIn("DATA2WEB",self.out.read_text(encoding='utf-8'))
+        self.assertNotIn("<script>alert(1)</script>",self.out.read_text(encoding='utf-8'))
 
     def test_requires_approval(self):
         with self.assertRaises(ValueError): build(self.src,self.out,"id","title","category")
@@ -25,7 +25,7 @@ class BuilderTests(unittest.TestCase):
     def test_no_overwrite(self):
         self.out.write_text("original")
         with self.assertRaises(FileExistsError): build(self.src,self.out,"id","title","category",True)
-        self.assertEqual(self.out.read_text(),"original")
+        self.assertEqual(self.out.read_text(encoding='utf-8'),"original")
 
     def test_duplicate_ids(self):
         self.src.write_text("id,title,category\n1,a,x\n1,b,y\n")
