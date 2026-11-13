@@ -11,7 +11,7 @@ import zipfile
 from pathlib import Path
 
 from data2web import read_table
-from data2web_append import build_approved_append, provenance_sha
+from data2web_append import build_approved_append, provenance_sha, deliver_to_new_directory
 from data2web_profile import profile_table
 from receipt_utils import write_receipt
 from verify_delivery import verify_zip
@@ -81,6 +81,43 @@ class FinalBlueprint(unittest.TestCase):
         self.assertIn("profile",j)
         self.assertEqual(j["profile"]["column_count"],4)
         self.assertNotIn("SecretMarker-DO-NOT-LOG",x.stdout)
+
+    def test_delivery_creates_new_folder_with_all_artifacts(self):
+        dest=self.root/"new-client"
+        result=deliver_to_new_directory(self.manifest,dest,
+                   confirm="APPROVE",ack_plaintext=True)
+        self.assertTrue(result["delivery_folder_created"])
+        self.assertTrue((dest/"index.html").exists())
+        self.assertTrue((dest/"delivery.zip").exists())
+        self.assertTrue((dest/"receipt.json").exists())
+        self.assertTrue(verify_zip(dest/"delivery.zip")["verified"])
+        self.assertFalse(json.loads((dest/"receipt.json").read_text(encoding="utf-8"))["sale_approved"])
+
+    def test_delivery_preexisting_folder_refused_without_deletion(self):
+        dest=self.root/"existing"
+        dest.mkdir()
+        keep=dest/"customer.txt"
+        keep.write_text("PRESERVE",encoding="utf-8")
+        with self.assertRaises(FileExistsError):
+            deliver_to_new_directory(self.manifest,dest,confirm="APPROVE",ack_plaintext=True)
+        self.assertEqual(keep.read_text(encoding="utf-8"),"PRESERVE")
+
+    def test_delivery_bad_sha_creates_no_folder(self):
+        self.doc["sources"][0]["sha256"]="0"*64
+        self.save()
+        dest=self.root/"not-created"
+        with self.assertRaises(ValueError):
+            deliver_to_new_directory(self.manifest,dest,confirm="APPROVE",ack_plaintext=True)
+        self.assertFalse(dest.exists())
+
+    def test_cli_deliver_append_new_folder(self):
+        dest=self.root/"cli-delivery"
+        p=subprocess.run([sys.executable,"studio.py","deliver-append",
+              str(self.manifest),str(dest),"--confirm","APPROVE","--ack-plaintext"],
+              cwd=ROOT,encoding="utf-8",capture_output=True,text=True)
+        self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+        self.assertTrue(verify_zip(dest/"delivery.zip")["verified"])
+        self.assertEqual(json.loads(p.stdout)["rows"],3)
 
     def test_two_file_append_zip_and_receipt_end_to_end(self):
         receipt=self.build(zip_path=self.zip,receipt_path=self.receipt)

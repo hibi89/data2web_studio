@@ -43,6 +43,25 @@ class PortableDelivery(unittest.TestCase):
         self.assertEqual(o["profile"]["row_count"],1)
         self.assertNotIn("Local sample",p.stdout)
 
+    def test_python_zipapp_append_and_customer_folder(self):
+        create_portable(self.archive)
+        second=self.root/"second.csv"
+        second.write_text("id,title,category\nB1,Second sample,Y\n",encoding="utf-8")
+        doc={"contract":"DATA2WEB_INPUT_APPROVALS_V1","sources":[
+          {"filename":p.name,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()}
+          for p in (self.csv,second)],
+          "mapping":{"id":"id","title":"title","category":"category"},
+          "approval":{"rights_and_plaintext_ack":True,"privacy_classification":"NO_PERSONAL_DATA_REVIEWED"}}
+        src=self.root/"approved.json"
+        src.write_text(json.dumps(doc),encoding="utf-8")
+        dest=self.root/"new-customer-folder"
+        p=subprocess.run([sys.executable,str(self.archive),"deliver-append",str(src),str(dest),
+                          "--confirm","APPROVE","--ack-plaintext"],
+                          text=True,encoding="utf-8",capture_output=True)
+        self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+        self.assertEqual(json.loads(p.stdout)["rows"],2)
+        self.assertTrue(verify_zip(dest/"delivery.zip")["verified"])
+
     def test_python_zipapp_build_zip_verify(self):
         create_portable(self.archive)
         sha=hashlib.sha256(self.csv.read_bytes()).hexdigest()
