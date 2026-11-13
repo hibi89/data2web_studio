@@ -34,6 +34,11 @@ def main(argv=None):
     pa.add_argument("--ack-plaintext",action="store_true",required=True)
     pa.add_argument("--zip-path",type=Path)
     pa.add_argument("--receipt-path",type=Path)
+    pd=sub.add_parser("deliver-append")
+    pd.add_argument("approval_manifest",type=Path)
+    pd.add_argument("new_directory",type=Path)
+    pd.add_argument("--confirm",choices=["APPROVE"],required=True)
+    pd.add_argument("--ack-plaintext",action="store_true",required=True)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
@@ -75,6 +80,10 @@ def main(argv=None):
             result=build_approved_append(args.approval_manifest,args.output,
                         confirm=args.confirm,ack_plaintext=args.ack_plaintext,
                         zip_path=args.zip_path,receipt_path=args.receipt_path)
+        elif args.action=="deliver-append":
+            from data2web_append import deliver_to_new_directory
+            result=deliver_to_new_directory(args.approval_manifest,args.new_directory,
+                                             confirm=args.confirm,ack_plaintext=args.ack_plaintext)
         else:
             result=verify_zip(args.zip_path)
         print(json.dumps(result,ensure_ascii=True,sort_keys=True))

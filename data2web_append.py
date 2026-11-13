@@ -178,3 +178,22 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
     if receipt_path is not None:
         receipt["receipt_file"]=write_receipt(receipt_path,receipt)
     return receipt
+
+def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_plaintext):
+    """Create only a brand-new folder; preserve it on failure for forensic recovery."""
+    if confirm!="APPROVE" or not ack_plaintext:
+        raise ValueError("Explicit approval is required for delivery")
+    doc=read_approval_manifest(approval_manifest)
+    approved_sources(approval_manifest,doc)  # fail before creating the folder
+    path=Path(destination)
+    if (path.exists() or path.is_symlink() or
+            not path.parent.is_dir() or path.parent.is_symlink() or
+            path.name in ("", ".", "..")):
+        raise FileExistsError("Delivery destination must be a new folder")
+    path.mkdir(mode=0o700,exist_ok=False)
+    result=build_approved_append(approval_manifest,path/"index.html",
+              confirm=confirm,ack_plaintext=ack_plaintext,
+              zip_path=path/"delivery.zip",receipt_path=path/"receipt.json")
+    result["delivery_folder_created"]=True
+    result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
+    return result
