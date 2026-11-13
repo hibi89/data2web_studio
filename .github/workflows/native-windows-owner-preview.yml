@@ -1,0 +1,42 @@
+name: DATA2WEB unsigned native Windows owner preview
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/final-blueprint-p85-evidence-20261113
+    paths:
+      - native_windows_entry.py
+      - native_windows_acceptance.py
+      - .github/workflows/native-windows-owner-preview.yml
+      - studio.py
+      - data2web_desktop.py
+permissions:
+  contents: read
+jobs:
+  unsigned-native-preview:
+    runs-on: windows-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned test-only Windows freezer
+        run: python -m pip install --disable-pip-version-check pyinstaller==6.22.3
+      - name: Build private one-folder executable with embedded Python and Tcl/Tk
+        shell: pwsh
+        run: |
+          python -m PyInstaller --noconfirm --clean --onedir --console --noupx --name DATA2WEB-LOCAL --distpath native-dist --workpath native-build --specpath native-build --hidden-import=data2web_desktop --hidden-import=client_local_rehearsal --hidden-import=data2web_append --hidden-import=data2web_tabular --hidden-import=data2web_profile --hidden-import=verify_customer_folder --hidden-import=receipt_utils native_windows_entry.py
+      - name: Native exe synthetic browser, delivery, integrity and Tk desktop smoke
+        shell: pwsh
+        run: |
+          python native_windows_acceptance.py --exe native-dist/DATA2WEB-LOCAL/DATA2WEB-LOCAL.exe --manifest native-dist/PRIVATE_PREVIEW_MANIFEST.json
+      - name: Upload private unsigned synthetic-only owner preview (no customer files)
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATA2WEB-UNSIGNED-OWNER-PREVIEW-WINDOWS
+          path: |
+            native-dist/DATA2WEB-LOCAL/
+            native-dist/PRIVATE_PREVIEW_MANIFEST.json
+          if-no-files-found: error
+          retention-days: 7
