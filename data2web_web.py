@@ -39,7 +39,9 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 <header><small>DATA2WEB Studio · LOCAL ONLY</small><h1>__TITLE__</h1>
 <p>승인된 표 데이터로 만든 독립 HTML입니다. 서버·계정·외부 통신이 없으며 데이터는 이 HTML 파일에 평문으로 포함됩니다.</p>
 <p id="sheet-warning" class="warning" hidden>이 자료는 Excel 셀의 원시/캐시 값을 문자로 표시합니다. 날짜·숫자 표시형식·수식 재계산은 재현하지 않으므로 원본과 대조하십시오.</p>
-<p id="formula-warning" class="warning" hidden>수식 셀이 발견되어 명시적으로 승인한 캐시값만 읽었습니다. 수식은 계산되지 않았고 캐시가 올바른지는 보장하지 않습니다.</p></header>
+<p id="formula-warning" class="warning" hidden>수식 셀이 발견되어 명시적으로 승인한 캐시값만 읽었습니다. 수식은 계산되지 않았고 캐시가 올바른지는 보장하지 않습니다.</p>
+<p id="import-warning" class="warning" hidden>현재 데이터는 브라우저에서 교체한 로컬 CSV입니다. 원본 SHA·이전 납품 ZIP 무결성 증거가 새 데이터에 적용되지 않습니다. 배포 전 판매자 재검증이 필요합니다.</p>
+<p id="source-line" class="muted" aria-live="polite"></p></header>
 <section class="dashboard" aria-label="자료 요약">
 <div class="stat"><span class="eyebrow">전체 행</span><strong id="total-rows">0</strong><small>검수한 입력 기준</small></div>
 <div class="stat"><span class="eyebrow">표시된 행</span><strong id="filtered-rows">0</strong><small>현재 검색·필터 기준</small></div>
@@ -142,6 +144,12 @@ const sortKey=$("sort").value;
 const filtered=state.rows.filter(r=>(!$("category").value||r[categoryKey]===$("category").value)&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
 filtered.sort((a,b)=>{let v=collator.compare(a[sortKey],b[sortKey]);if(v===0)v=collator.compare(a[idKey],b[idKey]);return descending?-v:v});
 renderChart(filtered);
+const locallyReplaced=state.changed||d.import_status==="USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED";
+$("import-warning").hidden=!locallyReplaced;
+$("sheet-warning").hidden=locallyReplaced||d.source_sheet===null;
+$("formula-warning").hidden=locallyReplaced||!d.cached_formulas;
+$("source-line").textContent=locallyReplaced?"현재 출처: 사용자 로컬 CSV 교체 · 새 SHA 검증 필요":
+ "승인 원본 SHA256: "+String(d.source_sha256||"미제공").slice(0,20)+"…"+(d.source_sheet?" · 시트: "+d.source_sheet:"");
 const pages=Math.max(1,Math.ceil(filtered.length/PAGE));page=Math.max(0,Math.min(page,pages-1));$("body").replaceChildren();
 for(const record of filtered.slice(page*PAGE,(page+1)*PAGE)){const tr=document.createElement("tr");tr.tabIndex=0;
 for(const key of state.columns){const td=document.createElement("td");td.textContent=record[key];tr.append(td)}
@@ -194,7 +202,8 @@ function safeJSON(obj){
 $("save").onclick=()=>{
  try{
  if(!state.changed||!$("ack").checked)throw Error("명시적으로 승인된 CSV 교체 후에만 저장합니다");
- const doc={...d,rows:state.rows,source_sha256:null,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
+ const doc={...d,rows:state.rows,source_sha256:null,source_sheet:null,source_header_row:1,
+  cached_formulas:false,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
  $("dataset").textContent=safeJSON(doc);
  const blob=new Blob(["<!doctype html>\n"+document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});
  const a=document.createElement("a");const url=URL.createObjectURL(blob);a.href=url;a.download="DATA2WEB-local-updated.html";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);

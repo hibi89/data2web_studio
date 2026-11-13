@@ -77,6 +77,7 @@ def main():
             page.locator("#ack").check()
             page.locator("#replace").click()
             expect(page.locator("#count")).to_have_text("2건")
+            expect(page.locator("#import-warning")).to_be_visible()
             expect(page.locator("#metric")).to_have_value("amount")
             expect(page.locator("#chart-summary")).to_contain_text("18")
             with page.expect_download() as download:
@@ -89,6 +90,10 @@ def main():
             secondary.on("request",lambda r:remote.append(r.url) if r.url.startswith(("https:","http:")) else None)
             secondary.goto(downloaded.as_uri())
             expect(secondary.locator("#count")).to_have_text("2건")
+            expect(secondary.locator("#import-warning")).to_be_visible()
+            assert '"source_sha256":null' in secondary.locator("#dataset").text_content()
+            assert '"source_sheet":null' in secondary.locator("#dataset").text_content()
+            assert '"cached_formulas":false' in secondary.locator("#dataset").text_content()
             expect(secondary.locator("#chart-summary")).to_contain_text("표시된 행 2")
             secondary.locator("#metric").select_option("amount")
             expect(secondary.locator("#chart-summary")).to_contain_text("18")
