@@ -27,6 +27,7 @@ def create_portable(output, *, source_directory=None):
     contents=[("__main__.py",MAIN)]
     for name in RUNTIME:
         file=root/name
+        assert_no_links(file)
         if not file.is_file() or file.is_symlink() or file.stat().st_size>1_000_000:
             raise ValueError("Unsafe or missing portable source module")
         contents.append((name,file.read_bytes()))

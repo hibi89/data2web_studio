@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from path_policy import assert_no_links
 from zipfile import ZipFile, ZIP_STORED, BadZipFile
 
 ALLOWED = {"index.html", "manifest.json", "README_KO.txt"}
@@ -12,6 +13,7 @@ MAX_HTML = 20_000_000
 
 def verify_zip(path):
     path = Path(path)
+    assert_no_links(path)
     if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_ARCHIVE:
         raise ValueError("Missing, linked, or oversized package")
     try:

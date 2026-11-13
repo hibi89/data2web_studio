@@ -13,6 +13,7 @@ from data2web import read_table, MAX_ROWS, MAX_COLS
 from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt, assert_receipt_path_available
+from path_policy import assert_no_links
 
 CONTRACT="DATA2WEB_INPUT_APPROVALS_V1"
 COMBINED="DATA2WEB_APPENDED_SOURCE_V1"
@@ -29,6 +30,7 @@ def unique_keys(pairs):
 
 def read_approval_manifest(path):
     p=Path(path)
+    assert_no_links(p)
     if p.is_symlink() or not p.is_file() or p.suffix.lower() != ".json" or p.stat().st_size>64000:
         raise ValueError("Unsafe approval manifest")
     raw=p.read_bytes()
@@ -63,6 +65,7 @@ def source_path(manifest_path, filename):
     if base.is_symlink():
         raise ValueError("Manifest parent symlink not allowed")
     file=base/filename
+    assert_no_links(file)
     if file.is_symlink() or not file.is_file():
         raise ValueError("Missing or linked append input")
     return file
@@ -137,11 +140,15 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
     mapping=doc["mapping"]
     identity=provenance_sha(sources)
     html_path=Path(html_path)
+    if html_path.is_symlink() or html_path.exists():
+        raise FileExistsError("Append output already exists")
+    assert_no_links(html_path,allow_missing_leaf=True)
     if (html_path.suffix.lower()!=".html" or html_path.is_symlink() or html_path.exists() or
             not html_path.parent.is_dir() or html_path.parent.is_symlink()):
         raise FileExistsError("Append output must be new .html in an existing real directory")
     if zip_path is not None:
         z=Path(zip_path)
+        assert_no_links(z,allow_missing_leaf=True)
         if (z.suffix.lower()!=".zip" or z.exists() or z.is_symlink() or
                 not z.parent.is_dir() or z.parent.is_symlink()):
             raise FileExistsError("Append ZIP output must be new")
@@ -186,6 +193,7 @@ def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_pla
     doc=read_approval_manifest(approval_manifest)
     approved_sources(approval_manifest,doc)  # fail before creating the folder
     path=Path(destination)
+    assert_no_links(path,allow_missing_leaf=True)
     if (path.exists() or path.is_symlink() or
             not path.parent.is_dir() or path.parent.is_symlink() or
             path.name in ("", ".", "..")):

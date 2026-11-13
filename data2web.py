@@ -92,6 +92,8 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     if any(not i for i in ids) or len(ids) != len(set(ids)):
         raise ValueError("Missing or duplicate IDs")
     target = Path(output_file)
+    if target.is_symlink() or target.exists():
+        raise FileExistsError("Output must be a new file")
     assert_no_links(target,allow_missing_leaf=True)
     if target.suffix.lower() != ".html" or target.is_symlink() or target.exists() or not target.parent.is_dir() or target.parent.is_symlink():
         raise FileExistsError("Output must be a new file in an existing directory")
