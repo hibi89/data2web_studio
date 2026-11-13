@@ -47,3 +47,15 @@ python portable.pyz inspect first.csv
 - **현행 기술적 보존:** 소스 파일을 프로그램에서 삭제·덮어쓰지 않는다. HTML·ZIP·receipt는 create-only. GitHub/원격 API/고객 파일 자동전송 없음. 그러나 PC 운영체제·백업·고객이 직접 삭제/복사하는 행위나 완전한 데이터 보안을 보장하지 않는다.
 - **원본 SHA:** 새 HTML에 브라우저 CSV를 교체하여 다시 다운로드하면 이전 승인 SHA·시트 선택/캐시 승인 이력은 검증 종료 처리한다. 재생성 전 새 원본의 SHA를 다시 inspect 해야 한다.
 - 운영자 승인 없이는 `RELEASE HOLD`, `SALE NO-GO` 및 크몽 원장의 `[작업중]` 표시를 유지한다.
+
+## 2026-11-13 단일 파일 고객 폴더 명령 추가
+```bash
+python studio.py inspect file.csv
+python studio.py deliver file.csv new-client-folder --source-sha256 <실제 SHA256> \
+ --id id --title title --category category \
+ --confirm APPROVE --ack-plaintext --privacy-classification NO_PERSONAL_DATA_REVIEWED
+python studio.py verify new-client-folder/delivery.zip
+```
+- `NO_PERSONAL_DATA_REVIEWED`는 실제 소유자 스스로 개인정보 검수를 했다는 **선언값일 뿐** 시스템의 법적 적합성 판정이 아니다. 개인정보가 존재하면 법적·고객 승인 없는 상용 납품 금지.
+- 새 폴더만 생성, HTML·ZIP·영수증 파일을 create-only로 출력. XLSX는 `--sheet 실제시트명` 명시가 없으면 폴더를 만들기 **전** HOLD. 실제 고객 Win10/11 Chrome/Edge·업무 Excel 원본 샘플 인수는 미검증. Python3.11 .pyz 지원도 **서명/EXE가 아니다**.
+- 원본 공용 REA Lite의 pinned SHA 실제 실행 및 `file://` 비교는 합성 데이터 범위 [최종설계 85 재검증](FINAL_BLUEPRINT_85_REASSESSMENT_20261113.md)에 기록했다. 상업 라이선스 승인 증명과 무관하다.

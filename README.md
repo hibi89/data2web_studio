@@ -1,3 +1,18 @@
+## 최신 최종설계 전체 기준 개발·검증 (2026-11-13 KST)
+
+**공식 최종완성률은 여전히 UNASSESSED; 전체 최종설계 85% 미인증**. 단, [정확 코드 `d311c47f1b85382f1d4ce43dfacdabcdc7e85612`의 CI #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159)에서 **Windows·Ubuntu Python 각 210 PASS, Chrome·Edge·Chromium 실 `file://` 단일·다중 고객 폴더 HTML/ZIP·영수증 E2E PASS**, 원본 공개 REA Lite pinned commit `7b6b6811...`의 실제 런타임과 공통 CSV/JSON·테마·검색/분류·CSV 교체/재저장·거부 테스트 비교 PASS를 검증했다.
+
+**새 단일 파일 고객 납품 CLI** (원본 권리·민감자료 검토 후):
+```bash
+python studio.py inspect input.csv
+python studio.py deliver input.csv ./new-client-folder \
+ --source-sha256 <inspect에서 얻은 64글자 SHA256> \
+ --id id --title title --category category \
+ --confirm APPROVE --ack-plaintext --privacy-classification NO_PERSONAL_DATA_REVIEWED
+python studio.py verify ./new-client-folder/delivery.zip
+```
+XLSX는 `--sheet "실제 시트명"`도 필수. 명령은 **기존 고객 폴더/파일을 덮어쓰지 않으며** 출력에 평문 포함, 사용자 권리·개인정보 확인은 프로그램이 대신하지 않는다. 임의 JSON 중첩을 펼치지 않고 평면 단일 객체 또는 평면 객체 배열만 지원한다. [이번 추가 검증·미완료 범위](docs/FINAL_BLUEPRINT_85_REASSESSMENT_20261113.md).
+
 # DATA2WEB Studio — 오프라인 XLSX / TSV / CSV / JSON 웹앱 생성기
 
 ## 사용자 최종설계 R01–R33 기준 재감사 · 2026-11-13 16:52 KST

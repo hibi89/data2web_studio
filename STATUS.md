@@ -1,5 +1,15 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-13 KST — 사용자 지정 전체 최종설계 85% 목표 후속 결과
+- **정식 전체 최종완성률 UNASSESSED, 최종 85% 미인증**. 확인된 개발 기능이 많아져도 최종설계 R01–R33 승인 가중치·실 고객/권리 수락 없이는 퍼센트 임의 산정 금지.
+- 정확 검증 **코드 SHA `d311c47f1b85382f1d4ce43dfacdabcdc7e85612`**, [GitHub Actions #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159) **4/4 SUCCESS**; Python Windows/Ubuntu **각 210 PASS·0 FAIL·0 SKIP**, Windows Chrome·Edge / Linux Chromium에서 CSV/JSON/XLSX/TSV 단일/다중 납품 및 검색·교체·재저장 실제 `file://` QA PASS. 데이터 외부전송0.
+- 신규 R02 평면 JSON 단일 객체·비유한 숫자 HOLD, R24 단일 파일 새 고객 폴더 HTML+ZIP+영수증 납품, R31 원본 공개 REA_Web `7b6b6811...` 실제 코드와 합성 CSV/JSON·테마·동일 헤더 CSV 업데이트·HTML 재열기 기능 골든 비교 PASS. **전체 픽셀/모든 확장동작 동등성은 미주장**.
+- 신규 코드 `data2web_single.py`, `test_single_delivery.py`, `browser_single_delivery_probe.py`, `upstream_runtime_golden.py`. GitHub Actions에 exact upstream read-only checkout 단계 추가. 이전 R08/R13/R15/R24/R26/R29/R32와 호환 유지.
+- 사용자 최종설계 전체 기준 잔여: 실 구매자 Win10/11/macOS·실 Excel 고객자료, R21 LICENSE/NOTICE·R25 보유/파기·R27 SKU/지원/환불·R33 고객자료 권리/재배포/사용자 인수 **대기**; 공식 R01–R33 가중치 미확정, 실경합/보안 독립감사 부분 미검증. 판매/배포 금지.
+- 신규 [최종설계 후속 개발·검증 보고](docs/FINAL_BLUEPRINT_85_REASSESSMENT_20261113.md), [33요구 전수 감사](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) 업데이트. 원본 REA_Web/P50/P70/P85 기존 브랜치와 `main` 원본 SHA 불변.
+- 브랜치 `feature/final-blueprint-p85-evidence-20261113`. 크몽 `[작업중]`, RELEASE HOLD/SALE NO-GO 유지. 프로그램 로컬·Vercel N/A.
+
+## 이전 상태 기록 (보존, 최신 산정이 아님)
 ## 최신: 2026-11-13 16:52 KST · 사용자가 지정한 최종설계 85% 재검증 작업
 - **최종설계 전체 공식 완성률 = UNASSESSED / 85% 미인증(목표 미달 판정).** 이전 '85% 기술단계 완료' 답변을 정식 최종완성률 85%로 해석한 것은 오류였다. 사용자 최종설계 `REQUIREMENTS.md` R01~R33 전체/소유자 확정 가중치/실고객 인수를 기준으로만 공식 산정한다.
 - **R01~R33 전수 추적:** [docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md) 완성. 모든 행의 가중치는 승인 전으로 비워두었고 합성 CI/실 고객/법적 승인/미검증 구분. 전체 85% 수치를 임의 생성하지 않는다.
