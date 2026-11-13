@@ -33,7 +33,31 @@ table{border-collapse:collapse;width:100%;min-width:540px}th,td{text-align:left;
 th{color:var(--accent)}tbody tr{cursor:pointer}tbody tr:hover{background:var(--edge)}
 .table-scroll{overflow:auto}.pages{display:flex;gap:12px;align-items:center;margin-top:16px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
 small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12px}
-@media print{body{background:white;color:black}.controls,.pages,.import,.chart-controls{display:none!important}.surface,.stat{border:1px solid #888}th{color:black}.bar-track{border:1px solid #999}.bar-fill{background:#777}.dashboard{grid-template-columns:repeat(3,1fr)}}
+@page{size:A4 portrait;margin:13mm}
+@media print{
+ body{background:white;color:black;font-size:10pt;line-height:1.4}
+ main{max-width:none;padding:0}
+ .controls,.pages,.import,.chart-controls{display:none!important}
+ .surface,.stat{border:1px solid #888}
+ .surface{padding:10px;margin-top:14px}
+ header{padding:0 0 10px}
+ h1{font-size:18pt}
+ h2{font-size:12pt}
+ .dashboard{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .stat{padding:8px;break-inside:avoid}
+ .stat strong{font-size:14pt}
+ .table-scroll{overflow:visible}
+ table{min-width:0;width:100%;table-layout:fixed}
+ th,td{padding:5px 6px;max-width:none;overflow-wrap:anywhere;word-break:break-word}
+ th{color:#222}
+ thead{display:table-header-group}
+ tr{break-inside:avoid;page-break-inside:avoid}
+ .chart-row{break-inside:avoid}
+ .bar-track{border:1px solid #999}
+ .bar-fill{background:#777}
+ .muted,p,small,.eyebrow,label{color:#333}
+ #print-scope{display:block}
+}
 </style></head>
 <body><main>
 <header><small>DATA2WEB Studio · LOCAL ONLY</small><h1>__TITLE__</h1>
@@ -52,7 +76,7 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 <label>분류 (Ctrl/⌘ 다중 선택) <select id="category" multiple size="4" aria-label="분류 여러 개 선택"><option value="" selected>전체</option></select></label>
 <label>정렬 <select id="sort"></select></label>
 <button id="direction" type="button">오름차순</button></div>
-<p id="count" role="status"></p><div class="table-scroll"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
+<p id="count" role="status"></p><p id="print-scope" class="muted">인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.</p><div class="table-scroll"><table aria-label="검색 결과 데이터 표"><thead id="head"></thead><tbody id="body"></tbody></table></div>
 <nav class="pages" aria-label="페이지"><button id="prev" type="button">이전</button><span id="page"></span><button id="next" type="button">다음</button></nav></section>
 <section class="surface" aria-label="분류별 통계">
 <h2>분류별 요약 차트</h2>
@@ -160,8 +184,10 @@ const pages=Math.max(1,Math.ceil(filtered.length/PAGE));page=Math.max(0,Math.min
 for(const record of filtered.slice(page*PAGE,(page+1)*PAGE)){const tr=document.createElement("tr");tr.tabIndex=0;
 for(const key of state.columns){const td=document.createElement("td");td.textContent=record[key];tr.append(td)}
 const detail=()=>{$("details").textContent=JSON.stringify(record,null,2)};
-tr.addEventListener("click",detail);tr.addEventListener("keydown",e=>{if(e.key==="Enter")detail()});$("body").append(tr)}
+tr.setAttribute("aria-label","상세 보기: "+record[titleKey]);
+tr.addEventListener("click",detail);tr.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();detail()}});$("body").append(tr)}
 $("count").textContent=filtered.length+"건";$("page").textContent=(page+1)+" / "+pages;
+$("print-scope").textContent="인쇄 범위: "+filtered.length+"건 중 화면 "+(page+1)+"/"+pages+"페이지의 최대 "+PAGE+"행. 전체 데이터는 오프라인 HTML을 이용하세요.";
 $("prev").disabled=page===0;$("next").disabled=page===pages-1}
 $("search").addEventListener("input",()=>{page=0;render()});$("category").addEventListener("change",()=>{page=0;render()});
 $("sort").addEventListener("change",()=>{page=0;render()});
