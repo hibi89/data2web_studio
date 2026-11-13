@@ -53,10 +53,15 @@ def main(argv=None):
     ps.add_argument("--allow-cached-formulas",action="store_true")
     ps.add_argument("--theme",choices=["office","cafe","inventory"],default="office")
     ps.add_argument("--name",default="DATA2WEB")
+    sub.add_parser("desktop",help="Open optional local Tkinter owner-review UI (no server)")
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
-        if args.action=="inspect":
+        if args.action=="desktop":
+            from data2web_desktop import desktop_main
+            desktop_main()
+            return 0
+        elif args.action=="inspect":
             if args.source.suffix.lower()==".xlsx" and args.sheet is None:
                 import hashlib
                 from data2web_tabular import list_xlsx_sheets
