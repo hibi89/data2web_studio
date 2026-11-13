@@ -37,7 +37,7 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 @media print{
  body{background:white;color:black;font-size:10pt;line-height:1.4}
  main{max-width:none;padding:0}
- .controls,.pages,.import,.chart-controls{display:none!important}
+ .controls,.pages,.import,.chart-controls,#detail-panel{display:none!important}
  .surface,.stat{border:1px solid #888}
  .surface{padding:10px;margin-top:14px}
  header{padding:0 0 10px}
@@ -84,7 +84,7 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 <div id="chart-bars" role="img" aria-label="범주별 집계 막대 그래프"></div>
 <p id="chart-summary" aria-live="polite" class="muted">데이터를 준비하고 있습니다.</p>
 </section>
-<section class="surface"><h2>선택한 항목</h2><pre id="details" aria-live="polite">항목을 선택하세요.</pre></section>
+<section class="surface" id="detail-panel"><h2>선택한 항목</h2><pre id="details" aria-live="polite">항목을 선택하세요.</pre></section>
 <section class="surface import"><h2>동일 구조 CSV 교체</h2>
 <p class="warning">컬럼명과 순서가 같은 CSV만 선택할 수 있습니다. 교체는 로컬 메모리에서만 반영되고, 새 HTML을 저장해야 유지됩니다. 새 HTML에도 모든 셀의 평문이 포함됩니다.</p>
 <label>로컬 CSV <input id="csv" type="file" accept=".csv,text/csv"></label>
