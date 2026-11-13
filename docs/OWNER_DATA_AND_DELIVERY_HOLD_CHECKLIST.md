@@ -81,3 +81,7 @@ python tool.pyz verify-customer ./new-client-folder
 
 ## 2026-11-14 고객 PC 자기검증(합성 데이터만)
 python studio.py self-check --browsers 를 실행하면 자동으로 2행 합성 CSV→새 고객폴더 HTML·ZIP·receipt→독립 검증 및 설치 Chrome/Edge 헤드리스 렌더를 확인한다. 실제 고객 파일을 건드리지 않으며 출력은 플랫폼 종류·브라우저별 PASS/HOLD만 포함한다. 브라우저 미설치/렌더 오류는 PARTIAL_HOLD, 통과해도 PASS_SYNTHETIC_ONLY, 상업권리/실 고객자료/계약 승인 아님. 실제 Windows10/11에서 사용자 승인 후 실행한 결과만 해당 PC 근거로 채택. Windows hosted 자동시험만으로 실제 Win10/11 인수확정 금지.
+
+
+## 2026-11-14 KST · Windows Python 포터블 실행 정책 보류
+새 package_windows_bundle.py는 Python3.11이 사전 설치된 PC에서 쓸 수 있는 미서명 .pyz+Windows CMD·manifest이며 서명된 독립 EXE가 아니고 사용권·고객 인수/상품 판매 허가가 없다. RUN_SELFCHECK.cmd는 합성 데이터만 생성/검사하고 기존 고객 자료는 읽거나 삭제하지 않는다. 실 Win10/11 사용자 설치와 고객원본 권리·개인정보 보유/파기·LICENSE/NOTICE·지원/환불·상품 SKU/가격은 사용자 별도 승인 필요.

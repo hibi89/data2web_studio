@@ -1,3 +1,12 @@
+## 2026-11-14 · R06/R22/R29/R32 고객 ZIP 검증/Windows 실행 개선
+
+검증 코드 SHA 23a2d1293755294a58a20b98dc34e229a1e54f82. [Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS, Win Python269 PASS/Ubuntu268 PASS·Windows CMD1 SKIP**. 결정적 unsigned Python3.11 Windows bundle + 단일 ZIP bounded snapshot 내부 SHA 검사.
+
+    python package_windows_bundle.py create ./new-unsigned-windows-bundle
+    python package_windows_bundle.py verify ./new-unsigned-windows-bundle
+
+생성 폴더의 RUN_SELFCHECK.cmd는 **합성 파일로만 Chrome/Edge 동작 확인**, RUN_DESKTOP.cmd는 소유자 직접 데이터/권리 승인, VERIFY_CUSTOMER.cmd는 고객 폴더 검증에 사용. 별도 Python3.11+·GUI Tcl/Tk 설치가 필요하며, 서명된 EXE·실 Windows10/11 수용·상업권리 승인 제품이 아니다. [기능·보안 근거](docs/FINAL_BLUEPRINT_R22_R32_PACKAGE_INTEGRITY_20261114.md). 공식 최종률 UNASSESSED, [작업중]·RELEASE HOLD 유지.
+
 ## 2026-11-14 KST · 인쇄·키보드 R16 실제 브라우저 검증
 
 - A4 PDF(인쇄 현재 화면 최대50행 범위 명시)·표 줄바꿈/반복헤더, Chromium·Chrome·Edge `file://` PDF 생성·페이지/키보드 Space/ARIA E2E **실제 PASS**. [CI #43506243118](https://github.com/hibi89/data2web_studio/actions/runs/43506243118) 코드 SHA `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85`, Windows/Ubuntu Python 각249 PASS, 4/4 SUCCESS.

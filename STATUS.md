@@ -1,5 +1,13 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 최종설계 전체 85% 목표 후속 R06/R22/R29/R32 실제 개발
+- **공식 최종완성률 UNASSESSED / 사용자 전체 R01–R33 85% 미인증.** 전체 사용자 정본 가중치 합100·실 고객/권리 수용 미승인, 내부 기술 테스트 건수로 공식 퍼센트 추정 금지.
+- 정확 기능 SHA 23a2d1293755294a58a20b98dc34e229a1e54f82, [GitHub Actions #43509224663](https://github.com/hibi89/data2web_studio/actions/runs/43509224663) **4/4 SUCCESS**. Windows Python3.11 **269/269 PASS 0FAIL/0SKIP**, Ubuntu3.11 **268 PASS/1 Windows CMD 전용 SKIP/0FAIL**. 기존 Chromium/Windows Chrome·Edge file:// GUI·A4 인쇄·원본 Lite golden·성능 회귀 PASS.
+- R06/R22/R29: ZIP 검사·SHA를 24MB bounded **한 파일핸들 스냅샷**으로 수행, 두 시점 ZIP SHA가 다르면 고객 폴더 검증 HOLD; 승인 JSON·HTML/receipt 제한읽기, 중복 JSON·비유한 숫자/바꿔치기 부정 테스트 8개 추가.
+- R32: **미서명 Python3.11 .pyz + Windows CMD 3종 + README + SHA manifest** 새폴더 생성·독립 검증. Windows hosted 실제 CMD 실행·Chrome/Edge 자가검증 PASS. 12개 새 시험; 실제 Win10/11 고객 설치, 서명 EXE·고객 지원 정책 미검증.
+- 33개 정본 기술 범위 분류 **22개 근거 확보/11개 부분 또는 외부승인** 유지. 이전 미승인 참고 A안 22/33≈66.7%, B안 72/100 유지(공식률 아님). 외부 독립 보안감사·실 PC/데이터·권리 조건이 남아 R29/R32 전체 완료 판정 아님.
+- [신규 R06/R22/R29/R32 검증 보고](docs/FINAL_BLUEPRINT_R22_R32_PACKAGE_INTEGRITY_20261114.md), [R01–R33 전수 감사](docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md). [작업중], RELEASE HOLD/SALE NO-GO, 기존 main/P50/P70/P85/REA_Web 원본 유지. Production/Vercel 미적용.
+
 ## 2026-11-14 KST · 사용자 전체 최종설계 85% 목표 진행(기술 R16 추가 검증)
 - **사용자 정본 전체 R01~R33 기준 공식 완성률 `UNASSESSED` · 85% 미인증.** 최초 21개 합성 기술 근거에서 **R16 인쇄·키보드 기능**이 실브라우저 QA PASS를 확보해 **22개 기술 범위**로 증가. 사용자 승인 가중치 없으므로 기술 근거 수를 공식률로 환산하지 않는다.
 - 정확 기능 SHA `4dc55cd73664db0e15b2554fc7b6c7087ffc8e85` [Actions #43506243118](https://github.com/hibi89/data2web_studio/actions/runs/43506243118) **4/4 SUCCESS**, Windows Server2025/Ubuntu24.04 Python3.11 각 249/249 PASS. 실제 file:// Chromium/Win Chrome·Edge **A4 PDF 생성·화면 페이지별 50행 범위·Space/Enter·ARIA 및 원격요청0 PASS**. 기존 실제 Tk CSV/XLSX·입력 SHA·고객폴더 ZIP+영수증·원본 Lite golden·1만행 성능 회귀도 PASS.
