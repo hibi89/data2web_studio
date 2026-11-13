@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 보충 — 2026-11-14 KST · 코드 증거와 CI 장애
+1. **제품 목적/설계:** 정본 R01~R33/고정 100점, 데이터 파일→로컬 HTML/ZIP, 고객 원본 서버 전송 금지.
+2. **변경:** `b524cec2`까지 합성 디바이스 보고서 저장·create-only·SHA256, receipt JSON NaN/Infinity 거부, 회귀 4개 추가. 설계/가중치/원본 보존.
+3. **검증:** 기준 `c2956397` 4/4 SUCCESS; 신규 `b524cec2` Actions #43520221605, gate #43520221969는 **시작 전 실패/steps 0/코드 테스트 NOT RUN**.
+4. **상태:** 최종 72/100, 목표85 미달13, `[작업중]`/RELEASE HOLD/SALE NO-GO, 고객·라이선스 수용 미충족.
+5. **오류/피벗:** 모든 Actions job 시작 즉시 실패, 로그 다운로드 404/annotation 본문 미접근. 무의미한 재시도 대신 Actions 계정·runner 실행상태 확인 및 로컬 소스시험 필요. 코드 문제로 단정하지 않음.
+6. **GitHub:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, Draft PR #4 미병합, 이번 최신 기능 SHA `b524cec21c670f4696fc469fe96ed96bfd3cf562`.
+7. **Production:** 오프라인 제품, Vercel/Production 미적용; `python -m unittest discover -v`, `python blueprint_score.py`, `python studio.py self-check --browsers --evidence-output ./new-device-evidence.json`.
+8. **원본/복구:** 이전 성공 `c2956397` 복구 기준, 고객파일·원본·기존 브랜치/배점 불변, 기밀·PII/토큰 업로드 금지; 기존 파일 자동 삭제·덮어쓰기 금지.
+9. **다음:** CI 시작 실패 원인 진단→코드 회귀(Windows/Ubuntu/브라우저)→실고객 기기·Excel/권리 승인 증거 취득→R별 점수 재평가; 상업 출시 승인은 별도.
+10. **기준:** 2026-11-14 KST GitHub 원격 소스/CI 확인; 신규 코드 `b524cec2`, 신규 기능시험 아직 미실행, 이 문서의 최종 HEAD는 커밋 후 별도 검증. [상세](docs/R23_R32_LOCAL_EVIDENCE_AND_CI_BLOCKER_20261114.md).
+
 > **최종 CI 정정(2026-11-14 KST):** 채점기 정확 코드 SHA `6ce083ef763257b9ccb03bd3d81caad9a4ce4f66`, [Actions #43515052630](https://github.com/hibi89/data2web_studio/actions/runs/43515052630) **4/4 SUCCESS**, Windows Python **280/280 PASS**, Ubuntu **279 PASS+1 Windows 전용 SKIP**, Windows Chrome·Edge/Ubuntu Chromium E2E PASS, final evidence gate #43515053057 SUCCESS. Windows cmd cp1252 JSON `UnicodeEncodeError`를 ASCII-safe JSON 출력으로 수정한 failed CI #43514788415 기록 보존. **정본100점/검증72점/85 목표차13점**, 고객·법적·상업 승인 HOLD.
 
 1. **목표·정본·용도·기술:** R01–R33 + `docs/FINAL_DESIGN.md` 전체100점을 분모로 하는 로컬 CSV/JSON/XLSX/TSV → HTML/차트·검색·ZIP·영수증. Python3.11+ stdlib·Tk, API/원격 고객 업로드·유료 런타임0. 사용자 목표 **전체 최종설계 ≥85/100**.

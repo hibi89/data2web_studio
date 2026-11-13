@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · R23/R32 실장비 검증 증거 준비 및 영수증 JSON 안전성 보강 (신규 코드 CI 미검증)
+- **최신 코드/테스트 HEAD:** `b524cec21c670f4696fc469fe96ed96bfd3cf562` (Draft PR #4, feature/final-blueprint-p85-evidence-20261113, main 미병합). `client_local_rehearsal.py`에 `save_rehearsal_evidence()` 추가: 실제 입력파일은 읽지 않는 합성 self-check를 사용자가 지정한 **신규 로컬 JSON 경로에 create-only** 저장, 기존 파일 덮어쓰기 금지, 보고서 SHA256 계산, 네트워크 전송 기능 없음. CLI: `python studio.py self-check --browsers --evidence-output ./new-local-device-report.json`. Python 3.11+ Chrome/Edge 필요, 기존 .pyz에도 모듈 포함.
+- `verify_customer_folder.py` 고객 receipt/manifest JSON에서 NaN/Infinity/-Infinity 거부하도록 `parse_constant` 차단; 기존 중복키 거절 유지. `test_client_rehearsal.py` 및 `test_customer_folder.py`에 합성보고서 무덮어쓰기·HOLD·변조거부 회귀 테스트 추가. **해당 테스트는 신규 코드가 실제 성공했다는 증거가 아직 아님**.
+- **CI 비실행 장애:** 신규 HEAD `b524cec2` [Python/browser Actions #43520221605](https://github.com/hibi89/data2web_studio/actions/runs/43520221605) **FAILURE**, [final-blueprint gate #43520221969](https://github.com/hibi89/data2web_studio/actions/runs/43520221969) **FAILURE**. 모든 Python/브라우저/최종 설계 job에 실행 step 0개, 시작 직후 실패. job logs 다운로드 404, checks는 annotation 수만 보이며 상세 판독 불가. **테스트 코드 실패로 단정 금지**; runner/계정 Actions 실행제한·워크플로 인증/결제 상태 등 계층 확인 필요. 반복 리런 금지, 실제 Windows/Ubuntu 회귀 **미검증**. 사전 기준 HEAD `c295639744e6bba06ab909070602c6235305fff9` [#43515478830](https://github.com/hibi89/data2web_studio/actions/runs/43515478830) 4/4 SUCCESS는 **새 코드에 적용 금지**.
+- **점수/출시 판정 변동 없음:** R01~R33 전체 고정 100점, 검증 완료 22개/72점, 미검증 11개/28점, 목표85까지 13점. R23/R29/R32 및 상업/법적 수용은 자동 PASS 불가. **[작업중] / RELEASE HOLD / SALE NO-GO**, 상업 LICENSE/NOTICE 미승인, 실고객 Win10/11·Excel 미수용. 고객/실원본 업로드0, 기존 원본·고정 배점·main 불변. [실행 절차·진단](docs/R23_R32_LOCAL_EVIDENCE_AND_CI_BLOCKER_20261114.md).
+
+
 ## 2026-11-14 KST · 100점 만점 평가기 Windows 콘솔 회귀 최종 PASS
 - 정확 채점기 SHA `6ce083ef763257b9ccb03bd3d81caad9a4ce4f66` [Actions #43515052630](https://github.com/hibi89/data2web_studio/actions/runs/43515052630) **4/4 SUCCESS**, Windows Python3.11 **280/280 PASS**, Ubuntu Python3.11 **279 PASS/1 Windows CMD-only SKIP**, Windows Chrome·Edge/Ubuntu Chromium 합성 file:// E2E PASS. Final blueprint evidence gate #43515053057 SUCCESS.
 - `blueprint_score.py`의 stdout JSON 한글 `[작업중]` 때문에 일부 Windows PowerShell cp1252에서 `UnicodeEncodeError` 발생한 failed run #43514788415 원인을 ASCII-safe JSON으로 수정. `test_blueprint_score.py`에 cp1252 출력·JSON 재파싱 회귀 추가, `python blueprint_score.py` 양 OS 직접 실행에서 72/100·목표85·차이13/RELEASE HOLD 확인.

@@ -1,3 +1,14 @@
+## 2026-11-14 · 로컬 장비 합성 검증 기록(신규 CI 검증 대기)
+
+```bash
+# 고객 원본은 읽지 않으며, 사용자 PC에서 신뢰하는 새 로컬 경로에만 저장
+python studio.py self-check --browsers --evidence-output ./new-device-evidence.json
+# 보고서 없이 기존 검사만 실행
+python studio.py self-check --browsers
+```
+
+증거 파일은 unsigned 합성 실행 보고서이며 고객 실제 인수·저작권/개인정보 동의·판매 권리의 증거가 아니다. 파일을 자동으로 업로드하지 않으며 이미 존재하면 HOLD. 신규 코드 HEAD `b524cec2`에서 Actions가 실행 단계 0개로 실패하므로 **새 기능 미검증**; 기존 기준 `c2956397` CI 4/4 PASS와 혼동 금지. 최종완성률 **72/100**, 목표 85 미달. [증거/실행 장애 상세](docs/R23_R32_LOCAL_EVIDENCE_AND_CI_BLOCKER_20261114.md). **[작업중]/RELEASE HOLD/SALE NO-GO** 유지.
+
 ## 2026-11-14 · 최종설계 전체 100점 고정 평가 기준
 
 사용자 지시로 점수 척도 선택을 위임받아 **5/20점 대신 100점 만점 + 기존 B안 가중치**를 고정 확정했다. REQUIREMENTS.md R01–R33 전체가 분모(축소0), 33개 가중치 합100, 22개 검증 요구 점수 합 **72/100**, 85 목표까지13점. 실사용/법적 판매·권리 수용과 구분하며 **[작업중]/RELEASE HOLD/SALE NO-GO**.
