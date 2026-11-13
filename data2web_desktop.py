@@ -241,8 +241,8 @@ def desktop_main():
                  owner_has_rights=rights.get(),plaintext_ack=plaintext.get(),
                  privacy_classification=privacy.get(),
                  name=title.get(),theme=theme.get())
-            from verify_delivery import verify_zip
-            passed=verify_zip(destination/"delivery.zip")
+            from verify_customer_folder import verify_customer_folder
+            passed=verify_customer_folder(destination)
             if not passed["verified"] or receipt["rows"]!=current.count:
                 raise ValueError("Independent ZIP verification mismatch")
             message.set("로컬 생성·독립 검증 PASS · 고객 상업 납품은 RELEASE HOLD. 폴더를 수동 검수하세요.")

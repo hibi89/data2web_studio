@@ -54,6 +54,8 @@ def main(argv=None):
     ps.add_argument("--theme",choices=["office","cafe","inventory"],default="office")
     ps.add_argument("--name",default="DATA2WEB")
     sub.add_parser("desktop",help="Open optional local Tkinter owner-review UI (no server)")
+    pc=sub.add_parser("verify-customer",help="Independently verify a full local customer folder")
+    pc.add_argument("directory",type=Path)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
@@ -115,6 +117,9 @@ def main(argv=None):
                     sheet=args.sheet,header_row=args.header_row,
                     allow_cached_formulas=args.allow_cached_formulas,
                     name=args.name,theme=args.theme)
+        elif args.action=="verify-customer":
+            from verify_customer_folder import verify_customer_folder
+            result=verify_customer_folder(args.directory)
         else:
             result=verify_zip(args.zip_path)
         print(json.dumps(result,ensure_ascii=True,sort_keys=True))
