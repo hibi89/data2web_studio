@@ -56,15 +56,18 @@ def main(argv=None):
     sub.add_parser("desktop",help="Open optional local Tkinter owner-review UI (no server)")
     selfcheck=sub.add_parser("self-check",help="Run redacted local synthetic acceptance checks")
     selfcheck.add_argument("--browsers",action="store_true")
+    selfcheck.add_argument("--evidence-output",type=Path,
+        help="Create-only local unsigned synthetic device report; never uploads customer data")
     pc=sub.add_parser("verify-customer",help="Independently verify a full local customer folder")
     pc.add_argument("directory",type=Path)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
         if args.action=="self-check":
-            from client_local_rehearsal import self_check
-            result=self_check(with_browsers=args.browsers)
-            print(json.dumps(result,ensure_ascii=False,sort_keys=True))
+            from client_local_rehearsal import self_check, save_rehearsal_evidence
+            result=(save_rehearsal_evidence(args.evidence_output,with_browsers=args.browsers)
+                    if args.evidence_output is not None else self_check(with_browsers=args.browsers))
+            print(json.dumps(result,ensure_ascii=True,sort_keys=True))
             return 0 if result["status"]=="PASS_SYNTHETIC_ONLY" else 2
         if args.action=="desktop":
             from data2web_desktop import desktop_main
