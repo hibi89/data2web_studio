@@ -54,11 +54,12 @@ const [idKey,titleKey,categoryKey]=state.mapping;
 let page=0,descending=false;
 const PAGE=50,MAX_FILE=8000000,MAX_ROWS=10000,MAX_CELL=16000;
 const collator=new Intl.Collator("ko",{numeric:true,sensitivity:"base"});
+$("sort").replaceChildren();
 for(const k of state.columns){const opt=document.createElement("option");opt.value=k;opt.textContent=k;$("sort").append(opt)}
 $("sort").value=titleKey;
 const header=document.createElement("tr");
 for(const name of state.columns){const th=document.createElement("th");th.textContent=name;header.append(th)}
-$("head").append(header);
+$("head").replaceChildren(header);
 function categoryOptions(){const current=$("category").value;$("category").replaceChildren();const all=document.createElement("option");all.value="";all.textContent="전체";$("category").append(all);
 for(const name of [...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare)){const opt=document.createElement("option");opt.value=name;opt.textContent=name;$("category").append(opt)}
 $("category").value=[...$("category").options].some(x=>x.value===current)?current:""}
