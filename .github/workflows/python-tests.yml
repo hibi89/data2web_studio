@@ -52,3 +52,7 @@ jobs:
         run: python browser_p85_probe.py --channel chrome
       - name: Real installed Microsoft Edge file:// owner flow
         run: python browser_p85_probe.py --channel msedge
+      - name: Real Chrome XLSX TSV OOXML file:// flow
+        run: python browser_tabular_probe.py --channel chrome
+      - name: Real Edge XLSX TSV OOXML file:// flow
+        run: python browser_tabular_probe.py --channel msedge
