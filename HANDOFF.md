@@ -1,14 +1,14 @@
-# DATA2WEB Studio — HANDOFF (2026-11-12 KST)
+# DATA2WEB Studio — HANDOFF · 2026-11-13 15:20 KST
 
-1. **목표/확정 요구/기술:** 사용자가 새 `hibi89/data2web_studio`를 만들고, REA_Web 원래 웹사이트 분석 기능과 분리 승인. DATA2WEB은 CSV/flat JSON + 확장 XLSX/TSV 파일을 고객 로컬에서 승인 받아 독립 HTML 웹앱/납품 ZIP으로 만드는 제품. Python3.11+·HTML/JS·오프라인.
-2. **완료/변경/결정 근거:** 신규 저장소 정본 설계·요구사항·작업/검증 정책·출처/권리 가이드 작성. REA_Web Lite의 기능 전체 복붙(A)은 결합/권리/지원 부담으로 거절, 독립 코드와 테스트 계약(B) 채택. 사용자 원래 REA_Web 보존.
-3. **테스트 명령·수:** 신규 제품 코드/실행·QA 없음, `NOT RUN`. 기존 REA Lite 원본 기능 검증 `cb7df1f4`, Actions #43186105405 Windows688PASS/19SKIP, Ubuntu677PASS/20SKIP, 각0FAIL은 **기존 프로젝트 근거**이지 본 제품 테스트가 아니다.
-4. **상태:** 저장소·문서 초기화 DONE / 코드 이관 NOT STARTED / XLSX·TSV NOT STARTED / 독립 상품률 UNASSESSED, 실행 검증률0 / SALE HOLD, Production N/A.
-5. **문제·시도·대안:** 새 저장소 비어 있어 실행 제품 없음; 이전 Lite는 Pro `rea.mvp`에 의존. 기존 통째 이식은 종속/법적 범위 커서 최소 기능 독립 추출+골든 검증(B)으로 전환. 실제 라이선스/고객 자료는 미승인.
-6. **저장소·브랜치/SHA:** `hibi89/data2web_studio@main`, `feature/lite-independent-migration`, `feature/xlsx-tsv-import`; 기능 SHA 없음. 실제 최종 문서 HEAD는 GitHub 새 조회가 기준. 원본 REA Lite `cb7df1f4d1ce517c5940570af5bb1085410de268`, Pro `97b6e5cab7b8ffb4e1ee7f5e593021f4dac2598d`.
-7. **Production/환경:** 오프라인 프로그램, Vercel/Production URL 없음, Python3.11+ 후보 / 실행 명령 아직 미구현; 새 시스템·CI 실행 없음.
-8. **원본/복구/보안:** REA_Web 원본 브랜치들 변경 금지; 출처/권한 확인 `docs/ORIGIN_AND_LICENSE.md`; 문서/브랜치 Git SHA 복구. GitHub Private라도 민감정보 업로드 금지. 원본 ZIP/권리/실 고객 승인 전 배포 금지.
-9. **다음 작업·완료 조건·승인:** `feature/lite-independent-migration`에서 파서/템플릿/CLI/zip verify·테스트 이관·독립 CSV/JSON 정상 사용자 경로를 검증하면 **50% gate 후보**; 후속 Excel/TSV 안전 import, Windows+browser, 납품과 권리 검수. 유료 API/자료 전송/권리·판매 GO는 사용자 승인 필요.
-10. **갱신·검증범위:** 2026-11-12 KST. 저장소 메타·기존 Lite GitHub SHA 검증; 본 저장소 내용 readback 전까지 문서 저장 검증 대기. 최종 문서 커밋은 완료 후 조회 기록으로 갈음.
+1. **목표·용도·확정 요구·기술:** `hibi89/data2web_studio` 독립 로컬 표형 CSV/flat JSON → 단일 HTML/검증 ZIP. 최종설계 전체 R01–R33에는 XLSX/TSV·안전 import·고객납품/권리 포함. Python3.11 표준 라이브러리, 브라우저 로컬 JS/CSS, 외부 API/서버 없음.
+2. **완료 기능·변경·결정:** A(REA_Web Pro/Lite 통째 복제, 결합·권리 부담)보다 B(독립 최소 파서·템플릿·검증·원본 골든 계약 참고) 선택. `data2web.py` CSV/JSON 입력·SHA/명시 승인·ID중복 검증·create-only; `data2web_web.py` 정렬/분류/검색/상세/50행 페이징/3테마·CSV 교체·새 HTML; `studio.py` owner inspect/build/verify; `delivery.py` 결정적 ZIP; `verify_delivery.py` 독립 허용목록/CRC/SHA/size/zip-slip; 신규 97 Python 테스트와 실 Chromium E2E. 원본 REA_Web 수정0.
+3. **테스트 명령·PASS/FAIL/SKIP:** `python -m unittest discover -v` Windows 97/97 PASS, Ubuntu 97/97 PASS(둘 다 0 FAIL); 브라우저 `python browser_probe.py` Playwright Chromium `file://` PASS, HTTP(S) 요청0/JS 예외0. GitHub [#43377913444](https://github.com/hibi89/data2web_studio/actions/runs/43377913444) 정확 코드 `90da878ffa29926dda39f6c67913353ec7a3b390`에서 **3/3 JOB SUCCESS**. 실 Win10/11 Chrome·Edge 고객 장비 검증 미실시. 설계 전체 33요구 PASS 아님.
+4. **완료·진행·대기·차단:** P50 기술 핵심 경로 자동 검증됨. **공식 최종완성률 UNASSESSED**(사용자 승인 항목 가중치 미확정; 내부 P50 자동 공식 전용 금지), 해총 `[작업중]` 유지. XLSX/TSV/상용권/물리 Windows·실제 고객 E2E·원본 Lite 통합 골든·성능/차트 미검증. RELEASE HOLD.
+5. **실패 근거·원인·시도·금지·대안:** 초기 Windows cp1252 테스트 read/write FAIL→UTF-8 명시; ubuntu-latest가 26.04로 올라 Playwright 1.56 설치 FAIL→ubuntu-24.04 고정; 비동기 File.text 이후 즉시 assertion 및 CSP unsafe-eval Playwright 함수 실패→locator expect 대기; 임시 다운로드 파일 확장자 없음→HTML 명시 저장; Windows 텍스트 출력 CRLF로 사후 SHA mismatch→UTF-8 바이너리 출력. 각각 다른 원인 해결, 오래된 실패 run 무의미 재실행 금지. 실패 없이 파일 삭제/덮어쓰기 금지.
+6. **저장소·브랜치·SHA·경로:** `hibi89/data2web_studio@feature/lite-independent-migration` 기능 검증 SHA `90da878ffa29926dda39f6c67913353ec7a3b390`. `main`은 변경/병합하지 않음. 후속 `feature/xlsx-tsv-import` 별도. `data2web.py`, `data2web_web.py`, `studio.py`, `delivery.py`, `verify_delivery.py`, `test_acceptance.py`, `test_data2web.py`, `browser_probe.py`, `.github/workflows/python-tests.yml`, `docs/P50_ACCEPTANCE_EVIDENCE_20261113.md`.
+7. **Production·Vercel·실행·환경:** Production URL N/A, Vercel N/A(오프라인 파일 생성기). Python3.11+ `python studio.py inspect sample.csv`, 그 SHA로 `python studio.py build sample.csv new.html --source-sha256 SHA --id id --title title --category category --confirm APPROVE --ack-plaintext --zip-path new.zip`, `python studio.py verify new.zip`. 브라우저 QA는 테스트 전용 Playwright 1.56/Chromium 141, 런타임 pip 의존0.
+8. **원본·백업·인증·수정 금지:** 참조 원본 `hibi89/REA_Web@feature/lite-owner-delivery-p95-20261112`, 테스트 근거 `cb7df1f4...`, Pro `97b6e5c...`. 원본 저장소/고객 파일/수동 인수 원본 변경 금지; 신규 Git 기능은 parent SHA 및 revert로 복원. 고객 실제 자료 GitHub 기록 없음. 개인정보/토큰/GitHub secret 변경0. 고객 권리 및 OSS 법무는 출고 전 재확인.
+9. **다음 우선순위·절차·완료 기준·승인:** (1) 최종설계 R01–R33 사용자 **가중치 확정** 및 전수 증빙 평가 — 공식 50% 여부 재판정; (2) 같은 소스의 Lite 원본 executable fixture 비교, Windows10/11 실제 Chrome/Edge 구매자 E2E·10k×20 실측; (3) 다음 별도 지시 시 XLSX/TSV(외부 링크/수식·ZIP 안전/라이선스) 개발; (4) 납품 정책/실 고객 데이터/가격·지원·판매는 사전 승인 필요. 재검증 없이 목표 50% 공식 확정·마커 해제 금지.
+10. **갱신(KST)·기준 시점·검증 범위·문서 기준:** 2026-11-13 15:20 KST; GitHub 정확 코드 `90da878ffa29926dda39f6c67913353ec7a3b390`, [Actions #43377913444](https://github.com/hibi89/data2web_studio/actions/runs/43377913444) 2026-11-13 **15:20 KST 종료 확인**. 이번 문서는 해당 코드 SHA/테스트의 증거 설명이며 문서만의 새 HEAD 커밋은 최종 GitHub 확인 필요. 실 Windows 고객 PC/서명·Production은 N/A/미검증으로 별도 관리.
 
-**중요:** 기존 REA_Web Lite 내부95% ≠ DATA2WEB 신 최종설계95%; 문서만으로 개발 점수 증액 금지.
+**범위 분리:** `P50 기술 경로 성공` ≠ 사용자 최종설계 공식 완성률 50% ≠ 판매 허가. 코드/기능 증거는 출고 승인과 독립.
