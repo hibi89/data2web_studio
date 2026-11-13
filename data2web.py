@@ -47,9 +47,15 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
                     raise ValueError("Duplicate JSON key")
                 obj[key] = value
             return obj
-        data = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=unique_pairs)
+        data = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=unique_pairs,
+                          parse_constant=lambda value: (_ for _ in ()).throw(
+                              ValueError("Non-finite JSON numeric constant")))
+        # A flat JSON object is one record; arrays of flat records remain unchanged.
+        # Never guess a nested records container or silently flatten nested content.
+        if isinstance(data, dict):
+            data = [data]
         if not isinstance(data, list) or not data or not all(isinstance(row, dict) for row in data):
-            raise ValueError("Expected nonempty JSON object array")
+            raise ValueError("Expected a flat JSON object or nonempty object array")
         fields = list(data[0])
         if any(set(row) != set(fields) for row in data):
             raise ValueError("Inconsistent JSON keys")
@@ -65,7 +71,8 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
         record = {}
         for key in fields:
             value = row[key]
-            if isinstance(value, (dict, list)):
+            if not isinstance(value, (str, int, float, bool, type(None))) or (
+                    isinstance(value, float) and not __import__("math").isfinite(value)) or isinstance(value, (dict, list)):
                 raise ValueError("Nested value not supported")
             cell = "" if value is None else str(value)
             if len(cell) > MAX_CELL:
