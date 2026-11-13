@@ -46,6 +46,8 @@ def main(argv=None):
             if args.source.suffix.lower()==".xlsx" and args.sheet is None:
                 import hashlib
                 from data2web_tabular import list_xlsx_sheets
+                from path_policy import assert_no_links
+                assert_no_links(args.source)
                 if (args.source.is_symlink() or not args.source.is_file()
                         or args.source.stat().st_size>8_000_000):
                     raise ValueError("Unsafe XLSX source")

@@ -3,11 +3,13 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from path_policy import assert_no_links
 
 def assert_receipt_path_available(path):
     if path is None:
         return
     p=Path(path)
+    assert_no_links(p,allow_missing_leaf=True)
     if p.suffix.lower() != ".json" or p.is_symlink() or p.exists() or not p.parent.is_dir() or p.parent.is_symlink():
         raise FileExistsError("Receipt target must be a fresh .json file in an existing real directory")
 

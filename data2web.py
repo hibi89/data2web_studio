@@ -6,6 +6,7 @@ import html
 import json
 import os
 from pathlib import Path
+from path_policy import assert_no_links
 
 MAX_BYTES = 8_000_000
 MAX_ROWS = 10000
@@ -14,6 +15,7 @@ MAX_CELL = 16000
 
 def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
     path = Path(path)
+    assert_no_links(path)
     if path.is_symlink() or not path.is_file() or path.suffix.lower() not in (".csv", ".json", ".tsv", ".xlsx"):
         raise ValueError("Unsupported or unsafe input")
     if path.stat().st_size > MAX_BYTES:
@@ -90,6 +92,7 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     if any(not i for i in ids) or len(ids) != len(set(ids)):
         raise ValueError("Missing or duplicate IDs")
     target = Path(output_file)
+    assert_no_links(target,allow_missing_leaf=True)
     if target.suffix.lower() != ".html" or target.is_symlink() or target.exists() or not target.parent.is_dir() or target.parent.is_symlink():
         raise FileExistsError("Output must be a new file in an existing directory")
     from data2web_web import render_html

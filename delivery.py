@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from path_policy import assert_no_links
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 from verify_delivery import verify_zip
 
@@ -16,6 +17,8 @@ GUIDE = ("DATA2WEB Studio — 로컬 열람 안내\n"
 
 def package_html(html_path, zip_path, receipt):
     html_path, zip_path = Path(html_path), Path(zip_path)
+    assert_no_links(html_path)
+    assert_no_links(zip_path,allow_missing_leaf=True)
     if (not html_path.is_file() or html_path.is_symlink() or zip_path.is_symlink()
             or zip_path.exists() or not zip_path.parent.is_dir()
             or zip_path.parent.is_symlink() or zip_path.suffix.lower() != ".zip"):
