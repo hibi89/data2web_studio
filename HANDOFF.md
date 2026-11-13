@@ -1,5 +1,16 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · 네이티브 EXE 실구동 PASS / 85점 외부 수용 대기
+1. **제품·기술·정본:** DATA2WEB Studio; CSV/JSON/TSV/XLSX → 로컬 GUI·HTML/ZIP, R01–R33 고정 배점 100점·목표85점.
+2. **완료·근거:** source `96e2e1dff9976773bf3d3b2670ba6763ee69292d`에서 PyInstaller6.22.3 onedir native Windows `.exe` 신규 빌드, `native_windows_entry.py`, `native_windows_acceptance.py`, `.github/workflows/native-windows-owner-preview.yml` 추가. Python PATH 없는 native CLI/GUI·브라우저·synthetic deliver·verify·tamper/overwrite 거부 검증.
+3. **테스트/성공/미검증:** [Native workflow #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) 1/1 SUCCESS; [Full Python/browser #43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) 4/4 SUCCESS(Windows291 PASS, Ubuntu290PASS+1SKIP); [blueprint gate #43527161439](https://github.com/hibi89/data2web_studio/actions/runs/43527161439) SUCCESS. 고객 Win10/11/사용권·Authenticode·상용 인수 **NOT VERIFIED**.
+4. **상태:** 정본 전체검증 **72/100**, 목표85에 13점 부족. 11개28점 PENDING. `[작업중]`·RELEASE HOLD·SALE NO-GO·크몽 미등록, PR#4 Draft.
+5. **장애/복구:** 첫 native workflow SHA `2ee49504`에서 합성 fixture newline 오기→EXE 빌드 PASS/실구동 감사 FAIL. 수정 SHA `96e2e1df`에서 재검증 PASS. 실고객·판매법률 검증으로 둔갑 금지.
+6. **GitHub:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 기준 소스 SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d`, [Draft PR#4](https://github.com/hibi89/data2web_studio/pull/4). 산출물은 Private Actions artifact ID `14085058847`(기한7일); 바이너리 저장소 커밋0.
+7. **환경/Production:** Windows GitHub-hosted / Python3.11 build / PyInstaller 6.22.3; run `python native_windows_acceptance.py --exe native-dist/DATA2WEB-LOCAL/DATA2WEB-LOCAL.exe --manifest native-dist/PRIVATE_PREVIEW_MANIFEST.json`. EXE Python runtime 포함; Vercel/Production **미적용**.
+8. **원본/백업:** 기능 전 안정 SHA `e676010fb5069ae8f337e4ae7f0c22a0fb1fac85`, 이후 통과 소스 `96e2e1df`; 요구/scorecard/고객 원본/기존 브랜치/데이터 변경0, 고객자료 GitHub·챗봇 전송0.
+9. **다음 우선순위:** 물리 Win10/11 EXE·Chrome/Edge·한글/출력 실수용, 권리/NOTICE·원본 보유/파기, 가격·지원·환불·고객 인수·독립 보안감사 완료 뒤 R별 점수 산정. 현재 CI만으로 85 주장 금지; 사용자 최종 권리·상용 승인은 별도.
+10. **갱신·범위:** 2026-11-14 KST 원격 GitHub 소스/Actions·artifact 확인, CI PASS는 소스 `96e2e1df` 정확 SHA. 새 문서 커밋은 새 정확 HEAD 확인 시 별도로 기록. 상세 [R32 Native](docs/R32_NATIVE_WINDOWS_OWNER_PREVIEW_20261114.md).
 ## 최신 인수인계 — 2026-11-14 KST · ZIP 보안 강화·정확 CI SHA
 1. **제품/정본/기술:** DATA2WEB Studio, CSV/JSON/XLSX/TSV → 서버 없는 HTML/ZIP, R01–R33 고정 100점.
 2. **변경:** `verify_delivery` 승인 상태 정확 대조·숨은 ZIP 구조 차단; `delivery` bounded HTML 스냅샷; `package_portable` bounded src/pyz; 악성 패키지 7개 회귀 추가. 선택 stdlib strict ZIP, 서명 방식은 인증서/배포권 부재로 보류.

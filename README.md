@@ -1,3 +1,9 @@
+## 2026-11-14 · Windows 독립 EXE 오너 전용 시범 빌드 (상업배포 불가)
+
+정확 코드 SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d`: [Windows EXE native acceptance #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) **1/1 SUCCESS**, [Python/Browser #43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) **4/4 SUCCESS**, [Blueprint #43527161439](https://github.com/hibi89/data2web_studio/actions/runs/43527161439) SUCCESS. PyInstaller6.22.3 onedir의 embedded Python + Tk 동작을 합성 입력·Chrome/Edge·고객폴더 tamper/no-clobber까지 확인. 비공개 Actions artifact `DATA2WEB-UNSIGNED-OWNER-PREVIEW-WINDOWS` (2026-11-21 08:27 KST 자동 만료). `main` 미병합, 고객 PC·소유권/제3자 라이선스/상업 승인·서명은 미완성. [시범 실행 검증·사용자 최소수용 묶음](docs/R32_NATIVE_WINDOWS_OWNER_PREVIEW_20261114.md).
+
+**고정 R01–R33 최종점수 72/100, 목표85까지13점**, `[작업중]`·RELEASE HOLD/SALE NO-GO. 기술 테스트 성공이 실구매자 인수나 권리 승인 아님.
+
 ## 2026-11-14 · ZIP 무결성 보안 강화, 고정 72점 유지
 
 정확 소스 SHA `0cb09f86280f860b008e008da6ccaea8be068e29` [CI #43524908011](https://github.com/hibi89/data2web_studio/actions/runs/43524908011) **4/4 SUCCESS**, Windows291 PASS, Ubuntu290 PASS/1 SKIP, 브라우저 E2E PASS. 승인 상태 변조/가짜 서명·ZIP 앞뒤 숨은 데이터/댓글 거부, HTML/pyz 사전 bounded FD 점검 및 신규 보안회귀 7개. [보안 검증과 잔여 수용 게이트](docs/R22_R29_R32_HARDENED_ZIP_ACCEPTANCE_20261114.md).

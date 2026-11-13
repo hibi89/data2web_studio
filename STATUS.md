@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · R32 독립 Windows EXE 시범판 최초 성공 (Python 경로 의존성 축소)
+- **정확 제품 소스 SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d`**, [hosted Windows native EXE workflow #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) **1/1 SUCCESS**, PyInstaller6.22.3 onedir 빌드 + 합성 Chrome/Edge + ZIP·receipt 검증 + no-clobber/tamper HOLD + 실제 Tk GUI 창 검사 PASS. 비공개 시범 artifact `DATA2WEB-UNSIGNED-OWNER-PREVIEW-WINDOWS` ID14085058847, 7일 보존(2026-11-21 08:27 KST 만료). Python 바이너리가 기본 PATH에 없는 조건에서 독립 EXE 실행 검증.
+- 같은 정확 SHA [Windows/Ubuntu/browser CI #43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) **4/4 SUCCESS** (Win Python291PASS, Ubuntu290PASS/1SKIP, Chrome·Edge/Chromium E2E PASS), [R01–33 최종설계 게이트 #43527161439](https://github.com/hibi89/data2web_studio/actions/runs/43527161439) SUCCESS.
+- `native_windows_entry.py`, `native_windows_acceptance.py`, `.github/workflows/native-windows-owner-preview.yml` 추가. 첫 시험 SHA `2ee49504` 합성 CSV newline 오류 발견→수정→정확 SHA 성공. **R32 시범 EXE는 서명 없음/상업판 아님**; 실제 Win10/11 고객 장비/권리·서명·지원은 미검증.
+- **전체 72/100 그대로** (고정 33요구, 11 pending, 85까지13점). 성공한 EXE 기술검증을 고객/법적 수용으로 대체하지 않음. `[작업중]`, RELEASE HOLD/SALE NO-GO, PR#4 Draft, 원본·main 불변. [상세와 남은 실수용 조건](docs/R32_NATIVE_WINDOWS_OWNER_PREVIEW_20261114.md).
+
+
 ## 2026-11-14 KST · ZIP 승인 위조·숨은 데이터·메모리 상한 보안 실증 (4/4 CI PASS)
 - **기능/테스트 SHA `0cb09f86280f860b008e008da6ccaea8be068e29`** [CI #43524908011](https://github.com/hibi89/data2web_studio/actions/runs/43524908011) **4/4 SUCCESS** (Win 291/291 PASS, Ubuntu 290 PASS/1 Windows 전용 SKIP, hosted Chrome·Edge·Chromium E2E PASS), [final gate #43524908506](https://github.com/hibi89/data2web_studio/actions/runs/43524908506) SUCCESS.
 - `verify_delivery` ZIP의 `RELEASE_HOLD` 상태/허용된 manifest keys 고정, 거짓 판매허가와 불필요한 signer 플래그·ZIP 댓글·앞뒤 숨은 데이터·비정형 member offset 거부. `delivery` 20MB bounded FD로 HTML 처리, `package_portable` 제한된 source/pyz 스냅샷. **악성/경계 회귀 7개 추가**, 기존 통과 기능 보존 확인. 중간 실패 `914c0e1d` 이스케이프 결함 수정 후 정확 SHA CI PASS.
