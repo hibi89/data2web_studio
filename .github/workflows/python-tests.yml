@@ -20,6 +20,8 @@ jobs:
           python-version: '3.11'
       - name: Run standalone synthetic and packaging regressions
         run: python -m unittest discover -v
+      - name: Inspect fixed owner-approved R01-R33 100-point scoring contract
+        run: python blueprint_score.py
       - name: Stdlib-only synthetic customer-device preparation (no real user data)
         run: python studio.py self-check
   browser:
