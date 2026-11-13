@@ -106,8 +106,8 @@ def acceptance(executable, manifest_path):
             }):
             raise AssertionError("Native file browser self-check failed")
         source = root / "synthetic.csv"
-        source.write_text("id,title,category,amount\\n"
-                          "A1,LOCAL-SYNTHETIC-ITEM,A,12\\n", encoding="utf-8")
+        source.write_text("id,title,category,amount\n"
+                          "A1,LOCAL-SYNTHETIC-ITEM,A,12\n", encoding="utf-8")
         original = source.read_bytes()
         digest = hashlib.sha256(original).hexdigest()
         dest = root / "private-delivery"
@@ -162,7 +162,7 @@ def acceptance(executable, manifest_path):
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     with manifest_path.open("x", encoding="utf-8") as stream:
         json.dump(report, stream, ensure_ascii=True, sort_keys=True, indent=2)
-        stream.write("\\n")
+        stream.write("\n")
     return {"status":"PASS_SYNTHETIC_HOSTED_ONLY", "preview_sha256":report["exe_sha256"],
             "file_count":len(files), "native_tk_window_seen":desktop_ok,
             "customer_pc_verified":False,"sale_approved":False}
