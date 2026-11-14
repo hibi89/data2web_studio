@@ -104,6 +104,12 @@ const d=JSON.parse($("dataset").textContent);
 const state={rows:d.rows.slice(),columns:d.columns.slice(),mapping:d.mapping.slice(),sourceSha:d.source_sha256,changed:false};
 const [idKey,titleKey,categoryKey]=state.mapping;
 const chartMaxCategories=10;
+// The placeholder for an empty cell must never equal a real customer category.
+function blankCategoryLabel(names){
+ let label="— 분류 없음 —",suffix=2;
+ while(names.has(label)){label="— 분류 없음 ("+suffix+") —";suffix++}
+ return label
+}
 const metrics=document.getElementById("metric");
 const numberPattern=/^[+-]?(?:\d{1,12}(?:\.\d{1,4})?|\.\d{1,4})$/;
 // Scale accepted four-place decimals to exact BigInt units. Do not round
@@ -144,11 +150,12 @@ function renderChart(filtered){
  let ranked=[...frequencies.entries()].sort((a,b)=>a[1]===b[1]?collator.compare(a[0],b[0]):(a[1]>b[1]?-1:1));
  if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],field?0n:0);
  ranked=ranked.slice(0,chartMaxCategories-1).concat([["기타 "+(frequencies.size-chartMaxCategories+1)+"개 분류",remainder]])}
+ const blankLabel=blankCategoryLabel(new Set(frequencies.keys()));
  const largest=ranked.length?Number(ranked[0][1]):0;
  const bars=$("chart-bars");bars.replaceChildren();
  for(const [category,value] of ranked){
   const line=document.createElement("div");line.className="chart-row";
-  const name=document.createElement("span");name.className="chart-key";name.textContent=category===""?"— 분류 없음 —":category;
+  const name=document.createElement("span");name.className="chart-key";name.textContent=category===""?blankLabel:category;
   const track=document.createElement("div");track.className="bar-track";
   const fill=document.createElement("div");fill.className="bar-fill";
   fill.style.width=(largest>0?100*Number(value)/largest:0)+"%";track.append(fill);
@@ -180,9 +187,10 @@ function categoryOptions(preserveSelection=true){
 const previous=preserveSelection?[...$("category").selectedOptions].filter(x=>!x.dataset.all).map(x=>x.value):[];
 $("category").replaceChildren();
 const names=[...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare);
+const blankLabel=blankCategoryLabel(new Set(names));
 const effective=previous.filter(x=>names.includes(x));
 const all=document.createElement("option");all.value="";all.dataset.all="true";all.textContent="전체";all.selected=!effective.length;$("category").append(all);
-for(const name of names){const opt=document.createElement("option");opt.value=name;opt.textContent=name||"— 분류 없음 —";opt.selected=effective.includes(name);$("category").append(opt)}
+for(const name of names){const opt=document.createElement("option");opt.value=name;opt.textContent=name||blankLabel;opt.selected=effective.includes(name);$("category").append(opt)}
 }
 function render(){
  // A prior selected record may belong to a different filter or even a
