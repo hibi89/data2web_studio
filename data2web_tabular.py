@@ -125,9 +125,10 @@ def _metadata(archive):
             if not SHEET_PART.fullmatch(canonical) or canonical not in archive.namelist():
                 raise ValueError("Worksheet path not permitted")
             lookup[ident] = canonical
-    sheet_node = workbook.find(X + "sheets")
-    if sheet_node is None:
-        raise ValueError("Workbook has no sheets")
+    sheet_nodes = workbook.findall(X + "sheets")
+    if len(sheet_nodes) != 1:
+        raise ValueError("Workbook must have exactly one sheet list")
+    sheet_node = sheet_nodes[0]
     sheets = []
     seen = set()
     paths = set()
@@ -175,8 +176,17 @@ def _col_index(letter):
     return value - 1
 
 def _value(node, strings, allow_cached_formulas):
+    # Element.find() picks only the first matching child; a second payload
+    # could otherwise be hidden in an accepted workbook without review.
+    if any(len(node.findall(X + part)) > 1 for part in ("f", "v", "is")):
+        raise ValueError("Duplicate XLSX cell payload")
     formula = node.find(X + "f")
     cached = node.find(X + "v")
+    inline = node.find(X + "is")
+    if inline is not None and (
+            node.get("t", "n") != "inlineStr" or cached is not None
+            or formula is not None):
+        raise ValueError("Ambiguous XLSX inline cell payload")
     if formula is not None and not allow_cached_formulas:
         raise ValueError("XLSX formula found; explicit cached-value approval required")
     if formula is not None and (cached is None or cached.text is None):
@@ -234,6 +244,10 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
             raise ValueError("Merged worksheet cells are unsupported")
         # Hidden worksheet content may contain values the owner did not review.
         # Never silently publish or discard it; require a new visible-source SHA.
+        if (len(root.findall(X + "sheetFormatPr")) > 1
+                or len(root.findall(X + "cols")) > 1
+                or len(root.findall(X + "sheetData")) != 1):
+            raise ValueError("Repeated or missing XLSX worksheet structure")
         sheet_format = root.find(X + "sheetFormatPr")
         if (sheet_format is not None and
                 sheet_format.get("zeroHeight", "0").strip().lower() not in ("0", "false")):
