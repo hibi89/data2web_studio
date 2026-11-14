@@ -166,7 +166,7 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
     for path,sha in files:
         if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
             raise ValueError("Input mutated after publish; output HOLD")
-    outsha=hashlib.sha256(html_path.read_bytes()).hexdigest()
+    outsha=hashlib.sha256(read_bounded_source(html_path,max_bytes=MAX_OUTPUT)).hexdigest()
     if outsha!=hashlib.sha256(raw).hexdigest():
         raise ValueError("Output differs from generated HTML")
     receipt={

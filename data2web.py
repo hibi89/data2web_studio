@@ -106,14 +106,19 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     markup = render_html(fields, rows, mapping, digest, name=name, theme=theme,
                          source_sheet=sheet, source_header_row=header_row,
                          cached_formulas=allow_cached_formulas)
+    output_bytes = markup.encode("utf-8")
+    if len(output_bytes) > 20_000_000:
+        raise ValueError("Output HTML exceeds local delivery limit")
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     fd = os.open(target, flags, 0o600)
     with os.fdopen(fd, "wb") as stream:
-        stream.write(markup.encode("utf-8"))
+        stream.write(output_bytes)
     if hashlib.sha256(read_bounded_source(input_file,max_bytes=MAX_BYTES)).hexdigest() != digest:
         raise ValueError("Source modified after generation; output HOLD")
-    output_digest = hashlib.sha256(target.read_bytes()).hexdigest()
-    if output_digest != hashlib.sha256(markup.encode("utf-8")).hexdigest():
+    # Reopen using an identity-checked, size-bounded descriptor. A mutable
+    # output pathname must not bypass the same safety checks as source input.
+    output_digest = hashlib.sha256(read_bounded_source(target,max_bytes=20_000_000)).hexdigest()
+    if output_digest != hashlib.sha256(output_bytes).hexdigest():
         raise ValueError("Output integrity mismatch; output HOLD")
     return {"source_sha256": digest, "output_sha256": output_digest, "rows": len(rows),
             "columns": fields, "mapping": {"id": id_column, "title": title_column, "category": category_column},
