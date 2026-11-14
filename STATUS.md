@@ -1,3 +1,8 @@
+## 2026-11-14 KST — A07/R26 anonymous preorder malformed UTF-8 HOLD
+- Source review found `order_intake_preflight.py` CLI error handler omitted `UnicodeError`: malformed UTF-8 input could emit a Python traceback rather than the structured `INVALID_METADATA` HOLD. Added `UnicodeError` handler, code commit `3b0d62b95f711a4d348ddfa753e033963b9d2a82`.
+- Added a real CLI subprocess negative test using `bytes((255,254,128))`, asserting exit 2, structured HOLD, no traceback. Exact test commit `60ac101783715412258c63ea8b1d659d0616c320`. Also parenthesized existing PRO SKU condition without eligibility change (commit `66e4c1b1b564f17579d4ddc7c2b36996637fccbc`).
+- **Tests not executed / CI not confirmed**; code fix is committed, not runtime-verified. Rights, customer consent and independent security audit remain outstanding. Locked official score 72/100, R07/R26 pending, RELEASE HOLD. Next: run exact-code-SHA Python/GUI CI and review test logs; do not award fractional points.
+
 ## 2026-11-14 KST — R25 expired-copy report bypass closed
 - Verified source inspection found `validate_result` could accept `WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED` even when the report's due timestamp was at/before review time. Added fail-closed comparison in `operator_copy_retention.py` commit `3d3a3eec5bb3a47da8faa13faf61571058607565` and a negative regression case in `test_operator_copy_retention.py` commit `72633ae9e1777d9465e54be7b6695e67aa6cd5de`.
 - Tests/CI not executed or confirmed in this session; GitHub workflow/commit-status interfaces returned no relevant runs/statuses in prior attempt. Actual customer custody/owner evidence and independent acceptance absent. R25 PENDING, official 72/100, RELEASE HOLD.
