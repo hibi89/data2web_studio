@@ -73,12 +73,17 @@ def main():
             page.locator("#body tr").first.press("Enter")
             expect(page.locator("#details")).to_contain_text("XSS")
             page.locator("#category").select_option("")
+            # Stale detailed content from a different source must never be
+            # included in the downloaded replacement HTML.
+            page.locator("#body tr").last.click()
+            assert page.locator("#details").text_content() != "항목을 선택하세요."
             page.locator("#csv").set_input_files(str(changed))
             page.locator("#replace").click()
             expect(page.locator("#notice")).to_contain_text("HOLD")
             page.locator("#ack").check()
             page.locator("#replace").click()
             expect(page.locator("#count")).to_have_text("2건")
+            expect(page.locator("#details")).to_have_text("항목을 선택하세요.")
             expect(page.locator("#import-warning")).to_be_visible()
             expect(page.locator("#metric")).to_have_value("amount")
             expect(page.locator("#chart-summary")).to_contain_text("18")
@@ -87,6 +92,8 @@ def main():
             downloaded=root/"saved.html"
             download.value.save_as(str(downloaded))
             assert downloaded.exists()
+            assert "row-239" not in downloaded.read_text(encoding="utf-8"), "Stale prior detail leaked into replacement HTML"
+            assert "Injection" not in downloaded.read_text(encoding="utf-8"), "Old source detail leaked into replacement"
             secondary=context.new_page()
             secondary.on("pageerror",lambda e:errors.append(str(e)))
             secondary.on("request",lambda r:remote.append(r.url) if r.url.startswith(("https:","http:")) else None)

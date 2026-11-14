@@ -170,7 +170,11 @@ const effective=previous.filter(x=>names.includes(x));
 const all=document.createElement("option");all.value="";all.textContent="전체";all.selected=!effective.length;$("category").append(all);
 for(const name of names){const opt=document.createElement("option");opt.value=name;opt.textContent=name;opt.selected=effective.includes(name);$("category").append(opt)}
 }
-function render(){const query=$("search").value.toLocaleLowerCase();
+function render(){
+ // A prior selected record may belong to a different filter or even a
+ // different imported source. Never serialize a stale detail into new HTML.
+ $("details").textContent="항목을 선택하세요.";
+ const query=$("search").value.toLocaleLowerCase();
 const activeCategories=[...$("category").selectedOptions].map(x=>x.value).filter(Boolean);
 const sortKey=$("sort").value;
 const filtered=state.rows.filter(r=>(!activeCategories.length||activeCategories.includes(r[categoryKey]))&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
