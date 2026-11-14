@@ -203,20 +203,27 @@ $("direction").onclick=()=>{descending=!descending;$("direction").textContent=de
 $("prev").onclick=()=>{page--;render()};$("next").onclick=()=>{page++;render()};
 function parseCSV(text){
  if(text.charCodeAt(0)===0xfeff)text=text.slice(1);
- const table=[];let record=[],cell="",quoted=false,closed=false;
+ const table=[];let record=[],cell="",quoted=false,closed=false,touched=false;
  function pushCell(){record.push(cell);cell="";closed=false}
  function pushRow(){pushCell();table.push(record);record=[]}
  for(let i=0;i<text.length;i++){const c=text[i];
  if(quoted){if(c==='"'){if(text[i+1]==='"'){cell+='"';i++}else{quoted=false;closed=true}}else cell+=c;continue}
+ // Physical blank lines are ignored by Python csv.DictReader. An explicit
+ // quoted empty cell is different and must NOT be silently dropped.
+ if(c==="\r"||c==="\n"){
+  if(touched)pushRow();
+  if(c==="\r"&&text[i+1]==="\n")i++;
+  touched=false;continue
+ }
+ touched=true;
  if(c==='"'&&!cell&&!closed){quoted=true;continue}
  if(c===","){pushCell();continue}
- if(c==="\r"||c==="\n"){pushRow();if(c==="\r"&&text[i+1]==="\n")i++;continue}
  if(closed)throw Error("닫힌 따옴표 뒤에 잘못된 문자가 있습니다");
  if(c==='"')throw Error("인용 형식이 잘못되었습니다");
  cell+=c;if(cell.length>MAX_CELL)throw Error("셀 길이 제한 초과")
  }
  if(quoted)throw Error("닫히지 않은 따옴표");
- if(cell!==""||record.length)pushRow();
+ if(touched)pushRow();
  return table;
 }
 // Replacing a selected file invalidates the last reviewed CSV and consent.
