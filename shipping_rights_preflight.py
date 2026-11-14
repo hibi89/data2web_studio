@@ -12,6 +12,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from data2web_single import deliver_single
+from r21_source_provenance import check_source_provenance
 from verify_customer_folder import EXPECTED as FOLDER_EXPECTED, verify_customer_folder
 from verify_delivery import ALLOWED as ZIP_EXPECTED, verify_zip
 
@@ -114,6 +115,8 @@ def read_inventory(path=INVENTORY):
 def synthetic_shipping_preflight(*, inventory=None):
     doc = read_inventory() if inventory is None else inventory
     validate_inventory(doc)
+    # Source pins are technical ancestry checks, never legal rights approval.
+    check_source_provenance()
     if ZIP_EXPECTED != {"index.html", "manifest.json", "README_KO.txt"} or (
         FOLDER_EXPECTED != {"index.html", "delivery.zip", "receipt.json"}
     ):
