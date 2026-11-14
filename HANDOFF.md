@@ -1,3 +1,11 @@
+## 2026-11-15 KST — A21-01 source and shipped-package reconciliation
+
+At exact code/test SHA `320aebc23163019f85e1c345857ff4ed3da8147a`, the six R21 source pins were compared with the actual Git tree: `data2web_web.py` and `data2web_tabular.py` match; `delivery.py`, `receipt_utils.py`, `data2web_single.py`, and `data2web_append.py` drift. The file-by-file evidence and exact blob IDs are in [R21_SOURCE_PROVENANCE_EVIDENCE](https://github.com/hibi89/data2web_studio/blob/320aebc23163019f85e1c345857ff4ed3da8147a/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). No pin was refreshed.
+
+The current code, shipping inventory, and independent verifiers agree on the A contract: folder members `index.html`, `delivery.zip`, `receipt.json`; ZIP members `index.html`, `manifest.json`, `README_KO.txt`. Windows and Ubuntu hosted tests for folder verification, single delivery, receipt creation, and create-only behavior passed. The integrated shipping-rights preflight still stops at the intentional producer-pin gate. Browser logs at this exact SHA show Chromium, Chrome, and Edge local-file flows with `network0`.
+
+The A-scope HTML contains its CSS/JS inline. Owner-only EXE/runtime, read-only upstream golden source, and CI test dependencies are recorded as excluded from the customer A package. A21-01's technical inventory is reconciled; A21-02/03 still need authorized origin and rights review. This does not establish copyright, commercial redistribution, or NOTICE status. Score remains 72/100 and release remains on hold.
+
 ## 2026-11-15 KST — Native Windows manifest output and exact-SHA handoff (`320aebc23163019f85e1c345857ff4ed3da8147a`)
 
 ### GitHub state
