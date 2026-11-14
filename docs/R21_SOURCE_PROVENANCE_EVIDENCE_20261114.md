@@ -1,3 +1,12 @@
+## 2026-11-15 KST — GPT-6 v2 R21 소스 핀 복구, Windows·Ubuntu·macOS exact-SHA CI 실증
+
+**확정 기술검증 SHA:** `9c8cfdcb1c10482ad6184a581991626b7e42138c` (기능 producer 6개 SHA는 코드 변경 이전과 동일, macOS 워크플로 테스트 변경 포함).
+- GitHub Windows·Ubuntu·Chromium/Chrome/Edge [Actions #43647752145](https://github.com/hibi89/data2web_studio/actions/runs/43647752145): **4/4 Job SUCCESS**. Python full unittest 533개 Windows **532 PASS+1 SKIP**, Ubuntu **529 PASS+4 SKIP**, FAIL 0.
+- GitHub macOS [Actions #43647752125](https://github.com/hibi89/data2web_studio/actions/runs/43647752125): **SUCCESS**, full unittest 533개 **529 PASS+4 SKIP**, FAIL 0, Chromium file:// 및 A4/접근성·고객 ZIP/receipt 검증 포함. 테스트 파일 변경을 놓치지 않도록 `.github/workflows/macos-zero-cost-acceptance.yml`의 push path filter에 R21 출처/권리회귀 파일 2개 추가.
+- [CodeQL #43647752124](https://github.com/hibi89/data2web_studio/actions/runs/43647752124) workflow SUCCESS. [최종 Evidence Gate #43647752518](https://github.com/hibi89/data2web_studio/actions/runs/43647752518) workflow SUCCESS지만 report는 **UNASSESSED**, owner-accepted evidence manifest 없음.
+- 현행 `data/r21_source_provenance_v2.json`의 producer 6/6 SHA 일치 검증 및 `shipping_rights_preflight.py` 실행 PASS. 출력 상태는 `SOURCE_BLOBS_PINNED_RIGHTS_PENDING` / `HOLD_OWNER_IP_NOTICE_EXTERNAL_AUDIT`이고 승인 flag 4개는 모두 false, `score_addition=0`. v1 역사 registry blob `11796f9174fec88e29335d5f19bfe3038636787a` 변경 없음.
+- **이 문서 아래 이전 "CI 미검증" 기록은 해당 시점의 과거 상태**이며, 위 exact-SHA CI 완료 결과가 최신 우선. 기술 B0 복구 PASS, 상업적 소스/파생권리·NOTICE·고객별 사용권·R29 독립 외부감사는 여전히 증거 없음. **공식 72/100, R21 PENDING, RELEASE HOLD / SALE NO-GO**.
+
 ## 2026-11-15 KST — GPT-6 직접 복구: 기존 v1 보존 / 현재 v2 출처 핀 적용
 
 - 기준 GitHub producer code SHA: `320aebc23163019f85e1c345857ff4ed3da8147a`; 신규 source pin/test commit: `968d031f373054974c1bdae585dd61d12086ddf9`. 해당 두 커밋 사이에 6개 생산자 소스의 추가 변경은 없으며 GitHub `fetch_file`의 현행 blob IDs를 재조회했음.
