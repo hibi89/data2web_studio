@@ -1,3 +1,9 @@
+## 2026-11-15 KST · Windows native preview output anchored at exact SHA `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+`native_windows_acceptance.py` now checks manifest-path links and existing leaves, captures the parent identity before the long acceptance run, and creates the manifest relative to a held handle for that same directory. Exact hosted [native Windows preview #43644268111](https://github.com/hibi89/data2web_studio/actions/runs/43644268111) passed. Its synthetic-only manifest reports a native Tk window, `customer_pc_verified=false`, and `sale_approved=false`. GPT-6 High source review found no actionable code issue.
+
+At this SHA, internal R29 preaudit and browser tests passed; CodeQL [#43644268143](https://github.com/hibi89/data2web_studio/actions/runs/43644268143) passed. The full Python matrix [#43644268104](https://github.com/hibi89/data2web_studio/actions/runs/43644268104) remains failed on six R21 producer source-pin checks, not on a claimed external-audit test. The final gate [#43644268362](https://github.com/hibi89/data2web_studio/actions/runs/43644268362) passed as a workflow but reports `UNASSESSED`. This is internal synthetic evidence only: no independent audit, customer acceptance, signoff, sale approval, or score increase is claimed. R29 remains PENDING and RELEASE HOLD / SALE NO-GO.
+
 ## 2026-11-15 KST · Synthetic Chromium artifacts use anchored output at `b3850cde8249ac39aae474326cbdb02274ad0fd1`
 
 `kmong_preview_screenshot.py` now receives all three PNGs as bytes before output; after verifying the browser run had no JS errors or HTTP(S) requests, it creates a new screenshot directory and stores PNGs and `CAPTURE_EVIDENCE.json` relative to the held directory handle. Exact hosted [synthetic preview #43643553075](https://github.com/hibi89/data2web_studio/actions/runs/43643553075) passed; manifest recorded three PNG hashes, `offline_http_requests=0`, `js_errors=0`, and `sale_approved=false`.
