@@ -35,6 +35,9 @@ def read_approval_manifest(path):
         raise ValueError("Unsafe approval manifest")
     raw=read_bounded_source(p,max_bytes=64000)
     doc=json.loads(raw.decode("utf-8-sig"),object_pairs_hook=unique_keys)
+    return validate_approval_doc(doc)
+
+def validate_approval_doc(doc):
     if not isinstance(doc,dict) or doc.get("contract") != CONTRACT:
         raise ValueError("Invalid approval manifest contract")
     sources=doc.get("sources")
@@ -51,6 +54,7 @@ def read_approval_manifest(path):
             approval.get("privacy_classification") not in ("NO_PERSONAL_DATA_REVIEWED","OWNER_APPROVED_LOCAL_ONLY")):
         raise ValueError("Owner data-rights/privacy review has not been approved")
     return doc
+
 
 def source_path(manifest_path, filename):
     if (not isinstance(filename,str) or not filename or len(filename)>180 or
@@ -131,9 +135,18 @@ def provenance_sha(sources):
     return hashlib.sha256(raw).hexdigest()
 
 def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zip_path=None,receipt_path=None):
-    if confirm!="APPROVE" or not ack_plaintext:
+    if confirm!="APPROVE" or ack_plaintext is not True:
         raise ValueError("Explicit owner append approval is required")
     doc=read_approval_manifest(approval_manifest)
+    return _build_approved_append_doc(doc,approval_manifest,html_path,
+             confirm=confirm,ack_plaintext=ack_plaintext,
+             zip_path=zip_path,receipt_path=receipt_path)
+
+def _build_approved_append_doc(doc,approval_manifest,html_path,*,
+                                confirm,ack_plaintext,zip_path=None,receipt_path=None):
+    if confirm!="APPROVE" or ack_plaintext is not True:
+        raise ValueError("Explicit owner append approval is required")
+    validate_approval_doc(doc)
     columns,rows,sources,files=approved_sources(approval_manifest,doc)
     mapping=doc["mapping"]
     identity=provenance_sha(sources)
@@ -185,10 +198,38 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
     return receipt
 
 def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_plaintext):
-    """Create only a brand-new folder; preserve it on failure for forensic recovery."""
-    if confirm!="APPROVE" or not ack_plaintext:
+    """Existing manifest-driven CLI API; preserves all v1 semantics."""
+    if confirm!="APPROVE" or ack_plaintext is not True:
         raise ValueError("Explicit approval is required for delivery")
     doc=read_approval_manifest(approval_manifest)
+    return _deliver_approved_append_doc(doc,approval_manifest,destination,
+                  confirm=confirm,ack_plaintext=ack_plaintext)
+
+def deliver_reviewed_sources(doc, source_directory, destination, *, confirm, ack_plaintext):
+    """GUI entrypoint: in-memory owner approvals, no temp manifest on disk.
+
+    All source paths are resolved relative to one real source directory.
+    Existing append core re-reads SHA/headers/IDs before creating new output.
+    """
+    if confirm!="APPROVE" or ack_plaintext is not True:
+        raise ValueError("Explicit approval required")
+    base=Path(source_directory)
+    assert_no_links(base)
+    if not base.is_dir():
+        raise ValueError("Real source directory required")
+    validate_approval_doc(doc)
+    # The reference is never opened or created. Only its .parent is used by
+    # source_path(), so no extra approval JSON enters customer source folders.
+    reference=base/".DATA2WEB-IN-MEMORY-APPROVAL-NOT-A-FILE.json"
+    return _deliver_approved_append_doc(doc,reference,destination,
+                   confirm=confirm,ack_plaintext=ack_plaintext)
+
+def _deliver_approved_append_doc(doc, approval_manifest, destination, *,
+                                 confirm, ack_plaintext):
+    """Create-only full customer folder with the same validated append engine."""
+    if confirm!="APPROVE" or ack_plaintext is not True:
+        raise ValueError("Explicit approval is required for delivery")
+    validate_approval_doc(doc)
     approved_sources(approval_manifest,doc)  # fail before creating the folder
     path=Path(destination)
     assert_no_links(path,allow_missing_leaf=True)
@@ -197,7 +238,7 @@ def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_pla
             path.name in ("", ".", "..")):
         raise FileExistsError("Delivery destination must be a new folder")
     path.mkdir(mode=0o700,exist_ok=False)
-    result=build_approved_append(approval_manifest,path/"index.html",
+    result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
               confirm=confirm,ack_plaintext=ack_plaintext,
               zip_path=path/"delivery.zip",receipt_path=path/"receipt.json")
     result["delivery_folder_created"]=True
