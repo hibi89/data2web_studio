@@ -1,3 +1,7 @@
+## 2026-11-15 KST — A21-02 provenance preparation
+
+A21-01 technical asset/package mapping is reconciled. A21-02 now has a GitHub path-history table for six producer files (first path commit, latest path commit, current blob, old-pin status) and identifies the exact four-file drift commit `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`. Git author metadata is recorded as metadata only. Owner source-origin review, third-party/vendor license/NOTICE determination, and real commercial redistribution rights remain pending; no pins or score changed.
+
 ## 2026-11-15 KST — exact-SHA continuation at `320aebc23163019f85e1c345857ff4ed3da8147a`
 
 - The Windows native acceptance manifest now writes through a held output-directory handle after checking the same parent identity recorded before the hosted acceptance run. Exact-SHA native owner-preview passed; GPT-6 High source review found no actionable issue.

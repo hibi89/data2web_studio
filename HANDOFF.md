@@ -1,6 +1,12 @@
+## 2026-11-15 KST — A21 source-history evidence prepared for owner review
+
+GitHub path-history evidence now identifies the first recorded path commit, last recorded source commit, and current blob for all six R21 producer files. All recorded commit-author metadata in those path histories is `hibi89`; this is repository metadata, not a legal authorship or redistribution proof. The four changed delivery producers last changed at `92dca182`; the two matching pinned files are `data2web_web.py` and `data2web_tabular.py`. See [R21 provenance evidence](https://github.com/hibi89/data2web_studio/blob/feature/final-blueprint-p85-evidence-20261113/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md).
+
+The A-package contract and exclusions are now reconciled. Owner/provider review of source origin and actual third-party/vendor rights is still required; all four artifact rights states remain pending and no LICENSE/NOTICE has been invented. A21-02/03 and R21 acceptance remain blocked. Score remains 72/100.
+
 ## 2026-11-15 KST — A21-01 source and shipped-package reconciliation
 
-At exact code/test SHA `320aebc23163019f85e1c345857ff4ed3da8147a`, the six R21 source pins were compared with the actual Git tree: `data2web_web.py` and `data2web_tabular.py` match; `delivery.py`, `receipt_utils.py`, `data2web_single.py`, and `data2web_append.py` drift. The file-by-file evidence and exact blob IDs are in [R21_SOURCE_PROVENANCE_EVIDENCE](https://github.com/hibi89/data2web_studio/blob/320aebc23163019f85e1c345857ff4ed3da8147a/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). No pin was refreshed.
+At exact code/test SHA `320aebc23163019f85e1c345857ff4ed3da8147a`, the six R21 source pins were compared with the actual Git tree: `data2web_web.py` and `data2web_tabular.py` match; `delivery.py`, `receipt_utils.py`, `data2web_single.py`, and `data2web_append.py` drift. The file-by-file evidence and exact blob IDs are in [R21_SOURCE_PROVENANCE_EVIDENCE](https://github.com/hibi89/data2web_studio/blob/feature/final-blueprint-p85-evidence-20261113/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). No pin was refreshed.
 
 The current code, shipping inventory, and independent verifiers agree on the A contract: folder members `index.html`, `delivery.zip`, `receipt.json`; ZIP members `index.html`, `manifest.json`, `README_KO.txt`. Windows and Ubuntu hosted tests for folder verification, single delivery, receipt creation, and create-only behavior passed. The integrated shipping-rights preflight still stops at the intentional producer-pin gate. Browser logs at this exact SHA show Chromium, Chrome, and Edge local-file flows with `network0`.
 

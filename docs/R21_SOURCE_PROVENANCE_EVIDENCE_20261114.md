@@ -1,3 +1,20 @@
+## 2026-11-15 KST — GitHub source-history map for A21-02 (no rights decision)
+
+At the tested tree `320aebc23163019f85e1c345857ff4ed3da8147a`, all GitHub path histories for these six producer files show commit-author metadata `hibi89` and GitHub account `hibi89`. Earliest path commits and latest path commits are listed below. GitHub commit metadata documents repository history; it does not establish legal authorship, coauthor consent, work-for-hire status, or redistribution rights.
+
+| File | Earliest path commit in this repository | Latest path commit at the tested tree | Current blob | Pinned state |
+|---|---|---|---|---|
+| `data2web_web.py` | [`7e1ea5d`](https://github.com/hibi89/data2web_studio/commit/7e1ea5db3960b741966128c6a5c944aff686fc1b) | [`6702d19`](https://github.com/hibi89/data2web_studio/commit/6702d1962408a0dd4248f5b5abcd3ca44343d4cd) | `65bd8fe16d7b284f553d5185ed369650cc83d82f` | MATCH |
+| `delivery.py` | [`7e1ea5d`](https://github.com/hibi89/data2web_studio/commit/7e1ea5db3960b741966128c6a5c944aff686fc1b) | [`92dca18`](https://github.com/hibi89/data2web_studio/commit/92dca1824e24700dc38f8f9fa4ae3775488c2d3f) | `c0013e445f3d4b419314c795d387643abc176f48` | DRIFT |
+| `receipt_utils.py` | [`5cd41e9`](https://github.com/hibi89/data2web_studio/commit/5cd41e9ad5fb332bc11d57611cbf9c56bd282f45) | [`92dca18`](https://github.com/hibi89/data2web_studio/commit/92dca1824e24700dc38f8f9fa4ae3775488c2d3f) | `137f4086fe08cfe22722186ffc0b47aa30957817` | DRIFT |
+| `data2web_single.py` | [`a336357`](https://github.com/hibi89/data2web_studio/commit/a3363574c9f3b2132b82da38d5539bfdb951b622) | [`92dca18`](https://github.com/hibi89/data2web_studio/commit/92dca1824e24700dc38f8f9fa4ae3775488c2d3f) | `b24e7495f4c43131dcbd986ac7bb75dfd3d979c0` | DRIFT |
+| `data2web_append.py` | [`5cd41e9`](https://github.com/hibi89/data2web_studio/commit/5cd41e9ad5fb332bc11d57611cbf9c56bd282f45) | [`92dca18`](https://github.com/hibi89/data2web_studio/commit/92dca1824e24700dc38f8f9fa4ae3775488c2d3f) | `92ccab387a61f9546d13bf9c48a97875e84ae740` | DRIFT |
+| `data2web_tabular.py` | [`397c553`](https://github.com/hibi89/data2web_studio/commit/397c553e1612dcad7854cf8ebfcd46d8a050f8ea) | [`e62f890`](https://github.com/hibi89/data2web_studio/commit/e62f890eac8034787224ddf41a1844c1c58c94c8) | `66c2fb8910b1202ae3b0301e8b615158d9a5fac9` | MATCH |
+
+The four changed producer blobs last changed together in `92dca1824e24700dc38f8f9fa4ae3775488c2d3f` (output creation anchored to held directories; source pin guard intentionally left active). The original source snapshot is `0219a10c03cab826220a78af128cffdae995ac9f`. Separate upstream golden reference is `hibi89/REA_Web@7b6b68111efd906f9d929b5e2f577699b26399ee`; workflow source is checked out read-only in a disposable directory, and is not an A delivery member. The upstream source and DATA2WEB implementation lineage still need rights-holder review; this record makes no derivation or license determination.
+
+A-customer output is limited by current code and independent verifier to folder `index.html`, `delivery.zip`, `receipt.json` and ZIP `index.html`, `manifest.json`, `README_KO.txt`. HTML CSS/JS are inline. Owner-only EXE/Python/Tcl/Tk/PyInstaller and CI Playwright/pypdf are outside that A package. The registry marks all four A artifacts as rights-pending and sets `third_party_vendor_inventory_complete=false`; no `LICENSE`/ `NOTICE` is included. Missing rights/vendor confirmation remain open.
+
 ## 2026-11-15 KST update — exact six-file blob comparison at `320aebc23163019f85e1c345857ff4ed3da8147a`
 
 The PR code tree at `320aebc23163019f85e1c345857ff4ed3da8147a` was read through GitHub's Git tree endpoint and compared with the original R21 pin manifest snapshot `0219a10c03cab826220a78af128cffdae995ac9f`. This is a source identity comparison only.

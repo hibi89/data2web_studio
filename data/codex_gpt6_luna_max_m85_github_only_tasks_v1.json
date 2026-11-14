@@ -67,7 +67,9 @@
     "latest_final_evidence_gate_status": "PASS_WORKFLOW_UNASSESSED",
     "latest_macos_at_validation_sha": "NOT_RUN",
     "a21_01_reconciliation_sha": "320aebc23163019f85e1c345857ff4ed3da8147a",
-    "a21_01_reconciliation_status": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING"
+    "a21_01_reconciliation_status": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING",
+    "a21_02_repository_lineage_status": "GITHUB_HISTORY_MAPPED_NO_RIGHTS_PROOF",
+    "a21_02_lineage_sha": "320aebc23163019f85e1c345857ff4ed3da8147a"
   },
   "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
   "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
@@ -339,7 +341,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "At exact 320aebc, full Windows/Ubuntu suites fail closed with 'Shipping producer source drift requires R21 review'; original pin manifest remains untouched. Native preview/CodeQL/browser jobs pass. No mechanical pin refresh or commercial rights/NOTICE approval."
+      "current_note": "GitHub-only history is now mapped for all six producer files at exact 320aebc23163019f85e1c345857ff4ed3da8147a: earliest path commit, latest path commit, current blob, and historic pin state are recorded in docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md. GitHub author/account metadata is hibi89 across the returned histories; this is not proof of legal authorship, coauthor consent, commercial rights, or NOTICE status. Four producer files last changed at 92dca182 and still fail the historic pin gate. Rights-holder/source-origin review and third-party/vendor license inventory remain pending; do not refresh pins or claim redistribution permission."
     },
     {
       "id": "A21-03",

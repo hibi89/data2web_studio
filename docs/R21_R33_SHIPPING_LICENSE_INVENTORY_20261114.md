@@ -1,3 +1,7 @@
+## 2026-11-15 KST — GitHub source history mapped; ownership unresolved
+
+For A21 review, the repository histories of the six producer files have been compared with the current Git blob table in [R21 source provenance evidence](R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). GitHub records `hibi89` in author/account metadata across the returned histories; this is not proof of legal authorship or redistribution rights. Four shipping-producer blobs drift from the 2026-11-14 pin snapshot; `data2web_web.py` and `data2web_tabular.py` match. All four shipped artifacts still have pending rights states. The upstream golden reference remains a separate read-only test checkout, and no upstream license, derivation, or vendor NOTICE claim is made here.
+
 ## 2026-11-15 KST — A-scope inventory cross-check at `320aebc23163019f85e1c345857ff4ed3da8147a`
 
 The current Git tree and package/verifier code were rechecked at this exact source SHA. The six source blob IDs and pin comparison are recorded in [R21 source provenance evidence](R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md): two source files match the historic pins and four drift, with the pin check still fail-closed.
