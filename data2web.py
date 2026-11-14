@@ -25,11 +25,17 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
     if path.suffix.lower() == ".csv":
         from io import StringIO
         with StringIO(raw.decode("utf-8-sig"), newline="") as stream:
-            reader = csv.DictReader(stream, strict=True)
+            # DictReader normally pads physically missing trailing fields
+            # with None, indistinguishable from an explicit empty string after
+            # normalization. A malformed short record must HOLD instead.
+            missing = object()
+            reader = csv.DictReader(stream, strict=True, restval=missing)
             fields = reader.fieldnames
             if not fields:
                 raise ValueError("Missing header")
             rows = list(reader)
+            if any(value is missing for row in rows for value in row.values()):
+                raise ValueError("CSV record is missing a required field delimiter")
     elif path.suffix.lower() == ".tsv":
         from data2web_tabular import parse_tsv
         fields, rows = parse_tsv(raw)
