@@ -37,6 +37,23 @@ class ConsentResetBindingTests(unittest.TestCase):
                         self.assertFalse(plaintext.get())
                         self.assertEqual(privacy.get(),"")
 
+    def test_single_confirmation_requires_consent_first(self):
+        """Reject missing rights before showing the final confirmation dialog."""
+        tree=ast.parse((ROOT/"data2web_desktop.py").read_text(encoding="utf-8"))
+        deliver=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef)
+                     and n.name=="deliver")
+        guards=[n for n in deliver.body if isinstance(n,ast.If)]
+        consent=next(n for n in guards if
+                     "rights.get()" in ast.unparse(n.test) and
+                     "plaintext.get()" in ast.unparse(n.test) and
+                     "privacy.get()" in ast.unparse(n.test))
+        dialogs=[n for n in ast.walk(deliver) if isinstance(n,ast.Call)
+                 and isinstance(n.func,ast.Attribute)
+                 and n.func.attr=="askyesno"]
+        self.assertEqual(len(dialogs),1)
+        self.assertLess(consent.lineno,dialogs[0].lineno)
+        self.assertTrue(any(isinstance(n,ast.Return) for n in consent.body))
+
     def test_unrelated_display_option_does_not_clear_consent(self):
         try:
             import tkinter as tk
