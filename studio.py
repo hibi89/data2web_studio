@@ -71,7 +71,15 @@ def main(argv=None):
             return 0 if result["status"]=="PASS_SYNTHETIC_ONLY" else 2
         if args.action=="desktop":
             from data2web_desktop import desktop_main
-            desktop_main()
+            try:
+                desktop_main()
+            except KeyboardInterrupt:
+                # Console interruption while Tk is running must not turn into a
+                # PyInstaller traceback. Preserve all existing input/output and
+                # report the interruption (not an acceptance or sale approval).
+                print(json.dumps({"status":"INTERRUPTED","action":"desktop",
+                                  "sale_approved":False},sort_keys=True))
+                return 130
             return 0
         elif args.action=="inspect":
             if args.source.suffix.lower()==".xlsx" and args.sheet is None:
