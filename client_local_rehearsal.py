@@ -44,27 +44,46 @@ def _browser_binary(which):
 
 
 def _headless_browser(binary, html, temp):
-    profile=temp/("browser-"+binary.name.replace(".","-"))
-    command=[str(binary),"--headless=new","--disable-gpu",
-             "--disable-extensions","--disable-background-networking",
-             "--no-first-run","--no-default-browser-check",
-             "--disable-sync","--disable-features=Translate",
-             "--user-data-dir="+str(profile),"--virtual-time-budget=3500",
-             "--dump-dom",html.as_uri()]
-    try:
-        process=subprocess.run(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
-                               timeout=22,check=False)
-    except (OSError,subprocess.TimeoutExpired):
-        return "HOLD_EXECUTION_FAILED"
-    if process.returncode!=0:
-        return "HOLD_NONZERO_EXIT"
-    # The actual DATA2WEB HTML uses <p id="count" role="status">,
-    # not a span. Verify live DOM text after executing inline JS.
-    if not re.search(rb'<p\s+id="count"\s+role="status">2[^<]*</p>',process.stdout):
-        return "HOLD_BROWSER_RENDER_NOT_CONFIRMED"
-    if b"LOCAL-ITEM-1" not in process.stdout or b"LOCAL-ITEM-2" not in process.stdout:
-        return "HOLD_BROWSER_CONTENT_NOT_VISIBLE"
-    return "PASS_SYNTHETIC_LOCAL_FILE"
+    """Launch with one bounded retry for transient startup failures only.
+
+    Each attempt uses a distinct disposable profile. A missing render, missing
+    rows or a browser that twice fails to launch still returns HOLD. This
+    doesn't relax the required 2-row live DOM verification.
+    """
+    last_failure = "HOLD_EXECUTION_FAILED"
+    for attempt in range(2):
+        profile = temp / ("browser-" + binary.name.replace(".", "-") +
+                          "-attempt-" + str(attempt))
+        command = [str(binary), "--headless=new", "--disable-gpu",
+                   "--disable-extensions", "--disable-background-networking",
+                   "--no-first-run", "--no-default-browser-check",
+                   "--disable-sync", "--disable-features=Translate",
+                   "--user-data-dir=" + str(profile),
+                   "--virtual-time-budget=3500", "--dump-dom", html.as_uri()]
+        try:
+            process = subprocess.run(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                timeout=22, check=False
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            # Runner browsers occasionally fail before starting a session.
+            # No stdout/stderr/path from the failed attempt is ever emitted.
+            last_failure = "HOLD_EXECUTION_FAILED"
+            continue
+        if process.returncode != 0:
+            last_failure = "HOLD_NONZERO_EXIT"
+            continue
+        # Successful process exit alone is not enough. The browser must have
+        # executed live JS and visibly rendered both synthetic source rows.
+        if not re.search(
+            rb'<p\\s+id="count"\\s+role="status">2[^<]*</p>', process.stdout
+        ):
+            return "HOLD_BROWSER_RENDER_NOT_CONFIRMED"
+        if (b"LOCAL-ITEM-1" not in process.stdout or
+                b"LOCAL-ITEM-2" not in process.stdout):
+            return "HOLD_BROWSER_CONTENT_NOT_VISIBLE"
+        return "PASS_SYNTHETIC_LOCAL_FILE"
+    return last_failure
 
 
 def self_check(*, with_browsers=False):
