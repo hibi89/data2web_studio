@@ -55,6 +55,8 @@ class SnapshotSafety(unittest.TestCase):
         except (OSError,NotImplementedError) as error:
             self.skipTest(f"Hard link unavailable: {type(error).__name__}")
         self.assertTrue(self.source.samefile(alias))
+        original_bytes=self.source.read_bytes()
+        initial_mtime_ns=alias.stat().st_mtime_ns
         original_read=os.read
         mutated=[False]
 
@@ -64,6 +66,14 @@ class SnapshotSafety(unittest.TestCase):
                 mutated[0]=True
                 with alias.open("r+b") as stream:
                     stream.write(b"X")
+                changed=alias.stat()
+                # Windows may defer/coarsen write-time updates for an open
+                # file. Pin a distinct timestamp so this regression tests
+                # the identity check deterministically on every hosted OS.
+                os.utime(
+                    alias,
+                    ns=(changed.st_atime_ns,initial_mtime_ns+10_000_000_000),
+                )
             return data
 
         with patch("os.read",side_effect=mutate_through_alias):
@@ -72,6 +82,8 @@ class SnapshotSafety(unittest.TestCase):
             ):
                 read_bounded_source(self.source)
         self.assertTrue(mutated[0])
+        self.assertNotEqual(alias.read_bytes(),original_bytes)
+        self.assertNotEqual(alias.stat().st_mtime_ns,initial_mtime_ns)
 
     def test_read_table_rejects_source_mutated_during_parse(self):
         original=self.source.read_bytes()
