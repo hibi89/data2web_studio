@@ -348,12 +348,217 @@ def desktop_main():
                "상업적 납품은 별도 권리·계약·고객 승인 전 HOLD입니다.",parent=root)
         except (ValueError,FileExistsError,OSError) as error:
             message.set("HOLD: 무덮어쓰기·원본 SHA/매핑·권리 승인·출력 한도를 확인하세요. 기존 자료는 삭제하지 않았습니다.")
+    def open_batch_window():
+        """Second owner-only wizard: 2-10 exact-order files, same safe folder."""
+        from tkinter import simpledialog
+        win=tk.Toplevel(root)
+        win.title("DATA2WEB — 다중 원본 검수·납품")
+        win.geometry("900x680")
+        win.minsize(760,610)
+        content=ttk.Frame(win,padding=16)
+        content.pack(fill="both",expand=True)
+        content.columnconfigure(1,weight=1)
+        chosen=[()]
+        options=[()]
+        batch_reviews=[None]
+        files_label=tk.StringVar(value="2~10개 표 파일을 동일 폴더에서 선택하세요.")
+        batch_message=tk.StringVar(value="검수 전 · 서버 전송 없음 · 실제 데이터 값은 표시하지 않음")
+        batch_id=tk.StringVar()
+        batch_title=tk.StringVar()
+        batch_category=tk.StringVar()
+        batch_name=tk.StringVar(value="DATA2WEB")
+        batch_theme=tk.StringVar(value="office")
+        batch_parent=tk.StringVar()
+        batch_leaf=tk.StringVar(value="DATA2WEB-batch")
+        batch_rights=tk.BooleanVar(value=False)
+        batch_plaintext=tk.BooleanVar(value=False)
+        batch_privacy=tk.StringVar(value="")
+
+        def clear_batch_consent(*_):
+            batch_rights.set(False)
+            batch_plaintext.set(False)
+            batch_privacy.set("")
+
+        for variable in (batch_id,batch_title,batch_category):
+            variable.trace_add("write",clear_batch_consent)
+
+        def clear_batch_review():
+            batch_reviews[0]=None
+            clear_batch_consent()
+            for variable in (batch_id,batch_title,batch_category):
+                variable.set("")
+            for field in combos:
+                field["values"]=()
+
+        def select_batch_sources():
+            names=filedialog.askopenfilenames(
+                parent=win,title="같은 폴더의 표 자료 2~10개 선택",
+                filetypes=[("표 데이터","*.csv *.tsv *.json *.xlsx"),("모든 파일","*.*")]
+            )
+            if not names:return
+            clear_batch_review()
+            try:
+                if not 2<=len(names)<=10:
+                    raise ValueError("2~10개 원본만 선택")
+                selected=tuple(Path(value) for value in names)
+                specs=[]
+                for src in selected:
+                    if src.suffix.lower()==".xlsx":
+                        visible=inspect_sheets(src)
+                        if not visible:
+                            raise ValueError("Visible XLSX sheet is required")
+                        selection=simpledialog.askstring(
+                            "XLSX 시트 명시 선택",
+                            src.name+"\n사용 가능한 시트:\n"+"\n".join(visible),
+                            initialvalue=visible[0],parent=win)
+                        if selection not in visible:
+                            raise ValueError("XLSX 시트를 명시 선택해야 합니다")
+                        header_row=simpledialog.askinteger(
+                            "XLSX 헤더행","검수할 헤더행 (1~50)",
+                            initialvalue=1,minvalue=1,maxvalue=50,parent=win)
+                        if header_row is None:
+                            raise ValueError("XLSX 헤더행 선택을 취소했습니다")
+                        cached=messagebox.askyesno(
+                            "수식 캐시 정책",
+                            "Excel 수식이 포함됐다면 저장된 캐시값만 사용합니다."
+                            "\n실제 수식 계산이 아닌 캐시 사용을 승인합니까?",
+                            parent=win)
+                        specs.append({"sheet":selection,
+                                      "header_row":header_row,
+                                      "allow_cached_formulas":cached})
+                    else:
+                        specs.append({})
+                chosen[0]=selected
+                options[0]=tuple(specs)
+                files_label.set(str(len(selected))+"개 선택 · 헤더와 원본 SHA 검수 필요")
+                batch_message.set("검수 전 · 권리/개인정보 동의는 초기화됨")
+            except (OSError,ValueError,UnicodeError):
+                chosen[0]=()
+                options[0]=()
+                files_label.set("HOLD: 원본/시트/헤더 선택이 유효하지 않습니다.")
+                batch_message.set("HOLD: 다시 파일을 선택하세요. 기존 자료는 변경하지 않았습니다.")
+
+        def inspect_batch_selection():
+            clear_batch_review()
+            try:
+                values=inspect_owner_batch(chosen[0],options=options[0])
+                batch_reviews[0]=values
+                for field in combos:
+                    field["values"]=values[0].columns
+                for variable,guess in ((batch_id,"id"),(batch_title,"title"),
+                                       (batch_category,"category")):
+                    variable.set(guess if guess in values[0].columns else "")
+                files_label.set(str(len(values))+"개 SHA 검수 완료 / 총 "+
+                                str(sum(v.count for v in values))+"행 / "+
+                                str(len(values[0].columns))+"열")
+                batch_message.set("다중 검수 완료 · 서로 다른 세 컬럼·자료 권리·평문 동의 필요")
+            except (ValueError,OSError,UnicodeError):
+                batch_message.set("HOLD: 파일별 SHA·시트·헤더·열순서/행수 확인 실패.")
+
+        ttk.Button(content,text="여러 원본 파일 선택",command=select_batch_sources).grid(
+            row=0,column=0,sticky="ew",pady=5)
+        ttk.Label(content,textvariable=files_label,wraplength=650).grid(
+            row=0,column=1,sticky="w")
+        ttk.Button(content,text="2~10개 SHA·열 검수",command=inspect_batch_selection).grid(
+            row=1,column=0,sticky="ew",pady=5)
+        ttk.Label(content,text="여러 파일은 순서가 동일한 컬럼만 행 결합; JOIN 없음").grid(
+            row=1,column=1,sticky="w")
+        ttk.Label(content,text="ID / 제목 / 분류").grid(row=2,column=0,sticky="w",pady=6)
+        mapping_frame=ttk.Frame(content)
+        mapping_frame.grid(row=2,column=1,sticky="w")
+        combos=[]
+        for caption,var in (("ID",batch_id),("제목",batch_title),("분류",batch_category)):
+            ttk.Label(mapping_frame,text=caption).pack(side="left",padx=3)
+            combo=ttk.Combobox(mapping_frame,textvariable=var,state="readonly",width=16)
+            combo.pack(side="left",padx=5)
+            combos.append(combo)
+        ttk.Label(content,text="앱 이름 / 테마").grid(row=3,column=0,sticky="w")
+        opts=ttk.Frame(content)
+        opts.grid(row=3,column=1,sticky="w")
+        ttk.Entry(opts,textvariable=batch_name,width=34).pack(side="left",padx=4)
+        ttk.Combobox(opts,textvariable=batch_theme,values=THEMES,
+                     state="readonly",width=16).pack(side="left",padx=4)
+        ttk.Label(content,text="새 폴더 생성 위치").grid(row=4,column=0,sticky="w",pady=6)
+        location=ttk.Frame(content)
+        location.grid(row=4,column=1,sticky="ew")
+        location.columnconfigure(0,weight=1)
+        ttk.Entry(location,textvariable=batch_parent,state="readonly").grid(
+            row=0,column=0,sticky="ew")
+        ttk.Button(location,text="상위 폴더 선택",command=lambda:batch_parent.set(
+            filedialog.askdirectory(parent=win,title="새 다중 납품 폴더 위치") or
+            batch_parent.get())).grid(row=0,column=1,padx=5)
+        ttk.Entry(location,textvariable=batch_leaf).grid(row=1,column=0,sticky="ew",pady=5)
+        ttk.Label(location,text="기존 폴더 덮어쓰기 불가").grid(row=1,column=1)
+        ttk.Label(content,text="권리·평문·개인정보").grid(row=5,column=0,sticky="nw")
+        privacy_frame=ttk.Frame(content)
+        privacy_frame.grid(row=5,column=1,sticky="w")
+        ttk.Checkbutton(privacy_frame,text="모든 원본에 대한 사용 권리를 확인했습니다",
+                        variable=batch_rights).pack(anchor="w")
+        ttk.Checkbutton(privacy_frame,text="결과 HTML·ZIP에 모든 원본 값이 평문 포함됨을 이해합니다",
+                        variable=batch_plaintext).pack(anchor="w")
+        ttk.Combobox(privacy_frame,textvariable=batch_privacy,
+                     values=PRIVACY_CHOICES,state="readonly",width=40).pack(anchor="w",pady=6)
+
+        def deliver_batch_selection():
+            current=batch_reviews[0]
+            leaf=batch_leaf.get()
+            if current is None or not batch_parent.get() or not leaf.strip() or (
+                    Path(leaf).name!=leaf or "/" in leaf or "\\" in leaf or
+                    leaf in (".","..")):
+                batch_message.set("HOLD: 새 폴더명/상위 폴더 및 SHA 검수를 먼저 확인하세요")
+                return
+            if not batch_rights.get() or not batch_plaintext.get() or (
+                    batch_privacy.get() not in PRIVACY_CHOICES):
+                batch_message.set("HOLD: 전체 파일 권리·평문·개인정보 검수가 필요합니다")
+                return
+            destination=Path(batch_parent.get())/leaf
+            if not messagebox.askyesno(
+                    "다중 데이터 오프라인 납품 확인",
+                    str(len(current))+"개 SHA 검수·총 "+
+                    str(sum(r.count for r in current))+"행을 새 폴더로 생성합니다."
+                    "\n데이터 값은 평문으로 저장됩니다. 법적 판매 승인은 별도입니다.",
+                    parent=win):
+                batch_message.set("승인 취소 · 기존 원본/출력 불변")
+                return
+            try:
+                result=deliver_reviewed_batch(
+                    current,destination,
+                    {"id":batch_id.get(),"title":batch_title.get(),
+                     "category":batch_category.get()},
+                    owner_has_rights=batch_rights.get(),
+                    plaintext_ack=batch_plaintext.get(),
+                    privacy_classification=batch_privacy.get(),
+                    name=batch_name.get(),theme=batch_theme.get())
+                from verify_customer_folder import verify_customer_folder
+                checked=verify_customer_folder(destination)
+                if not checked["verified"] or result["rows"]!=sum(r.count for r in current):
+                    raise ValueError("Independent multi-source delivery failed")
+                batch_message.set("다중 납품 로컬 생성·독립 검증 PASS · 판매/고객 전달은 RELEASE HOLD")
+                messagebox.showinfo(
+                    "다중 납품 기술 검증","HTML·ZIP·영수증 검증 PASS\n"+
+                    str(destination)+"\n상업용 판매/외부 검수는 별도 승인 전 HOLD",parent=win)
+            except (ValueError,OSError,FileExistsError):
+                batch_message.set("HOLD: SHA/열순서/중복ID/사용권/무덮어쓰기 제한. 기존 자료 자동 삭제 없음.")
+
+        ttk.Button(content,text="새 다중 고객 폴더 생성·검증",
+                   command=deliver_batch_selection).grid(
+            row=6,column=0,columnspan=2,sticky="ew",pady=14)
+        ttk.Label(content,textvariable=batch_message,
+                  foreground="#9d271d",wraplength=800).grid(
+            row=7,column=0,columnspan=2,sticky="w")
+        ttk.Label(content,
+                  text="오프라인 · 2~10 동일 헤더 파일 · 최대 10,000행 · "
+                       "승인 없는 고객 자료 처리/판매 불가",
+                  wraplength=800).grid(row=8,column=0,columnspan=2,sticky="w",pady=8)
+
     ttk.Button(frame,text="새 고객 폴더 생성·독립 검증",command=deliver).grid(
         row=9,column=0,columnspan=3,sticky="ew",pady=15)
+    ttk.Button(frame,text="다중 파일(2~10) 검수·납품",command=open_batch_window).grid(
+        row=10,column=0,columnspan=3,sticky="ew",pady=7)
     ttk.Label(frame,textvariable=message,wraplength=880,
-              foreground="#9d271d").grid(row=10,column=0,columnspan=3,sticky="w")
+              foreground="#9d271d").grid(row=11,column=0,columnspan=3,sticky="w")
     ttk.Label(frame,text="오프라인 · 원본 읽기 전용 · 프로그램의 SHA는 법적 사용권/개인정보 적합성 인증이 아닙니다.",
-              wraplength=900).grid(row=11,column=0,columnspan=3,sticky="w",pady=6)
+              wraplength=900).grid(row=12,column=0,columnspan=3,sticky="w",pady=6)
     root.mainloop()
 
 
