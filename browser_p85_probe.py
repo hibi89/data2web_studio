@@ -42,7 +42,7 @@ def main():
         # Physical blank CSV lines are legal and ignored by the backend.
         changed.write_text('\nid,title,category,amount,notes\nX1,"Updated row",A,7,ok\n\nX2,"<script>alert(1)</script>",B,11,safe\n\n',encoding="utf-8")
         uncategorized=root/"uncategorized.csv"
-        uncategorized.write_text('id,title,category,amount,notes\nZ1,Uncategorized,,5,blank\nZ2,Classified,B,7,ok\n',encoding="utf-8")
+        uncategorized.write_text('id,title,category,amount,notes\nZ1,Uncategorized,,5,blank\nZ2,Named category,(미분류),7,ok\n',encoding="utf-8")
         precise=root/"precise_decimals.csv"
         precise.write_text(
             "id,title,category,amount,notes\n" +
@@ -137,6 +137,9 @@ def main():
             secondary.locator("#ack").check()
             secondary.locator("#replace").click()
             expect(secondary.locator("#count")).to_have_text("2건")
+            # Empty and literal '(미분류)' are distinct source values.
+            expect(secondary.locator("#chart-bars .chart-row")).to_have_count(2)
+            expect(secondary.locator("#chart-summary")).to_contain_text("고유 분류 2개")
             secondary.locator("#category").select_option(label="— 분류 없음 —")
             expect(secondary.locator("#count")).to_have_text("1건")
             expect(secondary.locator("#body tr")).to_have_count(1)
