@@ -37,3 +37,6 @@ The product owner explicitly approved these seven operational defaults and appoi
 - No customer source read; no external transmission, customer deletion, or production execution. This is a synthetic *technical* demonstration only, not an independently witnessed operator/customer custody trace.
 - R25 owner approval recorded, synthetic drill PASS, real-customer custody and independent acceptance still PENDING. Official score **72/100**; RELEASE HOLD.
 
+
+## Owner risk-control instruction (2026-11-14 KST)
+The owner reiterated that preventing unlawful handling and avoiding personal legal exposure is the highest priority. Treat this as a **risk-control instruction**, not a waiver, a legal compliance certification, permission to process customer data, or proof of disposal. Preserve fail-closed customer intake, no unauthorized deletion, no automatic source purge, customer-specific rights and privacy review, statutory exception checks, and RELEASE HOLD until independently evidenced acceptance. Legal obligations vary by data, contract, jurisdiction, and record type; seven days is an internal temporary-copy default only.
