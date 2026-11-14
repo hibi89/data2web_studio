@@ -269,7 +269,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Last pr
 - GitHub Actions 내부 테스트: `python security_audit_preaudit.py`, `python -m unittest discover -v`.
 - 관련 파일: `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`. **작업 자체 가점: 0**.
 
-- 11/15 exact SHA `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`: internal `security_audit_preaudit.py` reported 7/7 synthetic checks PASS on Windows/Ubuntu/macOS; full suite and CodeQL passed. No independent real-OS security audit is claimed.
+- 11/15 exact SHA `e42b570eae7aadbb21e5c93ae4664cc567f0dfba`: internal preaudit 7/7 PASS; full discovery Windows 524/524 and Ubuntu/macOS 523 PASS + 1 Windows-only SKIP. `test_zip_crc_corruption_is_rejected` and `test_duplicate_zip_member_name_is_rejected` PASS on all three OS. Actions: Python/browser #43613095734, macOS #43613095675, CodeQL #43613095750. No hardlink-specific/real NTFS TOCTOU or independent external audit is claimed.
 ### A29-02 · R29 · Codex · INTERNAL_PREAUDIT_PASS_EXACT_SHA_EXTERNAL_PENDING
 - 선행: A29-01. 
 - 실행: Prepare public-source-only reproducible audit bundle/instructions, source freeze and risk register, with existing internal CodeQL and browser CI clearly labeled self-check.
@@ -278,7 +278,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Last pr
 - GitHub Actions 내부 테스트: `python security_audit_preaudit.py`, `python shipping_rights_preflight.py`.
 - 관련 파일: `docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md`. **작업 자체 가점: 0**.
 
-- 11/15 exact SHA `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`: audit handoff updated with exact source pin, repeatable commands and current hosted evidence. High internal follow-up found no actionable workflow issue; Codex/High/CodeQL remain self-checks, and external audit/findings/retest are still missing.
+- 11/15 exact SHA `e42b570eae7aadbb21e5c93ae4664cc567f0dfba`: public-source handoff includes exact source pin, reproducible commands, attack-category coverage and explicit residuals. High follow-up closed its assertion-message P1 with no remaining finding; Codex/High/CodeQL remain internal self-checks, and independent external audit/findings/retest are still missing.
 ### A29-03 · R29 · OWNER · BLOCKED_OWNER
 - 선행: A29-02. **차단:** INDEPENDENT_REVIEWER_AND_EXTERNAL_DISCLOSURE_APPROVAL.
 - 실행: Select/approve a genuinely independent external reviewer and specific scope, any agreement or public-source sharing, zero-cost budget; no paid purchase or access grant absent new approval.
