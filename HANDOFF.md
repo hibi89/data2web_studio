@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · Tk Ctrl+C 수동중단 보강과 85점 외부수용 잠금
+1. **목표·범위:** DATA2WEB Studio 독립 로컬 CSV/JSON/XLSX/TSV→HTML/ZIP·Windows GUI, R01–R33 고정100점/목표85.
+2. **코드 변경:** `studio.py` Tk `KeyboardInterrupt` redacted JSON `status=INTERRUPTED,sale_approved=false`, exit130, 정상 종료0; `test_desktop_interrupt.py` 신규 회귀3. `native_windows_acceptance.py` 실패 시 민감 출력 없는 상태 진단.
+3. **실행/CI:** 코드 기준 `0995e5824dea0c667ab13bc5fea191eca3ce705c` [Python/browser #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) 4/4 SUCCESS Win294/294, Ubuntu293PASS/1SKIP, Chrome/Edge/Chromium PASS, [score #43531947120](https://github.com/hibi89/data2web_studio/actions/runs/43531947120) SUCCESS. 진단 SHA `4af5b70cd6340f334ed16f293b80d923688265bc` [native #43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) 1/1 SUCCESS.
+4. **현재:** 공식 최종설계 72/100=22 full verified, 11 pending28, 85에13 부족. RELEASE HOLD, SALE NO-GO, `[작업중]`; PR#4 Draft, 크몽 미등록.
+5. **실패·회복:** 첫 native [#43531946776](https://github.com/hibi89/data2web_studio/actions/runs/43531946776) PyInstaller 빌드 PASS 후 브라우저 self-check 반환코드 비0로 FAIL; 진단 부족/원인 미확인. 실패정보를 redacted로 보강하고 재시행 native PASS. 간헐 실패가 완전히 사라졌다고 확언 금지. 기존 사용자 Win11 `KeyboardInterrupt` 원인이 정말 Ctrl+C였는지는 미확인.
+6. **저장소/브랜치/SHA:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; 검증 기능 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c`, 진단 SHA `4af5b70cd6340f334ed16f293b80d923688265bc`. 주요 `studio.py` `test_desktop_interrupt.py` `native_windows_acceptance.py`; [상세](docs/R32_INTERRUPT_AND_R01_R33_TO_85_PLAN_20261114.md).
+7. **배포·환경:** Windows hosted PyInstaller6.22.3 private preview EXE `9e275ade3a250c663df6c77c2b1f40bd3146ddd353dd947e093a5ad75cb906e3`, artifact ID14087264349 만료 2026-11-21 09:10 KST, 새 EXE 소유자 PC 미검증. Vercel/Production 미적용.
+8. **원본·백업·권한:** 기존 사용자 Win11 합성 전달 HTML/ZIP/receipt 해시·PASS 그대로 보존, 실제 고객 원본·민감정보 GitHub 업로드0. 이전 안전 HEAD `ff9274b2a8fda65f98c4ce4792631012bf1d5578`, main/원본/점수표 불변. 적법한 LICENSE/NOTICE·외부 도구 권한 별도 승인.
+9. **다음 우선순위:** R07/R21/R25/R26/R27 사용자 정책·저작권 승인/검증 + R29 외부 독립 감사(가중치 기준 총15점→잠재87) 또는 R06/R23/R29/R30/R32 실제 환경·서명·고객 독립 인수(잠재85), 승인과 독립 검증 없이는 점수 상승 없음. `[작업중]` 유지.
+10. **갱신시점:** 2026-11-14 KST, 정확 원격 Actions/소스 확인; 문서 커밋 HEAD는 생성 후 확인. 이 기록은 코드/테스트/정책 상태의 근거이며 85 완료 주장 아님.
+
 ## 최신 인수인계 — 2026-11-14 KST · 소유자 Windows11 실기기 합성 납품·검증 PASS
 1. **목적·정본:** DATA2WEB Studio CSV/JSON/XLSX/TSV → 오프라인 HTML+ZIP+receipt, R01~R33 고정100점/목표85.
 2. **완료 기능·변경:** 사용자 Win11 Pro 26200 실제 Tk GUI에서 본인이 생성한 합성 CSV 2행/3열·SHA 검수, 권리/평문 체크, 개인정보 없음 분류, 신규 출력 폴더 생성 후 EXE `verify-customer` 실행; `verified=true`, `rows=2`, `sale_approved=false`. 코드 수정 없이 현장 검증 증거 문서만 추가.

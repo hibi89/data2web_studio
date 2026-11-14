@@ -1,3 +1,9 @@
+## 2026-11-14 · Windows GUI 인터럽트 명시 종료 및 실EXE 회귀
+
+`studio.py`의 Tk `KeyboardInterrupt`는 `{"action":"desktop","sale_approved":false,"status":"INTERRUPTED"}`와 종료코드130으로 기록하고 원본/경로/민감내용을 노출하지 않는다. 정상 창 닫기는 기존 코드0 유지. 정확 기능 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c`: [Windows·Ubuntu/Browser CI #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) **4/4 SUCCESS** (Win294 PASS, Ubuntu293PASS/1SKIP, Chrome/Edge/Chromium PASS). 첫 네이티브 빌드 자체검증 실패는 [#43531946776](https://github.com/hibi89/data2web_studio/actions/runs/43531946776)에 기록되고, redacted 상태 진단을 추가한 SHA `4af5b70cd6340f334ed16f293b80d923688265bc`에서 [native 재검증 #43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) **SUCCESS**. 간헐 원인 미확인, 소유자 PC 새 EXE 검증 대기. [세부와 실제 최종85 수용 경로](docs/R32_INTERRUPT_AND_R01_R33_TO_85_PLAN_20261114.md).
+
+**R01–R33 정본 최종72/100, 85까지13점**, `[작업중]` / RELEASE HOLD/SALE NO-GO 유지. 실제 실사용·권리·계약·외부 감사가 미완인 점수 항목을 기술 테스트로 대체하지 않는다.
+
 ## 2026-11-14 · Windows 독립 EXE 오너 전용 시범 빌드 (상업배포 불가)
 
 정확 코드 SHA `96e2e1dff9976773bf3d3b2670ba6763ee69292d`: [Windows EXE native acceptance #43527161029](https://github.com/hibi89/data2web_studio/actions/runs/43527161029) **1/1 SUCCESS**, [Python/Browser #43527161036](https://github.com/hibi89/data2web_studio/actions/runs/43527161036) **4/4 SUCCESS**, [Blueprint #43527161439](https://github.com/hibi89/data2web_studio/actions/runs/43527161439) SUCCESS. PyInstaller6.22.3 onedir의 embedded Python + Tk 동작을 합성 입력·Chrome/Edge·고객폴더 tamper/no-clobber까지 확인. 비공개 Actions artifact `DATA2WEB-UNSIGNED-OWNER-PREVIEW-WINDOWS` (2026-11-21 08:27 KST 자동 만료). `main` 미병합, 고객 PC·소유권/제3자 라이선스/상업 승인·서명은 미완성. [시범 실행 검증·사용자 최소수용 묶음](docs/R32_NATIVE_WINDOWS_OWNER_PREVIEW_20261114.md).

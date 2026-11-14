@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · Windows GUI 인터럽트 redacted 종료 보강, EXE 재빌드·한 번의 간헐 실패 후 PASS
+- **코드 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c`**: `studio.py` Tk 화면 실행 도중 `KeyboardInterrupt` 발생 시 원본/경로를 출력하지 않고 `status=INTERRUPTED,sale_approved=false` JSON·exit130 반환; 정상 종료0 유지. `test_desktop_interrupt.py` **3종 회귀 추가**. [Python/브라우저 #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) **4/4 SUCCESS**(Win294 PASS, Ubuntu293 PASS+1SKIP, 실 브라우저 E2E), [score gate #43531947120](https://github.com/hibi89/data2web_studio/actions/runs/43531947120) SUCCESS.
+- 첫 [native #43531946776](https://github.com/hibi89/data2web_studio/actions/runs/43531946776) Windows EXE **빌드 성공, 합성 브라우저 자체검증 종료코드 비0로 FAIL**. 세부 원인은 이전 진단에 없음→`native_windows_acceptance.py` redacted status/report를 보강한 SHA `4af5b70cd6340f334ed16f293b80d923688265bc`에서 [Windows native #43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) **1/1 SUCCESS**. 간헐 실패 원인 미확인으로 보존, 누락된 검사를 PASS로 취급하지 않음.
+- 신규 미서명 개인테스트용 EXE SHA `9e275ade3a250c663df6c77c2b1f40bd3146ddd353dd947e093a5ad75cb906e3`, GitHub artifact `14087264349`(자동 만료 2026-11-21 09:10 KST), **소유자 PC에서 이 새 버전은 아직 미검증**. 고객 실제 데이터/권리·상업 승인 변경0.
+- **최종설계 72/100 유지**, 11 pending28점/85 목표13점 부족. 최소 수용 경로·A/B 비용/외부 인수 대조 [상세](docs/R32_INTERRUPT_AND_R01_R33_TO_85_PLAN_20261114.md). `[작업중]`, RELEASE HOLD/SALE NO-GO, 기존 소유자 합성 납품 검증 보존.
+
+
 ## 2026-11-14 KST · Win11 소유자 실기기 합성 CSV→HTML/ZIP/영수증 독립 납품검증 PASS
 - 사용자가 Windows11 Pro build26200의 정본 SHA256 일치 `DATA2WEB-LOCAL.exe`로 직접 만든 2행 CSV를 GUI 검수·명시 권리/평문 체크·개인정보 없음 선택·신규 폴더 생성한 후 PowerShell `verify-customer` 출력 제공: `contract=DATA2WEB_CUSTOMER_FOLDER_V1`, `verified=true`, `rows=2`, `status=LOCAL_INTEGRITY_VERIFIED_RELEASE_HOLD_NOT_SALE_APPROVED`, `sale_approved=false`. HTML SHA `8ebe90998f5155b2ca73c8a8db2782c3fe8999e33e873f45cc48eee1d49c32a2`; ZIP SHA `5c16d93a56e432718cce5ebbf8d84564eb93c1dd176d6dd25604772e8b47677f`; receipt SHA `970994186449b9ad5dd521f02cc49b0ed01ebe5d6bdbf664f5f89ee117474a3a`. **소유자 현장 합성 납품·독립검증 PASS**, 고객 원본·실거래/법적 승인 아님.
 - 데스크톱 실행 세션에서 `tkinter.mainloop`의 `KeyboardInterrupt` 스택트레이스 1건 관찰. 인터럽트 원인(예 Ctrl+C) **미확인**, 일반 종료 오류로 단정하지 않으며 **이후 독립 폴더 verify PASS와 분리**. 현장 실제 HTML의 수동 Chrome/Edge 열기·검색 확인은 이번 증거 없음.
