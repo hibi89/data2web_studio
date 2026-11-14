@@ -1,3 +1,8 @@
+## 2026-11-14 KST / CSP SHA256 해시 제한, 정확 SHA 전체 CI 성공, 13시 일괄 작업 예약
+- 코드 SHA cab44263633be01a192d48a97e61e88f4a2a846f. data2web_web.py static JS CSP에서 script-src unsafe-inline을 정확한 JS의 sha256 hash allowlist로 변경. CSS inline은 별도 유지. 신규 test_script_hash_csp 6종 추가.
+- Win/Linux CI #43544123800 4/4 SUCCESS Win345PASS Ubuntu344PASS/1SKIP, macOS #43544125433 1/1 SUCCESS Mac344PASS/1SKIP, CodeQL #43544123781 SUCCESS, synthetic preview #43544123843 SUCCESS, score gate #43544123995 SUCCESS. Browser CSV 교체/재열기 및 오프라인 유지. 상세 docs/CSP_HASH_R29_TECHNICAL_EVIDENCE_20261114.md.
+- 2026-11-14 13:00 KST 1회 사용자 개입사항 알림 예약 완료. 필요한 폰/PC 일 분리 docs/OWNER_ACTIONS_1300_KST_20261114.md. 그 전에 GPT 자체작업 계속. 공식 최종설계72/100(22 VERIFIED/11 PENDING28) 변화 없음. R29 외부 독립 사람감사/실고객·권리 미검증. [작업중]/RELEASE HOLD/SALE NO-GO/크몽 미등록, main/REA/원본 무변경.
+
 ## 2026-11-14 KST · 0원 비식별 주문 판정기 및 macOS CI 실제 성공
 - A 납품형 주말 크몽화 보강: order_intake_preflight.py + 12개 fail-closed unittest + 정확 스키마 합성 예시/사용문서. CSV/TSV/JSON/XLSX의 대략 크기·행열·동일헤더·권리 주장·개인정보·평문 고지를 검사, BASIC49k/PRO129k/BUSINESS249k 후보만 표시. 고객 원본/이름/연락처/경로는 읽거나 저장하지 않고 sale_approved:false, order_accepted:false 고정.
 - 코드 정확 SHA **e4fc8c4616248902cf26ee7e4fcb1ba7f4d8aeb3**. [Win/Linux Python·browser #43542743086](https://github.com/hibi89/data2web_studio/actions/runs/43542743086) **4/4 SUCCESS** Win339PASS, Ubuntu338PASS/1SKIP; [macOS #43542743163](https://github.com/hibi89/data2web_studio/actions/runs/43542743163) **SUCCESS** macOS15 Python338PASS/1SKIP, real Chromium file:// 고객 샘플/ZIP·receipt/프린트/키보드; [CodeQL #43542743141](https://github.com/hibi89/data2web_studio/actions/runs/43542743141) **SUCCESS**, [score gate #43542743517](https://github.com/hibi89/data2web_studio/actions/runs/43542743517) **SUCCESS**.

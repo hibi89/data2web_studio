@@ -1,3 +1,15 @@
+## HANDOFF 최신 / 2026-11-14 KST / CSP JS hash 강제 및 13시 개입 분리
+1. 목표/기술: 사용자 DATA2WEB 최종설계 R01–R33 전체100, 0원, A offline HTML/ZIP/receipt 납품 우선, B unsigned EXE 후순위. Python3.11 stdlib, Chrome/Edge/Chromium.
+2. 완료: 정적 JS 실행 CSP sha256 only, 기존 script unsafe-inline 제거. CSS inline 유지. 신규6회귀, 12개 비식별 주문검사 회귀 및 합성 크몽 미리보기 보존. 신규 서버/유료API 없음.
+3. 정확 실행 증거: code SHA cab44263633be01a192d48a97e61e88f4a2a846f. Win/Linux #43544123800 4/4 SUCCESS (Win345 PASS, Ubuntu344 PASS/1SKIP); Mac #43544125433 SUCCESS (344 PASS/1SKIP + Chromium offline), CodeQL #43544123781 SUCCESS, synthetic demo #43544123843 SUCCESS, score #43544123995 SUCCESS. 문서 저장 뒤 별도 HEAD 구별.
+4. 상태: 22 VERIFIED=72/100, 11 PENDING=28, 100 미달, [작업중], RELEASE HOLD/SALE NO-GO, PR4 Draft, 크몽 실제 미등록.
+5. 과거 장애와 대안: Mac /var symlink TMPDIR는 이전 e4fc8c SHA에서 경로정책 완화없이 runner 물리경로로 해결. CSP 초기 코드 구성은 원문 반납줄 들여쓰기 불일치로 적용 전 중단, 원문 확인 후 정확 SHA 테스트 전체 성공. CodeQL 결과는 독립인간감사 아님.
+6. 저장소: hibi89/data2web_studio, branch feature/final-blueprint-p85-evidence-20261113, code SHA cab44263633be01a192d48a97e61e88f4a2a846f; 복구 SHA 02ef2b5d7cac5a09aec04bd479147ca0059a07fe. 주요 data2web_web.py, test_script_hash_csp.py, docs/CSP_HASH_R29_TECHNICAL_EVIDENCE_20261114.md.
+7. 환경/배포: Python -m unittest discover -v, GitHub public standard Windows Ubuntu macOS hosted, native/browser CI; Vercel 미적용. 고객EXE/실배포 없음.
+8. 원본/보안: main/REA 원본, customer data, LICENSE/NOTICE, scorecard, ZIP verifier 수정0. 외부로 고객 개인자료/비밀 업로드0, 추가금액0. 7일 합성 artifact은 영구자료 아님.
+9. 다음: 자동화 Automation_fb2b044b906c8191a2b2adbf69add50e가 오늘 13:00 KST 최신 GitHub 확인하여 사용자 폰/PC 필요사항 묶어 송신. 실제 저작권·재배포/고객동의/외부 R29/독립 실고객 수용은 별도 증빙 후 수용. 가격/0원 정책 재승인/기존 OS 합성테스트 반복요구 금지.
+10. 시점/검증 범위: 2026-11-14 KST, 기능 SHA 5종 CI 성공 실확인. 문서 HEAD는 이번 커밋 후 조회. 공식72/100, 중앙 kmong-productization에 [작업중] 동기화.
+
 ## HANDOFF / 2026-11-14 KST / 0원 주문 사전검수 + macOS 검증 추가
 1. 목표/정본: DATA2WEB Studio A=CSV/JSON/TSV/XLSX 기반 독립 HTML+ZIP+영수증 제작 서비스 우선, 후속 B=Windows native EXE 판매 보류. 사용자 목표 R01–R33 전체 100/100, 현금 지출 0원.
 2. 완료 기능/결정: 주문 전 권리·민감정보·평문고지·파일 유형/개수/크기/행수로 BASIC/PRO/BUSINESS 후보를 계산하는 비식별 로컬 Python 검사기 추가. 고객 이름·경로·원문 업로드 및 자동 매출승인 금지. 외부 SaaS 대신 Python stdlib 0원 사용. 새로운 macOS15 standard GitHub Actions Python+Chromium 실 실행과 기존 Windows/Linux CI 보존.
