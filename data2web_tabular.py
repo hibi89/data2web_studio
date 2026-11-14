@@ -265,6 +265,10 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
             if number < header_row:
                 continue
             cells = {}
+            # Formatting-only empty cells are not data. A deliberately present
+            # empty XML string/value is data and must not be dropped as an
+            # invisible blank row (a missing mapped ID must then HOLD).
+            explicit_values = False
             for cell in node.findall(X + "c"):
                 address = cell.get("r", "")
                 m = CELL.fullmatch(address)
@@ -274,6 +278,9 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 if col >= MAX_COLS or col in cells:
                     raise ValueError("Duplicate or oversized worksheet column")
                 cells[col] = _value(cell, strings, allow_cached_formulas)
+                cached_value = cell.find(X + "v")
+                if cell.find(X + "is") is not None or cached_value is not None:
+                    explicit_values = True
             if number == header_row:
                 if not cells:
                     raise ValueError("Empty worksheet header")
@@ -283,7 +290,7 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 headers = [cells[i] for i in range(last + 1)]
                 if any(not h or len(h) > 200 for h in headers) or len(set(headers)) != len(headers):
                     raise ValueError("Invalid or duplicate XLSX headers")
-            elif cells and any(v != "" for v in cells.values()):
+            elif cells and (explicit_values or any(v != "" for v in cells.values())):
                 if headers is None:
                     raise ValueError("Selected header row does not exist")
                 if any(col >= len(headers) and value for col, value in cells.items()):
