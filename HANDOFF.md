@@ -1,3 +1,15 @@
+## 2026-11-14 KST · 최신 크몽 Preview R06 CI 연결 HANDOFF
+1. 목표/기술: Python3.11 데이터→HTML/ZIP/receipt 로컬 납품 A 우선, EXE 프로그램 B 후순위, 전체 최종설계100점·현금0원 준수.
+2. 완료: 파일 빌더/검증기 변경 시 크몽 합성시연물 자동 재생성하도록 GitHub Actions 경로필터 여섯 개 추가, R06 입력/출력 FD snapshot 보안12 tests를 preview 업로드 전 강제.
+3. 테스트: 코드 기능 SHA ed89a0dcc852c755f8de5c824d0e9b3308b80ebd, workflow 포함 SHA 12a9c433d7f4155fba6649f3064185feca696982. preview #43546219045 SUCCESS + artifact14093583848 ZIP CRC9파일/PNG2/CSP HASH 검증, Windows/Linux #43546218953 4/4 SUCCESS, CodeQL #43546218944 SUCCESS, score #43546219333 SUCCESS. macOS source SHA ed89a0dc의 #43545781226 SUCCESS; workflow-only SHA의 Mac은 경로필터상 미트리거.
+4. 판정: 최종전체 R01–33 72/100(22 VERIFIED,11 PENDING=28), 목표100 미달, [작업중]/RELEASE HOLD/SALE NO-GO, 크몽 게시 미등록.
+5. 과거 오류/변경: Preview workflow는 core builder/path_policy/verify_delivery 수정에도 재생성이 누락될 수 있었음. 경로필터 추가 및 R06 직접 테스트로 개선, 정확 SHA GitHub CI 성공. CodeQL은 독립 외부보안 감사 아님.
+6. Repo/branch/SHA: hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113, 코드 ed89a0dcc852c755f8de5c824d0e9b3308b80ebd, CI workflow 12a9c433d7f4155fba6649f3064185feca696982. PATH .github/workflows/kmong-synthetic-preview.yml / docs/KMONG_PREVIEW_CI_R06_EVIDENCE_20261114.md.
+7. Production/execution: GitHub Ubuntu standard free hosted preview, actual Chromium screenshot, artifact retention7일, Vercel 미적용, 실판매/고객 production 없음.
+8. 원본/보안: 원본/REA/scorecard/고객 자료 변경·업로드0, 허위 IP/NOTICE/서명/외부 R29 인증0, 현금지출0.
+9. 다음: 무료외부독립 보안감사 issue#5, 실제 소유저작권·고객 동의·Win10/11 독립 실사용·크몽 계정/가격폼 확인이 완료되어야 R별 증빙 수용. 형 개입은 13:00 KST 기존 예약 알림(Automation_fb2b044b906c8191a2b2adbf69add50e)에 집중, PC 반복합성검사 지시 금지.
+10. 갱신 시점/기준: 2026-11-14 KST, 기능/CI 정확 SHA 구분, 최신 문서 SHA는 이번 커밋 후 별도 확인. 100% 선언 금지, [작업중] 유지.
+
 ## 2026-11-14 KST / 최신 R06 XLSX+생성 HTML FD 기반 검증 인수인계 (100% 목표)
 1. 목적/확정: DATA2WEB A 오프라인 HTML+ZIP+receipt 우선/B EXE 판매 후순위, 사용자 R01–R33 100점 정본과 0원 지출 규정 유지. Python3.11/Chrome Edge Chromium, 무계정·오프라인.
 2. 구현: XLSX 무시트 inspect의 직접 read_bytes 제거/8MB FD snapshot; 단일HTML 출력 20MB 초과 사전 거절, 단일·다중 결과 모두 FD 20MB 재읽기 + SHA 확인, 생성 중 문제는 기존 파일 삭제 없이 HOLD. 신규 합성12회귀(7 XLSX 원본 경합 + 5 생성 결과 변조/상한).
