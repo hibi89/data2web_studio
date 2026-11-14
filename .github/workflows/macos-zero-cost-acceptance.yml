@@ -31,6 +31,8 @@ on:
       - "test_operator_copy_retention.py"
       - "zero_cost_gate.py"
       - "r21_source_provenance.py"
+      - "test_r21_source_provenance.py"
+      - "test_shipping_rights_preflight.py"
       - "shipping_rights_preflight.py"
       - "security_audit_preaudit.py"
       - "test_security_audit_preaudit.py"
