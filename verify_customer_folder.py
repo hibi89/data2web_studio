@@ -126,3 +126,39 @@ def verify_customer_folder(destination):
         "receipt_sha256":hashlib.sha256(rbytes).hexdigest(),
         "sale_approved":False,
     }
+
+def diagnose_customer_folder(destination):
+    """Read-only, redacted HOLD classification for a local customer folder.
+
+    No filenames beyond the three fixed contract members, customer values,
+    paths or exception messages leave this function. A complete folder must
+    still pass the full independent verifier; this is not a recovery/write API.
+    """
+    root = Path(destination)
+    base = {
+        "verified": False,
+        "status": "HOLD",
+        "sale_approved": False,
+    }
+    try:
+        assert_no_links(root)
+        if not root.is_dir():
+            return {**base, "reason_code": "MISSING_OR_UNSAFE_DIRECTORY"}
+        observed = {p.name for p in root.iterdir()}
+        if observed != EXPECTED:
+            return {
+                **base,
+                "reason_code": "INCOMPLETE_OR_UNEXPECTED_MEMBERS",
+                "present": {name: name in observed for name in sorted(EXPECTED)},
+                "unexpected_member_count": len(observed - EXPECTED),
+            }
+        verified = verify_customer_folder(root)
+        return {
+            "verified": True,
+            "status": verified["status"],
+            "sale_approved": False,
+            "reason_code": "FULL_INTEGRITY_VERIFIED_NOT_SALE_APPROVED",
+        }
+    except (OSError, ValueError):
+        # Do not include exception messages: they may contain customer paths.
+        return {**base, "reason_code": "INTEGRITY_CHECK_FAILED"}

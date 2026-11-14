@@ -60,6 +60,8 @@ def main(argv=None):
         help="Create-only local unsigned synthetic device report; never uploads customer data")
     pc=sub.add_parser("verify-customer",help="Independently verify a full local customer folder")
     pc.add_argument("directory",type=Path)
+    dc=sub.add_parser("diagnose-customer",help="Read-only redacted HOLD diagnosis; never repairs files")
+    dc.add_argument("directory",type=Path)
     pv=sub.add_parser("verify");pv.add_argument("zip_path",type=Path)
     args=p.parse_args(argv)
     try:
@@ -135,6 +137,11 @@ def main(argv=None):
         elif args.action=="verify-customer":
             from verify_customer_folder import verify_customer_folder
             result=verify_customer_folder(args.directory)
+        elif args.action=="diagnose-customer":
+            from verify_customer_folder import diagnose_customer_folder
+            result=diagnose_customer_folder(args.directory)
+            print(json.dumps(result,ensure_ascii=True,sort_keys=True))
+            return 0 if result["verified"] else 2
         else:
             result=verify_zip(args.zip_path)
         print(json.dumps(result,ensure_ascii=True,sort_keys=True))
