@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 max-UTC report validator hardening
+- Found `validate_result` computed `reviewed + timedelta(days=7)`, which raises `OverflowError` for canonical year-9999 review times even though report parsing itself accepts those dates. Changed to duration comparison `due - reviewed > timedelta(days=7)`, avoiding arithmetic overflow while retaining fail-closed deadline bounds. Code SHA `80c69f643ae7a39f08c22df27797972cb3e00793`.
+- Added max-UTC report validation regression (test SHA `61329ec8311fe51a1b16c886932251ec97bfc1de`). CI deferred at owner's request; **tests not executed**. No claim of PASS.
+- Owner R25 seven-policy approval and isolated synthetic disposal drill are recorded, but independent real-world custody/disposal acceptance remains PENDING. Locked official score 72/100; RELEASE HOLD, no real customer data.
+
 ## 2026-11-14 KST — R25 explicit owner approval + executed synthetic custody/disposal drill
 - User explicitly appointed themselves R25 operator and approved seven internal policy conditions, while reserving real customer processing and release. Approval recorded in `docs/R25_OWNER_APPROVAL_AND_SYNTHETIC_CUSTODY_20261114.md` and reconciled with `docs/OWNER_APPROVAL_PACKET_A_20261114.md` (approval SHA `bf8fbed4970fa374a99010b46c14ca8a57337e28`).
 - Executed one isolated **assistant-container synthetic-only** drill: create and hash fixture, explicit scoped manual `unlink()`, confirm absence. Synthetic SHA-256 `90ea32ae87f8ab7f8c868ed436cd634dc159ed99f4bebce6a7c22441f901e9ea`; UTC `2026-11-14T13:36:15.499709Z` to `13:36:15.499782Z`. Evidence committed `2c51c5781325556ba9a3db92507663831ef7b0f7`. No actual customer files or user's Windows machine touched; not independent real operator disposal evidence.
