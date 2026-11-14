@@ -112,14 +112,14 @@ class InterruptedCustomerDelivery(unittest.TestCase):
         return diagnosis
 
     def test_single_interrupted_html_write_is_hold(self):
-        with patch.object(data2web.os, "fdopen",
+        with patch.object(os, "fdopen",
                           new=self.interrupted_fdopen(os.fdopen)):
             with self.assertRaisesRegex(OSError, "INJECTED_HTML_DISK_INTERRUPTION"):
                 self.deliver()
         self.assert_failed_folder_held(html=True, zip_file=False, receipt=False)
 
     def test_append_interrupted_html_write_is_hold(self):
-        with patch.object(data2web_append.os, "fdopen",
+        with patch.object(os, "fdopen",
                           new=self.interrupted_fdopen(os.fdopen)):
             with self.assertRaisesRegex(OSError, "INJECTED_HTML_DISK_INTERRUPTION"):
                 self.deliver(append=True)

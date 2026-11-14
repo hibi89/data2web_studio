@@ -63,8 +63,8 @@ class CustomerDeliveryFinalVerification(unittest.TestCase):
 
     @staticmethod
     def altered_receipt(real_writer):
-        def write(path, receipt):
-            result = real_writer(path, receipt)
+        def write(path, receipt, **kwargs):
+            result = real_writer(path, receipt, **kwargs)
             target = Path(path)
             doc = json.loads(target.read_text(encoding="utf-8"))
             doc["output_sha256"] = "f" * 64
@@ -74,8 +74,8 @@ class CustomerDeliveryFinalVerification(unittest.TestCase):
 
     @staticmethod
     def altered_zip(real_writer):
-        def write(path, receipt):
-            result = real_writer(path, receipt)
+        def write(path, receipt, **kwargs):
+            result = real_writer(path, receipt, **kwargs)
             target = Path(path).parent / "delivery.zip"
             with target.open("ab") as stream:
                 stream.write(b"TAMPER_AFTER_ZIP_VERIFICATION")
@@ -133,7 +133,7 @@ class CustomerDeliveryFinalVerification(unittest.TestCase):
         self.assert_existing_failure_is_hold()
 
     def test_interrupted_receipt_write_preserves_partial_and_blocks_retry(self):
-        def write_partial(path, receipt):
+        def write_partial(path, receipt, **kwargs):
             Path(path).write_bytes(b'{"contract":')
             raise OSError("SIMULATED_RECEIPT_INTERRUPTION")
         with patch.object(data2web_single, "write_receipt", side_effect=write_partial):
