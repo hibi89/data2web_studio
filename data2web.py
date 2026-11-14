@@ -33,9 +33,13 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
             fields = reader.fieldnames
             if not fields:
                 raise ValueError("Missing header")
-            rows = list(reader)
-            if any(value is missing for row in rows for value in row.values()):
-                raise ValueError("CSV record is missing a required field delimiter")
+            rows = []
+            for record in reader:
+                if len(rows) >= MAX_ROWS:
+                    raise ValueError("CSV row count limit")
+                if any(value is missing for value in record.values()):
+                    raise ValueError("CSV record is missing a required field delimiter")
+                rows.append(record)
     elif path.suffix.lower() == ".tsv":
         from data2web_tabular import parse_tsv
         fields, rows = parse_tsv(raw)
