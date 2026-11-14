@@ -16,7 +16,7 @@ GPT-6 High source-only review는 `b3850cd` 변경에서 actionable issue를 찾�
 ### Exact-SHA Actions
 
 - [Python/browser #43643553016](https://github.com/hibi89/data2web_studio/actions/runs/43643553016) — **FAIL**. Windows: 531 tests, 524 PASS / 5 ERROR / 1 FAIL / 1 SKIP; Ubuntu: 531 tests, 521 PASS / 5 ERROR / 1 FAIL / 4 SKIP. 6개 R21 source-provenance 케이스가 `Shipping producer source drift requires R21 review`로 fail-closed.
-- [macOS #43643597419](https://github.com/hibi89/data2web_studio/actions/runs/43641997419) — latest macOS run was on ancestor code/test SHA `92dca18`; no macOS run was triggered at `b3850cd`.
+- [macOS #43641997419](https://github.com/hibi89/data2web_studio/actions/runs/43641997419) — latest macOS run was on ancestor code/test SHA `92dca18`; no macOS run was triggered at `b3850cd`.
 - [CodeQL #43643553049](https://github.com/hibi89/data2web_studio/actions/runs/43643553049) — **PASS**.
 - [Synthetic preview #43643553075](https://github.com/hibi89/data2web_studio/actions/runs/43643553075) — **PASS**: real hosted Chromium created three synthetic screenshots; report says 0 remote requests and 0 JS errors.
 - [Final evidence gate #43643553369](https://github.com/hibi89/data2web_studio/actions/runs/43643553369) — workflow **PASS**, report `UNASSESSED`; no accepted evidence manifest, no score.
