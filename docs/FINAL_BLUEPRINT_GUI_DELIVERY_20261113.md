@@ -1,3 +1,5 @@
+> **2026-11-14 KST 최신: DATA2WEB 백엔드·프론트엔드 다중 파일 GUI 구현 완료** — [기술 구현 및 CI 검증](FRONTEND_BACKEND_MULTI_SOURCE_20261114.md). 정확 코드 SHA `d5c09f07d6e0d7173c6e9babb8bb0765a019ab85`, Windows415PASS/Ubuntu414PASS+1SKIP, 실제 Windows Tk CSV+TSV 및 CSV+XLSX GUI 경로·Chrome/Edge/Chromium PASS. 파일·시트·매핑 변경 시 권리/평문/개인정보 승인 재확인, 브라우저 CSV 교체 strict UTF-8, 기존 SHA-bound append 안전코어 재사용으로 GUI도 2~10개 파일을 파일별 XLSX 시트/헤더 선택·독립 HTML/ZIP/영수증까지 생성. **사용자 지시: 크몽 상품 등록은 나중에 Codex, 현재는 프론트·백엔드만 개발**. 고정 전체 최종 72/100, 상업 권리·외부 독립 검증/실구매자/판매 GO 미확보. `[작업중]`/SALE NO-GO 보존.
+
 # DATA2WEB Studio — R15/R21/R22/R24/R32 오프라인 고객 UI·납품 검증 강화 · 2026-11-13 KST
 
 **본 작업은 사용자의 '최종설계 전체 85%' 목표에 대한 실개발 진전이다. 단독 GUI/CI 성공이 공식 최종완성률 85%를 뜻하지 않는다.** 공식 100% 분모: `REQUIREMENTS.md` R01–R33 전부와 `docs/FINAL_DESIGN.md`; 사용자 소유 R별 가중치 합100 부재 → **UNASSESSED / 85% 공식 인증 보류**. 설계·SKU 범위 축소나 임의 R 가중치 생성 없음.
