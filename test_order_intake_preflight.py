@@ -121,5 +121,53 @@ class PreorderTests(unittest.TestCase):
         self.assertEqual(json.loads(p.stdout)["sku"], "BASIC")
         self.assertFalse(json.loads(p.stdout)["sale_approved"])
 
+
+    def test_direct_assess_rechecks_all_booleans(self):
+        # Previously Python's truthy "false"/"true" values could be
+        # mistaken for a valid right or privacy declaration.
+        for key, invalid in (
+            ("rights_claimed", "true"),
+            ("contains_personal_or_sensitive", "false"),
+            ("contains_third_party_confidential", 0),
+            ("plaintext_ack", 1),
+            ("same_headers", None),
+            ("mapping_3_distinct_columns", []),
+        ):
+            with self.subTest(key=key):
+                doc = synthetic_example()
+                doc[key] = invalid
+                with self.assertRaises(ValueError):
+                    assess(doc)
+
+    def test_direct_assess_rejects_undeclared_personal_fields(self):
+        doc = synthetic_example()
+        doc["customer_email"] = "synthetic@example.invalid"
+        with self.assertRaises(ValueError):
+            assess(doc)
+
+    def test_direct_assess_rejects_bad_nested_source_shape(self):
+        for invalid in (None, {}, "CSV", 5):
+            with self.subTest(bad_type=str(type(invalid))):
+                doc = synthetic_example()
+                doc["sources"] = [invalid]
+                with self.assertRaises(ValueError):
+                    assess(doc)
+
+    def test_zero_byte_source_never_gets_sku(self):
+        doc = synthetic_example()
+        doc["sources"][0]["estimated_bytes"] = 0
+        result = assess(doc)
+        self.assertEqual(result["status"], "HOLD_PREORDER")
+        self.assertIsNone(result["sku"])
+        self.assertFalse(result["sale_approved"])
+        self.assertEqual(result["reason"], "SOURCE_EXCEEDS_TECHNICAL_LIMIT")
+
+    def test_no_approval_on_direct_valid_call(self):
+        result = assess(synthetic_example())
+        self.assertEqual(result["sku"], "BASIC")
+        self.assertFalse(result["order_accepted"])
+        self.assertFalse(result["customer_rights_independently_verified"])
+        self.assertFalse(result["sale_approved"])
+
 if __name__ == "__main__":
     unittest.main()

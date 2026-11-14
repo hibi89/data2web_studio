@@ -24,11 +24,9 @@ def _unique_pairs(pairs):
         doc[key] = value
     return doc
 
-def parse_request(raw):
-    if not isinstance(raw, bytes) or len(raw) > MAX_INPUT_BYTES:
-        raise ValueError("Oversized metadata")
-    doc = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_pairs,
-                     parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite value")))
+def _validate_request(doc):
+    # Shared schema check. Internal callers cannot bypass type and privacy
+    # guards by calling assess() directly with an unparsed Python dict.
     if not isinstance(doc, dict) or set(doc) != FIELDS or doc["contract"] != CONTRACT:
         raise ValueError("Only anonymous whitelisted metadata is allowed")
     for field in FIELDS - {"contract", "sources"}:
@@ -48,6 +46,13 @@ def parse_request(raw):
                 raise ValueError("Count must be bounded nonnegative integer")
     return doc
 
+def parse_request(raw):
+    if not isinstance(raw, bytes) or len(raw) > MAX_INPUT_BYTES:
+        raise ValueError("Oversized metadata")
+    doc = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_pairs,
+                     parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite value")))
+    return _validate_request(doc)
+
 def result(reason, sku=None):
     return {
         "contract": "DATA2WEB_ANONYMOUS_PREORDER_RESULT_V1",
@@ -64,10 +69,9 @@ def result(reason, sku=None):
     }
 
 def assess(doc):
+    doc = _validate_request(doc)
     policy = _read(POLICY)
     validate_policy(policy, _read(SCORE))
-    if not isinstance(doc, dict) or set(doc) != FIELDS:
-        raise ValueError("Invalid metadata schema")
     sources = doc["sources"]
     if doc["contains_personal_or_sensitive"] or doc["contains_third_party_confidential"]:
         return result("PERSONAL_OR_CONFIDENTIAL_HOLD")
@@ -79,7 +83,7 @@ def assess(doc):
         return result("SAME_HEADERS_NOT_CONFIRMED")
     if len(sources) > 10:
         return result("TOO_MANY_SOURCES")
-    if any(s["estimated_bytes"] > 8_000_000 or s["estimated_rows"] < 1 or
+    if any(not 1 <= s["estimated_bytes"] <= 8_000_000 or s["estimated_rows"] < 1 or
            not 3 <= s["estimated_columns"] <= 20 for s in sources):
         return result("SOURCE_EXCEEDS_TECHNICAL_LIMIT")
     count = len(sources)
