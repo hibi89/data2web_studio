@@ -39,7 +39,8 @@ def main():
         assert result["rows"]==241
         assert verify_zip(z)["verified"]
         changed=root/"changed.csv"
-        changed.write_text('id,title,category,amount,notes\nX1,"Updated row",A,7,ok\nX2,"<script>alert(1)</script>",B,11,safe\n',encoding="utf-8")
+        # Physical blank CSV lines are legal and ignored by the backend.
+        changed.write_text('\nid,title,category,amount,notes\nX1,"Updated row",A,7,ok\n\nX2,"<script>alert(1)</script>",B,11,safe\n\n',encoding="utf-8")
         with sync_playwright() as p:
             browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
                      else p.chromium.launch(channel=args.channel,headless=True))
@@ -115,6 +116,15 @@ def main():
             secondary.locator("#replace").click()
             expect(secondary.locator("#count")).to_have_text("2건")
             expect(secondary.locator("#category")).to_have_values([""])
+            # Explicit quoted empty at EOF is not a blank physical line.
+            # It must HOLD without losing the previously accepted rows.
+            invalid=root/"explicit_empty_id.csv"
+            invalid.write_text('id,title,category,amount,notes\n""',encoding="utf-8")
+            secondary.locator("#csv").set_input_files(str(invalid))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#notice")).to_contain_text("HOLD")
+            expect(secondary.locator("#count")).to_have_text("2건")
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
             mob=mobile.new_page()
