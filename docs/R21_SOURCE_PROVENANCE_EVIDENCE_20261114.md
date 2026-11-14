@@ -22,3 +22,8 @@
 **명령**: `python r21_source_provenance.py`, `python shipping_rights_preflight.py`, `python -m unittest test_r21_source_provenance -v`.
 
 **점수 판정**: R21 +4 / R29 +3 및 R07/R25/R26 +6을 포함한 +13 인정에는 각각의 최종설계 전체 수용 증거가 필요하다. 내부 기능 테스트 또는 이 자료 자체로 점수 상승 없음.
+
+## 2026-11-14 21:36 KST 코드 및 CI 정정 기록
+- 최종 기능 SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7`; GitHub Actions [Windows/Ubuntu/browser #43595570078](https://github.com/hibi89/data2web_studio/actions/runs/43595570078) 4/4 SUCCESS, Windows 507/507 PASS, Ubuntu 506 PASS + 1 SKIP. [CodeQL #43595570039](https://github.com/hibi89/data2web_studio/actions/runs/43595570039) SUCCESS, [blueprint #43595570534](https://github.com/hibi89/data2web_studio/actions/runs/43595570534) SUCCESS. 이 SHA의 macOS 미실행.
+- 중간 SHA `5a8d94a`의 Windows CRLF git worktree 변환으로 인한 1 FAIL / 4 ERROR와 `abc0ab86` 테스트 fixture 1 FAIL은 원인 구별 후 수정. Windows/Linux를 동등하게 다루는 source Git blob 검사는 CRLF checkout 표현만 정상화하며 진짜 소스 변경은 반드시 HOLD.
+- **R21/R29 법적·독립 수용 불가**: 실제 권리자 서면 확인/의무 NOTICE 및 독립 외부 감사는 아직 없다. 85점을 허위로 선언하지 않고 현재 72/100, RELEASE HOLD 유지.
