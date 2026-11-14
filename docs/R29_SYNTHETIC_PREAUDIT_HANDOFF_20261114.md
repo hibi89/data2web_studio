@@ -1,3 +1,11 @@
+## 2026-11-15 KST · exact-SHA internal preaudit follow-up
+
+- Current tested source/workflow SHA: `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`. The follow-up commit after reviewed code SHA `4e6808b80023157cf9f849f600e18ed123e258e0` changes only the existing Python and macOS workflow YAML files plus documentation; no new product code was introduced in the workflow-only commit.
+- [Python/browser #43609470587](https://github.com/hibi89/data2web_studio/actions/runs/43609470587), [macOS #43609470565](https://github.com/hibi89/data2web_studio/actions/runs/43609470565), [CodeQL #43609470563](https://github.com/hibi89/data2web_studio/actions/runs/43609470563) and [final evidence gate #43609470850](https://github.com/hibi89/data2web_studio/actions/runs/43609470850) all completed SUCCESS at the exact SHA.
+- Direct `python security_audit_preaudit.py` reported 7/7 synthetic checks PASS on Windows, Ubuntu and macOS; direct focused A25 retention tests 19/19 and A26 intake/privacy tests 24/24 passed on all three runners. Full discovery ran 522 tests: Windows 522 PASS; Ubuntu/macOS 521 PASS + one Windows-only SKIP.
+- CodeQL scanned 89 Python files and 6 workflow files. GPT-6 High read-only follow-up found no actionable workflow issue. Both are internal checks, not the independent external R29 audit.
+- Final blueprint gate succeeded with no approved evidence manifest and no official score. R29 remains PENDING; no score is added. External evaluator scope approval, independent findings, remediation and independent retest/signoff remain outstanding.
+
 ## 2026-11-14 23:47 KST · High 검수 후속 및 R25/Mac CI 보완
 - Read-only High review of `0689ff1..48ea586` found two pre-existing issues: R25 overdue report could suppress the manual-action flag when the reason stayed in privacy/rights HOLD; macOS path filter omitted retention source/test and explicit policy/source/shipping checks.
 - At `bfa808b0815b7e5be1bd11de8d6833717be0dcfd`, report contract V2 carries purpose-completion and legal-exception claims and validates the manual-action flag against copy presence, deadline, purpose completion and exception. Added positive legal-exception and negative forged-flag regressions. MacOS path filter now includes `operator_copy_retention.py`, its tests, `zero_cost_gate.py`, source pinning and shipping preflight.

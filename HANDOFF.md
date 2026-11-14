@@ -1,19 +1,18 @@
-## 2026-11-15 KST — DATA2WEB Studio 기술 진행 인수인계
+## 2026-11-15 KST — P00/P03 및 A25/A26/A29 exact-SHA 후속 검증 (공식 72/100 유지)
 
-1. **목표·고정 기준:** 사용자 최종설계 R01–R33, 분모 100, 공식 72/100(22 VERIFIED, 11 PENDING), 목표 85까지 13점. 점수 배점/범위·RELEASE HOLD·SALE NO-GO 불변.
-2. **저장소/브랜치/PR:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; 코드·검증 SHA `4e6808b80023157cf9f849f600e18ed123e258e0`; PR #4 Draft/Open/Unmerged, main 미변경. 이 문서는 뒤따르는 docs-only 기록이며 테스트 대상 코드는 SHA 4e6808b다.
-3. **백엔드:** `order_intake_preflight.py`의 anonymous input contract V2가 명시적 privacy class와 strict risk booleans를 요구한다. 안전한 비개인 검토 외에 식별자, 민감/의료, 결제, 제3자 비밀/공유, 혼합/미확인 scope는 HOLD; 기존 rights/plaintext/sale guards 유지.
-4. **프론트엔드 및 기록 서식:** 단일·다중 GUI에 개인정보 범위 HOLD와 “로컬 전용은 암호화·익명화·법적 승인/동의가 아님” 안내를 추가. A25-02 빈 custody 폼은 원본/결과 사본 분리, 복사 없음, 만료/수동조치/예외 기록을 제공하며 실제 고객 증거가 아니다.
-5. **정확 SHA Actions:**
+1. **기준·현재 상태:** 저장소 `hibi89/data2web_studio`, 브랜치 `feature/final-blueprint-p85-evidence-20261113`; 검증된 코드/워크플로우 SHA `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`. PR #4 Draft/Open/Unmerged, base `feature/p85-ui-crossbrowser-20261113`; main `0cf4adbfe745c10fdb103db09185ea495fb769aa` 불변. 이 handoff/STATUS 갱신은 해당 SHA 뒤 docs-only `[skip ci]` 기록이며 테스트 대상 코드를 바꾸지 않는다.
+2. **고정 점수:** 33개 요구사항·100점, 22 VERIFIED·11 PENDING, 공식 72/100, 85까지 13점. Scorecard 가중치와 evidence baseline SHA를 변경하지 않았고 이번 증가 0. RELEASE HOLD / SALE NO-GO 유지.
+3. **P00/P03:** GitHub HEAD·PR·기준 문서와 33/100 scorecard를 재확인했다. `python blueprint_score.py` exact-SHA PASS, `test_blueprint_score`는 전체 unittest discovery에 포함되어 PASS(별도 단독 실행은 하지 않음). 전체 회귀는 Windows 522/522 PASS, Ubuntu/macOS 각각 522 run·521 PASS + Windows-only SKIP 1.
+4. **A25/A26 직접 회귀:** 기존 Actions에서 `python -m unittest test_operator_copy_retention -v` 19/19 PASS 및 `python -m unittest test_order_intake_preflight -v` 24/24 PASS가 Windows, Ubuntu, macOS에서 각각 직접 실행됐다. `operator_copy_retention.py`의 malformed UTF-8/극단일자/위조 report와 input preflight V2 privacy-class negative cases가 포함된다.
+5. **보안 및 UI:** `python security_audit_preaudit.py` 7/7 synthetic checks PASS on Windows/Ubuntu/macOS; CodeQL 89 Python + 6 workflow files PASS. Windows hosted Chrome/Edge와 Tk single/batch, hosted Chromium/file:// flows PASS. 모두 hosted/internal synthetic evidence이며 실제 고객 PC·고객 자료·독립 외부 감사 수용은 아니다.
+6. **출처·제약 검사:** `zero_cost_gate.py`는 72점·0원·HOLD; `r21_source_provenance.py`는 source blob 6/6 pin PASS, 권리 보류; `shipping_rights_preflight.py`는 synthetic artifact 4개 무결성 PASS지만 owner rights/commercial release/external audit false. Final gate의 no-approved-manifest 결과로 공식 점수 변경 없음.
+7. **High 검수:** GPT-6 High read-only 검수는 앞선 코드 SHA `4e6808b80023157cf9f849f600e18ed123e258e0`에 조치 가능한 finding 없음; 후속 `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661` workflow 변경 검수도 문제 없음. 둘 다 내부 검수이며 R29 외부감사 아님.
+8. **작업 ID:** 기술 완료 P00–P03, A07-03, A21-01/02, A25-01/02, A26-01/02, A29-01/02. 실제 권리·동의/고객 인수/외부 감사 차단: A07-04/05, A21-03~06, A25-03/04, A26-03/04, A29-03~07, G85-01~04. R25의 기존 7개 내부 정책 승인·합성 파기 시험은 유효하며 재요청하지 않는다.
+9. **다음 증거:** R07 고객별 원본/공유 사용 권리와 동의, R21 실제 배포 자산 상업 재배포 권리 및 LICENSE/NOTICE 결정, R25 실제 custody·보유·반환/파기 인수 기록, R26 고객별 처리 범위·적법 근거·명시 동의, R29 독립 외부 감사 범위/ findings/수정 후 재검증. 사적 자료는 저장소에 올리지 않고 승인된 비공개 채널의 opaque 상태 참조만 남긴다.
 
-   - [Python/browser #43608095426](https://github.com/hibi89/data2web_studio/actions/runs/43608095426) SUCCESS: 522 tests Windows; 521 PASS + 1 Windows-only SKIP on Ubuntu; Chrome/Edge and Chromium browser jobs PASS.
-   - [macOS #43608095412](https://github.com/hibi89/data2web_studio/actions/runs/43608095412) SUCCESS: 521 PASS + 1 Windows-only SKIP; offline Chromium, local-file and A4 checks PASS.
-   - [CodeQL #43608095464](https://github.com/hibi89/data2web_studio/actions/runs/43608095464) SUCCESS; [Windows native synthetic preview #43608095408](https://github.com/hibi89/data2web_studio/actions/runs/43608095408) SUCCESS, hosted synthetic only; [final evidence gate #43608095618](https://github.com/hibi89/data2web_studio/actions/runs/43608095618) SUCCESS but reports no approved evidence manifest and grants no score.
-6. **단위 회귀:** exact SHA에서 전체 522개: Windows 522 PASS; Ubuntu 521 PASS+1 Windows-only SKIP; macOS 521 PASS+1 Windows-only SKIP. 새 privacy matrix/missing, invalid, legacy classification 케이스가 세 OS에서 통과. 별도 직접 명령 실행이 아니라 각 기존 workflow의 전체 unittest discovery 안에서 검증됐다.
-7. **High 코드 검수:** 새 SHA의 6개 파일에 조치 가능한 finding 없음. High review와 CodeQL은 R29 독립 외부 감사가 아니며, final gate는 승인 증거 manifest 없이 점수를 부여하지 않았다.
-8. **작업 ID:** 완료 P00–P03, A07-03, A21-01/02 기술, A25-01/02, A26-01/02, A29-01/02. 실제 고객/권리/소유자 또는 외부 감사 evidence가 필요한 A07-04/05, A21-03~06, A25-03/04, A26-03/04, A29-03~07, G85-01~04는 PENDING/BLOCKED.
-9. **점수와 안전 상태:** 72/100 유지, 이번 점수 증가 0. R07/R21/R25/R26/R29는 미완료. 고객 PC 구매자 검수·권리, 고객별 privacy basis/consent, 실제 보존/파기, 상업 LICENSE/NOTICE, 외부 감사는 미검증. 추가 지출 0, 고객 자료/비밀 업로드 0.
-10. **다음 순서:** 외부 증거를 확보하면 해당 owner/external 작업부터 exact SHA와 연결하고 선행 수용 ID를 재검토한다. 실제 증거 없이 점수/출시를 변경하지 않는다. R25의 7개 내부 정책 승인·합성 시험은 이미 기록되어 있으므로 중복 요청하지 않는다.
+- [Python/browser #43609470587](https://github.com/hibi89/data2web_studio/actions/runs/43609470587) SUCCESS at `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`: Windows 522/522 PASS; Ubuntu 522 run, 521 PASS + 1 Windows-only SKIP; Chrome/Edge and Chromium hosted browser flows PASS, including synthetic Tk single/batch consent reset.
+- [macOS offline #43609470565](https://github.com/hibi89/data2web_studio/actions/runs/43609470565) SUCCESS: 522 run, 521 PASS + 1 Windows-only SKIP; offline Chromium, local-file and A4 checks PASS.
+- [CodeQL #43609470563](https://github.com/hibi89/data2web_studio/actions/runs/43609470563) SUCCESS; [final blueprint gate #43609470850](https://github.com/hibi89/data2web_studio/actions/runs/43609470850) SUCCESS, but reports no approved evidence manifest and no official score.
 
 ## 2026-11-14 23:47 KST — DATA2WEB Studio 최신 인수인계 (High 검수 반영)
 1. **목표·정본:** R01–R33 고정 100점 설계, 목표 85. 공식 점수 72/100(22 VERIFIED, 11 PENDING), 13점 부족. 배점·분모·출시 상태 불변.

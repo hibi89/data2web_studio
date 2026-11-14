@@ -1,6 +1,10 @@
 # A26-01 — 개인정보 범위 분류표와 노출 경로
 
 **상태: 기술 검토 보조물만 제공.** 아래 분류는 합성 범위만 설명하며 고객 사례가 아니다. 분류값은 사용자가 제출하는 자기검토 진술이며 기계 탐지·법률 자문·고객 동의·익명화·권리 증명이 아니다. 고객별 적법한 처리근거와 명시 동의가 미확보되어 R26은 계속 PENDING이다.
+## 2026-11-15 exact-SHA technical recheck
+
+At tested source/workflow SHA `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`, `python -m unittest test_order_intake_preflight -v` passed 24/24 on Windows, Ubuntu and macOS. Full hosted regression and Windows Tk/Chrome/Edge plus Ubuntu/macOS Chromium local-file flows also passed. These checks confirm the technical fail-closed path only; the classification remains operator self-report, and customer-specific lawful basis/consent are still missing. R26 remains PENDING and the official score is unchanged at 72/100.
+
 
 ## 합성 개인정보 분류표
 
