@@ -1,3 +1,7 @@
+## 2026-11-15 KST — screenshot artifact path hardening at exact SHA `b3850cde8249ac39aae474326cbdb02274ad0fd1`
+
+The synthetic Chromium preview now buffers each PNG and writes PNGs plus the evidence manifest using `secure_output.py` held-directory relative create. Exact-SHA [preview #43643553075](https://github.com/hibi89/data2web_studio/actions/runs/43643553075) passed, created three synthetic screenshots, and recorded zero remote requests and zero JS errors. The associated Chromium and Windows Chrome/Edge/Tk jobs passed; CodeQL passed. The Python/Ubuntu jobs still fail only on the previously documented R21 producer source-pin drift; no macOS job ran at this SHA. The final gate is `UNASSESSED`, no accepted manifest and score addition 0.
+
 ## 2026-11-15 KST — latest output-path hardening evidence at `92dca18`
 
 The exact code/test revision is `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`. New `secure_output.py` routes create-only output through verified directory handles; hosted Windows verifies ancestor rename denial and relative creation, while Ubuntu/macOS pass POSIX trusted-ancestry and relative-create regressions. The source-only GPT-6 High review found no actionable issue in these changes or test seams. Internal R29 preaudit reports all seven synthetic checks passing, but still says `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`.

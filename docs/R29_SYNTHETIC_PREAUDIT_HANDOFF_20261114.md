@@ -1,3 +1,9 @@
+## 2026-11-15 KST · Synthetic Chromium artifacts use anchored output at `b3850cde8249ac39aae474326cbdb02274ad0fd1`
+
+`kmong_preview_screenshot.py` now receives all three PNGs as bytes before output; after verifying the browser run had no JS errors or HTTP(S) requests, it creates a new screenshot directory and stores PNGs and `CAPTURE_EVIDENCE.json` relative to the held directory handle. Exact hosted [synthetic preview #43643553075](https://github.com/hibi89/data2web_studio/actions/runs/43643553075) passed; manifest recorded three PNG hashes, `offline_http_requests=0`, `js_errors=0`, and `sale_approved=false`.
+
+GPT-6 High source-only review of `b3850cd` found no actionable issue. The full Python/Ubuntu suites fail on the separate R21 producer source-pin review gate; CodeQL/browser/preview jobs pass. This remains internal synthetic evidence only. No customer data, transfer, independent audit, signoff, sale approval, or score increase is claimed. R29 remains PENDING and RELEASE HOLD / SALE NO-GO.
+
 ## 2026-11-15 KST · Handle-anchored output creation at exact code/test HEAD
 
 At `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`, output producers use `secure_output.py` to create files relative to a verified, held directory handle. Windows tests pass for ancestor rename denial and relative create; POSIX tests pass for trusted ancestry refusal and relative create. The pre-open parent link race test passes on Windows, Ubuntu and macOS. The R29 internal synthetic preaudit step reports all seven configured checks passing and score addition 0.

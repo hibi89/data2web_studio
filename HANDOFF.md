@@ -1,3 +1,38 @@
+## 2026-11-15 KST — 출력경합 추가 보강 및 인수인계 (`b3850cde8249ac39aae474326cbdb02274ad0fd1`)
+
+### GitHub 위치
+
+- Repository: `hibi89/data2web_studio`
+- Branch: `feature/final-blueprint-p85-evidence-20261113`
+- PR #4: Draft/Open/Unmerged. `main`: `0cf4adbfe745c10fdb103db09185ea495fb769aa`.
+- Latest product/test SHA: `b3850cde8249ac39aae474326cbdb02274ad0fd1`. The following docs-only commit is not a test SHA.
+
+### 이번 계속 작업
+
+전체 Python 생산자에서 경로 기반 output 호출을 점검했다. 이전 secure-output 변경에 이어, hosted Chromium synthetic preview `kmong_preview_screenshot.py`도 직접 경로에 쓰던 PNG 및 `CAPTURE_EVIDENCE.json`을 수정했다. Playwright에서 PNG bytes를 메모리로 받고 타입/크기를 검증한 뒤, `create_output_directory` 및 `create_output_file`로 held handle에 상대 생성한다. 실패 시 partial artifacts를 삭제하지 않고 보존한다.
+
+GPT-6 High source-only review는 `b3850cd` 변경에서 actionable issue를 찾지 않았다. 이는 source review이며 tests 실행 또는 R29 독립 감사라고 주장하지 않는다.
+
+### Exact-SHA Actions
+
+- [Python/browser #43643553016](https://github.com/hibi89/data2web_studio/actions/runs/43643553016) — **FAIL**. Windows: 531 tests, 524 PASS / 5 ERROR / 1 FAIL / 1 SKIP; Ubuntu: 531 tests, 521 PASS / 5 ERROR / 1 FAIL / 4 SKIP. 6개 R21 source-provenance 케이스가 `Shipping producer source drift requires R21 review`로 fail-closed.
+- [macOS #43643597419](https://github.com/hibi89/data2web_studio/actions/runs/43641997419) — latest macOS run was on ancestor code/test SHA `92dca18`; no macOS run was triggered at `b3850cd`.
+- [CodeQL #43643553049](https://github.com/hibi89/data2web_studio/actions/runs/43643553049) — **PASS**.
+- [Synthetic preview #43643553075](https://github.com/hibi89/data2web_studio/actions/runs/43643553075) — **PASS**: real hosted Chromium created three synthetic screenshots; report says 0 remote requests and 0 JS errors.
+- [Final evidence gate #43643553369](https://github.com/hibi89/data2web_studio/actions/runs/43643553369) — workflow **PASS**, report `UNASSESSED`; no accepted evidence manifest, no score.
+
+The Python/browser subjobs for Chromium and installed Windows Chrome/Edge/Tk passed. Output-path, no-clobber, CSP/XSS, CSV formula, tamper, consent reset, retention/UTF-8/report integrity, privacy flow and internal R29 preaudit regressions passed; overall suite still fails at R21 source pins.
+
+### Task state, score and next requirements
+
+- P00–P02 rechecked. P03 and G85-02 remain blocked by failing exact-SHA full matrix.
+- A29-01 internal synthetic security coverage passes in its stated scope; A29-02 internal reproducibility package evidence is updated. A29-03–07 still need owner-authorized independent external audit scope, actual external findings, remediation retest and signoff.
+- A21-01 needs source/asset reconciliation after review; A21-02 is BLOCKED because `data2web_single.py`, `data2web_append.py`, `delivery.py`, `receipt_utils.py` differ from the historic manifest. Do not mechanically refresh the pin.
+- A07-03, A25-01 and A26-02 targeted regressions passed. Existing R25 seven-policy approval and synthetic destruction drill remain accepted, not re-requested.
+- Official score remains **72/100**, 22 VERIFIED / 11 PENDING; increase **0**, target 85, shortfall 13. RELEASE HOLD / SALE NO-GO unchanged.
+- Outstanding user/owner/external evidence: R07 actual source-owner authority and customer consent; R21 source-change review plus commercial redistribution rights and LICENSE/NOTICE decision; R25 actual customer custody/retention/return/disposal records; R26 customer-specific privacy basis and consent; R29 owner-approved independent evaluator and audit/remediation/retest/signoff.
+- After owner review of producer source changes, update pins only under authorized review, then rerun the entire Python Windows/Ubuntu, macOS if available, browser/Chrome/Edge, CodeQL, preview and evidence gate at one exact SHA. Keep any unrun jobs marked unverified.
+
 ## 2026-11-15 KST — 보안 수정 및 다음 실행 인수인계 (코드/테스트 SHA `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`)
 
 ### 현재 GitHub 상태

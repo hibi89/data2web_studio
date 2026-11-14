@@ -1,6 +1,6 @@
 {
   "contract": "DATA2WEB_CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_V1",
-  "snapshot_date_kst": "2026-11-15 06:21",
+  "snapshot_date_kst": "2026-11-15 06:37",
   "repository": "hibi89/data2web_studio",
   "branch": "feature/final-blueprint-p85-evidence-20261113",
   "source_branch_sha_at_plan": "1c582db78fb3ac91f37ddbab27b18124c08a5419",
@@ -83,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Read latest GitHub source, scorecard and evidence at tested code/test SHA 92dca1824e24700dc38f8f9fa4ae3775488c2d3f. Official score remains 72, 22 VERIFIED/11 PENDING; PR #4 Draft/Open/Unmerged; main unchanged."
+      "current_note": "Latest exact code/test SHA b3850cde8249ac39aae474326cbdb02274ad0fd1; PR #4 remains Draft/Open/Unmerged; main unchanged; locked score is 72/100 (22 VERIFIED/11 PENDING). Docs-only HEAD follows."
     },
     {
       "id": "P01",
@@ -157,7 +157,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "At exact 92dca18, Python/browser and macOS full test jobs fail closed in R21 source provenance (5 errors + 1 failure each OS suite); Chromium, Windows Chrome/Edge/Tk, CodeQL, synthetic preview and evidence gate pass. Final gate says UNASSESSED."
+      "current_note": "At exact b3850cd, Python/browser #43643553016 failed only at six source-provenance tests because four producer blobs differ from historic pins; CodeQL #43643553049, synthetic preview #43643553075, browser/Windows browser subjobs and gate #43643553369 passed. MacOS not run on this SHA."
     },
     {
       "id": "A07-01",
@@ -304,7 +304,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Handle-anchored delivery changes alter four producer blobs; reconcile the current shipped source set after the authorized R21 source-change review. No product/rights approval inferred."
+      "current_note": "Current secure output changes alter four shipped producer blobs. Reconcile shipped-source provenance only after authorized R21 source-change review; no rights claim."
     },
     {
       "id": "A21-02",
@@ -328,7 +328,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "The source provenance guard correctly rejects four changed producer blobs at 92dca18. Original manifest remains untouched; no mechanical pin refresh or owner rights claim."
+      "current_note": "Original six-source pin manifest stays untouched; four current producer blobs drift. No mechanical pin refresh or commercial rights/NOTICE approval."
     },
     {
       "id": "A21-03",
@@ -635,7 +635,7 @@
       ],
       "blocker": "INDEPENDENT_EXTERNAL_AUDIT_PENDING",
       "point_award_by_task": 0,
-      "current_note": "Exact 92dca18 secure_output parent-link/relative-create checks passed; Windows ancestor rename lock passed; POSIX trust-mode checks passed; internal preaudit reports 7/7. Full suites stop on R21 blob drift. GPT-6 High source-only review found no actionable issue; not independent R29 acceptance."
+      "current_note": "At b3850cd, secure_output parent/link/relative-create tests and R29 seven-check synthetic preaudit pass; hosted Chromium screenshot output now uses held output-directory handles; preview report records 3 files, 0 remote requests, 0 JS errors. High source review found no actionable issue; not independent audit."
     },
     {
       "id": "A29-02",
@@ -659,7 +659,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Public-source-only instructions and internal synthetic bundle are recorded; no independent audit claim."
+      "current_note": "Synthetic public-source audit bundle and current hosted preview evidence are reproducible at b3850cd; R21 source pins block full suite and external R29 approval remains absent."
     },
     {
       "id": "A29-03",
@@ -825,7 +825,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "At 92dca18 the exact full Python/Ubuntu/Windows/macOS workflows are not PASS because the R21 source-pin guard fails closed; browser jobs, CodeQL, synthetic preview and final evidence workflow pass. Evidence gate is UNASSESSED, no manifest."
+      "current_note": "At exact b3850cd Python/Ubuntu suites fail closed on six R21 source-pin checks; browser and Windows browsers, CodeQL, preview and evidence workflow pass. Final gate is UNASSESSED. No macOS run at this SHA."
     },
     {
       "id": "G85-03",
