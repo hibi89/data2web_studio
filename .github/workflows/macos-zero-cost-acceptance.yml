@@ -17,6 +17,7 @@ on:
       - "blueprint_score.py"
       - "test_blueprint_score.py"
       - "test_customer_folder.py"
+      - "data/**"
       - "operator_copy_retention.py"
       - "test_operator_copy_retention.py"
       - "zero_cost_gate.py"
