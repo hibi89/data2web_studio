@@ -116,7 +116,7 @@ class PreorderTests(unittest.TestCase):
         root = Path(__file__).parent
         with tempfile.TemporaryDirectory() as tmp:
             metadata = Path(tmp) / "invalid-utf8.json"
-            metadata.write_bytes(b"\\xff\\xfe\\x80")
+            metadata.write_bytes(bytes((255, 254, 128)))
             proc = subprocess.run(
                 [sys.executable, str(root / "order_intake_preflight.py"),
                  "--metadata-file", str(metadata)],
