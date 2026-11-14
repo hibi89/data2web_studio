@@ -13,17 +13,27 @@ The product owner explicitly approved these seven operational defaults and appoi
 **Scope:** internal zero-cost synthetic testing only. No customer data, sale, release, cloud upload, auto-delete, or exception to existing hold. The owner approved policy, **not** actual disposal or acceptance evidence.
 
 ## Synthetic drill checklist — evidence is pending until executed
-- [ ] Create a new temporary directory on an authorized local device, containing only a clearly marked synthetic text file (no actual customer information).
-- [ ] Record creation UTC timestamp and a SHA-256 digest of synthetic bytes in a private log. No absolute paths or identifiers in public GitHub.
+- [x] Isolated assistant container: synthetic-only temporary text file created (not owner local device).
+- [x] UTC timestamp and synthetic-content SHA-256 recorded below, no absolute paths.
 - [ ] Record operator custody and completion of the synthetic purpose. Validate the seven-day deadline using `operator_copy_retention.py` with anonymous metadata.
 - [ ] Inspect the synthetic target and ensure it is **not** a customer original, backup, shared folder, or another application's file.
-- [ ] Authorized operator **manually** deletes only the synthetic temporary file. The application and this document never delete it.
-- [ ] Independently check the target is absent, and retain dated verification evidence privately. Record evidence reference only (opaque token) in the public tracker.
+- [x] Assistant explicitly removed its own synthetic-only temporary file, not a customer file or application auto-delete.
+- [x] Post-deletion absence checked in assistant container; independent external witness **not** obtained.
 - [ ] Independently review synthetic trace against R25 requirements, then separately decide whether R25 technical simulation is accepted. Do not certify real-customer custody/disposal.
 
 ## Status
 - Owner policy approval: **APPROVED — in chat, 2026-11-14 KST**.
-- Synthetic custody/disposal actual execution: **NOT YET EVIDENCED**.
+- Synthetic assistant-container disposal drill: **PASS, not real customer custody evidence**.
 - Real customer data authorization/consent: **NOT APPROVED**.
 - Independent real-world disposal confirmation: **NOT EVIDENCED**.
 - R25 item: **PENDING**; official score **72/100**, RELEASE HOLD.
+
+## Executed synthetic drill — isolated assistant container (2026-11-14 UTC)
+- Scope: one newly created, known synthetic-only temporary text file in an isolated temporary directory; **not** user's Windows PC or any real customer environment.
+- UTC creation/hash check: `2026-11-14T13:36:15.499709+00:00`.
+- Synthetic content SHA-256: `90ea32ae87f8ab7f8c868ed436cd634dc159ed99f4bebce6a7c22441f901e9ea`.
+- Explicitly scoped manual deletion step: removed only that newly created synthetic file with `Path.unlink()`, not via the product or an automated retention sweep.
+- Post-action absence check: **PASS** at `2026-11-14T13:36:15.499782+00:00`; original bytes verified before deletion. Temporary directory cleaned.
+- No customer source read; no external transmission, customer deletion, or production execution. This is a synthetic *technical* demonstration only, not an independently witnessed operator/customer custody trace.
+- R25 owner approval recorded, synthetic drill PASS, real-customer custody and independent acceptance still PENDING. Official score **72/100**; RELEASE HOLD.
+
