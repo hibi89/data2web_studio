@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 report consistency hardening
+- Read `operator_copy_retention.py`, `test_operator_copy_retention.py`, and approved zero-cost policy. Found `validate_result` accepted forged contradictory `operator_copy_present_claimed`/due date/manual-disposal flags even while correctly rejecting false sale approval. Hardened report schema consistency (code SHA `0c0a65f78bf6e74910b9fbe54db4bca23dc47c9d`).
+- Added eight forged-report negative cases to `test_operator_copy_retention.py` (test SHA `a5c89151b8d1f102b52c8a6588ecf17dbad9573f`). **Not executed this turn**; exact-SHA CI pending. No customer files touched, no auto-delete.
+- R25 actual accountable custody/disposal owner evidence still missing; R25 remains PENDING. Fixed locked scoring has no 1-point pending item, so official score **72/100**, release HOLD, no invented +1%.
+
 ## 2026-11-14 KST — A07/A26 consent-before-confirmation fix
 - `data2web_desktop.py` single delivery previously opened the final confirmation dialog before validating rights/plaintext/privacy, unlike batch. Added fail-closed consent gate **before** the confirmation dialog; downstream `deliver_reviewed` still independently checks. Code SHA `8fe85d464ae4e2e974c7d3420dc0626370c8e962`.
 - `test_consent_reset_bindings.py` now checks the consent gate precedes the confirmation dialog using AST; also contains headless Tcl callback regressions. Test SHA `10580c4cb6bb5a705985ff5df92b922bca8da280`.
