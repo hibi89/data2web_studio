@@ -26,6 +26,7 @@ on:
       - "shipping_rights_preflight.py"
       - "security_audit_preaudit.py"
       - "test_security_audit_preaudit.py"
+      - "test_path_policy.py"
       - "test_script_hash_csp.py"
       - "browser_p85_probe.py"
       - "browser_single_delivery_probe.py"
