@@ -7,6 +7,12 @@ on:
       - "kmong_preview_screenshot.py"
       - "test_kmong_weekend_demo.py"
       - ".github/workflows/kmong-synthetic-preview.yml"
+      - "data2web.py"
+      - "data2web_append.py"
+      - "data2web_tabular.py"
+      - "path_policy.py"
+      - "receipt_utils.py"
+      - "verify_delivery.py"
       - "data2web_single.py"
       - "verify_customer_folder.py"
       - "delivery.py"
@@ -26,6 +32,8 @@ jobs:
           python-version: "3.11"
       - name: Synthetic-only no-clobber and deterministic package tests
         run: python -m unittest test_kmong_weekend_demo -v
+      - name: R06 real source and output FD identity checks
+        run: python -m unittest test_xlsx_inspection_snapshot test_output_snapshot_security -v
       - name: Make and independently verify artificial demonstration package
         run: python kmong_weekend_demo.py --output ./kmong-preview-synthetic
       - name: Install free Chromium for genuine synthetic UI screenshots
