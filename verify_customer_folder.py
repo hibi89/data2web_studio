@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import stat
 from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
@@ -46,11 +47,25 @@ def _load_json(data, *, max_bytes=256_000):
 def _is_sha(digest):
     return isinstance(digest,str) and len(digest)==64 and all(x in HEX for x in digest)
 
+def _folder_identity(root):
+    """Detect persistent root replacement or member changes during a verify pass.
+
+    An ordinary pathname is not a transaction or immutable snapshot. Compare
+    root identity/metadata at the start and end, and enumerate members twice.
+    This narrows races but cannot defeat an adversary who swaps and restores
+    everything between checks (R06 field acceptance still pending).
+    """
+    assert_no_links(root)
+    info = root.lstat()
+    if not stat.S_ISDIR(info.st_mode):
+        raise ValueError("Customer delivery folder is not a real directory")
+    return (info.st_dev, info.st_ino, info.st_mode,
+            info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
 def verify_customer_folder(destination):
     root=Path(destination)
-    assert_no_links(root)
-    if not root.is_dir():
-        raise ValueError("Customer delivery folder is not a real directory")
+    starting_identity=_folder_identity(root)
     items=list(root.iterdir())
     if len(items)!=3 or {p.name for p in items}!=EXPECTED:
         raise ValueError("Unexpected, missing, or duplicated delivery folder member")
@@ -116,6 +131,19 @@ def verify_customer_folder(destination):
             embedded.get("source_receipts")!=receipt["source_receipts"] or
             len(embedded.get("rows",[]))!=receipt["rows"]):
         raise ValueError("Embedded source evidence differs from customer receipt")
+    # A new unexpected file inserted after the first enumeration must HOLD,
+    # even if the HTML, ZIP and receipt all have matching checksums.
+    if _folder_identity(root) != starting_identity:
+        raise ValueError("Customer folder changed during verification")
+    final_members=list(root.iterdir())
+    if len(final_members)!=3 or {p.name for p in final_members}!=EXPECTED:
+        raise ValueError("Customer folder members changed during verification")
+    for member in final_members:
+        assert_no_links(member)
+        if not member.is_file():
+            raise ValueError("Customer folder member became unsafe")
+    if _folder_identity(root) != starting_identity:
+        raise ValueError("Customer folder changed during final inventory")
     return {
         "verified":True,
         "contract":"DATA2WEB_CUSTOMER_FOLDER_V1",
@@ -144,8 +172,11 @@ def diagnose_customer_folder(destination):
         assert_no_links(root, allow_missing_leaf=True)
         if not root.is_dir():
             return {**base, "reason_code": "MISSING_OR_UNSAFE_DIRECTORY"}
+        starting_identity = _folder_identity(root)
         observed = {p.name for p in root.iterdir()}
         if observed != EXPECTED:
+            if _folder_identity(root) != starting_identity:
+                return {**base, "reason_code": "INTEGRITY_CHECK_FAILED"}
             return {
                 **base,
                 "reason_code": "INCOMPLETE_OR_UNEXPECTED_MEMBERS",
