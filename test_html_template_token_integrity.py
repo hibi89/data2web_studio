@@ -19,7 +19,7 @@ class HtmlTemplateTokenIntegrityTests(unittest.TestCase):
         }
         page = render_html(
             headers, [original], ["id", "title", "category"],
-            "a" * 64, name="Studio __SCRIPT_HASH__"
+            "a" * 64, name="Studio __SCRIPT_HASH__ __PAYLOAD__"
         )
         match = re.search(
             r'<script type="application/json" id="dataset">(.*?)</script>',
@@ -29,8 +29,8 @@ class HtmlTemplateTokenIntegrityTests(unittest.TestCase):
         data = json.loads(match.group(1))
         self.assertEqual(data["columns"], headers)
         self.assertEqual(data["rows"], [original])
-        self.assertIn("<h1>Studio __SCRIPT_HASH__</h1>", page)
-        self.assertIn("<title>Studio __SCRIPT_HASH__ · DATA2WEB</title>", page)
+        self.assertIn("<h1>Studio __SCRIPT_HASH__ __PAYLOAD__</h1>", page)
+        self.assertIn("<title>Studio __SCRIPT_HASH__ __PAYLOAD__ · DATA2WEB</title>", page)
 
     def test_static_script_hash_csp_remains_exact(self):
         page = render_html(
