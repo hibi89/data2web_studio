@@ -27,6 +27,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Use real on-disk CI temp root, not macOS /var symlink
+        run: |
+          mkdir -p "$PWD/.ci-real-temp"
+          chmod 700 "$PWD/.ci-real-temp"
+          echo "TMPDIR=$(cd .ci-real-temp && pwd -P)" >> "$GITHUB_ENV"
+          python -c 'import os,pathlib; p=pathlib.Path(".ci-real-temp").resolve(strict=True); print("TEMP_ROOT_CANONICAL:",p); assert p.is_dir() and not p.is_symlink()'
       - name: Python full synthetic and policy regressions
         run: python -m unittest discover -v
       - name: Offline synthetic customer self-check
