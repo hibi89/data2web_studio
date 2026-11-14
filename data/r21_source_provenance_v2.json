@@ -1,0 +1,41 @@
+{
+  "contract": "DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V2",
+  "source_snapshot_commit": "320aebc23163019f85e1c345857ff4ed3da8147a",
+  "source_files": [
+    {
+      "path": "data2web_web.py",
+      "git_blob_sha1": "65bd8fe16d7b284f553d5185ed369650cc83d82f",
+      "role": "GENERATES_CUSTOMER_HTML_CSS_JS"
+    },
+    {
+      "path": "delivery.py",
+      "git_blob_sha1": "c0013e445f3d4b419314c795d387643abc176f48",
+      "role": "GENERATES_ZIP_MANIFEST_GUIDE"
+    },
+    {
+      "path": "receipt_utils.py",
+      "git_blob_sha1": "137f4086fe08cfe22722186ffc0b47aa30957817",
+      "role": "GENERATES_LOCAL_RECEIPT"
+    },
+    {
+      "path": "data2web_single.py",
+      "git_blob_sha1": "b24e7495f4c43131dcbd986ac7bb75dfd3d979c0",
+      "role": "OWNER_ONLY_DELIVERY_PRODUCER"
+    },
+    {
+      "path": "data2web_append.py",
+      "git_blob_sha1": "92ccab387a61f9546d13bf9c48a97875e84ae740",
+      "role": "OWNER_ONLY_APPEND_PRODUCER"
+    },
+    {
+      "path": "data2web_tabular.py",
+      "git_blob_sha1": "66c2fb8910b1202ae3b0301e8b615158d9a5fac9",
+      "role": "OWNER_ONLY_TABULAR_PARSER"
+    }
+  ],
+  "rights_evidence_complete": false,
+  "third_party_notice_approved": false,
+  "commercial_release_approved": false,
+  "independent_security_audit_completed": false,
+  "score_addition": 0
+}
