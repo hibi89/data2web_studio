@@ -269,6 +269,7 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
             # empty XML string/value is data and must not be dropped as an
             # invisible blank row (a missing mapped ID must then HOLD).
             explicit_values = False
+            explicit_columns = set()
             for cell in node.findall(X + "c"):
                 address = cell.get("r", "")
                 m = CELL.fullmatch(address)
@@ -281,6 +282,7 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 cached_value = cell.find(X + "v")
                 if cell.find(X + "is") is not None or cached_value is not None:
                     explicit_values = True
+                    explicit_columns.add(col)
             if number == header_row:
                 if not cells:
                     raise ValueError("Empty worksheet header")
@@ -293,7 +295,8 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
             elif cells and (explicit_values or any(v != "" for v in cells.values())):
                 if headers is None:
                     raise ValueError("Selected header row does not exist")
-                if any(col >= len(headers) and value for col, value in cells.items()):
+                if any(col >= len(headers) and (value or col in explicit_columns)
+                       for col, value in cells.items()):
                     raise ValueError("Data extends beyond approved headers")
                 rowdata.append({h: cells.get(i, "") for i, h in enumerate(headers)})
                 if len(rowdata) > MAX_ROWS:
