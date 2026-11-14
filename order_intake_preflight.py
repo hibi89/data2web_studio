@@ -91,8 +91,8 @@ def assess(doc):
     kinds = [s["format"] for s in sources]
     if count == 1 and kinds[0] in BASIC_FORMATS and rows <= 1000:
         return result("BASIC_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", policy["skus"][0])
-    if rows <= 5000 and (count == 1 and kinds[0] == "XLSX" or
-                         1 <= count <= 3 and all(k in BASIC_FORMATS for k in kinds)):
+    if rows <= 5000 and ((count == 1 and kinds[0] == "XLSX") or
+                         (1 <= count <= 3 and all(k in BASIC_FORMATS for k in kinds))):
         return result("PRO_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", policy["skus"][1])
     if 2 <= count <= 10 and rows <= 10000:
         return result("BUSINESS_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", policy["skus"][2])
