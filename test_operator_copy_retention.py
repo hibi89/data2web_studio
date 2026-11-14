@@ -178,6 +178,24 @@ class OperatorCopyRetentionTests(unittest.TestCase):
                 write_new_report(target,record)
             self.assertEqual(target.read_bytes(),before)
 
+    def test_cli_invalid_utf8_returns_hold_without_traceback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source=Path(tmp)/"malformed.json"
+            source.write_bytes(bytes((255,254,128)))
+            proc=subprocess.run(
+                [sys.executable,"operator_copy_retention.py",
+                 "--metadata-file",str(source)],
+                cwd=Path(__file__).resolve().parent,
+                encoding="utf-8",capture_output=True,timeout=30,
+            )
+            self.assertEqual(proc.returncode,2,proc.stdout+proc.stderr)
+            self.assertEqual(json.loads(proc.stdout),{
+                "status":"HOLD",
+                "reason_code":"INVALID_LOCAL_RETENTION_METADATA",
+                "sale_approved":False,
+            })
+            self.assertNotIn("Traceback",proc.stderr)
+
     def test_cli_synthetic_no_customer_data_or_auto_deletion(self):
         proc=subprocess.run(
             [sys.executable,"operator_copy_retention.py","--synthetic-self-check"],
