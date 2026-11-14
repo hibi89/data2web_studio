@@ -1,3 +1,9 @@
+## 2026-11-15 KST — A29 직접 호출 위조 회귀 확인
+
+- Exact PR HEAD `8ea6fe8671d18f0de1e6d931d8721f7227d8307e`에서 GitHub Issue #5의 직접 Python 호출 위협 사례를 점검했다. 기존 `test_order_intake_preflight.py`에 direct `assess()` 입력 위조와 저장 보고서 식별자/권리/가격/판매 필드 위조를 거부하는 6개 회귀가 있어 중복 제품 수정은 하지 않았다.
+- 해당 모듈은 Windows/Ubuntu/macOS 각각 24/24 PASS. 전체 회귀는 Windows 525/525, Ubuntu 524 PASS + 1 Windows-only SKIP, macOS 525/525 PASS. [Python/browser #43619959890](https://github.com/hibi89/data2web_studio/actions/runs/43619959890), [macOS #43619959862](https://github.com/hibi89/data2web_studio/actions/runs/43619959862), [CodeQL #43619959861](https://github.com/hibi89/data2web_studio/actions/runs/43619959861), [evidence gate #43619960034](https://github.com/hibi89/data2web_studio/actions/runs/43619960034) all SUCCESS.
+- A29-01 내부 synthetic 재점검과 P00/P03 상태를 최신 PR HEAD에 연결했다. Issue #5는 댓글 0개, 독립 검수자 미확보. 공식 점수 72/100, 증가 0, R29 PENDING, RELEASE HOLD / SALE NO-GO 그대로다.
+
 ## 2026-11-15 KST — Windows source share-deny 보강 및 exact-SHA 재검증
 
 1. **저장소·브랜치:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR #4 Draft/Open/Unmerged, base `feature/p85-ui-crossbrowser-20261113`; `main`은 `0cf4adbfe745c10fdb103db09185ea495fb769aa` 그대로다. 이 기록은 code/test SHA 뒤의 docs-only 갱신이다.

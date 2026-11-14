@@ -83,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Re-read current GitHub source, scorecard and evidence. Latest tested code/test SHA 512af500; official score 72, 22 VERIFIED/11 PENDING."
+      "current_note": "Re-read current GitHub source, scorecard and evidence. Exact current PR HEAD 8ea6fe8671d18f0de1e6d931d8721f7227d8307e rerun completed; score remains 72, 22 VERIFIED/11 PENDING."
     },
     {
       "id": "P01",
@@ -157,7 +157,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Exact-SHA Python/browser #43617898725, macOS #43617898816, CodeQL #43617898719 and gate #43617898943 passed; logs distinguish OS/browser PASS and SKIP."
+      "current_note": "At exact PR HEAD 8ea6fe8671d18f0de1e6d931d8721f7227d8307e: Python/browser #43619959890, macOS #43619959862, CodeQL #43619959861 and gate #43619960034 passed; logs distinguish OS/browser PASS and SKIP."
     },
     {
       "id": "A07-01",
@@ -635,7 +635,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Threat coverage and hardlink/path-swap regressions were rechecked; CodeQL and synthetic checks pass, residual TOCTOU/XLSX/host-evidence limits remain."
+      "current_note": "At exact PR HEAD 8ea6fe8, the six direct assess()/write_new_report() spoof/forgery regressions passed within 24/24 module tests on Windows, Ubuntu and macOS; CodeQL passed. Internal synthetic only; independent R29 audit remains pending."
     },
     {
       "id": "A29-02",
