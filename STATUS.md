@@ -1,3 +1,8 @@
+## 2026-11-14 KST — 652×488 크몽 메인이미지 생성·자동패키지 수용
+- 실 합성 Chromium 화면 2장+크몽 메인 652×488 1장 총3개. 소스 SHA 5afd7726ac3556d2b44d3ae1ba51678cb9e53019, 신규 크기검증 회귀 2개 PASS, 12파일 ZIP, 기존 출력/원본 불변.
+- Win/Ubuntu #43552090456 4/4 SUCCESS Win386 PASS Ubuntu385PASS+1SKIP; 실 시연 #43552090412 SUCCESS, CodeQL #43552090437 SUCCESS, score #43552090619 SUCCESS. PNG 652×488/154940B, ZIP 371191B SHA256 d224f0b5ce6237a951010679fc329e9f6311dc8ab8db9ce2b0e9f780b0fcada9, CRC/전체 SHA PASS. 제품메인 이미지 가이드 https://kmong.com/support/expert-center/posts/752 대응.
+- 문서 docs/KMONG_MAIN_IMAGE_652X488_EVIDENCE_20261114.md. 사용자 13시 한 번만 요청, 폰 그림 검토/PC는 귀가후. [작업중]/RELEASE HOLD/SALE NO-GO, 인정72/100·11 PENDING28, 등록 미완, 유료지출0.
+
 ## 2026-11-14 KST: GitHub-built 11-file weekend Kmong registration kit PASS
 - Added reproducible kmong_registration_kit.py 0KRW stand-alone packaging, requiring real synthetic screenshot SHA evidence, exact 8 fake data rows, independent HTML/ZIP/receipt integrity and seven allowlisted docs; create-only archive; rejects tampered screenshots/customer source, preserves older source and output, verifies package SHA.
 - Exact code SHA a84f018ec2b4994390860b7f2f4488f88c84c1cf. CI #43551045711 Win384PASS Ubuntu383PASS/1SKIP and 4/4 SUCCESS real Chrome/Edge/Chromium; #43551045748 real synthetic screenshot/11-file registration archive SUCCESS; artifact 14096591307; CodeQL #43551045695 SUCCESS, score #43551045958 SUCCESS. Downloaded package ZIP CRC/member sha passed, final direct archive SHA e7bd7818fb380e0f6886f4512e8c2a67e2ddb4af6f88f547c7f0856dbdce6dd3 (214297 bytes; 11 files); ChatGPT download not permanent GitHub/Library upload.

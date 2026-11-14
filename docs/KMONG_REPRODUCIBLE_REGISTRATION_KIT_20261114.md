@@ -1,3 +1,5 @@
+> **LATEST 2026-11-14 KST — 크몽 공식 652×488 메인이미지 포함, 12파일 자동생성:** 이전 11파일 ZIP은 역사 버전임. [자동생성 #43552090412](https://github.com/hibi89/data2web_studio/actions/runs/43552090412) SUCCESS, 원본코드 SHA 5afd7726ac3556d2b44d3ae1ba51678cb9e53019, 직접 내려받은 12파일 ZIP SHA256 d224f0b5ce6237a951010679fc329e9f6311dc8ab8db9ce2b0e9f780b0fcada9, CRC/멤버 SHA PASS, 가상 데이터 PNG 652×488 정확 크기 확인. [근거](docs/KMONG_MAIN_IMAGE_652X488_EVIDENCE_20261114.md). Windows386PASS/Ubuntu385PASS+1SKIP, Chrome/Edge/Chromium/CodeQL/score SUCCESS. *이 데이터는 판매권/실고객 인수/독립감사를 대체하지 않음.* 사용자 최종목표100, 인정72/100·미수용28·크몽 미등록·RELEASE HOLD. 기존 13:00 KST 사용자 요청 한 번만, PC는 귀가 후.
+
 # 2026-11-14 KST — Reproducible synthetic-only Kmong registration archive
 
 ## Purpose and tradeoff
