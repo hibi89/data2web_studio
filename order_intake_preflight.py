@@ -184,7 +184,7 @@ def main(argv=None):
             write_new_report(args.new_report_file, record)
         print(json.dumps(record, ensure_ascii=True, sort_keys=True))
         return 0 if record["status"] == "SCOPE_CANDIDATE_ONLY" else 2
-    except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError, json.JSONDecodeError):
         print(json.dumps({"status": "HOLD_PREORDER", "reason": "INVALID_METADATA",
                           "sale_approved": False}, sort_keys=True))
         return 2
