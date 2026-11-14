@@ -1,3 +1,9 @@
+## 2026-11-14 KST - accelerated Kmong registration preparation
+- Pivoted away from repetitive low-value security test loops toward weekend seller ready-to-copy assets: 10-member verified ChatGPT ZIP DATA2WEB-KMONG-WEEKEND-REGISTRATION-KIT-20261114.zip, SHA256 7b6d2ac2ebeb49840920fdc6c30fb0ca3f2146e047a567dc0f67047e69459be1. Seven copy/paste docs, two genuine synthetic Chromium screenshots and one synthetic demo ZIP; locally ZIP CRC PASS. NOT persisted in GitHub / Library.
+- Docs: docs/KMONG_WEEKEND_REGISTRATION_READY_20261114.md. Kmong official support confirms PC WEB service editing only and upper-category limitations after submission. Existing 13:00 KST owner task automation updated to PC-required and mobile-possible actions.
+- A custom offline dashboard creation service with BASIC 49k/PRO129k/BUSINESS249k internal approved prices; not unsigned EXE resale. Actual site login, seller identity, IP/licensing and customer consent remain owner/external blockers. This is registration pack prepared, NOT platform registered or commercial release.
+- Official user full100 target verified72/100; R01-R33 11 PENDING28, [작업중]/RELEASE HOLD/SALE NO-GO unchanged. No new paid service or code changes in this task.
+
 ## 2026-11-14 KST — R22 strict offline ZIP CSP security, 3-OS validation
 - ZIP verifier now checks CSP meta and inline script SHA-256 Base64 as well as previously validated ZIP hashes/CRC. New 6 adversarial tests PASS. Source SHA 02bd0f6f5920e90511633686866eecf7a9d1c50c, Win/Ubuntu/browser CI run 43548658681 SUCCESS (Win378 PASS, Ubuntu377PASS/1SKIP); preview run 43548658668 SUCCESS; CodeQL 43548658658 SUCCESS; score run 43548658954 SUCCESS.
 - macOS workflow path trigger expanded for ZIP/core security code at SHA a56737ab3690339e00bfef5664639ecd4a41eeb7. macOS run 43548812460 SUCCESS (377PASS/1SKIP + Chromium offline); Win/Linux 43548812433 4/4 SUCCESS, CodeQL 43548812448 SUCCESS, score 43548812656 SUCCESS.
