@@ -30,18 +30,21 @@ DOCS = (
     "docs/KMONG_LOCAL_PREORDER_TRIAGE_20261114.md",
     "docs/R22_ZIP_STRICT_CSP_INTEGRITY_20261114.md",
 )
-SHOTS = ("01-dashboard.png", "02-search-filter.png")
+SHOTS = ("01-dashboard.png", "02-search-filter.png", "03-kmong-main-652x488.png")
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
 MAX_KIT = 32_000_000
 
 
-def _canonical_png(blob):
+def _canonical_png(blob, *, filename=None):
     if len(blob) < 33 or not blob.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError("Missing or invalid synthetic PNG")
     if blob[12:16] != b"IHDR" or blob[8:12] != b"\x00\x00\x00\r":
         raise ValueError("Missing PNG IHDR")
     width, height = struct.unpack(">II", blob[16:24])
-    if not 800 <= width <= 4096 or not 500 <= height <= 4096:
+    if filename == "03-kmong-main-652x488.png":
+        if (width, height) != (652, 488):
+            raise ValueError("Main image must be exactly 652x488 pixels")
+    elif not 800 <= width <= 4096 or not 500 <= height <= 4096:
         raise ValueError("Screenshot has unexpected geometry")
 
 
@@ -87,7 +90,7 @@ def _input_members(preview, source_root):
             or capture.get("js_errors") != 0):
         raise ValueError("Missing real synthetic browser screenshot evidence")
     records = capture.get("screenshots")
-    if (not isinstance(records, list) or len(records) != 2
+    if (not isinstance(records, list) or len(records) != len(SHOTS)
             or [x.get("filename") for x in records if isinstance(x, dict)] != list(SHOTS)):
         raise ValueError("Unexpected synthetic screenshot inventory")
     members = {}
@@ -95,7 +98,7 @@ def _input_members(preview, source_root):
         members[path] = read_bounded_source(source_root / path, max_bytes=256_000)
     for filename, item in zip(SHOTS, records):
         data = read_bounded_source(preview / "screenshots" / filename, max_bytes=8_000_000)
-        _canonical_png(data)
+        _canonical_png(data, filename=filename)
         if (item.get("sha256") != hashlib.sha256(data).hexdigest()
                 or type(item.get("bytes")) is not int or item["bytes"] != len(data)):
             raise ValueError("Screenshot SHA/length differs from browser evidence")
@@ -103,7 +106,7 @@ def _input_members(preview, source_root):
     members["synthetic-demo-delivery.zip"] = read_bounded_source(
         preview / LEAF / "delivery.zip", max_bytes=24_000_000
     )
-    if len(members) != 10:
+    if len(members) != 11:
         raise AssertionError("Unexpected registration kit inventory")
     return members
 
@@ -113,7 +116,7 @@ def verify_kit(path):
     with ZipFile(io.BytesIO(raw), "r") as archive:
         members = archive.infolist()
         names = [x.filename for x in members]
-        if (len(names) != 11 or len(names) != len(set(names))
+        if (len(names) != 12 or len(names) != len(set(names))
                 or archive.testzip() is not None
                 or any(x.compress_type != ZIP_STORED for x in members)
                 or any(x.is_dir() or x.flag_bits or x.extra or x.comment for x in members)):
@@ -137,9 +140,9 @@ def verify_kit(path):
             if digest != hashlib.sha256(archive.read(name)).hexdigest():
                 raise ValueError("Registration member hash mismatch")
         for name in SHOTS:
-            _canonical_png(archive.read("screenshots/" + name))
+            _canonical_png(archive.read("screenshots/" + name), filename=name)
     return {"verified": True, "contract": CONTRACT, "sha256": hashlib.sha256(raw).hexdigest(),
-            "member_count": 11, "sale_approved": False, "customer_data_used": False}
+            "member_count": 12, "sale_approved": False, "customer_data_used": False}
 
 
 def create_registration_kit(output, preview, *, source_sha, source_root=ROOT):
@@ -177,7 +180,7 @@ def create_registration_kit(output, preview, *, source_sha, source_root=ROOT):
                 info.external_attr = 0o100600 << 16
                 archive.writestr(info, data)
     checked = verify_kit(target)
-    if checked["member_count"] != 11:
+    if checked["member_count"] != 12:
         raise AssertionError("Registration pack was not verified")
     return checked
 

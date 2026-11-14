@@ -11,9 +11,8 @@ from kmong_weekend_demo import build_demo, SOURCE
 from kmong_registration_kit import create_registration_kit, verify_kit, SHOTS
 
 
-def fake_fixture_png():
+def fake_fixture_png(width=1440, height=900):
     # This is a valid all-white PNG UNIT-TEST fixture, not a browser screenshot.
-    width, height = 1440, 900
     uncompressed = (b"\x00" + b"\xff\xff\xff" * width) * height
     def chunk(tag, payload):
         return (struct.pack(">I", len(payload)) + tag + payload +
@@ -40,7 +39,7 @@ class RegistrationKitTests(unittest.TestCase):
                     "offline_http_requests": 0, "js_errors": 0,
                     "sale_approved": False, "screenshots": []}
         for name in SHOTS:
-            raw = fake_fixture_png()
+            raw = fake_fixture_png(652, 488) if name == SHOTS[-1] else fake_fixture_png()
             (shots / name).write_bytes(raw)
             evidence["screenshots"].append(
                 {"filename": name, "bytes": len(raw),
@@ -56,7 +55,7 @@ class RegistrationKitTests(unittest.TestCase):
     def test_valid_synthetic_fixture_package_and_create_only(self):
         self.prepare_fake_capture()
         result = create_registration_kit(self.zip, self.preview, source_sha="a"*40)
-        self.assertEqual(result["member_count"], 11)
+        self.assertEqual(result["member_count"], 12)
         self.assertTrue(result["verified"])
         self.assertFalse(result["sale_approved"])
         self.assertFalse(result["customer_data_used"])
@@ -97,6 +96,33 @@ class RegistrationKitTests(unittest.TestCase):
         b = create_registration_kit(second, self.preview, source_sha="a"*40)
         self.assertEqual(a["sha256"], b["sha256"])
         self.assertEqual(first.read_bytes(), second.read_bytes())
+
+
+    def test_main_image_wrong_dimensions_refuses_even_with_matching_hash(self):
+        evidence = self.prepare_fake_capture()
+        wrong = fake_fixture_png(1440, 900)
+        cover = self.preview / "screenshots" / SHOTS[-1]
+        cover.write_bytes(wrong)
+        evidence["screenshots"][-1]["sha256"] = hashlib.sha256(wrong).hexdigest()
+        evidence["screenshots"][-1]["bytes"] = len(wrong)
+        (self.preview / "screenshots" / "CAPTURE_EVIDENCE.json").write_text(
+            json.dumps(evidence), "utf-8"
+        )
+        with self.assertRaisesRegex(ValueError, "652x488"):
+            create_registration_kit(self.zip, self.preview, source_sha="a"*40)
+        self.assertFalse(self.zip.exists())
+
+    def test_registration_archive_has_real_main_image_shape(self):
+        import io
+        from zipfile import ZipFile
+        self.prepare_fake_capture()
+        report = create_registration_kit(self.zip, self.preview, source_sha="a"*40)
+        self.assertEqual(report["member_count"], 12)
+        with ZipFile(io.BytesIO(self.zip.read_bytes())) as z:
+            cover = z.read("screenshots/03-kmong-main-652x488.png")
+            self.assertEqual(struct.unpack(">II", cover[16:24]), (652, 488))
+            self.assertFalse(json.loads(z.read("KIT_EVIDENCE.json"))["sale_approved"])
+
 
 
 if __name__ == "__main__":

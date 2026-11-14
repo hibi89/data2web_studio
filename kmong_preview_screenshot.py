@@ -6,6 +6,7 @@ Playwright is a test-only dependency installed by the free public GitHub workflo
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 from pathlib import Path
@@ -63,6 +64,48 @@ def capture(root):
             two = screenshots / "02-search-filter.png"
             page.screenshot(path=str(two), full_page=False)
             paths.append(two)
+            # Official Kmong 4:3 cover at 652x488, all authored from the
+            # proven synthetic local screenshot. No third-party graphic or
+            # external request, no price or unverified ranking on the cover.
+            preview_data = base64.b64encode(one.read_bytes()).decode("ascii")
+            cover_html = ("""<!doctype html><html lang="ko"><meta charset="utf-8">
+            <style>
+              *{box-sizing:border-box}
+              html,body{margin:0;width:652px;height:488px;overflow:hidden}
+              body{font-family:'Noto Sans CJK KR','NanumGothic',sans-serif;
+                   color:#f7f9fd;background:linear-gradient(120deg,#0a213a,#143b60)}
+              .shell{position:absolute;inset:0;padding:51px 52px;
+                     background:radial-gradient(circle at 93% 8%,#1e5981 0,transparent 48%)}
+              .eyebrow{font-size:14px;letter-spacing:1px;font-weight:700;color:#84d9e3}
+              #headline{font-size:32px;line-height:1.32;font-weight:800;
+                        margin:12px 0 10px;letter-spacing:-0.6px}
+              .desc{font-size:16px;line-height:1.4;color:#c2dcea}
+              .screen{margin-top:20px;height:199px;border:2px solid #779cb9;
+                      border-radius:14px;overflow:hidden;background:#f5f7fa;
+                      box-shadow:0 10px 35px #03132199}
+              .screen img{width:100%;height:100%;object-fit:cover;object-position:top left}
+              .note{position:absolute;right:53px;bottom:52px;font-size:11px;
+                    background:#0d2439db;border-radius:5px;padding:5px 9px}
+            </style><body><main class="shell">
+              <div class="eyebrow">DATA2WEB · CUSTOM DASHBOARD</div>
+              <h1 id="headline">엑셀·CSV를<br>오프라인 웹 대시보드로</h1>
+              <div class="desc">검색 · 분류 · 정렬 · 요약</div>
+              <div class="screen"><img alt="가상 데이터 대시보드" src="data:image/png;base64,"""+
+              preview_data+""""></div><div class="note">합성 데이터 시연</div>
+              </main></body></html>""")
+            cover = browser.new_page(viewport={"width": 652, "height": 488},
+                                     device_scale_factor=1)
+            try:
+                cover.on("pageerror", lambda err: errors.append(str(err)))
+                cover.on("request", lambda req: remote_requests.append(req.url)
+                         if req.url.startswith(("http://", "https://")) else None)
+                cover.set_content(cover_html, wait_until="load")
+                expect(cover.locator("#headline")).to_contain_text("오프라인 웹 대시보드로")
+                three = screenshots / "03-kmong-main-652x488.png"
+                cover.screenshot(path=str(three), full_page=False)
+                paths.append(three)
+            finally:
+                cover.close()
         finally:
             browser.close()
     if errors or remote_requests:
