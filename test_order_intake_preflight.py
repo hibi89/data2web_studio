@@ -122,6 +122,71 @@ class PreorderTests(unittest.TestCase):
         self.assertFalse(json.loads(p.stdout)["sale_approved"])
 
 
+
+    def test_saved_report_rejects_identifiers_and_unapproved_fields(self):
+        for key, value in (
+            ("customer_email", "private@example.invalid"),
+            ("file_path", "secret.csv"),
+            ("customer_name", "Synthetic Buyer"),
+            ("account_number", "123456"),
+        ):
+            with self.subTest(key=key):
+                record = check(synthetic_example())
+                record[key] = value
+                with tempfile.TemporaryDirectory() as tmp:
+                    target = Path(tmp) / "must-not-exist.json"
+                    with self.assertRaises(ValueError):
+                        write_new_report(target, record)
+                    self.assertFalse(target.exists())
+
+    def test_saved_report_rejects_fake_release_and_rights(self):
+        for key, value in (
+            ("sale_approved", True),
+            ("customer_rights_independently_verified", True),
+            ("real_customer_file_read", True),
+            ("order_accepted", True),
+            ("release", "SALE_GO"),
+            ("new_cash_spend_krw", 1),
+        ):
+            with self.subTest(key=key):
+                record = check(synthetic_example())
+                record[key] = value
+                with tempfile.TemporaryDirectory() as tmp:
+                    target = Path(tmp) / "forbidden.json"
+                    with self.assertRaises(ValueError):
+                        write_new_report(target, record)
+                    self.assertFalse(target.exists())
+
+    def test_saved_report_rejects_forged_prices_and_free_text(self):
+        for key, value in (
+            ("suggested_price_krw", 1000),
+            ("sku", "ENTERPRISE"),
+            ("reason", "CONTACT_CUSTOMER_BY_EMAIL"),
+            ("status", "APPROVED"),
+        ):
+            with self.subTest(key=key):
+                record = check(synthetic_example())
+                record[key] = value
+                with tempfile.TemporaryDirectory() as tmp:
+                    target = Path(tmp) / "unsafe.json"
+                    with self.assertRaises(ValueError):
+                        write_new_report(target, record)
+                    self.assertFalse(target.exists())
+
+    def test_hold_report_still_create_only_and_zero_data(self):
+        doc = synthetic_example()
+        doc["rights_claimed"] = False
+        record = assess(doc)
+        self.assertEqual(record["status"], "HOLD_PREORDER")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "hold.json"
+            write_new_report(target, record)
+            raw = target.read_text("utf-8")
+            self.assertEqual(json.loads(raw), record)
+            self.assertNotIn("@", raw)
+            with self.assertRaises(FileExistsError):
+                write_new_report(target, record)
+
     def test_direct_assess_rechecks_all_booleans(self):
         # Previously Python's truthy "false"/"true" values could be
         # mistaken for a valid right or privacy declaration.

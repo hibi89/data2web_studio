@@ -108,7 +108,58 @@ def synthetic_example():
         "mapping_3_distinct_columns": True, "same_headers": True,
     }
 
+# This output format is intentionally closed. An embedded email, path,
+# free-text reason or forged approval is never permitted in saved reports.
+CANDIDATE_REASONS = {
+    "BASIC": ("BASIC_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", 49000),
+    "PRO": ("PRO_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", 129000),
+    "BUSINESS": ("BUSINESS_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", 249000),
+}
+HOLD_REASONS = frozenset({
+    "PERSONAL_OR_CONFIDENTIAL_HOLD", "RIGHTS_OR_PLAINTEXT_ACK_MISSING",
+    "THREE_COLUMN_MAPPING_NOT_CONFIRMED", "SAME_HEADERS_NOT_CONFIRMED",
+    "TOO_MANY_SOURCES", "SOURCE_EXCEEDS_TECHNICAL_LIMIT",
+    "NO_APPROVED_PACKAGE_MATCH",
+})
+REPORT_FIELDS = frozenset((
+    "contract", "status", "reason", "sku", "suggested_price_krw",
+    "real_customer_file_read", "customer_rights_independently_verified",
+    "order_accepted", "sale_approved", "release", "new_cash_spend_krw",
+))
+
+
+def validate_report(record):
+    if not isinstance(record, dict) or set(record) != REPORT_FIELDS:
+        raise ValueError("Only anonymous exact-schema preorder reports can be saved")
+    if record["contract"] != "DATA2WEB_ANONYMOUS_PREORDER_RESULT_V1":
+        raise ValueError("Unknown report contract")
+    for field in ("real_customer_file_read",
+                  "customer_rights_independently_verified",
+                  "order_accepted", "sale_approved"):
+        if record[field] is not False:
+            raise ValueError("Customer source or approval cannot be certified")
+    if record["release"] != "RELEASE_HOLD_SALE_NO_GO" or (
+            type(record["new_cash_spend_krw"]) is not int or
+            record["new_cash_spend_krw"] != 0):
+        raise ValueError("Report cannot spend or authorize sale")
+    if record["status"] == "SCOPE_CANDIDATE_ONLY":
+        expected = CANDIDATE_REASONS.get(record["sku"])
+        if expected is None or (
+                record["reason"], record["suggested_price_krw"]) != expected or (
+                type(record["suggested_price_krw"]) is not int):
+            raise ValueError("Unapproved candidate reason or price")
+    elif record["status"] == "HOLD_PREORDER":
+        if (record["reason"] not in HOLD_REASONS or
+                record["sku"] is not None or
+                record["suggested_price_krw"] is not None):
+            raise ValueError("Unapproved HOLD reason or nonempty candidate")
+    else:
+        raise ValueError("Only HOLD and unapproved scope candidate statuses exist")
+    return record
+
+
 def write_new_report(path, record):
+    validate_report(record)
     target = Path(path)
     assert_no_links(target, allow_missing_leaf=True)
     if target.is_symlink() or target.exists() or not target.parent.is_dir():
