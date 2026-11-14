@@ -1,3 +1,15 @@
+## 2026-11-15 KST — A-scope inventory cross-check at `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+The current Git tree and package/verifier code were rechecked at this exact source SHA. The six source blob IDs and pin comparison are recorded in [R21 source provenance evidence](R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md): two source files match the historic pins and four drift, with the pin check still fail-closed.
+
+The current A contract is:
+- Folder: `index.html`, `delivery.zip`, `receipt.json`.
+- ZIP: `index.html`, `manifest.json`, `README_KO.txt`.
+- HTML CSS/JS are self-contained in `data2web_web.py`; hosted Chromium/Chrome/Edge flows at this SHA report `network0`.
+- Owner EXE and bundled Python/Tcl/Tk/PyInstaller, read-only upstream golden source, and Playwright/pypdf CI dependencies remain excluded from A delivery.
+
+Hosted Windows and Ubuntu folder, single-delivery, receipt, and create-only tests pass at this SHA. The combined synthetic rights preflight cannot finish because R21 producer provenance rejects the four drifted blobs. All four shipped artifact rights states remain pending; vendor/NOTICE completion, owner rights confirmation, and customer data rights remain unresolved. This is A21-01 technical inventory evidence only; A21-02/03 and R21 acceptance stay blocked.
+
 # DATA2WEB Studio — 배포 자산·제3자 사용권 조사표 (R21/R33 준비)
 
 **2026-11-14 KST GitHub 소스 조사 범위:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113` HEAD 기준, 직접 조회한 파일 `data2web_web.py`, `data2web_tabular.py`, `delivery.py`, `package_windows_bundle.py`, `upstream_runtime_golden.py`, `.github/workflows/python-tests.yml`, `docs/ORIGIN_AND_LICENSE.md`. 외부 권리자 직접 확인/법률감정은 **미완료**.
