@@ -1,3 +1,12 @@
+## 2026-11-15 KST — GPT-6 직접 복구: 기존 v1 보존 / 현재 v2 출처 핀 적용
+
+- 기준 GitHub producer code SHA: `320aebc23163019f85e1c345857ff4ed3da8147a`; 신규 source pin/test commit: `968d031f373054974c1bdae585dd61d12086ddf9`. 해당 두 커밋 사이에 6개 생산자 소스의 추가 변경은 없으며 GitHub `fetch_file`의 현행 blob IDs를 재조회했음.
+- **기존 역사적 기준은 그대로 보존**: `data/r21_source_provenance_v1.json` Git blob `11796f9174fec88e29335d5f19bfe3038636787a`, 원래 snapshot `0219a10c03cab826220a78af128cffdae995ac9f`. 아래 DRIFT 표는 **기존 v1 기준 비교**라는 의미로만 유지.
+- **새로운 기술 기준**: `data/r21_source_provenance_v2.json` / `DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V2`, 소스 스냅샷 `320aebc23163019f85e1c345857ff4ed3da8147a`. 현재 6개 Git blob 식별자가 v2의 각 행과 일치함. 새 SHA는 `delivery.py=c0013e445f3d4b419314c795d387643abc176f48`, `receipt_utils.py=137f4086fe08cfe22722186ffc0b47aa30957817`, `data2web_single.py=b24e7495f4c43131dcbd986ac7bb75dfd3d979c0`, `data2web_append.py=92ccab387a61f9546d13bf9c48a97875e84ae740`. 나머지 두 생산자는 기존 SHA 그대로.
+- `r21_source_provenance.py`의 활성 레지스트리/계약을 v2로 교체하고 `test_r21_source_provenance.py`에 역사적 v1 불변과 현재 v2 바이트, 권리 HOLD, 변조 탐지 검증을 추가함. 네 파일의 실제 기술 변경은 `92dca182`의 directory-handle anchored create-only 경로 개선임. 이 기록은 **기술적 Git provenance 재고정**이며 법적 저작권/재배포 권리 확인이 아님.
+- **CI 결과:** Push 기반 `.github/workflows/python-tests.yml` 트리거 존재 확인. 연결된 PR-filtered workflow lookup 및 legacy combined status는 새 SHA 결과를 반환하지 않아, 신규 GitHub Actions **성공/실패 미검증**. 이전 실패 #43644268104는 구 SHA 결과임. 0원·외부 데이터 전송 없음.
+- `rights_evidence_complete=false`, `third_party_notice_approved=false`, `commercial_release_approved=false`, `independent_security_audit_completed=false`, `score_addition=0` 유지. 고객/권리자 확인과 외부 R29 감사 없이는 공식 72/100 및 RELEASE HOLD/SALE NO-GO 변경 금지.
+
 ## 2026-11-15 KST — GitHub source-history map for A21-02 (no rights decision)
 
 At the tested tree `320aebc23163019f85e1c345857ff4ed3da8147a`, all GitHub path histories for these six producer files show commit-author metadata `hibi89` and GitHub account `hibi89`. Earliest path commits and latest path commits are listed below. GitHub commit metadata documents repository history; it does not establish legal authorship, coauthor consent, work-for-hire status, or redistribution rights.
