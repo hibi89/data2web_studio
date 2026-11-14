@@ -79,6 +79,9 @@ class InterruptedCustomerDelivery(unittest.TestCase):
                     stream.write(data[:40])
                     stream.flush()
                     raise OSError("INJECTED_HTML_DISK_INTERRUPTION")
+
+                def close(self):
+                    stream.close()
             return PartialWriter()
         return open_partial
 
