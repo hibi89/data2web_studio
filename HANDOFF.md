@@ -1,3 +1,15 @@
+## 2026-11-14 22:44 KST — Codex Luna Max GitHub-only M85 실행 인수인계 (10항)
+1. **목표/정본/기술:** DATA2WEB Studio A 오프라인 CSV·JSON·XLSX·TSV→HTML+ZIP+receipt, 사용자 최종설계 R01–R33 전체 100점. 이번 실행은 **72→85점**에 한정. `REQUIREMENTS.md`, `docs/FINAL_DESIGN.md`, 잠금 `data/final_blueprint_scorecard_v1.json`이 정본.
+2. **완료/결정:** [Codex GPT-6 Luna Max · GitHub-only 72→85 실행 공시](docs/CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_EXECUTION_20261114.md), [34개 작업 JSON](data/codex_gpt6_luna_max_m85_github_only_tasks_v1.json) 신규 GitHub 공시. 기존 50작업/점수표 보존, PREP4+M85 30=34개 실행 작업을 기존 ID·선행조건·수용/증거로 매핑. 담당 `INSTANT`→Codex GPT-6 Luna Max(이 배치 한정), OWNER/EXTERNAL 비대체. 문서와 기계 JSON readback·ID/의존성 대조 완료. **코드 변경 없음**.
+3. **테스트:** 이번 회차 docs-only, 새 Python/브라우저/CI 테스트 **0 실행**. 이전 검증 코드 SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7` Windows507/507 PASS, Ubuntu506 PASS+1 SKIP, Chrome/Edge/Chromium 등 성공 기록. 최근 R25/동의 변경 exact SHA CI **미확인**. 다음 P03에서 hosted Actions로 검증.
+4. **상태/차단:** 공식 **72/100**(33개 중 VERIFIED22/PENDING11), 목표 85까지 +13. R07/R21/R25/R26/R29는 각각 2/4/2/2/3 전부 PENDING. 실제 사용자/권리자 증거와 독립 보안감사 없이는 BLOCKED_OWNER/EXTERNAL; `[작업중]`, RELEASE HOLD/SALE NO-GO.
+5. **문제/대안:** 정책·합성 테스트는 실고객 권리/동의/법정 준수/실사본 파기/R29 외부 독립 검증의 대체물이 아니다. R25 운영자 지정/7개 정책 승인+합성 삭제 성공 이미 기록됨(반복 승인 요청 금지); 실제 인수 증거 없음. GitHub-only 한계에서는 기술 준비를 최대 수행하고 미달 점수 그대로 둔다. 실패 시 원인→최소수정 1회 재시도→무진전이면 병렬 작업으로 피벗.
+6. **저장소/브랜치/커밋:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR #4 Draft/Open/unmerged; 문서 시작 전 HEAD `1c582db78fb3ac91f37ddbab27b18124c08a5419`, JSON 공시 `c449d6a721e853dfb806cd44ddade85f2e336353`, 계획 공시 `66074fbebb6ce9d2fe579bbb3e2e07330514f93e`. 최종 문서 갱신 이후 최신 HEAD 반드시 GitHub에서 재조회. 원본 `main` 및 고정 배점 변경 금지.
+7. **실행 환경/Production:** 사용자 로컬 사용 금지. 기존 GitHub Actions hosted Windows/Ubuntu, Chrome/Edge/Chromium `file://` 회귀와 CodeQL만, 새 유료 도구/서버/계정권한 없음. 오프라인 납품형, Production/Vercel **미적용**. Python 명령은 GitHub Actions 내부에서만 실행.
+8. **원본/백업/보안:** 원본 REA_Web/기존 제품 코드·고객 결과물, 고객 데이터·계정 시크릿/권한/원본 경로 변경 없음. Git 이전 부모 커밋으로 복구 가능. 새 파일은 계획 MD/JSON만이며 고객자료 업로드·자동 삭제·LICENSE 가짜 생성·force push 금지.
+9. **다음 작업 우선순위/승인:** P00~P02 readback 최소검증→P03 최신 CI→A07-03/A25-01/A26-02 미실행 회귀→A21-01/02 권리 자료 대조→A29-01/02 독립감사 준비→OWNER/EXTERNAL 게이트 조건부. 실제 외부 검사·데이터 이전·판매·LICENSE/NOTICE 법적 결정은 별도 실제 증거/승인이 필요. G85는 5요구 전체 수용+정확 SHA CI 때만 승인.
+10. **시각/확인범위:** 2026-11-14 22:44 KST 기준 인수인계. 문서 및 JSON GitHub readback, 작업 수/원본 ID/의존성 및 scorecard 72 검증. 이번 실행 코드는 미변경, 새 CI 없음. PR/main 및 새 HEAD는 최종 재조회로 판단.
+
 ## 2026-11-14 KST — R25 max-UTC report validator hardening
 - Found `validate_result` computed `reviewed + timedelta(days=7)`, which raises `OverflowError` for canonical year-9999 review times even though report parsing itself accepts those dates. Changed to duration comparison `due - reviewed > timedelta(days=7)`, avoiding arithmetic overflow while retaining fail-closed deadline bounds. Code SHA `80c69f643ae7a39f08c22df27797972cb3e00793`.
 - Added max-UTC report validation regression (test SHA `61329ec8311fe51a1b16c886932251ec97bfc1de`). CI deferred at owner's request; **tests not executed**. No claim of PASS.
