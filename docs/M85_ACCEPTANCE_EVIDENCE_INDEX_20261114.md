@@ -1,3 +1,7 @@
+## 2026-11-15 KST — A21-01 technical inventory reconciliation at `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+GitHub tree hashes at this exact SHA show two of six historic R21 pins match and four drift. The source table, package/verifier reconciliation, and test limitation are documented in [R21 source provenance evidence](https://github.com/hibi89/data2web_studio/blob/320aebc23163019f85e1c345857ff4ed3da8147a/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). Current source and independent verifier agree on the three folder members and three ZIP members. Hosted Windows/Ubuntu folder, delivery, receipt, and create-only regressions passed; the integrated rights preflight remains blocked at the fail-closed R21 source gate. No pins or rights claims were changed.
+
 ## 2026-11-15 KST — exact SHA `320aebc23163019f85e1c345857ff4ed3da8147a`
 
 - Windows native preview output-path fix is covered by [native preview #43644268111](https://github.com/hibi89/data2web_studio/actions/runs/43644268111) PASS. The synthetic manifest confirms the native Tk window appeared, customer PC is unverified, and sale is not approved. GPT-6 High source review found no actionable issue.
