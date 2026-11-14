@@ -42,7 +42,7 @@ def main():
         # Physical blank CSV lines are legal and ignored by the backend.
         changed.write_text('\nid,title,category,amount,notes\nX1,"Updated row",A,7,ok\n\nX2,"<script>alert(1)</script>",B,11,safe\n\n',encoding="utf-8")
         uncategorized=root/"uncategorized.csv"
-        uncategorized.write_text('id,title,category,amount,notes\\nZ1,Uncategorized,,5,blank\\nZ2,Classified,B,7,ok\\n',encoding="utf-8")
+        uncategorized.write_text('id,title,category,amount,notes\nZ1,Uncategorized,,5,blank\nZ2,Classified,B,7,ok\n',encoding="utf-8")
         precise=root/"precise_decimals.csv"
         precise.write_text(
             "id,title,category,amount,notes\n" +
