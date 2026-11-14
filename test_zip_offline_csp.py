@@ -6,8 +6,10 @@ or publisher/source authenticity and not an independent human security audit.
 from __future__ import annotations
 import hashlib
 import json
+import struct
 import tempfile
 import unittest
+import warnings
 from pathlib import Path
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
@@ -52,6 +54,34 @@ class ZipOfflineCsp(unittest.TestCase):
     def test_valid_exact_offline_csp_and_delivery_verified(self):
         self.assertTrue(verify_zip(self.archive)["verified"])
         self.assertIn(b"script-src 'sha256-",self.members["index.html"])
+
+    def test_zip_crc_corruption_is_rejected(self):
+        output=self.root/"crc-corrupted.zip"
+        raw=bytearray(self.archive.read_bytes())
+        with ZipFile(self.archive,"r") as archive:
+            member=archive.getinfo("index.html")
+            self.assertEqual(member.compress_type,ZIP_STORED)
+            name_length,extra_length=struct.unpack_from(
+                "<HH",raw,member.header_offset+26
+            )
+        data_offset=member.header_offset+30+name_length+extra_length
+        raw[data_offset] ^= 1
+        output.write_bytes(raw)
+        with self.assertRaisesRegex(ValueError,"ZIP CRC failure"):
+            verify_zip(output)
+
+    def test_duplicate_zip_member_name_is_rejected(self):
+        output=self.root/"duplicate-member.zip"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore",UserWarning)
+            with ZipFile(output,"w",compression=ZIP_STORED,allowZip64=False) as archive:
+                for name in ("index.html","manifest.json","README_KO.txt","index.html"):
+                    info=ZipInfo(name,date_time=(1980,1,1,0,0,0))
+                    info.compress_type=ZIP_STORED
+                    info.external_attr=0o100600<<16
+                    archive.writestr(info,self.members[name])
+        with self.assertRaisesRegex(ValueError,"duplicated or unsafe ZIP members"):
+            verify_zip(output)
 
     def test_tampered_network_policy_with_recomputed_manifest_is_rejected(self):
         html=self.members["index.html"].replace(
