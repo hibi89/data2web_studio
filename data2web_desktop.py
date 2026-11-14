@@ -278,7 +278,8 @@ def desktop_main():
 
     for var in (source,sheet,header,cached):
         var.trace_add("write",lambda *_:reset_review())
-    for var in (id_key,title_key,category_key):
+    for var in (id_key,title_key,category_key,parent,folder):
+        # Destination changes may change the recipient or delivery scope.
         var.trace_add("write",reset_consent)
 
     def choose_source():
@@ -379,7 +380,8 @@ def desktop_main():
             batch_plaintext.set(False)
             batch_privacy.set("")
 
-        for variable in (batch_id,batch_title,batch_category):
+        for variable in (batch_id,batch_title,batch_category,batch_parent,batch_leaf):
+            # Never carry a previous recipient/scope approval to a new folder.
             variable.trace_add("write",clear_batch_consent)
 
         def clear_batch_review():
