@@ -1,3 +1,9 @@
+## 2026-11-14 KST — real buyer-device synthetic REQUEST prepared
+- Created kmong_independent_buyer_request.py, test_kmong_independent_buyer_request.py, updated existing synthetic GitHub workflow. 7-file create-only ZIP with only 8 fictional records and verified HTML/delivery.zip/receipt, Korean OS/browser test instructions and a blank NOT_RUN/FALSE review template. Independent human action is NOT completed.
+- Exact source SHA de9d629087407f16364cee35e0d7a645fe797815. Win/Ubuntu/browser #43553284509 4/4 SUCCESS Win392PASS Ubuntu391PASS/1SKIP; preview + third reviewer test REQUEST artifact #43553284548 SUCCESS; CodeQL #43553284624 SUCCESS; frozen full score gate #43553284865 SUCCESS.
+- Artifact 14096768471 unwrapped as DATA2WEB-INDEPENDENT-BUYER-TEST-REQUEST-20261114.zip (46739 bytes SHA256 a33b35e551e1329b5d232e051992d46948e2da52331ab3841e3fcca7462438ce), 7 unique members ZIP CRC/all SHA and false approval flags verified. docs/R23_R30_INDEPENDENT_BUYER_TEST_REQUEST_20261114.md.
+- R23/R30 external buyer test STILL NOT RUN; R29 independent human security audit NOT DONE; IP, client rights, actual seller listing blocked. Original user final goal100, official 72/100 11 PENDING28, [작업중], RELEASE HOLD/SALE NO-GO. Zero cash. Existing 13:00 batch only; PC after 5+h absence.
+
 ## 2026-11-14 KST — 652×488 크몽 메인이미지 생성·자동패키지 수용
 - 실 합성 Chromium 화면 2장+크몽 메인 652×488 1장 총3개. 소스 SHA 5afd7726ac3556d2b44d3ae1ba51678cb9e53019, 신규 크기검증 회귀 2개 PASS, 12파일 ZIP, 기존 출력/원본 불변.
 - Win/Ubuntu #43552090456 4/4 SUCCESS Win386 PASS Ubuntu385PASS+1SKIP; 실 시연 #43552090412 SUCCESS, CodeQL #43552090437 SUCCESS, score #43552090619 SUCCESS. PNG 652×488/154940B, ZIP 371191B SHA256 d224f0b5ce6237a951010679fc329e9f6311dc8ab8db9ce2b0e9f780b0fcada9, CRC/전체 SHA PASS. 제품메인 이미지 가이드 https://kmong.com/support/expert-center/posts/752 대응.

@@ -1,3 +1,15 @@
+## HANDOFF 2026-11-14 KST — external buyer real-device test REQUEST
+1. Goal/tech: DATA2WEB final R01–R33 100/100, existing certified72/100, zero cash, A results-only offline HTML/ZIP/receipt service, Python3.11 stdlib.
+2. Done: reproducible create-only 7-file synthetic reviewer test REQUEST, fake eight-row source HTML/ZIP/receipt, Korean instructions, blank NOT_RUN OS/browser form. Six new negative/deterministic tests. No human acceptance fabricated or source/customer data transmitted.
+3. Exact feature SHA de9d629087407f16364cee35e0d7a645fe797815; Win/Linux/browser CI #43553284509 4/4 SUCCESS Windows392PASS Ubuntu391PASS/1SKIP; synthetic artifact #43553284548 SUCCESS artifact14096768471; CodeQL #43553284624 and score #43553284865 SUCCESS. Downloaded 46,739B file SHA256 a33b35e551e1329b5d232e051992d46948e2da52331ab3841e3fcca7462438ce, ZIP7 CRC/all member SHA/blank form verified.
+4. Status: official 22 VERIFIED72, 11 PENDING28 of whole 100, independent R23/R30 buyer run and human R29 security audit not done, owner IP/NOTICE/client rights and actual marketplace sale not approved. [작업중] RELEASE HOLD/SALE NO-GO.
+5. Decision and limitations: repeated author CI cannot earn outside independent evidence, built a ready-to-share synthetic package. Does not certify OS, reviewer identity or IP; outside person must actually run and submit raw factual proof under agreed authorization.
+6. Repo hibi89/data2web_studio branch feature/final-blueprint-p85-evidence-20261113, code SHA de9d629087407f16364cee35e0d7a645fe797815. New kmong_independent_buyer_request.py, test_kmong_independent_buyer_request.py, docs/R23_R30_INDEPENDENT_BUYER_TEST_REQUEST_20261114.md and workflow. HEAD after this docs-only commit separate.
+7. Environment: Python 3.11 stdlib free public standard GitHub Actions; offline file://; no Vercel production, Kmong listing URL uncreated.
+8. Source/backups/security: original/main/REA_Web untouched, synthetic records only, no credentials/real customer data, no additional paid services, GitHub artifacts 7-day ephemeral, chat ZIP requires owner local download.
+9. Next: 13:00 KST existing single enabled task Automation_fb2b044b906c8191a2b2adbf69add50e for owner phone-only rights/expert setup and PC-only marketplace form after 5+h excursion. Independent R29 issue5 still separate. Reviewers/third-party scope subject to owner approval, no repeat Win CI or SKU confirmation request.
+10. Updated 2026-11-14 KST, tested SHA and exact CI evidence above. This docs SHA must be rechecked. Full100 and sale GO unverified.
+
 ## HANDOFF 2026-11-14 KST — official 652×488 Kmong main-image requirement
 1. Goal: full user R01–33 100/100, weekend single A offline result-production service, 0KRW new spending.
 2. Done: create 652×488 blue main image directly from 8-row synthetic real Chromium dashboard, ~52px text margin and no price/external contacts/false ranking. 7 registration docs+3 screenshot PNG+synthetic delivery ZIP+KIT_EVIDENCE JSON=12 unique members. 2 new negative/positive geometry tests.
