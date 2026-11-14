@@ -50,12 +50,17 @@ class LinkedAncestors(unittest.TestCase):
     def test_source_directory_junction_rejected(self):
         alias=self.root/"junction"
         self._make_junction(alias)
-        with self.assertRaises(ValueError):read_table(alias/"source.csv")
+        junction_source=alias/"source.csv"
+        self.assertTrue(junction_source.samefile(self.source))
+        with self.assertRaisesRegex(ValueError,"junction or reparse point forbidden"):
+            read_table(junction_source)
 
     def test_output_parent_directory_junction_rejected(self):
         alias=self.root/"junction"
         self._make_junction(alias)
-        with self.assertRaises(ValueError):
+        junction_source=alias/"source.csv"
+        self.assertTrue(junction_source.samefile(self.source))
+        with self.assertRaisesRegex(ValueError,"junction or reparse point forbidden"):
             build(self.source,alias/"new.html","id","title","category",True)
         self.assertFalse((self.real/"new.html").exists())
 
