@@ -75,8 +75,8 @@ def main():
             page.locator("#category").select_option("")
             # Stale detailed content from a different source must never be
             # included in the downloaded replacement HTML.
-            page.locator("#body tr").last.click()
-            assert page.locator("#details").text_content() != "항목을 선택하세요."
+            page.locator("#body tr").first.click()
+            expect(page.locator("#details")).to_contain_text("Injection")
             page.locator("#csv").set_input_files(str(changed))
             page.locator("#replace").click()
             expect(page.locator("#notice")).to_contain_text("HOLD")
