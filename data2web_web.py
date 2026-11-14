@@ -1,5 +1,7 @@
 """Render a self-contained, network-free HTML data browser."""
 from __future__ import annotations
+import base64
+import hashlib
 import html
 import json
 
@@ -7,7 +9,7 @@ THEMES = ("office", "cafe", "inventory")
 TEMPLATE = r'''<!doctype html>
 <html lang="ko" data-theme="__THEME__">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src __SCRIPT_HASH__; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>__TITLE__ · DATA2WEB</title>
 <style>
 :root{color-scheme:dark;--bg:#0c1625;--surface:#152438;--edge:#29405b;--ink:#ecf4ff;--muted:#a6bed6;--accent:#77dbd4}
@@ -263,6 +265,16 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
         safe_json = safe_json.replace(original, escaped)
     if TEMPLATE.count("__PAYLOAD__") != 1:
         raise RuntimeError("Broken renderer template")
+    # Only this exact static JS may execute; the hash includes whitespace.
+    # A locally saved HTML update retains this unchanged JS block.
+    if (TEMPLATE.count("<script>") != 1 or
+            TEMPLATE.count("__SCRIPT_HASH__") != 1 or
+            TEMPLATE.count("script-src __SCRIPT_HASH__") != 1):
+        raise RuntimeError("Broken static script or CSP template")
+    static_script = TEMPLATE.split("<script>", 1)[1].split("</script>", 1)[0]
+    script_hash = base64.b64encode(hashlib.sha256(static_script.encode("utf-8")).digest()).decode("ascii")
+    source = "'sha256-" + script_hash + "'"
     return (TEMPLATE.replace("__THEME__", theme)
             .replace("__TITLE__", html.escape(name, quote=True))
-            .replace("__PAYLOAD__", safe_json))
+            .replace("__PAYLOAD__", safe_json)
+            .replace("__SCRIPT_HASH__", source))
