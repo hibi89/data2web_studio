@@ -1,6 +1,6 @@
 {
   "contract": "DATA2WEB_CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_V1",
-  "snapshot_date_kst": "2026-11-14 22:44",
+  "snapshot_date_kst": "2026-11-15 01:55",
   "repository": "hibi89/data2web_studio",
   "branch": "feature/final-blueprint-p85-evidence-20261113",
   "source_branch_sha_at_plan": "1c582db78fb3ac91f37ddbab27b18124c08a5419",
@@ -46,15 +46,17 @@
     "secrets_or_permissions_changes": false
   },
   "known_current_evidence": {
-    "functional_verified_sha": "1be21c6a3f4ba2426c93a71201d96e274ce22ee7",
-    "functional_ci_run": 43595570078,
-    "hosted_windows_pass": 507,
-    "hosted_ubuntu_pass": 506,
-    "latest_changes_test_status": "UNEXECUTED_OR_NOT_CONFIRMED",
+    "functional_verified_sha": "512af5000658f40ed7deefae096f29b886bd1ec0",
+    "functional_ci_run": 43617898725,
+    "hosted_windows_pass": 525,
+    "hosted_ubuntu_pass": 524,
+    "latest_changes_test_status": "PASS_EXACT_SHA_512AF500",
     "R25_policy_approved": true,
     "R25_synthetic_deletion": "PASS_LIMITED_ASSISTANT_CONTAINER",
     "R25_real_operator_evidence": "PENDING",
-    "R29_real_independent_audit": "PENDING"
+    "R29_real_independent_audit": "PENDING",
+    "hosted_ubuntu_windows_only_skip": 1,
+    "owner_pc_windows10_11": "NOT_VERIFIED"
   },
   "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
   "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
@@ -66,7 +68,7 @@
       "legacy_assignee": "INSTANT",
       "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
       "depends_on": [],
-      "status_snapshot": "RECORDED_RECHECK",
+      "status_snapshot": "PASS_EXACT_SHA",
       "work": "Read HANDOFF→STATUS→AGENTS→REQUIREMENTS→FINAL_DESIGN→scorecard→latest source; compare repo branch and PR SHA.",
       "acceptance": "Enumerate actual 33/100, 22 VERIFIED, 11 PENDING, latest tested code SHA separately from docs HEAD.",
       "evidence": "Read-only SHA, scorecard contract, baseline diff in STATUS.",
@@ -81,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Re-read current GitHub source, scorecard and evidence. Latest tested code/test SHA 512af500; official score 72, 22 VERIFIED/11 PENDING."
     },
     {
       "id": "P01",
@@ -92,7 +94,7 @@
       "depends_on": [
         "P00"
       ],
-      "status_snapshot": "RECORDED_RECHECK",
+      "status_snapshot": "PASS_NO_OVERWRITE_BOUNDARY_RECORDED",
       "work": "Secure previous non-destructive rollback reference and inventory customer/REA_Web protected paths; check auth identity, existing branch and CI budget.",
       "acceptance": "Explicit rollback SHA and original/no-overwrite boundary; no new branch/release/repo/rights change.",
       "evidence": "Git commit parent SHA + protected paths listed; no private materials.",
@@ -105,7 +107,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Rollback parent 954cfe03 recorded; protected originals/customer data and main were not changed; no local checkout, release or merge."
     },
     {
       "id": "P02",
@@ -116,7 +118,7 @@
       "depends_on": [
         "P00"
       ],
-      "status_snapshot": "RECORDED_RECHECK",
+      "status_snapshot": "EVIDENCE_INDEX_COMPLETE",
       "work": "Open evidence index per R with unique opaque IDs and a public-safe checklist; no customer names, data, screenshots, private paths or permission tokens.",
       "acceptance": "Each R07/R21/R25/R26/R29 evidence indexed as VERIFIED/INCOMPLETE/MISSING without assigning points.",
       "evidence": "New redacted evidence reference index and missing list.",
@@ -129,7 +131,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Public-safe R07/R21/R25/R26/R29 evidence index updated; missing real-owner and external proof remains explicitly missing."
     },
     {
       "id": "P03",
@@ -140,7 +142,7 @@
       "depends_on": [
         "P00"
       ],
-      "status_snapshot": "READY_GITHUB_CI",
+      "status_snapshot": "PASS_EXACT_SHA",
       "work": "Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.",
       "acceptance": "No regression and no mistaken CI-Ready=customer-approved claim.",
       "evidence": "Test run URLs exact SHA, PASS/FAIL/SKIP log and OS/browser scope.",
@@ -155,7 +157,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Run full hosted regression at the new exact SHA; do not recycle earlier 507/506 PASS as latest."
+      "current_note": "Exact-SHA Python/browser #43617898725, macOS #43617898816, CodeQL #43617898719 and gate #43617898943 passed; logs distinguish OS/browser PASS and SKIP."
     },
     {
       "id": "A07-01",
@@ -166,7 +168,7 @@
       "depends_on": [
         "P02"
       ],
-      "status_snapshot": "STATIC_EVIDENCE_RECHECK",
+      "status_snapshot": "EVIDENCE_RECHECK_COMPLETE_RIGHTS_PENDING",
       "work": "Map raw-source custody, user-of-record, owner-created copies, browser plaintext output and shared-data rights; reuse existing order_intake_preflight to avoid duplicate workflow.",
       "acceptance": "Data flow states input rights, no cloud upload, source hash invariance, unsafe types HOLD; missing legal rights clearly isolated.",
       "evidence": "Redacted dataflow/threat review linked to source SHA.",
@@ -179,7 +181,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Existing intake/data-flow and no-upload evidence rechecked; actual customer source authority and consent remain unavailable."
     },
     {
       "id": "A07-02",
@@ -202,7 +204,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Per-order rights/privacy/plaintext checklist remains an unfilled template, not a customer signature."
     },
     {
       "id": "A07-03",
@@ -213,7 +215,7 @@
       "depends_on": [
         "A07-02"
       ],
-      "status_snapshot": "CODE_AND_TEST_COMMITTED_CI_PENDING",
+      "status_snapshot": "PASS_EXACT_SHA",
       "work": "Audit both desktop single/batch consent-reset paths and CLI on source/sheet/header/ID mapping/file replacement; fix only reproduced omission.",
       "acceptance": "Invalid/missing consent or changed input fails closed; source bytes and existing customer outputs identical to pretest.",
       "evidence": "Synthetic changed-source SHA, direct CLI and GUI regression evidence.",
@@ -228,7 +230,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Re-run consent reset and pre-confirmation gates in existing GitHub Actions; verify Windows hosted Tk and malicious metadata paths."
+      "current_note": "Consent-reset and pre-confirmation regression paths passed hosted Windows/Ubuntu and Tk browser acceptance at 512af500."
     },
     {
       "id": "A07-04",
@@ -250,7 +252,7 @@
       ],
       "blocker": "NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT",
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No real source owner/provider authorization and customer-specific consent evidence is available in the permitted public-only workflow."
     },
     {
       "id": "A07-05",
@@ -263,7 +265,7 @@
         "A07-03",
         "A07-04"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_OWNER_EVIDENCE",
       "work": "Review rights/consent provenance and source-before/after SHA, exact tested code SHA and residual privacy limits.",
       "acceptance": "Entire R07 source preservation + actual rights/consent satisfied; otherwise leave R07 PENDING.",
       "evidence": "Signed/referenced Instant item-level review without customer data in repo.",
@@ -275,7 +277,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Cannot accept R07 from templates or synthetic CI; wait for real scoped authority/consent and source SHA evidence."
     },
     {
       "id": "A21-01",
@@ -287,7 +289,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "STATIC_EVIDENCE_RECHECK",
+      "status_snapshot": "RECONCILIATION_COMPLETE",
       "work": "Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.",
       "acceptance": "Complete real A shipping inventory vs whitelist; all provenance unknowns labeled pending, no fake LICENSE.",
       "evidence": "Git-linked inventory with source SHA and actual synthetic ZIP member evidence.",
@@ -302,7 +304,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Shipping members and synthetic create-only delivery checks reconciled; no extra EXE/vendor bundle inferred."
     },
     {
       "id": "A21-02",
@@ -313,7 +315,7 @@
       "depends_on": [
         "A21-01"
       ],
-      "status_snapshot": "STATIC_EVIDENCE_RECHECK",
+      "status_snapshot": "PROVENANCE_RECHECK_COMPLETE_RIGHTS_PENDING",
       "work": "For every shipped asset/derivation enumerate author, origin SHA, upstream reference, vendor license/NOTICE obligations and unresolved chains; do not infer IP ownership from AI generation or GitHub owner.",
       "acceptance": "Every actually shipped text/JS/CSS artifact has a rights-evidence or explicit unresolved flag; no accidental EXE bundling.",
       "evidence": "Versioned chain-of-title/third-party dependency matrix, unknowns kept as blockers.",
@@ -326,7 +328,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Read the existing 6/6 source Git blob provenance evidence but keep derived-work/notice commercial rights unresolved."
+      "current_note": "Six producer Git blob pins and shipped asset origin inventory rechecked; provenance does not establish derivative/commercial rights or NOTICE clearance."
     },
     {
       "id": "A21-03",
@@ -347,7 +349,7 @@
       ],
       "blocker": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Actual rightsholder/license and commercial redistribution/NOTICE decision not supplied."
     },
     {
       "id": "A21-04",
@@ -358,7 +360,7 @@
       "depends_on": [
         "A21-03"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_DEPENDENCY",
       "work": "Only after verified rights decision: choose (1) no extra member when legally justified; or (2) versioned approved LICENSE/NOTICE packaging contract, migrating builder/verifier/receipt together without breaking v1.",
       "acceptance": "Allowed contents match actual authorized rights text and deterministic ZIP, versioned v2 when needed; no overwrite, no invented license.",
       "evidence": "Exact legal text provenance ref, package contract version, signed owner authorization, code diff.",
@@ -373,7 +375,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Package/license contract depends on verified A21-03 rights decision."
     },
     {
       "id": "A21-05",
@@ -384,7 +386,7 @@
       "depends_on": [
         "A21-04"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_DEPENDENCY",
       "work": "Run synthetic allowed/forbidden license member, duplicate/ZIP-slip/modified notice, old v1 compatibility, receipt hash and create-only failure rollback.",
       "acceptance": "Valid authorized package passes independent verifier; malicious/unapproved member and old-data corruption fail closed, old v1 still accepted.",
       "evidence": "Windows/Ubuntu and Chrome/Edge exact-SHA source/test evidence, ZIP hash and manifest contract.",
@@ -398,7 +400,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Unapproved LICENSE/NOTICE package tests must wait for the authorized packaging contract; no license was invented."
     },
     {
       "id": "A21-06",
@@ -410,7 +412,7 @@
         "A21-03",
         "A21-05"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_DEPENDENCY",
       "work": "Review owner/third-party rights proof, final shipped bytes and license text/NOTICE obligations, migration, exact-SHA CI.",
       "acceptance": "Entire R21 including real commercial use permission and v1/v2 verifier correctness accepted or 4 points stay pending.",
       "evidence": "Instant item review and exact rights decision reference, not hypothetical license.",
@@ -422,7 +424,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Full R21 acceptance awaits real rights decision and any resulting packaging migration/CI."
     },
     {
       "id": "A25-01",
@@ -433,7 +435,7 @@
       "depends_on": [
         "P02"
       ],
-      "status_snapshot": "CODE_AND_TEST_COMMITTED_CI_PENDING",
+      "status_snapshot": "PASS_EXACT_SHA",
       "work": "Map owner-approved max 7-day temporary operator copy, earlier purpose-completion handling, legal exceptions, originals/outputs never auto-delete; compare current retention utility.",
       "acceptance": "No accidental deletion/upload; policy mismatch fails closed and actual disposal is not certified by metadata.",
       "evidence": "Policy-vs-code map and synthetic time boundary tests.",
@@ -446,7 +448,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "R25 seven-policy owner approval and isolated synthetic delete PASS already recorded; run new unexecuted max-date/invalid UTF-8/contradictory report negative tests on hosted runner."
+      "current_note": "Max-date, malformed UTF-8 and report-integrity regressions are covered by the full exact-SHA hosted suite; original/result no-auto-delete boundary retained."
     },
     {
       "id": "A25-02",
@@ -469,7 +471,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Checklist/template remains useful; actual source/result custody, expiry, return and disposal trace is not in public evidence."
     },
     {
       "id": "A25-03",
@@ -490,7 +492,7 @@
       ],
       "blocker": "NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE",
       "point_award_by_task": 0,
-      "current_note": "Owner named as operator and approved policy, NOT proof of real customer custody/deletion; actual authorized evidence remains unavailable under no-local/no-customer constraint."
+      "current_note": "User's operator appointment, seven approved policies and synthetic disposal drill remain accepted; actual customer custody/return/disposal proof is missing and was not requested again."
     },
     {
       "id": "A25-04",
@@ -502,7 +504,7 @@
         "A25-01",
         "A25-03"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_REAL_CUSTOMER_EVIDENCE",
       "work": "Compare actual operator evidence with source-preservation, duration and manual-only protocol; check legal exceptions not silently bypassed.",
       "acceptance": "Complete R25 policy notice and actual accountable practice satisfied; else hold.",
       "evidence": "Instant item review plus retention acceptance reference.",
@@ -514,7 +516,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No real handling record exists to revalidate against the approved manual-only retention protocol."
     },
     {
       "id": "A26-01",
@@ -525,7 +527,7 @@
       "depends_on": [
         "P02"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "SCOPE_RECHECK_COMPLETE_CUSTOMER_BASIS_PENDING",
       "work": "Reconcile personal/sensitive/medical/payment identifiers, shared/confidential, unknown scope, allowed nonpersonal only; map plaintext and offline exposure.",
       "acceptance": "Default HOLD for personal/sensitive/unclear rights and explicit safe classification; no encryption/anonymous-data fiction.",
       "evidence": "Synthetic privacy class matrix, mappings and negative cases.",
@@ -538,7 +540,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Privacy/preflight boundaries and plaintext exposure rechecked; customer-specific lawful processing basis and consent are not established."
     },
     {
       "id": "A26-02",
@@ -549,7 +551,7 @@
       "depends_on": [
         "A26-01"
       ],
-      "status_snapshot": "CODE_AND_TEST_COMMITTED_CI_PENDING",
+      "status_snapshot": "PASS_EXACT_SHA",
       "work": "Audit frontend checkbox reset for replaced/altered source, rights, plaintext and privacy classification across single and batch; update tests only for reproduced gap.",
       "acceptance": "No persistence of stale sensitive approval across dataset revisions; file values not sent over network.",
       "evidence": "CI/browser negative-flow evidence, clear notices/HOLD response.",
@@ -562,7 +564,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Run GUI consent-change callbacks and malformed UTF-8 preorder HOLD tests hosted; code/test recent commits not confirmed CI."
+      "current_note": "Single/batch consent reset, pre-confirmation validation and malformed metadata HOLD regressions passed the latest hosted Windows/Ubuntu and UI jobs."
     },
     {
       "id": "A26-03",
@@ -584,7 +586,7 @@
       ],
       "blocker": "NON_DELEGABLE_PER_CUSTOMER_PRIVACY_CONSENT",
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No customer-specific data scope, accessor, retention/transfer basis or explicit plaintext consent was provided."
     },
     {
       "id": "A26-04",
@@ -596,7 +598,7 @@
         "A26-02",
         "A26-03"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_CUSTOMER_EVIDENCE",
       "work": "Verify privacy scope and actual permission against implementation and plaintext warnings; never treat program checkbox alone as legal agreement.",
       "acceptance": "Full R26 personally sensitive data handling/rejection and real consent scope accepted; otherwise pending.",
       "evidence": "Instant item review plus consent reference.",
@@ -608,7 +610,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Program checkboxes and synthetic flows cannot establish the customer's legal agreement."
     },
     {
       "id": "A29-01",
@@ -620,7 +622,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "INTERNAL_SYNTHETIC_PREAUDIT_RECHECK_COMPLETE_EXTERNAL_PENDING",
       "work": "Freeze independent evaluator's threat scope: XSS/CSP/CSV formula, XLSX zip bomb and XML entities, ZIP/receipt, TOCTOU symlink/hardlink/junction, interruptions, offline network.",
       "acceptance": "Threat matrix has reproducible positive/negative test cases, supported OS constraints and residual risks; no claim of external audit.",
       "evidence": "Synthetic case inventory, fixture hashes, exact source SHA.",
@@ -633,7 +635,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Threat coverage and hardlink/path-swap regressions were rechecked; CodeQL and synthetic checks pass, residual TOCTOU/XLSX/host-evidence limits remain."
     },
     {
       "id": "A29-02",
@@ -644,7 +646,7 @@
       "depends_on": [
         "A29-01"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "REPRODUCIBLE_INTERNAL_BUNDLE_READY_EXTERNAL_PENDING",
       "work": "Prepare public-source-only reproducible audit bundle/instructions, source freeze and risk register, with existing internal CodeQL and browser CI clearly labeled self-check.",
       "acceptance": "Another evaluator can independently run tests without customer data, secrets, private access or false PASS.",
       "evidence": "SHA-pin commands/expected outputs and failure reporting template.",
@@ -657,7 +659,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Public-source-only instructions and internal synthetic bundle are recorded; no independent audit claim."
     },
     {
       "id": "A29-03",
@@ -678,7 +680,7 @@
       ],
       "blocker": "INDEPENDENT_REVIEWER_AND_EXTERNAL_DISCLOSURE_APPROVAL",
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No owner-approved independent evaluator, audit scope or external disclosure decision is recorded."
     },
     {
       "id": "A29-04",
@@ -699,7 +701,7 @@
       ],
       "blocker": "REAL_INDEPENDENT_HUMAN_AUDIT_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "External real-independent person or qualified organization required; CodeQL, second model and Codex self-audit are NOT independent attestation."
+      "current_note": "No genuinely independent external findings exist; self-review, CodeQL and hosted CI do not satisfy this task."
     },
     {
       "id": "A29-05",
@@ -710,7 +712,7 @@
       "depends_on": [
         "A29-04"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_EXTERNAL_FINDINGS",
       "work": "Implement least-invasive fixes for confirmed external findings, preserve originals/v1 ZIP and no-network contract, add reproducing regressions.",
       "acceptance": "Each finding has fix commit or documented accepted blocker, Windows/Ubuntu/browser CI on exact fix SHA.",
       "evidence": "Finding→fix SHA→test table, data and secrets absent.",
@@ -725,7 +727,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No independent findings are available to remediate; reassess only after A29-04."
     },
     {
       "id": "A29-06",
@@ -736,7 +738,7 @@
       "depends_on": [
         "A29-05"
       ],
-      "status_snapshot": "BLOCKED_EXTERNAL",
+      "status_snapshot": "BLOCKED_EXTERNAL_RETEST",
       "work": "Same independent evaluator retests fixes on new SHA, records unfixable risks, gaps, and signoff/remaining-blocker status.",
       "acceptance": "External final retest confirms closure or explicitly blocks R29; no self-signed completion.",
       "evidence": "Independent dated recheck SHA report, signed/attributable reviewer.",
@@ -746,7 +748,7 @@
       ],
       "blocker": "EXTERNAL_RETEST_AND_SIGNOFF",
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "No external findings/fixes are available for an independent retest or signoff."
     },
     {
       "id": "A29-07",
@@ -758,7 +760,7 @@
         "A29-04",
         "A29-06"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_EXTERNAL_SIGNOFF",
       "work": "Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate Instant with external.",
       "acceptance": "Complete R29 acceptance only after external signoff and verified no blocking findings; else PENDING.",
       "evidence": "Instant R29 score review linking external IDs and code SHA.",
@@ -770,7 +772,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "R29 acceptance cannot be independently verified without external evaluator identity, scope and final signoff."
     },
     {
       "id": "G85-01",
@@ -785,7 +787,7 @@
         "A26-04",
         "A29-07"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_MISSING_ACCEPTANCE_PACKETS",
       "work": "Assemble five complete item-level evidence packets with provenance and no private material in repo; reconcile 2+4+2+2+3 points.",
       "acceptance": "Each requirement fully accepted independently; none receives partial point for templates, self tests or false attestations.",
       "evidence": "R07/R21/R25/R26/R29 acceptance matrix, exact SHA of reviewed functionality.",
@@ -797,7 +799,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "The five full item-level R07/R21/R25/R26/R29 acceptance packets are incomplete."
     },
     {
       "id": "G85-02",
@@ -808,7 +810,7 @@
       "depends_on": [
         "G85-01"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "EXACT_SHA_CI_PASS_ACCEPTANCE_BLOCKED",
       "work": "Run last exact-code-SHA Windows/Ubuntu Python, Chrome/Edge/Chromium, portable v1/v2, privacy/R21/R29 regression and CodeQL using existing free runners.",
       "acceptance": "All required CI jobs SUCCESS at exact code SHA with PASS/FAIL/SKIP, browser assets/API/zip/receipt intact; buyer acceptance separate.",
       "evidence": "Actions URL/run/job, browser and no-network evidence; no doc-SHA confusion.",
@@ -823,7 +825,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Latest exact-SHA Python/OS/browser/CodeQL checks passed, but G85 final acceptance is blocked by missing customer/rights/external evidence and remaining full acceptance scope."
     },
     {
       "id": "G85-03",
@@ -834,7 +836,7 @@
       "depends_on": [
         "G85-02"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_MISSING_ACCEPTANCE_PACKETS",
       "work": "Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.",
       "acceptance": "Score mechanically equals 85/100, 33 items and 100 denominator unchanged, all five VERIFIED and other six PENDING; publish audit diff.",
       "evidence": "Scorecard JSON diff, exact SHA score command and evidence links.",
@@ -848,7 +850,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Do not modify scorecard states until all five complete acceptance proofs exist; score remains exactly 72."
     },
     {
       "id": "G85-04",
@@ -859,7 +861,7 @@
       "depends_on": [
         "G85-03"
       ],
-      "status_snapshot": "REVALIDATE_THEN_READY_OR_BLOCKED",
+      "status_snapshot": "BLOCKED_EXTERNAL_AND_OWNER_EVIDENCE",
       "work": "Instant 85 milestone evidence gate (High final review only after 100): confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.",
       "acceptance": "Authorize 85 report only when all five complete; otherwise return blocked IDs to Instant and preserve prior score; keep RELEASE HOLD.",
       "evidence": "Instant acceptance memo with item verdicts, STATUS/HANDOFF consistency.",
@@ -872,7 +874,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": null
+      "current_note": "Final 85 report is unauthorized until owner/customer rights, retention/privacy records, independent R29 audit and exact-SHA evidence are accepted."
     }
   ]
 }

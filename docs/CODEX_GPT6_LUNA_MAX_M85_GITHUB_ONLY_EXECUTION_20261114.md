@@ -1,14 +1,14 @@
 ## 2026-11-15 KST — latest exact-SHA status
 
-- Latest tested code/test SHA: `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`; product logic last changed at `4e6808b80023157cf9f849f600e18ed123e258e0`. The only new code-SHA change since `144f72e` is a deterministic test stimulus; no product logic changed.
-- Interim documentation-only SHA `ac5f6cf88ac2eb874d4841f0b3ef54af04c9387e` triggered [Python/browser #43615091295](https://github.com/hibi89/data2web_studio/actions/runs/43615091295), where one Windows regression failed because a same-size hardlink write did not produce an immediately observable timestamp change. The test now explicitly pins a distinct timestamp and asserts both bytes and timestamp changed.
-- [Python/browser #43615731394](https://github.com/hibi89/data2web_studio/actions/runs/43615731394) SUCCESS at the exact SHA: Windows 525/525 PASS; Ubuntu 524 PASS + 1 Windows-only SKIP. Direct P00 11/11, P01 15/15, A25 19/19, A26 24/24 and internal R29 preaudit 7/7 PASS; hardlink regression ran without skip on Windows/Ubuntu/macOS.
-- [macOS offline #43615731344](https://github.com/hibi89/data2web_studio/actions/runs/43615731344) SUCCESS: 524 PASS + 1 Windows-only SKIP; hardlink test, Chromium `file://` and A4 checks PASS.
-- [CodeQL #43615731368](https://github.com/hibi89/data2web_studio/actions/runs/43615731368) SUCCESS; hosted Windows Chrome/Edge and Chromium browser flows PASS with observed `network0`.
-- [Final blueprint gate #43615731598](https://github.com/hibi89/data2web_studio/actions/runs/43615731598) SUCCESS, but the log says `UNASSESSED`; no approved evidence manifest and no official score.
-- GPT-6 High reviewed SHA `61b9ecab` and found no actionable issue. Scope is the timestamp-visible hardlink mutation case; stealth metadata-preserving writes and an independent external R29 audit remain unverified.
-
-Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer Windows 10/11 and independent external audit remain unverified. Internal/hosted evidence does not satisfy owner or external acceptance.
+- Latest code/test SHA: `512af5000658f40ed7deefae096f29b886bd1ec0`; product fix commit `3a6d7588e8f5e58e51b1b0f7e6c1eaf9b2a917cf` adds a Windows `CreateFileW` read handle with `FILE_SHARE_READ` only, held through final file identity checks. This narrows concurrent writes/deletes through ordinary Windows sharing.
+- At `3a6d758`, the alias write was denied but one regression overfit `PermissionError.winerror`; a second race test patched `os.open` instead of the new platform helper. Test commit `512af500` removes the OS-specific field assumption and injects the path swap at `_open_source_readonly`.
+- Exact-SHA [Python/browser #43617898725](https://github.com/hibi89/data2web_studio/actions/runs/43617898725): Windows 525/525 PASS, Ubuntu 524 PASS + 1 Windows-only SKIP, browser job Chromium PASS, Windows-installed Chrome/Edge and Tk single/batch flows PASS.
+- Exact-SHA [macOS offline #43617898816](https://github.com/hibi89/data2web_studio/actions/runs/43617898816): 524 PASS + 1 Windows-only SKIP. [CodeQL #43617898719](https://github.com/hibi89/data2web_studio/actions/runs/43617898719) SUCCESS/no new alerts. [evidence gate #43617898943](https://github.com/hibi89/data2web_studio/actions/runs/43617898943) SUCCESS; the run itself does not accept owner or external evidence.
+- GPT-6 High reviewed current GitHub source at `512af500`: no actionable finding. Scope is internal code review; it does not satisfy R29 external audit. Directory ancestry races and mutations outside ordinary Windows share controls remain unproven.
+- Official R01–R33 score remains **72/100** (22 VERIFIED, 11 PENDING), increase **0**, target 85, shortfall 13. Fixed weighting, RELEASE HOLD, SALE NO-GO and `[작업중]` are unchanged.
+- Technically verified/documented IDs: `P00–P03`, `A07-01/02/03`, `A21-01/02`, `A25-01`, `A26-01/02`, `A29-01/02`; `A25-02` remains a partial policy/checklist record. OWNER/EXTERNAL evidence and dependent `A07-04/05`, `A21-03~06`, `A25-03/04`, `A26-03/04`, `A29-03~07`, `G85-01~04` remain pending or blocked.
+- Missing acceptance material: actual customer source authority/consent (R07); commercial reuse rights and NOTICE decision (R21); actual customer copy custody/return/disposal traces (R25); customer-specific privacy basis/consent (R26); an approved independent R29 evaluator, dated findings, remediation retest and signoff. Existing R25 seven-policy approval and synthetic disposal drill remain accepted.
+- This internal/hosted evidence protects the existing synthetic scope only. It does not assert buyer Windows 10/11 acceptance, external audit, customer legal rights, commercial release or 85 points.
 
 # DATA2WEB Studio — Codex GPT-6 Luna Max · GitHub-only M85 실행 공시
 
