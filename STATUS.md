@@ -1,3 +1,8 @@
+## 2026-11-14 KST · 정확 SHA 0원 정책 게이트 + 무료 CodeQL + 전체 CI PASS
+- 정확 구현 SHA `f7fc5607404d7349b95a85a0ebdb30a76ccc58ca`: Python/Browser [#43540222122](https://github.com/hibi89/data2web_studio/actions/runs/43540222122) **4/4 SUCCESS** Windows322/322 PASS, Ubuntu321 PASS+1SKIP, Chrome/Edge/Chromium hosted E2E PASS; [무료 CodeQL #43540222284](https://github.com/hibi89/data2web_studio/actions/runs/43540222284) **1/1 SUCCESS** Python53/53 및 workflow4/4 분석; [점수 게이트 #43540222285](https://github.com/hibi89/data2web_studio/actions/runs/43540222285) **1/1 SUCCESS**.
+- 신규 0원 정책 회귀7종 양 OS 성공, 유료 API/감사/서명/러너/호스팅 구매 금지·기본 SKU/데이터 최소화 기준. 외부 무료 독립 보안감사 [모집이슈 #5](https://github.com/hibi89/data2web_studio/issues/5)만 생성, 평가자는 아직 없음. CodeQL 보안 alert 0건을 확인한 것은 아니고 외부독립 R29도 미충족.
+- **공식72/100**, 85까지13, PENDING11개, [작업중], RELEASE HOLD/SALE NO-GO, 상품 미등록/PR#4 Draft. [상세 검증 기록](docs/ZERO_COST_CI_EVIDENCE_20261114.md).
+
 ## 2026-11-14 KST · 현금지출 0원 승인에 따른 무료 보안/운영 게이트 설정
 - 사용자 무료 조건부 일괄위임 반영: A 납품 우선, B EXE 상용화 후순위, 무료 표준 GitHub Actions/공개 소스 CodeQL, 유료 API/감사/인증서/runner/외부 서비스 구매 금지. 기본 SKU·보관/파기/고객 권리 체크의 **내부 운영 정책 승인**과 실제 사용권/고객 동의/출시 승인 구분. `docs/ZERO_COST_OWNER_AUTHORIZATION_20261114.md`.
 - 신규 `data/zero_cost_owner_policy_v1.json`, `zero_cost_gate.py`, `test_zero_cost_gate.py`, `.github/workflows/codeql-zero-cost.yml` 예정. **커밋 이후 새 정확 SHA와 CodeQL/기존 CI 판정 재확인 필요**; 코드 정적분석과 독립 사람 감사 혼동 금지.

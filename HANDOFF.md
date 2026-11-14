@@ -1,3 +1,15 @@
+## 최종 인수인계 보강 — 2026-11-14 KST · 0원 정책 새 SHA 전 CI 검증 완료
+1. 목표: A 오프라인 HTML/ZIP/receipt 우선 B EXE 후순위, 사용자 추가 현금지출0원 승인, R01–R33 100점/85목표.
+2. 구현: 공개 GitHub 표준 runner 기반 무료 CodeQL, `zero_cost_gate.py`/정책JSON/7회귀, [무상 리뷰 요청 #5](https://github.com/hibi89/data2web_studio/issues/5). 원본/기존 ZIP/scorecard 불변.
+3. 실제 검사: 정확 SHA `f7fc5607404d7349b95a85a0ebdb30a76ccc58ca`; [Python/browser #43540222122](https://github.com/hibi89/data2web_studio/actions/runs/43540222122) **4/4 SUCCESS** Windows322/322, Ubuntu321PASS/1SKIP, Chrome/Edge/Chromium; [CodeQL #43540222284](https://github.com/hibi89/data2web_studio/actions/runs/43540222284) **1/1 SUCCESS** Python53/53+GH Actions4/4 정적분석; [Score #43540222285](https://github.com/hibi89/data2web_studio/actions/runs/43540222285) 1/1 SUCCESS. scan alert 목록 직접 미분류.
+4. 상태: VERIFIED22 72/100, PENDING11 28점, 85까지13 부족, [작업중], RELEASE HOLD/SALE NO-GO, PR#4 Draft, 상품 미등록. 신규 정책 테스트 성공은 요구사항 R29 수용이 아님.
+5. 차단/대안: 유료감사 배제(사용자 0원); CodeQL 성공과 외부 독립 사람 리뷰 구분. 무료 평가자 아직 없음; 고객별 권리·IP·NOTICE/개인정보 증빙 없음. 비용없는 리뷰 결과 없으면 R29 0 유지.
+6. repo/branch: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 기능 SHA `f7fc5607404d7349b95a85a0ebdb30a76ccc58ca`. 최종 문서 HEAD는 후속 저장 후 재확인. 중앙 kmong [작업중] 동기화.
+7. 환경: Python3.11 hosted Win/Ubuntu + browsers, 무료 CodeQL GitHub 공개 소스, Vercel/production 해당 없음. 실행 `python zero_cost_gate.py`/`python -m unittest discover -v`.
+8. 원본/보안: main/고객 실원본/타프로젝트/기존 ZIP v1/가중치·권리 승인 플래그 변경0. 이전 복구 HEAD `ea29ecec1a1fc272ed968e4f703d64d341086944`; 고객자료 외부전송0.
+9. 다음: 무료 외부 리뷰 참여 여부·발견 경고 분류/수정, IP/고객 권리 실제 증거 확보, R 요구별 개별 수용, 최소13점 추가된 경우만 채점; 원본/고객 권리 불명확하면 HOLD.
+10. 시점: 2026-11-14 KST, 정확 SHA Actions와 7회귀 로그 직접 확인, 상세 [무료 CI 증거](docs/ZERO_COST_CI_EVIDENCE_20261114.md), 이번 문서 커밋 SHA는 후속 조회.
+
 ## 최신 인수인계 — 2026-11-14 KST · 0원 일괄 위임/무상 코드보안 게이트
 1. 목표/기술: A 오프라인 HTML+ZIP+receipt 서비스 우선, B unsigned EXE 판매 후순위, 33개100점/현재72/85목표.
 2. 소유자 결정: 현금지출0원 한도의 무료 내부 운영 정책·가격 BASIC49,000/PRO129,000/BUSINESS249,000 및 보수적 데이터 취급/최대7일 수동 파기·법정환불권 보존 기본안 승인. 사용자 실제 결제/유료감사·서버/API/서명 구매0. 고객 동의·제3자 권리의 법적 증명은 불가.
