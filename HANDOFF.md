@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 explicit owner approval + executed synthetic custody/disposal drill
+- User explicitly appointed themselves R25 operator and approved seven internal policy conditions, while reserving real customer processing and release. Approval recorded in `docs/R25_OWNER_APPROVAL_AND_SYNTHETIC_CUSTODY_20261114.md` and reconciled with `docs/OWNER_APPROVAL_PACKET_A_20261114.md` (approval SHA `bf8fbed4970fa374a99010b46c14ca8a57337e28`).
+- Executed one isolated **assistant-container synthetic-only** drill: create and hash fixture, explicit scoped manual `unlink()`, confirm absence. Synthetic SHA-256 `90ea32ae87f8ab7f8c868ed436cd634dc159ed99f4bebce6a7c22441f901e9ea`; UTC `2026-11-14T13:36:15.499709Z` to `13:36:15.499782Z`. Evidence committed `2c51c5781325556ba9a3db92507663831ef7b0f7`. No actual customer files or user's Windows machine touched; not independent real operator disposal evidence.
+- R25 operator policy **APPROVED**, synthetic technical disposal drill **PASS**, actual customer custody/disposal acceptance **PENDING**. Official fixed score **72/100**; no 2-point award without full R25 acceptance; RELEASE HOLD. Nonessential CI deferred per user.
+
 ## 2026-11-14 KST — R25 extreme receipt date overflow guard
 - Reviewed `operator_copy_retention.py`: `received + timedelta(days=7)` can raise `OverflowError` for a syntactically valid year-9999 receipt when a synthetic clock is at that instant. Added fail-closed `ValueError` conversion rather than an uncaught error (code `976cd67f3a0ad19030d0f77aa1929d2de911c148`).
 - Added regression `test_extreme_receipt_timestamp_fails_closed` for `9999-12-31T23:59:59Z` (test `9de49b05f8f05c879a2d0a0e43f625fcdc004458`). User deferred nonessential CI; tests **not executed** this turn.
