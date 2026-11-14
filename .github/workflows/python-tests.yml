@@ -20,6 +20,12 @@ jobs:
           python-version: '3.11'
       - name: Run standalone synthetic and packaging regressions
         run: python -m unittest discover -v
+      - name: Verify zero-cost policy constraints
+        run: python zero_cost_gate.py
+      - name: Verify pinned shipped-producer provenance
+        run: python r21_source_provenance.py
+      - name: Run synthetic-only shipped asset preflight
+        run: python shipping_rights_preflight.py
       - name: Inspect fixed owner-approved R01-R33 100-point scoring contract
         run: python blueprint_score.py
       - name: Stdlib-only synthetic customer-device preparation (no real user data)
