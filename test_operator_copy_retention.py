@@ -141,6 +141,26 @@ class OperatorCopyRetentionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_result(record)
 
+    def test_sensitive_or_unconsented_overdue_copy_still_writes_hold_report(self):
+        for scenario in ("sensitive", "unconsented", "purpose_completed"):
+            with self.subTest(scenario=scenario):
+                doc=doc_at(8 if scenario != "purpose_completed" else 1)
+                if scenario=="sensitive":
+                    doc["source_scope"]="PERSONAL_OR_SENSITIVE"
+                elif scenario=="unconsented":
+                    doc["per_order_rights_claimed"]=False
+                else:
+                    doc["source_scope"]="PERSONAL_OR_SENSITIVE"
+                    doc["purpose_completed"]=True
+                report=review_copy(doc,as_of=NOW)
+                self.assertTrue(report["manual_disposal_action_due"])
+                self.assertEqual(report["status"],"REVIEW_ONLY_RELEASE_HOLD")
+                self.assertFalse(report["sale_approved"])
+                with tempfile.TemporaryDirectory() as tmp:
+                    target=Path(tmp)/"retention.json"
+                    write_new_report(target,report)
+                    self.assertEqual(json.loads(target.read_text("utf-8")),report)
+
     def test_report_cannot_forge_deadline_or_disposal_consistency(self):
         present=review_copy(doc_at(8),as_of=NOW)
         absent=doc_at(1)
