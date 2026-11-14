@@ -14,6 +14,42 @@ def check(doc):
     return assess(parse_request(json.dumps(doc).encode("utf-8")))
 
 class PreorderTests(unittest.TestCase):
+    def test_privacy_class_matrix_defaults_to_hold(self):
+        held = (
+            "PERSONAL_OR_IDENTIFYING_DATA_PRESENT",
+            "SENSITIVE_OR_MEDICAL_DATA_PRESENT",
+            "PAYMENT_DATA_PRESENT",
+            "THIRD_PARTY_CONFIDENTIAL_OR_SHARED_DATA",
+            "UNKNOWN_OR_MIXED_SCOPE",
+        )
+        for privacy_classification in held:
+            with self.subTest(privacy_classification=privacy_classification):
+                doc = synthetic_example()
+                doc["privacy_classification"] = privacy_classification
+                result = check(doc)
+                self.assertEqual(result["status"], "HOLD_PREORDER")
+                self.assertEqual(result["reason"], "PRIVACY_SCOPE_HOLD")
+                self.assertIsNone(result["sku"])
+                self.assertFalse(result["order_accepted"])
+                self.assertFalse(result["sale_approved"])
+
+    def test_privacy_classification_required_and_closed(self):
+        doc = synthetic_example()
+        del doc["privacy_classification"]
+        with self.assertRaises(ValueError):
+            parse_request(json.dumps(doc).encode("utf-8"))
+        for invalid in ("", "PERSONAL", "NO_PERSONAL_DATA_REVIEWED_WITH_EXCEPTIONS"):
+            with self.subTest(invalid=invalid):
+                doc = synthetic_example()
+                doc["privacy_classification"] = invalid
+                with self.assertRaises(ValueError):
+                    parse_request(json.dumps(doc).encode("utf-8"))
+        legacy = synthetic_example()
+        legacy["contract"] = "DATA2WEB_ANONYMOUS_PREORDER_V1"
+        del legacy["privacy_classification"]
+        with self.assertRaises(ValueError):
+            parse_request(json.dumps(legacy).encode("utf-8"))
+
     def test_basic_3_formats(self):
         for kind in ("CSV", "TSV", "JSON"):
             data = synthetic_example()

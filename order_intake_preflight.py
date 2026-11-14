@@ -7,10 +7,19 @@ from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
 from zero_cost_gate import POLICY, SCORE, _read, validate_policy
 
-CONTRACT = "DATA2WEB_ANONYMOUS_PREORDER_V1"
+CONTRACT = "DATA2WEB_ANONYMOUS_PREORDER_V2"
+PRIVACY_CLASSES = frozenset({
+    "NO_PERSONAL_DATA_REVIEWED",
+    "PERSONAL_OR_IDENTIFYING_DATA_PRESENT",
+    "SENSITIVE_OR_MEDICAL_DATA_PRESENT",
+    "PAYMENT_DATA_PRESENT",
+    "THIRD_PARTY_CONFIDENTIAL_OR_SHARED_DATA",
+    "UNKNOWN_OR_MIXED_SCOPE",
+})
+SAFE_PRIVACY_CLASS = "NO_PERSONAL_DATA_REVIEWED"
 FIELDS = {"contract", "sources", "rights_claimed", "contains_personal_or_sensitive",
-          "contains_third_party_confidential", "plaintext_ack",
-          "mapping_3_distinct_columns", "same_headers"}
+          "contains_third_party_confidential", "privacy_classification",
+          "plaintext_ack", "mapping_3_distinct_columns", "same_headers"}
 SOURCE_FIELDS = {"format", "estimated_bytes", "estimated_rows", "estimated_columns"}
 FORMATS = {"CSV", "TSV", "JSON", "XLSX"}
 BASIC_FORMATS = {"CSV", "TSV", "JSON"}
@@ -29,9 +38,12 @@ def _validate_request(doc):
     # guards by calling assess() directly with an unparsed Python dict.
     if not isinstance(doc, dict) or set(doc) != FIELDS or doc["contract"] != CONTRACT:
         raise ValueError("Only anonymous whitelisted metadata is allowed")
-    for field in FIELDS - {"contract", "sources"}:
+    for field in FIELDS - {"contract", "sources", "privacy_classification"}:
         if type(doc[field]) is not bool:
             raise ValueError("Explicit boolean metadata required")
+    if (type(doc["privacy_classification"]) is not str or
+            doc["privacy_classification"] not in PRIVACY_CLASSES):
+        raise ValueError("Explicit whitelisted privacy classification required")
     sources = doc["sources"]
     if not isinstance(sources, list) or not 1 <= len(sources) <= 40:
         raise ValueError("Expected 1 to 40 anonymous file summaries")
@@ -75,6 +87,8 @@ def assess(doc):
     sources = doc["sources"]
     if doc["contains_personal_or_sensitive"] or doc["contains_third_party_confidential"]:
         return result("PERSONAL_OR_CONFIDENTIAL_HOLD")
+    if doc["privacy_classification"] != SAFE_PRIVACY_CLASS:
+        return result("PRIVACY_SCOPE_HOLD")
     if not doc["rights_claimed"] or not doc["plaintext_ack"]:
         return result("RIGHTS_OR_PLAINTEXT_ACK_MISSING")
     if not doc["mapping_3_distinct_columns"]:
@@ -104,7 +118,8 @@ def synthetic_example():
             {"format": "CSV", "estimated_bytes": 400,
              "estimated_rows": 8, "estimated_columns": 4}
         ], "rights_claimed": True, "contains_personal_or_sensitive": False,
-        "contains_third_party_confidential": False, "plaintext_ack": True,
+        "contains_third_party_confidential": False,
+        "privacy_classification": SAFE_PRIVACY_CLASS, "plaintext_ack": True,
         "mapping_3_distinct_columns": True, "same_headers": True,
     }
 
@@ -116,7 +131,8 @@ CANDIDATE_REASONS = {
     "BUSINESS": ("BUSINESS_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", 249000),
 }
 HOLD_REASONS = frozenset({
-    "PERSONAL_OR_CONFIDENTIAL_HOLD", "RIGHTS_OR_PLAINTEXT_ACK_MISSING",
+    "PERSONAL_OR_CONFIDENTIAL_HOLD", "PRIVACY_SCOPE_HOLD",
+    "RIGHTS_OR_PLAINTEXT_ACK_MISSING",
     "THREE_COLUMN_MAPPING_NOT_CONFIRMED", "SAME_HEADERS_NOT_CONFIRMED",
     "TOO_MANY_SOURCES", "SOURCE_EXCEEDS_TECHNICAL_LIMIT",
     "NO_APPROVED_PACKAGE_MATCH",

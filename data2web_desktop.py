@@ -267,7 +267,11 @@ def desktop_main():
     checks=ttk.Frame(frame);checks.grid(row=8,column=1,sticky="w")
     ttk.Checkbutton(checks,text="이 자료를 사용할 권리를 직접 확인했습니다",variable=rights).pack(anchor="w")
     ttk.Checkbutton(checks,text="결과 HTML·ZIP에 자료가 평문으로 포함되는 것을 이해합니다",variable=plaintext).pack(anchor="w")
-    ttk.Label(checks,text="개인정보 검수 상태 (자동 법적 승인 아님)").pack(anchor="w",pady=(5,0))
+    ttk.Label(checks,text="식별자·민감/의료·결제·제3자 비밀·범위 불명은 고객별 근거 전 HOLD",
+              wraplength=560,justify="left").pack(anchor="w",pady=(5,0))
+    ttk.Label(checks,text="로컬 전용은 암호화·익명화·법적 승인이나 고객 동의가 아닙니다",
+              wraplength=560,justify="left").pack(anchor="w")
+    ttk.Label(checks,text="개인정보 검수 상태 (제출자 자기검토; 자동 법적 승인 아님)").pack(anchor="w")
     ttk.Combobox(checks,textvariable=privacy,values=PRIVACY_CHOICES,state="readonly",width=38).pack(anchor="w")
 
     # Consent is scoped to the inspected data, mapping, and output destination.
@@ -504,6 +508,12 @@ def desktop_main():
                         variable=batch_plaintext).pack(anchor="w")
         ttk.Combobox(privacy_frame,textvariable=batch_privacy,
                      values=PRIVACY_CHOICES,state="readonly",width=40).pack(anchor="w",pady=6)
+        ttk.Label(privacy_frame,
+                  text="식별자·민감/의료·결제·제3자 비밀·범위 불명은 고객별 근거 전 HOLD",
+                  wraplength=620,justify="left").pack(anchor="w")
+        ttk.Label(privacy_frame,
+                  text="로컬 전용은 암호화·익명화·법적 승인이나 고객 동의가 아닙니다",
+                  wraplength=620,justify="left").pack(anchor="w")
 
         def deliver_batch_selection():
             current=batch_reviews[0]
