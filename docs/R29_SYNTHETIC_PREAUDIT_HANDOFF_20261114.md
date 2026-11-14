@@ -1,3 +1,9 @@
+## 2026-11-14 23:31 KST · 최신 exact-SHA 기술 검증 / 외부감사 차단 유지
+- 보안 검사 변경: `security_audit_preaudit.py`가 HTML을 파싱해 활성 요소/URI/event 속성을 검사하고 JSON dataset은 데이터로 처리한다. `verify_delivery.py` 및 script hash 회귀 검사는 HTML script 태그 대소문자를 무시하며, 회귀 테스트는 승인된 executable script 블록이 하나만 남는지 비교한다.
+- **SHA `48ea586b6ef712176b26c33d1809d3cd9a782d94`:** [Python/browser #43604742332](https://github.com/hibi89/data2web_studio/actions/runs/43604742332) 4/4 SUCCESS (Windows 519/519, Ubuntu 518 PASS+1 Windows-only SKIP, Chromium/Chrome/Edge; hosted Tk UI). [macOS #43604742400](https://github.com/hibi89/data2web_studio/actions/runs/43604742400) SUCCESS (518 PASS+1 SKIP; offline Chromium + A4); [CodeQL #43604742371](https://github.com/hibi89/data2web_studio/actions/runs/43604742371) SUCCESS; [blueprint gate #43604742623](https://github.com/hibi89/data2web_studio/actions/runs/43604742623) SUCCESS.
+- b57 SHA의 Python #43603754152 및 macOS #43603754125는 새 테스트가 정상 data-script와 UI executable-script 경계를 오인해 FAIL. 제품 공격 성공 보고가 아니다. assertion을 `21a6fda`에서 executable script만 비교하도록 최소 수정했고 위의 `48ea586` exact-SHA 전체 검증과 macOS 재검증에서 PASS. CodeQL 인라인 3개 review thread는 corrected scan 후 resolved/outdated 상태.
+- 이 모든 결과는 내부 자체/합성·hosted CI. **독립 외부 보안 감사, 외부 findings/retest/signoff는 수행되지 않았으며 R29 PENDING, score addition 0.** Windows10/11 실제 고객기기, 고급 NTFS/TOCTOU independent audit, 고객 data 및 IP/개인정보 승인 필요. RELEASE HOLD / SALE NO-GO 유지.
+
 # R29 전환 실행 — 독립 감사용 합성 보안 사전증거 (2026-11-14 KST)
 
 ## 차단·피벗 분석

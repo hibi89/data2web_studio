@@ -1,6 +1,6 @@
 # A21-02 — shipped producer origin and dependency review (2026-11-14 KST)
 
-**Evidence scope:** Direct GitHub contents API retrieval on `feature/final-blueprint-p85-evidence-20261113`; no customer file, external license-holder confirmation, or runtime execution.
+**Evidence scope:** Direct GitHub contents API retrieval and hosted technical checks at `${verifiedSha}`; no customer file, external license-holder confirmation, or legal review.
 
 ## Verified source identity
 All six `data/r21_source_provenance_v1.json` Git blob SHA-1 pins matched GitHub's returned current blob IDs (6/6):
@@ -15,6 +15,11 @@ All six `data/r21_source_provenance_v1.json` Git blob SHA-1 pins matched GitHub'
 | `data2web_tabular.py` | `66c2fb8910b1202ae3b0301e8b615158d9a5fac9` |
 
 Git blob equality is code identity, **not** author attribution, copyright clearance, or signed provenance. Source snapshot declared in manifest: `0219a10c03cab826220a78af128cffdae995ac9f`.
+
+## Hosted technical recheck
+- At exact SHA `48ea586b6ef712176b26c33d1809d3cd9a782d94`, [Actions #43604742332](https://github.com/hibi89/data2web_studio/actions/runs/43604742332) ran `python r21_source_provenance.py` on Windows and Ubuntu: `source_files_verified=6`, `SOURCE_BLOBS_PINNED_RIGHTS_PENDING`.
+- The same exact SHA ran `python shipping_rights_preflight.py` on both runners: four synthetic artifacts, exact v1 folder/ZIP allowlists, source bytes preserved, technical integrity verified; owner rights, commercial release, third-party notices and independent audit all remain false.
+- These checks prove pinned byte identity and package-contract behavior only. They do not identify the human author of embedded HTML/CSS/JS or grant redistribution rights.
 
 ## Direct import scan and A delivery boundary
 - `data2web_web.py`: Python stdlib `base64`, `hashlib`, `html`, `json`, `re`; emits inline HTML/CSS/JS. No imported vendor JS module identified by Python import scan. Embedded script/template authorship **not verified**.
@@ -32,4 +37,4 @@ Git blob equality is code identity, **not** author attribution, copyright cleara
 4. Inspect generated output bytes and dependency SBOM in a complete runnable checkout; source import scan does not prove absence of embedded third-party code.
 5. Only after owner/legal confirmation, decide whether v1 requires LICENSE/NOTICE; do not ship invented text or change the strict allowlist before approval.
 
-**Result:** A21-02 source identity and dependency *inspection* complete, legal origin and NOTICE evidence PENDING. No test/CI run, no R21 score award, official 72/100 and RELEASE HOLD.
+**Result:** A21-02 source identity and dependency inspection plus 6/6 runtime pin validation complete at `${verifiedSha}`; legal origin, authorship, redistribution and NOTICE evidence remain PENDING. No R21 score award; official 72/100, RELEASE HOLD.
