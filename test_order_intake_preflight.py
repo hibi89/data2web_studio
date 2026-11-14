@@ -112,6 +112,23 @@ class PreorderTests(unittest.TestCase):
                 write_new_report(target, result)
             self.assertEqual(before, target.read_bytes())
 
+    def test_cli_invalid_utf8_is_structured_hold_not_traceback(self):
+        root = Path(__file__).parent
+        with tempfile.TemporaryDirectory() as tmp:
+            metadata = Path(tmp) / "invalid-utf8.json"
+            metadata.write_bytes(b"\\xff\\xfe\\x80")
+            proc = subprocess.run(
+                [sys.executable, str(root / "order_intake_preflight.py"),
+                 "--metadata-file", str(metadata)],
+                cwd=str(root), capture_output=True, text=True, timeout=30,
+            )
+            self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+            self.assertEqual(json.loads(proc.stdout), {
+                "status": "HOLD_PREORDER", "reason": "INVALID_METADATA",
+                "sale_approved": False,
+            })
+            self.assertNotIn("Traceback", proc.stderr)
+
     def test_cli_offline_real_python(self):
         root = Path(__file__).parent
         p = subprocess.run([sys.executable, str(root / "order_intake_preflight.py"),
