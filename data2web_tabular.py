@@ -298,16 +298,20 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
 def parse_tsv(raw):
     try:
         text = raw.decode("utf-8-sig")
-        rows = list(csv.reader(io.StringIO(text, newline=""), delimiter="\t", strict=True))
+        with io.StringIO(text, newline="") as stream:
+            reader = csv.reader(stream, delimiter="\t", strict=True)
+            headers = next(reader, None)
+            if not headers or len(headers) > MAX_COLS:
+                raise ValueError("TSV requires bounded nonempty header")
+            if any(not x or len(x) > 200 for x in headers) or len(set(headers)) != len(headers):
+                raise ValueError("Duplicate or empty TSV header")
+            rows = []
+            for record in reader:
+                if len(rows) >= MAX_ROWS:
+                    raise ValueError("TSV row count limit")
+                if len(record) != len(headers):
+                    raise ValueError("TSV row has inconsistent column count")
+                rows.append(dict(zip(headers, record)))
     except (UnicodeDecodeError, csv.Error) as e:
         raise ValueError("Invalid TSV encoding or quoting") from e
-    if not rows or not rows[0] or len(rows[0]) > MAX_COLS:
-        raise ValueError("TSV requires bounded nonempty header")
-    headers = rows[0]
-    if any(not x or len(x) > 200 for x in headers) or len(set(headers)) != len(headers):
-        raise ValueError("Duplicate or empty TSV header")
-    if len(rows) - 1 > MAX_ROWS:
-        raise ValueError("TSV row count limit")
-    if any(len(r) != len(headers) for r in rows[1:]):
-        raise ValueError("TSV row has inconsistent column count")
-    return headers, [dict(zip(headers, record)) for record in rows[1:]]
+    return headers, rows
