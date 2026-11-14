@@ -4,6 +4,7 @@ import base64
 import hashlib
 import html
 import json
+import re
 
 THEMES = ("office", "cafe", "inventory")
 TEMPLATE = r'''<!doctype html>
@@ -292,7 +293,13 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
     static_script = TEMPLATE.split("<script>", 1)[1].split("</script>", 1)[0]
     script_hash = base64.b64encode(hashlib.sha256(static_script.encode("utf-8")).digest()).decode("ascii")
     source = "'sha256-" + script_hash + "'"
-    return (TEMPLATE.replace("__THEME__", theme)
-            .replace("__TITLE__", html.escape(name, quote=True))
-            .replace("__SCRIPT_HASH__", source)
-            .replace("__PAYLOAD__", safe_json))
+    # Replace only placeholders in the original template, never tokens that
+    # happen to occur inside customer cells or the document title.
+    replacements = {
+        "__THEME__": theme,
+        "__TITLE__": html.escape(name, quote=True),
+        "__PAYLOAD__": safe_json,
+        "__SCRIPT_HASH__": source,
+    }
+    return re.sub(r"__(?:THEME|TITLE|PAYLOAD|SCRIPT_HASH)__",
+                  lambda match: replacements[match.group(0)], TEMPLATE)
