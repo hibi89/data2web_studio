@@ -212,6 +212,9 @@ def validate_result(record):
             raise ValueError("Retention deadline cannot exceed seven days from review")
         if record["reason_code"] == "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
             raise ValueError("Copy-present report cannot claim no copy")
+        if (record["reason_code"] == "WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED"
+                and due <= reviewed):
+            raise ValueError("Expired copy cannot be reported within retention window")
     else:
         if due_text is not None or record["manual_disposal_action_due"]:
             raise ValueError("Copy-absent report cannot claim deadline or action due")
