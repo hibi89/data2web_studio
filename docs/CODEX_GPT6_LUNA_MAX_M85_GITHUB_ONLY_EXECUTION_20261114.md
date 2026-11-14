@@ -1,12 +1,15 @@
 ## 2026-11-15 KST — latest exact-SHA status
 
-- Latest tested code/test SHA: `144f72ee62a91d49279bcbf6ab4022b736cdeaee`; product logic last changed at `4e6808b80023157cf9f849f600e18ed123e258e0`. This test-only change adds a real hardlink-alias mutation race regression and triggers the macOS workflow when that test changes.
-- [Python/browser #43614494073](https://github.com/hibi89/data2web_studio/actions/runs/43614494073) SUCCESS: Windows 525/525 PASS; Ubuntu 524 PASS + 1 Windows-only SKIP. Direct P00 11/11, P01 15/15, A25 19/19, A26 24/24, internal R29 preaudit 7/7 PASS.
-- [macOS offline #43614494211](https://github.com/hibi89/data2web_studio/actions/runs/43614494211) SUCCESS: 524 PASS + 1 Windows-only SKIP; the new hardlink test ran and passed. Chromium `file://`/A4 checks PASS.
-- [CodeQL #43614494157](https://github.com/hibi89/data2web_studio/actions/runs/43614494157) SUCCESS. Hosted Windows Chrome/Edge and Chromium browser flows PASS.
-- [Final blueprint gate #43614494491](https://github.com/hibi89/data2web_studio/actions/runs/43614494491) SUCCESS, but the log says `UNASSESSED`; there is no approved evidence manifest and no official score.
+- Latest tested code/test SHA: `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`; product logic last changed at `4e6808b80023157cf9f849f600e18ed123e258e0`. The only new code-SHA change since `144f72e` is a deterministic test stimulus; no product logic changed.
+- Interim documentation-only SHA `ac5f6cf88ac2eb874d4841f0b3ef54af04c9387e` triggered [Python/browser #43615091295](https://github.com/hibi89/data2web_studio/actions/runs/43615091295), where one Windows regression failed because a same-size hardlink write did not produce an immediately observable timestamp change. The test now explicitly pins a distinct timestamp and asserts both bytes and timestamp changed.
+- [Python/browser #43615731394](https://github.com/hibi89/data2web_studio/actions/runs/43615731394) SUCCESS at the exact SHA: Windows 525/525 PASS; Ubuntu 524 PASS + 1 Windows-only SKIP. Direct P00 11/11, P01 15/15, A25 19/19, A26 24/24 and internal R29 preaudit 7/7 PASS; hardlink regression ran without skip on Windows/Ubuntu/macOS.
+- [macOS offline #43615731344](https://github.com/hibi89/data2web_studio/actions/runs/43615731344) SUCCESS: 524 PASS + 1 Windows-only SKIP; hardlink test, Chromium `file://` and A4 checks PASS.
+- [CodeQL #43615731368](https://github.com/hibi89/data2web_studio/actions/runs/43615731368) SUCCESS; hosted Windows Chrome/Edge and Chromium browser flows PASS with observed `network0`.
+- [Final blueprint gate #43615731598](https://github.com/hibi89/data2web_studio/actions/runs/43615731598) SUCCESS, but the log says `UNASSESSED`; no approved evidence manifest and no official score.
+- GPT-6 High reviewed SHA `61b9ecab` and found no actionable issue. Scope is the timestamp-visible hardlink mutation case; stealth metadata-preserving writes and an independent external R29 audit remain unverified.
 
-Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer Windows 10/11 and independent external audit remain unverified. This report is based on internal/synthetic and hosted CI evidence.
+Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer Windows 10/11 and independent external audit remain unverified. Internal/hosted evidence does not satisfy owner or external acceptance.
+
 # DATA2WEB Studio — Codex GPT-6 Luna Max · GitHub-only M85 실행 공시
 
 **기준:** 2026-11-14 22:44 KST · 저장소 `hibi89/data2web_studio` · 브랜치 `feature/final-blueprint-p85-evidence-20261113` · Draft [PR #4](https://github.com/hibi89/data2web_studio/pull/4) · 공시 직전 HEAD `1c582db78fb3ac91f37ddbab27b18124c08a5419`.
@@ -61,7 +64,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - 관련 파일: `HANDOFF.md`, `STATUS.md`, `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
 - 11/15 exact-SHA recheck: HEAD/PR/scorecard and the historical 100-point baseline were read from GitHub; `blueprint_score.py` returned 72/100. `test_blueprint_score` ran under full unittest discovery; its standalone command was not invoked separately.
-- 11/15: `python blueprint_score.py` returned 72/100; standalone `python -m unittest test_blueprint_score -v` passed 11/11 on Windows/Ubuntu/macOS at `144f72ee62a91d49279bcbf6ab4022b736cdeaee`.
+- 11/15: `python blueprint_score.py` returned 72/100; standalone `python -m unittest test_blueprint_score -v` passed 11/11 on Windows/Ubuntu/macOS at `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`.
 ### P01 · PREP/GATE · Codex · PASS_EXACT_SHA
 - 선행: P00. 
 - 실행: Secure previous non-destructive rollback reference and inventory customer/REA_Web protected paths; check auth identity, existing branch and CI budget.
@@ -70,7 +73,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python -m unittest test_customer_folder -v`.
 - 관련 파일: `AGENTS.md`, `docs/ORIGIN_AND_LICENSE.md`. **작업 자체 가점: 0**.
 
-- 11/15: standalone `python -m unittest test_customer_folder -v` passed 15/15 on Windows/Ubuntu/macOS at `144f72ee62a91d49279bcbf6ab4022b736cdeaee`; source rollback anchor `4e6808b` and protected path boundary were rechecked in AGENTS/ORIGIN docs.
+- 11/15: standalone `python -m unittest test_customer_folder -v` passed 15/15 on Windows/Ubuntu/macOS at `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`; source rollback anchor `4e6808b` and protected path boundary were rechecked in AGENTS/ORIGIN docs.
 ### P02 · PREP/GATE · Codex · EVIDENCE_INDEX_COMPLETE
 - 선행: P00. 
 - 실행: Open evidence index per R with unique opaque IDs and a public-safe checklist; no customer names, data, screenshots, private paths or permission tokens.
@@ -89,8 +92,8 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`, `python shipping_rights_preflight.py`, `python zero_cost_gate.py`.
 - 관련 파일: `test_blueprint_score.py`, `shipping_rights_preflight.py`. **작업 자체 가점: 0**.
 
-- 11/15 exact-SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: full discovery, source/shipping/zero-cost checks, focused A25/A26 modules, browser/UI, CodeQL and final gate completed; run URLs and PASS/SKIP scope are in STATUS/HANDOFF. This remains synthetic/hosted evidence, not buyer acceptance.
-- 11/15 exact-SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: full discovery plus direct P00/P01/A25/A26, R29 preaudit, source/shipping/zero-cost checks, browser/UI, CodeQL and final evidence gate passed at the URLs above; Windows 525/525, Ubuntu/macOS 524 PASS + 1 Windows-only SKIP.
+- 11/15 exact-SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: full discovery, source/shipping/zero-cost checks, focused A25/A26 modules, browser/UI, CodeQL and final gate completed; run URLs and PASS/SKIP scope are in STATUS/HANDOFF. This remains synthetic/hosted evidence, not buyer acceptance.
+- 11/15 exact-SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: full discovery plus direct P00/P01/A25/A26, R29 preaudit, source/shipping/zero-cost checks, browser/UI, CodeQL and final evidence gate passed at the URLs above; Windows 525/525, Ubuntu/macOS 524 PASS + 1 Windows-only SKIP.
 ### A07-01 · R07 · Codex · TECHNICAL_RECHECK_PASS_EXACT_SHA
 - 선행: P02. 
 - 실행: Map raw-source custody, user-of-record, owner-created copies, browser plaintext output and shared-data rights; reuse existing order_intake_preflight to avoid duplicate workflow.
@@ -117,7 +120,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`.
 - 관련 파일: `data2web_desktop.py`, `data2web_single.py`, `data2web_append.py`, `test_acceptance.py`. **작업 자체 가점: 0**.
 
-- 11/15 exact-SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: full discovery and hosted Windows Tk single/batch consent-reset flows, Chrome/Edge and Chromium local-file flows PASS. No actual rights/consent acceptance is implied.
+- 11/15 exact-SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: full discovery and hosted Windows Tk single/batch consent-reset flows, Chrome/Edge and Chromium local-file flows PASS. No actual rights/consent acceptance is implied.
 ### A07-04 · R07 · OWNER · BLOCKED_OWNER
 - 선행: A07-02, A07-03. **차단:** NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT.
 - 실행: Confirm actual rights/authority and obtain specific owner/provider permission plus scope for one authorized acceptance case using approved private/local channel only.
@@ -134,7 +137,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
-- 11/15: technical preflight and browser/UI regression are tested at `144f72ee62a91d49279bcbf6ab4022b736cdeaee`; actual source authority and customer-specific consent are still absent, so item acceptance remains blocked.
+- 11/15: technical preflight and browser/UI regression are tested at `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`; actual source authority and customer-specific consent are still absent, so item acceptance remains blocked.
 ### A21-01 · R21 · Codex · TECHNICAL_RECHECK_PASS_EXACT_SHA
 - 선행: P01, P02. 
 - 실행: Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.
@@ -198,13 +201,13 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python -m unittest test_operator_copy_retention -v`.
 - 관련 파일: `operator_copy_retention.py`, `data/zero_cost_owner_policy_v1.json`. **작업 자체 가점: 0**.
 
-- 11/15 exact-SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: direct `python -m unittest test_operator_copy_retention -v` PASS 19/19 on Windows, Ubuntu and macOS; full discovery PASS with one Windows-only skip on Ubuntu/macOS. Includes invalid UTF-8, extreme dates and forged-report regressions; no real disposal is certified.
+- 11/15 exact-SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: direct `python -m unittest test_operator_copy_retention -v` PASS 19/19 on Windows, Ubuntu and macOS; full discovery PASS with one Windows-only skip on Ubuntu/macOS. Includes invalid UTF-8, extreme dates and forged-report regressions; no real disposal is certified.
 ### A25-02 · R25 · Codex · TECHNICAL_TEMPLATE_AND_TESTS_PASS_EXACT_SHA
 - 선행: A25-01. 
 - 실행: Prepare an unfilled custody/owner role, where/when data copied, rights, purpose, manual deletion or return authority, legal exception and record checklist.
 - 수용: Customer source and result retention separate; explicit records for custody, expiry, action and no-copy case; no customer identifiers in public repo.
 - 증거: Redacted receipt/retention notice and operator manual checklist.
-- 11/15: the blank custody/retention form is committed; exact SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee` direct retention command PASS 19/19 on Windows, Ubuntu and macOS. The seven owner-approved internal policies and prior synthetic deletion drill remain recorded; no actual customer custody/disposal record exists.
+- 11/15: the blank custody/retention form is committed; exact SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf` direct retention command PASS 19/19 on Windows, Ubuntu and macOS. The seven owner-approved internal policies and prior synthetic deletion drill remain recorded; no actual customer custody/disposal record exists.
 - GitHub Actions 내부 테스트: `python -m unittest test_operator_copy_retention -v`.
 - 관련 파일: `docs/R07_R25_R26_LOCAL_COPY_RETENTION_20261114.md`, `docs/A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md`. **작업 자체 가점: 0**.
 
@@ -231,7 +234,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - 실행: Reconcile personal/sensitive/medical/payment identifiers, shared/confidential, unknown scope, allowed nonpersonal only; map plaintext and offline exposure.
 - 수용: Default HOLD for personal/sensitive/unclear rights and explicit safe classification; no encryption/anonymous-data fiction.
 - 증거: Synthetic privacy class matrix, mappings and negative cases.
-- 11/15: V2 explicit privacy class/matrix and fail-closed cases; exact SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee` direct `python -m unittest test_order_intake_preflight -v` PASS 24/24 on Windows, Ubuntu and macOS. Classification remains self-reported, not detection or legal basis.
+- 11/15: V2 explicit privacy class/matrix and fail-closed cases; exact SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf` direct `python -m unittest test_order_intake_preflight -v` PASS 24/24 on Windows, Ubuntu and macOS. Classification remains self-reported, not detection or legal basis.
 - GitHub Actions 내부 테스트: `python -m unittest test_order_intake_preflight -v`.
 - 관련 파일: `order_intake_preflight.py`, `test_order_intake_preflight.py`, `data2web_desktop.py`, `docs/A26_01_PRIVACY_SCOPE_MATRIX_20261115.md`. **작업 자체 가점: 0**.
 
@@ -240,7 +243,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - 실행: Audit frontend checkbox reset for replaced/altered source, rights, plaintext and privacy classification across single and batch; update tests only for reproduced gap.
 - 수용: No persistence of stale sensitive approval across dataset revisions; file values not sent over network.
 - 증거: CI/browser negative-flow evidence, clear notices/HOLD response.
-- 11/15 exact-SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: direct A26 module 24/24 PASS on Windows/Ubuntu/macOS, full suite PASS, plus hosted Windows Tk single/batch consent-reset and Chrome/Edge/Chromium file:// flows PASS. Customer-specific privacy basis and consent remain blocked.
+- 11/15 exact-SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: direct A26 module 24/24 PASS on Windows/Ubuntu/macOS, full suite PASS, plus hosted Windows Tk single/batch consent-reset and Chrome/Edge/Chromium file:// flows PASS. Customer-specific privacy basis and consent remain blocked.
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`.
 - 관련 파일: `data2web_desktop.py`, `browser_final_blueprint_probe.py`. **작업 자체 가점: 0**.
 
@@ -269,7 +272,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python security_audit_preaudit.py`, `python -m unittest discover -v`.
 - 관련 파일: `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`. **작업 자체 가점: 0**.
 
-- 11/15 exact SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: internal preaudit 7/7 PASS; full discovery Windows 525/525 and Ubuntu/macOS 524 PASS + 1 Windows-only SKIP. CRC, duplicate ZIP member, and hardlink-alias mutation regressions PASS on all three OS. Actions: Python/browser #43614494073, macOS #43614494211, CodeQL #43614494157. Real NTFS junction/TOCTOU exercise and independent external audit remain unverified.
+- 11/15 exact SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: internal preaudit 7/7 PASS; full discovery Windows 525/525 and Ubuntu/macOS 524 PASS + 1 Windows-only SKIP. CRC, duplicate ZIP member, and hardlink-alias mutation regressions PASS on all three OS. Actions: Python/browser #43615731394, macOS #43615731344, CodeQL #43615731368. Real NTFS junction/TOCTOU exercise and independent external audit remain unverified.
 ### A29-02 · R29 · Codex · INTERNAL_PREAUDIT_PASS_EXACT_SHA_EXTERNAL_PENDING
 - 선행: A29-01. 
 - 실행: Prepare public-source-only reproducible audit bundle/instructions, source freeze and risk register, with existing internal CodeQL and browser CI clearly labeled self-check.
@@ -278,7 +281,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python security_audit_preaudit.py`, `python shipping_rights_preflight.py`.
 - 관련 파일: `docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md`. **작업 자체 가점: 0**.
 
-- 11/15 exact SHA `144f72ee62a91d49279bcbf6ab4022b736cdeaee`: public-source handoff includes exact source pin, reproducible commands, attack-category coverage and explicit residuals. GPT-6 High reviewed the new hardlink fault injection and macOS path trigger with no actionable finding; Codex/High/CodeQL remain internal self-checks, and independent external audit/findings/retest are still missing.
+- 11/15 exact SHA `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`: public-source handoff includes exact source pin, reproducible commands, attack-category coverage and explicit residuals. The hardlink regression forces an observable timestamp change after the alias write; GPT-6 High found no actionable issue. Metadata-preserving stealth writes and independent external audit/findings/retest remain outside internal evidence.
 ### A29-03 · R29 · OWNER · BLOCKED_OWNER
 - 선행: A29-02. **차단:** INDEPENDENT_REVIEWER_AND_EXTERNAL_DISCLOSURE_APPROVAL.
 - 실행: Select/approve a genuinely independent external reviewer and specific scope, any agreement or public-source sharing, zero-cost budget; no paid purchase or access grant absent new approval.
@@ -339,7 +342,7 @@ Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Buyer W
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`, `python blueprint_score.py`, `python shipping_rights_preflight.py`.
 - 관련 파일: ` .github/workflows/python-tests.yml`, `.github/workflows/final-blueprint-gate.yml`. **작업 자체 가점: 0**.
 
-- 11/15: exact-SHA CI/browser/CodeQL/gate passed at `144f72ee62a91d49279bcbf6ab4022b736cdeaee`, but G85-01 remains blocked on real owner/customer/external acceptance evidence.
+- 11/15: exact-SHA CI/browser/CodeQL/gate passed at `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`, but G85-01 remains blocked on real owner/customer/external acceptance evidence.
 ### G85-03 · PREP/GATE · Codex · BLOCKED_G85_01_OWNER_EVIDENCE
 - 선행: G85-02. 
 - 실행: Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.

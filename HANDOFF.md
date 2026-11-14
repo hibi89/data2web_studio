@@ -1,16 +1,17 @@
-## 2026-11-15 KST — A29 hardlink 경합 회귀 및 exact-SHA 재검증
+## 2026-11-15 KST — A29 hardlink 회귀 안정화 및 exact-SHA 재검증
 
-1. **저장소·브랜치:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR #4 Draft/Open/Unmerged; base `feature/p85-ui-crossbrowser-20261113`, `main`은 `0cf4adbfe745c10fdb103db09185ea495fb769aa`에서 불변. 최신 검증 코드·테스트 SHA는 `144f72ee62a91d49279bcbf6ab4022b736cdeaee`; 제품 로직의 마지막 변경은 `4e6808b80023157cf9f849f600e18ed123e258e0`이다. 이번 커밋은 합성 hardlink 회귀와 macOS 경로 트리거만 변경했다.
-2. **공식 점수:** R01–R33 33개/100점 중 22 VERIFIED, 11 PENDING, **72/100**. 85까지 +13, 이번 증가 0. 기존 가중치·증거 범위·`[작업중]`·RELEASE HOLD·SALE NO-GO를 유지한다.
-3. **hardlink 회귀:** `test_snapshot_safety.py::test_hardlink_alias_mutation_during_bounded_read_is_rejected`가 실제 `os.link` 별칭을 만들고 동일 파일인지 확인한 뒤 별칭 경로에서 파일 내용을 바꾸어 `read_bounded_source`가 변경 감지로 fail closed 하는지 검증한다. Windows/Ubuntu/macOS 모두 해당 테스트가 skip 없이 PASS했다. macOS workflow 경로 필터에 해당 테스트를 추가했다. 제품 로직 변경은 없다.
-4. **정확 SHA 전체 테스트:** [Python/browser #43614494073](https://github.com/hibi89/data2web_studio/actions/runs/43614494073) SUCCESS. Windows 525/525 PASS; Ubuntu 524 PASS + Windows-only 1 SKIP. P00 11/11, P01 15/15, A25 19/19, A26 24/24, R29 내부 preaudit 7/7 통과.
-5. **macOS·브라우저:** [macOS offline #43614494211](https://github.com/hibi89/data2web_studio/actions/runs/43614494211) SUCCESS, 524 PASS + Windows-only 1 SKIP; hardlink 회귀 포함. Hosted Windows Chrome/Edge 및 Chromium `file://` 합성 흐름 PASS. Playwright 관측에서 HTTP(S) 페이지 요청은 없었으며 이는 OS 전체 네트워크 감시가 아니다.
-6. **정적분석·게이트:** [CodeQL #43614494157](https://github.com/hibi89/data2web_studio/actions/runs/43614494157) SUCCESS. [final blueprint gate #43614494491](https://github.com/hibi89/data2web_studio/actions/runs/43614494491) SUCCESS지만 `UNASSESSED`, 승인된 증거 manifest 없음, 공식 점수 미부여.
-7. **GPT-6 High 검수:** commit `144f72e`의 hardlink fault injection과 macOS path trigger를 별도 검수했고 추가 actionable finding이 없다고 확인했다. 내부 검수이며 실제 독립 외부 R29 감사가 아니다.
-8. **작업 ID:** 기술/기록 완료 P00–P03, A07-01/02 증거 재사용, A07-03, A21-01/02, A25-01/02, A26-01/02, A29-01/02. OWNER·고객·외부 증거 대기 A07-04/05, A21-03~06, A25-03/04, A26-03/04, A29-03~07, G85-01~04. R25 기존 7개 정책 승인과 합성 파기 시험은 유효하며 재요청하지 않는다.
-9. **남은 수용 증거:** R07 실제 고객별 원본 권한·동의, R21 상업 재배포권·NOTICE, R25 실제 고객 보관·반환·파기 기록, R26 고객별 개인정보 처리근거·동의, R29 승인된 독립 평가자의 감사·발견사항·수정 후 독립 재검증.
-10. **명시적 미검증:** 실제 구매자 Windows 10/11 인수, 독립 NTFS junction/reparse·고급 TOCTOU 감사, Excel/LibreOffice 수식 실행, 광범위 악성 XLSX의 독립 시간·메모리 측정, OS 전체 egress 감시는 미검증이다. hardlink 테스트는 합성 경합 회귀이며 현장 독립 감사를 대체하지 않는다. 상세는 [R29 사전감사 행렬](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md)에 있다.
-11. 이 기록은 검증 SHA 뒤 docs-only `[skip ci]` 커밋에 반영한다.
+1. **저장소·브랜치:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, PR #4 Draft/Open/Unmerged, base `feature/p85-ui-crossbrowser-20261113`; `main`은 `0cf4adbfe745c10fdb103db09185ea495fb769aa`에서 불변. 최신 검증 코드·테스트 SHA는 `61b9ecab976518d28b732395f8ac3e1d40f9c5bf`; 제품 로직 마지막 변경은 `4e6808b80023157cf9f849f600e18ed123e258e0`이다.
+2. **공식 점수:** R01–R33 중 22 VERIFIED / 11 PENDING, **72/100**. 85까지 +13이며 이번 증가는 0점. 고정 가중치·증거 범위·`[작업중]`·RELEASE HOLD·SALE NO-GO를 유지한다.
+3. **실패 이력과 수정:** 문서 전용 SHA `ac5f6cf88ac2eb874d4841f0b3ef54af04c9387e`의 [Python/browser #43615091295](https://github.com/hibi89/data2web_studio/actions/runs/43615091295)에서 Windows 전체 테스트 중 `test_hardlink_alias_mutation_during_bounded_read_is_rejected`가 `ValueError not raised`로 실패했다. 테스트가 같은 크기의 alias write 직후 OS 수정시각이 바뀐다고 가정한 부분을 확인해 SHA `61b9ecab`에서 수정시각을 명시적으로 10초 이동하고 변경 바이트·시각을 확인하도록 고쳤다. 제품 로직은 수정하지 않았다.
+4. **정확 SHA 전체 회귀:** [Python/browser #43615731394](https://github.com/hibi89/data2web_studio/actions/runs/43615731394) SUCCESS. Windows 525/525 PASS; Ubuntu 524 PASS + 1 Windows-only SKIP. 전체 제품·패키징 회귀와 zero-cost/source-pin/shipping 확인이 통과했다.
+5. **직접 게이트·보안 사전검사:** P00 11/11, P01 15/15, A25 19/19, A26 24/24, 내부 R29 사전검사 7/7 PASS. hardlink 회귀는 Windows/Ubuntu/macOS에서 skip 없이 실행됐다.
+6. **macOS·브라우저:** [macOS offline #43615731344](https://github.com/hibi89/data2web_studio/actions/runs/43615731344) SUCCESS; 524 PASS + 1 Windows-only SKIP. [호스팅 브라우저 #43615731394](https://github.com/hibi89/data2web_studio/actions/runs/43615731394)와 Windows 브라우저 job에서 Chromium/Chrome/Edge, Tk 단일·다중 합성 흐름 PASS. Playwright의 `network0`은 해당 페이지 요청 관찰 결과이며 OS 전체 egress 감시가 아니다.
+7. **CodeQL·최종 게이트:** [CodeQL #43615731368](https://github.com/hibi89/data2web_studio/actions/runs/43615731368) SUCCESS. [blueprint gate #43615731598](https://github.com/hibi89/data2web_studio/actions/runs/43615731598) SUCCESS / `UNASSESSED`; 승인된 증거 manifest가 없어 공식 점수는 부여하지 않는다.
+8. **GPT-6 High 별도 검수:** SHA `61b9ecab`의 시험 수정은 별도 검수에서 actionable finding 없음. 검수 범위는 실제 hardlink write 뒤 관측 가능한 수정시각 변경의 fail-closed 검증이다. 시각을 보존·복구하는 stealth same-size race 검증이나 독립 외부 R29 감사가 아니다.
+9. **작업 ID:** 기술·기록 완료 P00–P03, A07-01/02 증거 재사용, A07-03, A21-01/02, A25-01/02, A26-01/02, A29-01/02. OWNER·고객·외부 증거 대기 A07-04/05, A21-03~06, A25-03/04, A26-03/04, A29-03~07, G85-01~04. R25 기존 정책 7건 승인과 합성 파기 시험은 유효하므로 재요청하지 않는다.
+10. **남은 수용 증거:** R07 실제 고객별 원본 권한·동의, R21 상업 재배포권·NOTICE 결정, R25 실제 고객 보관·반환·파기 기록, R26 고객별 개인정보 처리근거·동의, R29 승인된 독립 평가자의 감사·발견사항·시정 후 독립 재검증.
+11. **명시적 미검증:** 구매자 Windows 10/11 인수, 독립 NTFS junction/reparse 및 고급 TOCTOU 감사, Excel/LibreOffice 수식 실행, 광범위 악성 XLSX의 독립 시간·메모리 측정, OS 전체 egress 감시는 미검증이다. 내부·합성 검증은 외부 수용을 대체하지 않는다. 아래 갱신은 검증 SHA 뒤 docs-only commit이다.
+
 ## 2026-11-14 23:47 KST — DATA2WEB Studio 최신 인수인계 (High 검수 반영)
 1. **목표·정본:** R01–R33 고정 100점 설계, 목표 85. 공식 점수 72/100(22 VERIFIED, 11 PENDING), 13점 부족. 배점·분모·출시 상태 불변.
 2. **저장소/브랜치/SHA:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; latest tested SHA `bfa808b0815b7e5be1bd11de8d6833717be0dcfd`; 뒤따르는 docs-only `[skip ci]` commit은 테스트 대상 코드 변경 아님. PR #4 Draft/Open/Unmerged, main 미변경.
