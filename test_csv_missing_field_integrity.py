@@ -46,6 +46,20 @@ class CsvMissingFieldIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "missing a required field delimiter"):
             read_table(self.source)
 
+    def test_csv_row_count_is_rejected_at_bounded_limit(self):
+        self._write(
+            "id,title,category\n" +
+            "".join(f"{n},Sample{n},A\n" for n in range(10001))
+        )
+        with self.assertRaisesRegex(ValueError, "CSV row count limit"):
+            read_table(self.source)
+
+    def test_csv_excess_columns_rejected_before_reading_records(self):
+        columns = ["id", "title", "category"] + [f"extra{i}" for i in range(38)]
+        self._write(",".join(columns) + "\n")
+        with self.assertRaisesRegex(ValueError, "CSV column count limit"):
+            read_table(self.source)
+
     def test_invalid_row_cannot_create_single_delivery_directory(self):
         content = "id,title,category\nA,Alpha\n"
         self._write(content)
