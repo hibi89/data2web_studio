@@ -124,7 +124,7 @@ function numericMetrics(){const current=metrics.value;metrics.replaceChildren();
  for(const key of state.columns){if([idKey,titleKey,categoryKey].includes(key))continue;
  let observed=0,usable=true;
  for(const row of state.rows){const value=row[key].trim();if(!value)continue;
- const amount=safeScaled(value);if(amount===null||amount<0n){usable=false;break}observed++
+ const amount=safeScaled(value);if(amount===null||amount<0n){usable=false;break}observed++}
  if(usable&&observed){const option=document.createElement("option");option.value=key;option.textContent=key+" 합계 (빈 값 제외)";metrics.append(option)}
  }
  metrics.value=[...metrics.options].some(x=>x.value===current)?current:""}
