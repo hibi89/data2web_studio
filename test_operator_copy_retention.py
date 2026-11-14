@@ -97,6 +97,12 @@ class OperatorCopyRetentionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     review_copy(doc,as_of=NOW)
 
+    def test_extreme_receipt_timestamp_fails_closed(self):
+        doc=doc_at(1)
+        doc["received_at_utc"]="9999-12-31T23:59:59Z"
+        with self.assertRaises(ValueError):
+            review_copy(doc,as_of=datetime(9999,12,31,23,59,59,tzinfo=timezone.utc))
+
     def test_closed_schema_rejects_identifiers_and_free_text(self):
         for key in ("customer_email","file_path","customer_name","actual_data_values","disposal_proof"):
             with self.subTest(field=key):
