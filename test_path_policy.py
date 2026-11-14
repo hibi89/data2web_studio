@@ -1,4 +1,7 @@
 """Path ancestry, junction-equivalent and no-clobber regressions."""
+import os
+import stat
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -24,6 +27,37 @@ class LinkedAncestors(unittest.TestCase):
     def test_parent_directory_alias_rejected(self):
         path=self.real/".."/"safe"/"source.csv"
         with self.assertRaises(ValueError):assert_no_links(path)
+
+    def _make_junction(self, alias):
+        if os.name != "nt":
+            self.skipTest("Windows-only directory junction")
+        command=[os.environ.get("COMSPEC","cmd.exe"),"/c","mklink","/J",
+                 str(alias),str(self.real)]
+        result=subprocess.run(command,capture_output=True,text=True,
+                              errors="replace",timeout=15)
+        if result.returncode:
+            self.fail("mklink /J failed: "+result.stdout+result.stderr)
+        self.addCleanup(self._remove_junction,alias)
+        attributes=getattr(alias.lstat(),"st_file_attributes",0)
+        self.assertTrue(attributes & getattr(stat,"FILE_ATTRIBUTE_REPARSE_POINT",0x400),
+                        "created directory junction must be a reparse point")
+
+    @staticmethod
+    def _remove_junction(path):
+        try:os.rmdir(path)
+        except FileNotFoundError:pass
+
+    def test_source_directory_junction_rejected(self):
+        alias=self.root/"junction"
+        self._make_junction(alias)
+        with self.assertRaises(ValueError):read_table(alias/"source.csv")
+
+    def test_output_parent_directory_junction_rejected(self):
+        alias=self.root/"junction"
+        self._make_junction(alias)
+        with self.assertRaises(ValueError):
+            build(self.source,alias/"new.html","id","title","category",True)
+        self.assertFalse((self.real/"new.html").exists())
 
     def test_source_symlink_directory_rejected(self):
         alias=self.root/"linkdir"
