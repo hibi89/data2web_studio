@@ -1,5 +1,11 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · Win11 소유자 실기기 합성 CSV→HTML/ZIP/영수증 독립 납품검증 PASS
+- 사용자가 Windows11 Pro build26200의 정본 SHA256 일치 `DATA2WEB-LOCAL.exe`로 직접 만든 2행 CSV를 GUI 검수·명시 권리/평문 체크·개인정보 없음 선택·신규 폴더 생성한 후 PowerShell `verify-customer` 출력 제공: `contract=DATA2WEB_CUSTOMER_FOLDER_V1`, `verified=true`, `rows=2`, `status=LOCAL_INTEGRITY_VERIFIED_RELEASE_HOLD_NOT_SALE_APPROVED`, `sale_approved=false`. HTML SHA `8ebe90998f5155b2ca73c8a8db2782c3fe8999e33e873f45cc48eee1d49c32a2`; ZIP SHA `5c16d93a56e432718cce5ebbf8d84564eb93c1dd176d6dd25604772e8b47677f`; receipt SHA `970994186449b9ad5dd521f02cc49b0ed01ebe5d6bdbf664f5f89ee117474a3a`. **소유자 현장 합성 납품·독립검증 PASS**, 고객 원본·실거래/법적 승인 아님.
+- 데스크톱 실행 세션에서 `tkinter.mainloop`의 `KeyboardInterrupt` 스택트레이스 1건 관찰. 인터럽트 원인(예 Ctrl+C) **미확인**, 일반 종료 오류로 단정하지 않으며 **이후 독립 폴더 verify PASS와 분리**. 현장 실제 HTML의 수동 Chrome/Edge 열기·검색 확인은 이번 증거 없음.
+- R23/R32 추가 현장 근거이나 완전 수용 Win10/macOS·독립 고객/서명·권리 등 미충족. 기존 R24 이미 3점 VERIFIED여서 중복 득점 금지. **정본 R01–33 전체72/100 유지**, 85까지13점, 11 PENDING28점, `[작업중]`/RELEASE HOLD/SALE NO-GO. [자세한 현장 증거·재검증 한계](docs/R23_R32_WIN11_OWNER_FULL_DELIVERY_20261114.md). 코드/점수표/원본 변경0.
+
+
 ## 2026-11-14 KST · 사용자 Win11 Pro 실제 Tk GUI 합성 CSV SHA/스키마 검수 PASS
 - 소유자가 직접 생성한 **합성 2행/3열 CSV**(헤더 `id,title,category`, 두 레코드) 선택 후 `SHA·열·중복 검수` 실행. 사용자 제공 GUI 스크린샷에 `SHA256: 641fcfb8e6e4a522993e0894d2e0fac3d0d4784a19911e4a3f9e42ec25e15fd1 | 2행 / 3열`, 빈 셀0, 중복 비어있지 않은 셀0, `id`/ `title`/ `category` 매핑 자동 선택, 자료형 힌트 표시 및 `검수 완료. 컬럼·사용권·개인정보를 확인하고 새 고객 폴더를 지정하세요` 안내 확인. 이 내용은 **사용자 제공 이미지 기준 시각 증거**, 로컬 원본 자체 파일 bytes를 ChatGPT가 열어 검산한 결과는 아님.
 - 정확 Windows11 Pro Build26200/EXE SHA256 일치 및 Chrome·Edge 실PC 합성 self-check PASS는 직전 검증. **이번 실PC에서는 GUI 파일 선택·2행3열 파싱·검수·매핑 반영 PASS**, 실제 배송폴더 생성·검증 버튼·권리/개인정보 동의는 아직 실행 전.

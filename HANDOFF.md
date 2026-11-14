@@ -1,5 +1,16 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · 소유자 Windows11 실기기 합성 납품·검증 PASS
+1. **목적·정본:** DATA2WEB Studio CSV/JSON/XLSX/TSV → 오프라인 HTML+ZIP+receipt, R01~R33 고정100점/목표85.
+2. **완료 기능·변경:** 사용자 Win11 Pro 26200 실제 Tk GUI에서 본인이 생성한 합성 CSV 2행/3열·SHA 검수, 권리/평문 체크, 개인정보 없음 분류, 신규 출력 폴더 생성 후 EXE `verify-customer` 실행; `verified=true`, `rows=2`, `sale_approved=false`. 코드 수정 없이 현장 검증 증거 문서만 추가.
+3. **시험:** 실제 소유자 EXE `verify-customer` 출력 `contract=DATA2WEB_CUSTOMER_FOLDER_V1`; HTML SHA `8ebe90998f5155b2ca73c8a8db2782c3fe8999e33e873f45cc48eee1d49c32a2`; ZIP SHA `5c16d93a56e432718cce5ebbf8d84564eb93c1dd176d6dd25604772e8b47677f`; 영수증 SHA `970994186449b9ad5dd521f02cc49b0ed01ebe5d6bdbf664f5f89ee117474a3a`; **현장 합성 자료 납품 PASS**, 실제 고객 원본·법적 승인·Win10/macOS·독립 고객 인수 미검증. 기존 hosted Python/browser [#43530595714](https://github.com/hibi89/data2web_studio/actions/runs/43530595714) 4/4 PASS, [gate #43530596273](https://github.com/hibi89/data2web_studio/actions/runs/43530596273) PASS. 새 문서 HEAD의 CI 별도 확인.
+4. **완료/대기:** 72/100점, 22 verified(기존), 11 pending 28점, 목표85까지13점. R24 기존3점 중복 금지; R23/32 부분 현장 근거 강화. `[작업중]`/RELEASE HOLD/SALE NO-GO, Draft PR#4.
+5. **장애/근거:** 소유자 `DATA2WEB-LOCAL.exe desktop` 로그에 `tkinter.mainloop KeyboardInterrupt` 1건. Ctrl+C 등 수동 인터럽트 가능하지만 미확인; 이후 `verify-customer` PASS므로 납품 실패 단정 금지. 반복 기존 성공 검사 불필요. UX 개선 후보에만 기록.
+6. **저장소·브랜치/SHA:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 마지막 검증 기준 HEAD `a27cc31d0328b489904767f0d45062da289bed88`, native EXE 원본 소스 `96e2e1dff9976773bf3d3b2670ba6763ee69292d`, EXE sha256 `87d0d28222a052cd5c8f4da48922376ec72a604283b8021a775199f4fa0f4718`. 주요 경로 `data2web_desktop.py`, `verify_customer_folder.py`, `docs/R23_R32_WIN11_OWNER_FULL_DELIVERY_20261114.md`.
+7. **프로덕션/환경:** 사용자의 Windows11 Pro build26200, EXE `verify-customer`; Python/Playwright 직접 설치 없이 실행; Vercel/Production 미적용, 7일 GitHub preview artifact.
+8. **원본·권한/복구:** 실고객 자료 사용0, 합성 CSV의 실제 바이트·사용자 홈 경로·스크린샷 저장소 업로드0; 출력 digest만 기록. 기존 코드·배점·기능/소스·main 보존. 별도 권리·판매·개인정보 승인 전 배포 금지.
+9. **다음:** 현장 생성된 `index.html`을 Windows Chrome/Edge에서 열어 2행·검색/필터 시각검수(필요하면); 별도 Windows10/macOS·외부 독립 고객 인수, 상업/법률/지원·환불 정책 승인으로 85까지 실제 미검증 요구 해결. GUI 인터럽트 로그의 정확한 재현 원인은 소유자 확인 없이는 미확인.
+10. **갱신 시간/증거:** 2026-11-14 KST 소유자 제공 실제 Win11 PowerShell 결과·이전 GUI 스크린샷; 향후 문서 commit SHA 재확인 필요.
 ## 추가 인수인계 — 2026-11-14 KST · 소유자 실Windows GUI 합성 CSV 입력 검수
 1. 목표/정본: DATA2WEB Studio 로컬 XLSX/CSV/TSV/JSON→HTML/ZIP, 사용자 최종설계 고정100점·85목표.
 2. 사용자 제공 실PC GUI 스크린샷: 본인이 만든 합성 CSV `id,title,category`, 두 행, 3열. 실제 `파일 선택` 및 `SHA·열·중복 검수` 후 SHA256 `641fcfb8e6e4a522993e0894d2e0fac3d0d4784a19911e4a3f9e42ec25e15fd1`, 빈 셀0·중복0, ID/title/category 선택값 일치, 검수 완료 안내 확인.
