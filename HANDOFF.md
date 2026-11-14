@@ -1,3 +1,7 @@
+## 2026-11-14 KST — Instant P01 recovery / A07-01 static source custody review
+- Reviewed `order_intake_preflight.py`, `test_order_intake_preflight.py`, `docs/ORIGIN_AND_LICENSE.md`, `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md`, and shipping rights inventory. Recorded rollback boundary, protected sources, plaintext dataflow and owner/third-party acceptance gaps in [P01/A07-01 review](docs/P01_A07_01_SOURCE_CUSTODY_REVIEW_20261114.md), code review commit `9cf2add09afa1e3069091cbd84faabcbc4cf524a`.
+- P01 read-only recovery reference and A07-01 **static review** complete. No runtime reproduction or new CI was executed; P03 remains pending and A07-01 runtime verification is still required. Workflow-run lookup returned no results through its limited PR-only query, not a claim that historical CI failed. Official score 72/100, R07 still PENDING, RELEASE HOLD. Next A07-02/A07-03 and A21-01; do not award points without owner/external evidence.
+
 ## 2026-11-14 KST — Instant P00/P02 evidence indexing (official 72/100 unchanged)
 - Verified locked scorecard directly: 33 requirements, weight 100, 22 VERIFIED = 72, 11 PENDING = 28. P00 score inspection complete; full command/CI rerun not performed in this turn, so P03 remains pending.
 - P02 public-safe evidence index committed: [M85 evidence index](docs/M85_ACCEPTANCE_EVIDENCE_INDEX_20261114.md). Five M85 requirements R07/R21/R25/R26/R29 remain PENDING due to real owner/rights/privacy/operational and independent external audit evidence. No customer data, fake rights, or point changes.
