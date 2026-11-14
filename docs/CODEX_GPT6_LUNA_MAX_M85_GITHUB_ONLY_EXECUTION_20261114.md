@@ -175,13 +175,14 @@
 - GitHub Actions 내부 테스트: `python -m unittest test_operator_copy_retention -v`.
 - 관련 파일: `operator_copy_retention.py`, `data/zero_cost_owner_policy_v1.json`. **작업 자체 가점: 0**.
 
-### A25-02 · R25 · Codex · PARTIAL_SYNTHETIC
+### A25-02 · R25 · Codex · TECHNICAL_TEMPLATE_COMPLETE — exact-SHA suite PASS
 - 선행: A25-01. 
 - 실행: Prepare an unfilled custody/owner role, where/when data copied, rights, purpose, manual deletion or return authority, legal exception and record checklist.
 - 수용: Customer source and result retention separate; explicit records for custody, expiry, action and no-copy case; no customer identifiers in public repo.
 - 증거: Redacted receipt/retention notice and operator manual checklist.
+- 11/15: blank source/result/no-copy custody form is committed; exact SHA `4e6808b80023157cf9f849f600e18ed123e258e0` full suite PASS on Windows/Ubuntu/macOS, including retention regressions. The task module was covered by discovery; the standalone command was not run. No real customer receipt or disposal proof exists.
 - GitHub Actions 내부 테스트: `python -m unittest test_operator_copy_retention -v`.
-- 관련 파일: `docs/R07_R25_R26_LOCAL_COPY_RETENTION_20261114.md`. **작업 자체 가점: 0**.
+- 관련 파일: `docs/R07_R25_R26_LOCAL_COPY_RETENTION_20261114.md`, `docs/A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md`. **작업 자체 가점: 0**.
 
 ### A25-03 · R25 · OWNER · POLICY_APPROVED_SYNTHETIC_PASS_REAL_EVIDENCE_BLOCKED
 - 선행: A25-02. **차단:** NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE.
@@ -200,20 +201,21 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
-### A26-01 · R26 · Codex · REVALIDATE
+### A26-01 · R26 · Codex · TECHNICAL_MATRIX_AND_NEGATIVE_TESTS_PASS
 - 선행: P02. 
 - 실행: Reconcile personal/sensitive/medical/payment identifiers, shared/confidential, unknown scope, allowed nonpersonal only; map plaintext and offline exposure.
 - 수용: Default HOLD for personal/sensitive/unclear rights and explicit safe classification; no encryption/anonymous-data fiction.
 - 증거: Synthetic privacy class matrix, mappings and negative cases.
+- 11/15: V2 requires an exact privacy class; only reviewed nonpersonal scope can become a candidate. Five risky/unknown classes, missing/invalid/legacy values fail closed; GUI explains plaintext/local-only limits. Exact SHA `4e6808b80023157cf9f849f600e18ed123e258e0` full suite PASS on Windows/Ubuntu/macOS, including the two new matrix/contract tests. The focused module was covered by discovery; the standalone command was not run. R26 remains PENDING for customer-specific consent and lawful basis.
 - GitHub Actions 내부 테스트: `python -m unittest test_order_intake_preflight -v`.
-- 관련 파일: `order_intake_preflight.py`, `data2web_desktop.py`. **작업 자체 가점: 0**.
+- 관련 파일: `order_intake_preflight.py`, `test_order_intake_preflight.py`, `data2web_desktop.py`, `docs/A26_01_PRIVACY_SCOPE_MATRIX_20261115.md`. **작업 자체 가점: 0**.
 
-### A26-02 · R26 · Codex · CODE_AND_TEST_COMMITTED_CI_PENDING
+### A26-02 · R26 · Codex · CODE_AND_TEST_PASS_EXACT_SHA
 - 선행: A26-01. 
 - 실행: Audit frontend checkbox reset for replaced/altered source, rights, plaintext and privacy classification across single and batch; update tests only for reproduced gap.
 - 수용: No persistence of stale sensitive approval across dataset revisions; file values not sent over network.
 - 증거: CI/browser negative-flow evidence, clear notices/HOLD response.
-- 11/14 최신 증거 주의: Run GUI consent-change callbacks and malformed UTF-8 preorder HOLD tests hosted; code/test recent commits not confirmed CI.
+- 11/15 exact-SHA revalidation: Windows/Ubuntu/macOS full suite PASS; Tk single/batch consent reset and browser local-file flows PASS. This verifies technical safeguards only; customer privacy basis and consent remain blocked.
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`.
 - 관련 파일: `data2web_desktop.py`, `browser_final_blueprint_probe.py`. **작업 자체 가점: 0**.
 

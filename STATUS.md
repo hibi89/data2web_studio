@@ -1,3 +1,16 @@
+## 2026-11-15 KST — A25-02/A26-01 기술 작업 및 정확 SHA 재검증 (공식 점수 72/100 유지)
+
+- 저장소 `hibi89/data2web_studio`, 브랜치 `feature/final-blueprint-p85-evidence-20261113`, 코드·테스트 SHA `4e6808b80023157cf9f849f600e18ed123e258e0`. PR #4 Draft/Open/Unmerged; main 변경 없음. 이 기록은 코드 SHA 뒤의 docs-only 업데이트이며 새 테스트를 뜻하지 않는다.
+- [Python/browser #43608095426](https://github.com/hibi89/data2web_studio/actions/runs/43608095426) SUCCESS: 522 tests Windows; 521 PASS + 1 Windows-only SKIP on Ubuntu; Chrome/Edge and Chromium browser jobs PASS.
+- [macOS #43608095412](https://github.com/hibi89/data2web_studio/actions/runs/43608095412) SUCCESS: 521 PASS + 1 Windows-only SKIP; offline Chromium, local-file and A4 checks PASS.
+- [CodeQL #43608095464](https://github.com/hibi89/data2web_studio/actions/runs/43608095464) SUCCESS; [Windows native synthetic preview #43608095408](https://github.com/hibi89/data2web_studio/actions/runs/43608095408) SUCCESS, hosted synthetic only; [final evidence gate #43608095618](https://github.com/hibi89/data2web_studio/actions/runs/43608095618) SUCCESS but reports no approved evidence manifest and grants no score.
+- **A25-02 완료(기술 서식):** [빈 custody/보유/반환/파기 서식](docs/A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md)을 추가했다. 운영자 원본 사본, 결과 사본, 사본 없음, 만료, 조치 권한자, 수동 삭제/반환, 법적 예외를 분리했다. 실제 고객 기록·수령·파기 증거는 여전히 없음; 기존 7개 정책 승인·합성 시험은 재요청하지 않는다.
+- **A26-01 완료(기술 분류):** 사전검수 입력을 V2로 올려 고정 privacy class를 요구한다. 직접/간접 식별자, 민감·의료, 결제, 제3자 비밀·공유, 혼합·불명확 범위는 HOLD; 명시적 비개인 검토만 다른 조건 충족 시 scope candidate가 된다. [분류표와 노출 경로](docs/A26_01_PRIVACY_SCOPE_MATRIX_20261115.md)를 추가하고 UI에는 로컬 전용이 암호화·익명화·법적 승인·고객 동의가 아님을 표시했다. 새 부정 회귀 테스트가 세 OS 모두 전체 522개 테스트에 포함되어 PASS했다.
+- **GPT-6 High 별도 read-only 검수:** 변경 6개 파일에서 조치 가능한 finding 없음. 이는 내부 검수이며 R29 독립 외부감사와 다르다.
+- **점수/수용 한계:** 공식 72/100, 22/33 VERIFIED, 11 PENDING; 이번 증가 0, 85까지 +13. Scorecard 가중치·증거 범위·RELEASE HOLD/SALE NO-GO를 유지한다. 고객별 실제 권리·동의·보유/파기·처리 근거·외부 감사는 이 코드/문서/hosted PASS로 대체할 수 없다.
+- **작업 ID:** 완료 P00–P03, A07-03, A21-01/02 기술 검토, A25-01/02, A26-01/02, A29-01/02. 차단/조건부 A07-04/05; A21-03 및 A21-04/05/06; A25-03/04의 실제 고객 증거; A26-03/04의 고객별 근거; A29-03 OWNER·A29-04/06 EXTERNAL 및 결과 의존 A29-05/07; G85-01~04.
+- **다음 인수 조건:** R07 실제 source 권리/동의, R21 재배포 권리와 LICENSE/NOTICE 결정, R25 실제 custody·반환/파기 기록, R26 고객별 처리 범위·적법 근거·명시 동의, R29 외부 독립 감사 findings와 수정 후 재검증. 증거는 공개 저장소가 아닌 승인된 비공개 채널에서 다룬다. 이는 종합된 남은 증거 목록이며 이미 승인된 R25 정책을 다시 묻지 않는다.
+
 ## 2026-11-14 23:47 KST — High 검수 후속 수정 및 exact-SHA 재검증 (공식 점수 72/100 유지)
 - 저장소 `hibi89/data2web_studio`, 브랜치 `feature/final-blueprint-p85-evidence-20261113`, 검증 SHA `bfa808b0815b7e5be1bd11de8d6833717be0dcfd`. 문서 갱신은 뒤따르는 docs-only `[skip ci]` 커밋이다. PR #4는 Draft/Open/Unmerged.
 - [Python/browser #43606247844](https://github.com/hibi89/data2web_studio/actions/runs/43606247844) 4/4 SUCCESS: Windows 520/520 PASS, Ubuntu 519 PASS+1 Windows-only SKIP, Chromium/Chrome/Edge file:// 회귀 및 Windows Tk 단일/다중 GUI PASS. [macOS #43606247722](https://github.com/hibi89/data2web_studio/actions/runs/43606247722) SUCCESS: 519 PASS+1 Windows-only SKIP, 오프라인 Chromium/인쇄 PASS. [CodeQL #43606247728](https://github.com/hibi89/data2web_studio/actions/runs/43606247728) SUCCESS; [final blueprint gate #43606248064](https://github.com/hibi89/data2web_studio/actions/runs/43606248064) SUCCESS.

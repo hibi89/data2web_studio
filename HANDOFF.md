@@ -1,3 +1,20 @@
+## 2026-11-15 KST — DATA2WEB Studio 기술 진행 인수인계
+
+1. **목표·고정 기준:** 사용자 최종설계 R01–R33, 분모 100, 공식 72/100(22 VERIFIED, 11 PENDING), 목표 85까지 13점. 점수 배점/범위·RELEASE HOLD·SALE NO-GO 불변.
+2. **저장소/브랜치/PR:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; 코드·검증 SHA `4e6808b80023157cf9f849f600e18ed123e258e0`; PR #4 Draft/Open/Unmerged, main 미변경. 이 문서는 뒤따르는 docs-only 기록이며 테스트 대상 코드는 SHA 4e6808b다.
+3. **백엔드:** `order_intake_preflight.py`의 anonymous input contract V2가 명시적 privacy class와 strict risk booleans를 요구한다. 안전한 비개인 검토 외에 식별자, 민감/의료, 결제, 제3자 비밀/공유, 혼합/미확인 scope는 HOLD; 기존 rights/plaintext/sale guards 유지.
+4. **프론트엔드 및 기록 서식:** 단일·다중 GUI에 개인정보 범위 HOLD와 “로컬 전용은 암호화·익명화·법적 승인/동의가 아님” 안내를 추가. A25-02 빈 custody 폼은 원본/결과 사본 분리, 복사 없음, 만료/수동조치/예외 기록을 제공하며 실제 고객 증거가 아니다.
+5. **정확 SHA Actions:**
+
+   - [Python/browser #43608095426](https://github.com/hibi89/data2web_studio/actions/runs/43608095426) SUCCESS: 522 tests Windows; 521 PASS + 1 Windows-only SKIP on Ubuntu; Chrome/Edge and Chromium browser jobs PASS.
+   - [macOS #43608095412](https://github.com/hibi89/data2web_studio/actions/runs/43608095412) SUCCESS: 521 PASS + 1 Windows-only SKIP; offline Chromium, local-file and A4 checks PASS.
+   - [CodeQL #43608095464](https://github.com/hibi89/data2web_studio/actions/runs/43608095464) SUCCESS; [Windows native synthetic preview #43608095408](https://github.com/hibi89/data2web_studio/actions/runs/43608095408) SUCCESS, hosted synthetic only; [final evidence gate #43608095618](https://github.com/hibi89/data2web_studio/actions/runs/43608095618) SUCCESS but reports no approved evidence manifest and grants no score.
+6. **단위 회귀:** exact SHA에서 전체 522개: Windows 522 PASS; Ubuntu 521 PASS+1 Windows-only SKIP; macOS 521 PASS+1 Windows-only SKIP. 새 privacy matrix/missing, invalid, legacy classification 케이스가 세 OS에서 통과. 별도 직접 명령 실행이 아니라 각 기존 workflow의 전체 unittest discovery 안에서 검증됐다.
+7. **High 코드 검수:** 새 SHA의 6개 파일에 조치 가능한 finding 없음. High review와 CodeQL은 R29 독립 외부 감사가 아니며, final gate는 승인 증거 manifest 없이 점수를 부여하지 않았다.
+8. **작업 ID:** 완료 P00–P03, A07-03, A21-01/02 기술, A25-01/02, A26-01/02, A29-01/02. 실제 고객/권리/소유자 또는 외부 감사 evidence가 필요한 A07-04/05, A21-03~06, A25-03/04, A26-03/04, A29-03~07, G85-01~04는 PENDING/BLOCKED.
+9. **점수와 안전 상태:** 72/100 유지, 이번 점수 증가 0. R07/R21/R25/R26/R29는 미완료. 고객 PC 구매자 검수·권리, 고객별 privacy basis/consent, 실제 보존/파기, 상업 LICENSE/NOTICE, 외부 감사는 미검증. 추가 지출 0, 고객 자료/비밀 업로드 0.
+10. **다음 순서:** 외부 증거를 확보하면 해당 owner/external 작업부터 exact SHA와 연결하고 선행 수용 ID를 재검토한다. 실제 증거 없이 점수/출시를 변경하지 않는다. R25의 7개 내부 정책 승인·합성 시험은 이미 기록되어 있으므로 중복 요청하지 않는다.
+
 ## 2026-11-14 23:47 KST — DATA2WEB Studio 최신 인수인계 (High 검수 반영)
 1. **목표·정본:** R01–R33 고정 100점 설계, 목표 85. 공식 점수 72/100(22 VERIFIED, 11 PENDING), 13점 부족. 배점·분모·출시 상태 불변.
 2. **저장소/브랜치/SHA:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; latest tested SHA `bfa808b0815b7e5be1bd11de8d6833717be0dcfd`; 뒤따르는 docs-only `[skip ci]` commit은 테스트 대상 코드 변경 아님. PR #4 Draft/Open/Unmerged, main 미변경.
