@@ -50,6 +50,14 @@ def main():
             encoding="utf-8")
         collision=root/"category_label_collision.csv"
         collision.write_text('id,title,category,amount,notes\nC1,Missing,,1,ok\nC2,Literal default,— 분류 없음 —,2,ok\nC3,Literal suffix,— 분류 없음 (2) —,3,ok\n',encoding="utf-8")
+        grouped=root/"grouped_label_collision.csv"
+        grouped_lines=["id,title,category,amount,notes"]
+        grouped_categories=[("기타 2개 분류",100),("기타 2개 분류 (묶음 2)",90)]
+        grouped_categories.extend((f"G{i}",80-10*i) for i in range(7))
+        grouped_categories.extend([("Low1",1),("Low2",1)])
+        for n,(category,amount) in enumerate(grouped_categories):
+            grouped_lines.append(f"G{n},Group {n},{category},{amount},ok")
+        grouped.write_text("\n".join(grouped_lines)+"\n",encoding="utf-8")
         with sync_playwright() as p:
             browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
                      else p.chromium.launch(channel=args.channel,headless=True))
@@ -172,6 +180,19 @@ def main():
             expect(secondary.locator("#body tr").first).to_contain_text("C1")
             secondary.locator("#category").select_option("")
             expect(secondary.locator("#count")).to_have_text("3건")
+            # The synthetic "other" bar must not impersonate a real category.
+            # Exercise both the default label and the first numbered fallback.
+            secondary.locator("#csv").set_input_files(str(grouped))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#count")).to_have_text("11건")
+            secondary.locator("#metric").select_option("amount")
+            expect(secondary.locator("#chart-bars .chart-row")).to_have_count(10)
+            group_labels=secondary.locator("#chart-bars .chart-key").all_text_contents()
+            assert len(group_labels)==len(set(group_labels))==10, group_labels
+            assert "기타 2개 분류" in group_labels, group_labels
+            assert "기타 2개 분류 (묶음 2)" in group_labels, group_labels
+            assert "기타 2개 분류 (묶음 3)" in group_labels, group_labels
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
             mob=mobile.new_page()
