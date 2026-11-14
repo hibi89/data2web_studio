@@ -23,6 +23,51 @@ class SourceProvenanceGate(unittest.TestCase):
         self.assertFalse(result["commercial_release_approved"])
         self.assertEqual(result["score_addition"],0)
 
+    def test_reviewed_v2_pins_preserve_historical_v1_and_hold(self):
+        from r21_source_provenance import source_checkout_matches_git_blob
+        old_bytes = (ROOT / "data" / "r21_source_provenance_v1.json").read_bytes()
+        self.assertTrue(source_checkout_matches_git_blob(
+            old_bytes, "11796f9174fec88e29335d5f19bfe3038636787a"
+        ))
+        historical = json.loads(old_bytes.decode("utf-8"))
+        current = read_pins()
+        self.assertEqual(
+            historical["contract"], "DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V1"
+        )
+        self.assertEqual(
+            current["contract"], "DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V2"
+        )
+        self.assertEqual(historical["source_snapshot_commit"],
+                         "0219a10c03cab826220a78af128cffdae995ac9f")
+        self.assertEqual(current["source_snapshot_commit"],
+                         "320aebc23163019f85e1c345857ff4ed3da8147a")
+        old_pins = {item["path"]: item["git_blob_sha1"]
+                    for item in historical["source_files"]}
+        new_pins = {item["path"]: item["git_blob_sha1"]
+                    for item in current["source_files"]}
+        self.assertEqual(set(old_pins), set(new_pins))
+        self.assertEqual(
+            {path for path in old_pins if old_pins[path] != new_pins[path]},
+            {"delivery.py", "receipt_utils.py",
+             "data2web_single.py", "data2web_append.py"}
+        )
+        for field in ("rights_evidence_complete", "third_party_notice_approved",
+                      "commercial_release_approved",
+                      "independent_security_audit_completed"):
+            self.assertIs(current[field], False)
+        self.assertEqual(current["score_addition"], 0)
+
+    def test_reviewed_current_blobs_reject_any_new_source_drift(self):
+        from r21_source_provenance import source_checkout_matches_git_blob
+        current = read_pins()
+        for item in current["source_files"]:
+            with self.subTest(source=item["path"]):
+                self.assertTrue(source_checkout_matches_git_blob(
+                    (ROOT / item["path"]).read_bytes(),
+                    item["git_blob_sha1"],
+                ))
+        self.assertEqual(check_source_provenance()["source_files_verified"], 6)
+
     def test_windows_crlf_checkout_is_same_git_blob(self):
         # Git checkout autocrlf modifies the WORKTREE representation only.
         from r21_source_provenance import source_checkout_matches_git_blob
