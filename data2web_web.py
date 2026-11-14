@@ -106,47 +106,59 @@ const [idKey,titleKey,categoryKey]=state.mapping;
 const chartMaxCategories=10;
 const metrics=document.getElementById("metric");
 const numberPattern=/^[+-]?(?:\d{1,12}(?:\.\d{1,4})?|\.\d{1,4})$/;
-function safeNumber(value){const str=value.trim();if(!numberPattern.test(str))return null;
- const n=Number(str);return Number.isFinite(n)&&Math.abs(n)<=1e12?n:null}
+// Scale accepted four-place decimals to exact BigInt units. Do not round
+// financial-looking totals through IEEE-754 before displaying them.
+function safeScaled(value){const str=value.trim();if(!numberPattern.test(str))return null;
+ const sign=str.startsWith("-")?-1n:1n;
+ const unsigned=str.replace(/^[+-]/,""),parts=unsigned.split(".");
+ const whole=BigInt(parts[0]||"0"),frac=BigInt((parts[1]||"").padEnd(4,"0"));
+ const scaled=sign*(whole*10000n+frac);
+ return scaled>=-10000000000000000n&&scaled<=10000000000000000n?scaled:null}
+function formatScaled(value){
+ const negative=value<0n,positive=negative?-value:value;
+ const whole=(positive/10000n).toLocaleString("ko-KR");
+ const fraction=String(positive%10000n).padStart(4,"0").replace(/0+$/,"");
+ return (negative?"-":"")+whole+(fraction?"."+fraction:"")
+}
 function numericMetrics(){const current=metrics.value;metrics.replaceChildren();const base=document.createElement("option");base.value="";base.textContent="분류별 건수";metrics.append(base);
  for(const key of state.columns){if([idKey,titleKey,categoryKey].includes(key))continue;
  let observed=0,usable=true;
  for(const row of state.rows){const value=row[key].trim();if(!value)continue;
- const amount=safeNumber(value);if(amount===null||amount<0){usable=false;break}observed++}
+ const amount=safeScaled(value);if(amount===null||amount<0n){usable=false;break}observed++
  if(usable&&observed){const option=document.createElement("option");option.value=key;option.textContent=key+" 합계 (빈 값 제외)";metrics.append(option)}
  }
  metrics.value=[...metrics.options].some(x=>x.value===current)?current:""}
 function renderChart(filtered){
  const field=metrics.value;
- const frequencies=new Map();let validValues=0,blankValues=0,sum=0;
+ const frequencies=new Map();let validValues=0,blankValues=0,sum=0n;
  for(const record of filtered){
   const category=record[categoryKey]||"(미분류)";
-  let amount=1;
-  if(field){const raw=record[field].trim();const parsed=safeNumber(raw);
-   if(!raw){amount=0;blankValues++}
-   else if(parsed===null||parsed<0){amount=0;blankValues++}
+  let amount=field?0n:1;
+  if(field){const raw=record[field].trim();const parsed=safeScaled(raw);
+   if(!raw){blankValues++}
+   else if(parsed===null||parsed<0n){blankValues++}
    else{amount=parsed;validValues++;sum+=parsed}}
-  frequencies.set(category,(frequencies.get(category)||0)+amount)
+  frequencies.set(category,(frequencies.get(category)??(field?0n:0))+amount)
  }
- let ranked=[...frequencies.entries()].sort((a,b)=>b[1]-a[1]||collator.compare(a[0],b[0]));
- if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],0);
+ let ranked=[...frequencies.entries()].sort((a,b)=>a[1]===b[1]?collator.compare(a[0],b[0]):(a[1]>b[1]?-1:1));
+ if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],field?0n:0);
  ranked=ranked.slice(0,chartMaxCategories-1).concat([["기타 "+(frequencies.size-chartMaxCategories+1)+"개 분류",remainder]])}
- const largest=Math.max(0,...ranked.map(x=>x[1]));
+ const largest=ranked.length?Number(ranked[0][1]):0;
  const bars=$("chart-bars");bars.replaceChildren();
  for(const [category,value] of ranked){
   const line=document.createElement("div");line.className="chart-row";
   const name=document.createElement("span");name.className="chart-key";name.textContent=category;
   const track=document.createElement("div");track.className="bar-track";
   const fill=document.createElement("div");fill.className="bar-fill";
-  fill.style.width=(largest>0?100*value/largest:0)+"%";track.append(fill);
-  const label=document.createElement("span");label.className="chart-value";label.textContent=field?value.toLocaleString("ko-KR",{maximumFractionDigits:4}):String(value);
+  fill.style.width=(largest>0?100*Number(value)/largest:0)+"%";track.append(fill);
+  const label=document.createElement("span");label.className="chart-value";label.textContent=field?formatScaled(value):String(value);
   line.append(name,track,label);bars.append(line)
  }
  if(!ranked.length){bars.textContent="현재 조건에 맞는 자료가 없습니다."}
  $("chart-note").textContent=field?"숫자열 "+field+"의 산술합. 빈 셀 제외 · 단위/회계 의미 추정 없음":"현재 조건에 해당하는 레코드 수";
- const expected=field?sum:filtered.length;
+ const expected=field?formatScaled(sum):filtered.length.toLocaleString("ko-KR");
  $("chart-summary").textContent=(field?"집계된 숫자 셀 "+validValues+"개 · 빈 셀 "+blankValues+"개 · 합계 ":"표시된 행 ") +
- expected.toLocaleString("ko-KR",{maximumFractionDigits:4})+" · 고유 분류 "+frequencies.size+"개";
+ expected+" · 고유 분류 "+frequencies.size+"개";
  $("total-rows").textContent=state.rows.length.toLocaleString("ko-KR");
  $("filtered-rows").textContent=filtered.length.toLocaleString("ko-KR");
  $("category-total").textContent=new Set(state.rows.map(x=>x[categoryKey])).size.toLocaleString("ko-KR");
