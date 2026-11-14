@@ -1,3 +1,9 @@
+## 2026-11-14 · R29 보안 사전감사 및 Chrome/Edge 일시 실행 실패 회복 완전 CI 검증
+
+최신 코드 SHA `d7e029ae838a15f6f7a952cdf920341a6e3ad6b0` [Windows+Ubuntu/Chrome+Edge+Chromium #43538001797](https://github.com/hibi89/data2web_studio/actions/runs/43538001797) **4/4 SUCCESS** (Win315 PASS, Ubuntu314 PASS+1SKIP), [final blueprint gate #43538002050](https://github.com/hibi89/data2web_studio/actions/runs/43538002050) SUCCESS. Chrome/Edge 프로세스 transient 시작 오류에 한해서만 새로운 로컬 프로필로 최대1회 재시도하고, 실제 DOM과 합성 2행 콘텐츠가 없으면 재시도 없이 `HOLD`. 이전 두 번의 실패[#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883), [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617)]는 [실패·복구 문서](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md)에 보존.
+
+**R29 synthetic preaudit** 7종·5개 관련 회귀를 포함해 검증됐으나 외부 독립감사/고객 법적권리·승인은 여전히 PENDING. 공식72/100, 목표85점까지13점, `[작업중]`, RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-14 · R29 독립 감사 준비: 고객자료 없는 내부 합성 증거
 - `python security_audit_preaudit.py`(외부 업로드0) 또는 `python security_audit_preaudit.py --output <새로 만들 로컬>.json`(create-only)으로 합성 데이터의 XSS/CSV수식문자·ZIP허위판매·고객폴더변조·동일폴더무덮어쓰기·CSP 7개 시험. `test_security_audit_preaudit.py` 회귀5종. 내장 결과 `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 독립감사/권리승인 false, 추가점수0. [상세](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
 - 최근 hosted Windows 브라우저 시작 간헐 실패 [#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) → 독립된 새 프로필로 최대1회 실패 복구. 첫 수정 [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617)에서는 정규식 이스케이프 실수로 FAIL. SHA `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 복구했지만 **정확 HEAD CI 미확인 상태**. 실패를 숨기지 않고 검증 전 성공 주장 금지.

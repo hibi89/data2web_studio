@@ -24,3 +24,7 @@
 - [1차 #43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883): 전체 CI FAIL, 기존 CMD 기반 self-check에서 Chrome `HOLD_EXECUTION_FAILED`, Edge 정상. 악성 입력 R29 프로브 failure가 아님.
 - [2차 #43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617): transient launch retry 신규 추가됐으나 regex 두 번 이스케이프해 기존 DOM 보기도 실패. `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 한 줄 정규식 복구. **최신 빌드/실브라우저 CI 통과 확인 전 미검증**.
 - 리트라이 1번은 Chrome/Edge 명령 실행 실패/비0 종료에만, 독립된 새 임시 프로필로 수행. 정상 종료지만 렌더/2개 합성값이 빠지면 그대로 `HOLD`. 실행횟수로 수용점수 부풀림 금지.
+
+## 2026-11-14 KST · 최신 실제 기능 SHA CI 검증 완료
+- **SHA `d7e029ae838a15f6f7a952cdf920341a6e3ad6b0`**: [Python/browser #43538001797](https://github.com/hibi89/data2web_studio/actions/runs/43538001797) **4/4 SUCCESS**, Win315/315, Ubuntu314PASS/1SKIP, Chrome·Edge·Chromium E2E. [점수 게이트 #43538002050](https://github.com/hibi89/data2web_studio/actions/runs/43538002050) SUCCESS.
+- 중간 [Chrome 실패 #43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) 및 [regex 회귀 실패 #43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617)는 이력 보존. 프로세스 시작 장애 시 독립 프로필 1회 재시도(최대2회), 브라우저 DOM/행 미검증 시 무조건 HOLD, regex는 정상 복구. GitHub Actions에서 실제 동작 PASS. **R29 외부 독립 보안감사 여전히 NOT VERIFIED**, 추가점수0.

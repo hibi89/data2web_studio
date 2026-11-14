@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · R29 합성보안 사전검증 + Chrome 간헐 시작장애 해결, 정확 SHA CI 4/4 SUCCESS
+- 최신 기능 SHA **`d7e029ae838a15f6f7a952cdf920341a6e3ad6b0`** [Python/browser #43538001797](https://github.com/hibi89/data2web_studio/actions/runs/43538001797) **4/4 SUCCESS**. Windows Python **315/315 PASS**, Ubuntu **314 PASS+1 Windows-only SKIP**, installed Windows Chrome·Edge / Ubuntu Chromium 실브라우저 E2E PASS. 신규 `test_security_audit_preaudit.py` 5종 + `test_browser_transient_retry.py` 6종 모두 Win/Ubuntu PASS. [Final blueprint gate #43538002050](https://github.com/hibi89/data2web_studio/actions/runs/43538002050) **SUCCESS**.
+- 이전 실패는 보존: [#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) hosted Windows Chrome `HOLD_EXECUTION_FAILED`(기존 browser smoke), [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617) retry 수정 중 regex backslash 두 번 이스케이프, 각 FAIL. **실질 개선**: Chrome/Edge 자가진단에서 초기 실행 실패/비0 종료에만 새 disposable profile로 1회 재시도, 두 번 실패면 HOLD; DOM/행내용 부족 시 즉시 HOLD. 정확 SHA `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 regex 한 줄 정상화 후 `d7e0` 문서 SHA CI 완주; 기존 잘못된 실행은 PASS로 위장하지 않음.
+- **R29 preaudit:** 합성 2행만 사용하여 7개 XSS·CSV·원본/ZIP/폴더 변조·무덮어쓰기·오프라인 정책 기술시험; redacted JSON create-only, 고객/PC 경로/비밀 및 네트워크 송신0. 내부자가 실행한 self test는 **외부 독립보안감사 자체 아님**. 외부감사 `false`/권리·판매승인 `false`/신규 인정점수0. [실행·외부 수용계획](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
+- **고정 R01–R33 전체 72/100(22 VERIFIED/11 PENDING28), 목표85까지13점**. R07(2)/R21(4)/R25(2)/R26(2)의 실제 권리·PII·보존/라이선스 사용자 승인과 R29(3) 별도 독립 평가/재검증 필요. `[작업중]`, RELEASE HOLD/SALE NO-GO, Draft PR#4 및 기존 고객/원본 데이터 불변.
+
+
 ## 2026-11-14 KST · R29 독립 감사 증거 사전패킷 + Windows Chrome transient 복구
 - **구현:** `security_audit_preaudit.py`, `test_security_audit_preaudit.py` (기능 SHA `2516ff76e3bab6e431c2b423d3112579f908c027`). 합성 2행 입력 기반 HTML script-end/XSS 텍스트, CSV formula, 원본 SHA 보존, ZIP release status 위조, 기존 출력 무덮어쓰기, 고객폴더 변조 거부, 오프라인 CSP 등 **7개 내부 보안 프로브** 및 **5개 회귀**. `--output`은 명시된 새 로컬 JSON 파일만 O_EXCL로 생성·무업로드. 항상 `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 독립감사/권리/판매 `false`, `score_addition=0`. [독립평가자용 준비 문서](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
 - **실패 증거 1:** [Python/browser #43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) 전체 **FAIL** — 신규 7개 preaudit 내부 범위 때문이 아니라 기존 Windows hosted CMD launcher의 Chrome `HOLD_EXECUTION_FAILED`, Edge `PASS_SYNTHETIC_LOCAL_FILE` (간헐 초기 실행 장애), Ubuntu/Browser/Windows 브라우저 개별 검증 경로 성공. 이 실패를 다른 워크플로우 PASS로 대체/숨기지 않음.

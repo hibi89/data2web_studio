@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · R29 synthetic preaudit 및 Chrome CI 장애 회복 확증
+1. 목표/기술: DATA2WEB A 오프라인 HTML/ZIP/receipt 납품 서비스 우선, B native EXE 판매 후속. R01–R33 고정100점, 85 목표.
+2. 완료 기능: `security_audit_preaudit.py` 내부 합성 공격7종 + 5개 회귀/오프라인 redacted create-only 보고서. `client_local_rehearsal.py` Chrome/Edge 시작 실패에만 다른 새 프로필로 최대1회 재시도/재실패 HOLD, 2행 렌더/내용 없으면 즉시 HOLD. `test_browser_transient_retry.py` 6종.
+3. 정확 SHA/검증: **`d7e029ae838a15f6f7a952cdf920341a6e3ad6b0`**, [Python+browser Actions #43538001797](https://github.com/hibi89/data2web_studio/actions/runs/43538001797) **4/4 SUCCESS** Windows315PASS/Ubuntu314PASS+1SKIP, Chrome/Edge/Chromium PASS; [score gate #43538002050](https://github.com/hibi89/data2web_studio/actions/runs/43538002050) SUCCESS. 신규 preaudit 5+browser retry6 테스트 모두 PASS.
+4. 공식 산정: 22개 VERIFIED=72/100, 11개 pending28, 85 목표까지13점 부족. `[작업중]`, RELEASE HOLD/SALE NO-GO, 크몽 미등록, PR#4 Draft. 내부 보안 자체 검증은 R29 외부감사 점수0.
+5. 실패/원인/피벗: 첫 [#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) hosted Windows Chrome `HOLD_EXECUTION_FAILED`; 두 번째 [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617) 새 browser retry 구현 regex escape 실수로 4개 실패. `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 regex 복원, 최신 문서 SHA d7e0 CI 4/4 PASS. 원래 Chrome startup 간헐 실패가 모든 미래 환경에서 해결되었다고 과장하지 않음.
+6. repo/SHA/경로: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113` 본문 코드 검증 SHA `d7e029ae838a15f6f7a952cdf920341a6e3ad6b0`. 주요 `security_audit_preaudit.py`, `test_security_audit_preaudit.py`, `client_local_rehearsal.py`, `test_browser_transient_retry.py`, `docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md`. 보고 문서 커밋 이후 최종 HEAD 조회.
+7. Production/실행: offline Python3.11, Windows/Ubuntu hosted, Chrome·Edge·Chromium; user Win11 previous unsigned EXE actual synthetic delivery PASS maintained, **new SHA EXE owner PC not tested**, Vercel/Production N/A.
+8. 원본/보안: 모든 preaudit 새 임시 합성파일 사용, `--output`은 사용자가 지정한 새 JSON만 생성/무덮어쓰기. 고객 실제 자료/계정/PC 식별/토큰 GitHub 업로드0, 외부전송/유료감사/판매·권한 변경0, source scorecard와 original/main 불변. 이전 안전 HEAD `2c77ce68bbe8735c0b98facbe4df19709802497a`.
+9. 다음 우선순위: [형의 일괄 정책/권리 승인](docs/OWNER_APPROVAL_PACKET_A_20261114.md); 별도의 독립 보안평가자 및 비용·접근범위 사전승인 후 R29 실감사·재검증; 승인된 라이선스/NOTICE 정본 확정 후에만 고객 ZIP/verify v2 마이그레이션. 전 항목 **실제 수용** 전 85점 변경 금지.
+10. 시점/범위: 2026-11-14 KST 제품 SHA d7e0 CI/코드 로그, 4/4 및 실패원인 직접 확인, 새 문서 기준 SHA 후속 확인. 외부 감사·고객 법적권리 미검증.
+
 ## 최신 인수인계 2026-11-14 KST · R29 합성 사전감사 및 Chrome 1회 복구
 1. **목표·정본:** DATA2WEB 오프라인 결과물(A) 우선/Windows EXE(B) 후속, R01–R33 고정100점, 최종85 목표.
 2. **완료/변경:** `security_audit_preaudit.py`·`test_security_audit_preaudit.py` 신규(내부7개 합성 공격/5개 create-only·HOLD·무자료 보고 테스트). Windows hosted Chrome 간헐 시작 실패 시 `client_local_rehearsal._headless_browser` 최대1회 별도 프로필 재시도(총2회), DOM 실2행/2개 셀 미검증 시 HOLD. `test_browser_transient_retry.py` 6개 경계 테스트. 외부 자료 전송/고객파일0.
