@@ -82,7 +82,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`, `docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md`. **작업 자체 가점: 0**.
 
-- 11/15: the five-row public-safe R07/R21/R25/R26/R29 evidence index records VERIFIED/INCOMPLETE/MISSING without partial points or private materials.
+- 11/15: completed the public-safe evidence register in `docs/M85_ACCEPTANCE_EVIDENCE_INDEX_20261114.md`: 18 unique non-identifying tracker IDs across R07/R21/R25/R26/R29; each artifact/proof slot is VERIFIED/INCOMPLETE/MISSING, all five item packets remain INCOMPLETE, no partial points or private materials.
 ### P03 · PREP/GATE · Codex · PASS_EXACT_SHA_CI
 - 선행: P00. 
 - 실행: Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.

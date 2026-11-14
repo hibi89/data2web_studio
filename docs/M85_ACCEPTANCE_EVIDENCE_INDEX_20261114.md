@@ -2,6 +2,41 @@
 
 Scope: R07/R21/R25/R26/R29. Public-safe repository evidence only; no private customer proof, signatures or legal attestations. No partial points.
 
+## Requirement-level evidence register — 2026-11-15 KST
+
+Evidence IDs below are stable, non-identifying tracking references, not signatures or proof by themselves. `VERIFIED` means the linked artifact was checked for the narrow scope stated; `INCOMPLETE` means an available artifact does not cover the full item; `MISSING` means the required proof was not supplied through this public GitHub-only task. Every R07/R21/R25/R26/R29 item packet remains **INCOMPLETE** and receives no points.
+
+| Requirement packet | Overall evidence state | Evidence IDs | Remaining acceptance proof |
+|---|---|---|---|
+| R07 | INCOMPLETE | M85-E01–E04 | Real source authority/consent and case-bound source integrity proof |
+| R21 | INCOMPLETE | M85-E05–E07 | Commercial redistribution rights, NOTICE decision and authorized package verification |
+| R25 | INCOMPLETE | M85-E08–E11 | Actual customer custody, retention, return/disposal records |
+| R26 | INCOMPLETE | M85-E12–E13 | Customer-specific lawful basis, data scope and plaintext consent |
+| R29 | INCOMPLETE | M85-E14–E18 | Approved independent evaluator, external report/findings, remediation retest and signoff |
+
+| Evidence ID | Req. | Evidence or tracked proof slot | State | Source / scope limit |
+|---|---|---|---|---|
+| M85-E01 | R07 | Source-flow, no-upload, consent-reset and fail-closed technical controls | VERIFIED | `P01_A07_01_SOURCE_CUSTODY_REVIEW_20261114.md`, A07 consent regression, latest hosted CI; synthetic/technical scope only |
+| M85-E02 | R07 | Per-order rights, shared-data, plaintext and privacy checklist template | VERIFIED | `A07_PER_ORDER_RIGHTS_CHECKLIST_20261114.md`; blank form, not customer assent |
+| M85-E03 | R07 | Actual rightsholder/provider authority and scoped customer permission to use/transform/deliver a real source | MISSING | No customer or private legal proof supplied; the checklist cannot establish it |
+| M85-E04 | R07 | Before/after source identity and bytes tied to an authorized real acceptance case | MISSING | No real source case or private hash record supplied |
+| M85-E05 | R21 | Shipped asset inventory and six producer Git blob identity pins | VERIFIED | `R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md`, `R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md`, latest source preflight; identity is not ownership |
+| M85-E06 | R21 | Rightsholder chain, derivative-work rights, commercial redistribution license and third-party NOTICE obligations | MISSING | No actual rights instrument or approved NOTICE decision supplied |
+| M85-E07 | R21 | Rights-driven LICENSE/NOTICE package decision and allowed/forbidden-member migration tests | MISSING | Depends on M85-E06; no license is invented or added |
+| M85-E08 | R25 | Seven owner-approved internal policies and named operator record | VERIFIED | `R25_OWNER_APPROVAL_AND_SYNTHETIC_CUSTODY_20261114.md`; policy approval only |
+| M85-E09 | R25 | Synthetic manual disposal drill and retention-report regression suite | VERIFIED | R25 record plus [latest hosted CI](https://github.com/hibi89/data2web_studio/actions/runs/43619050999); no customer custody asserted |
+| M85-E10 | R25 | Blank source/result custody, expiry, return/disposal, legal-exception and no-copy record form | VERIFIED | `A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md`; template only |
+| M85-E11 | R25 | Actual customer source/result custody, retention notice, return or disposal trace and responsible-party evidence | MISSING | No customer handling record supplied; existing policy/drill do not replace it |
+| M85-E12 | R26 | Privacy scope matrix, default HOLD and consent-reset/plaintext-warning technical flow | VERIFIED | `A26_01_PRIVACY_SCOPE_MATRIX_20261115.md`, hosted synthetic GUI/regression tests; not legal advice or customer consent |
+| M85-E13 | R26 | Customer-specific data scope/access/retention basis and informed plaintext/use consent | MISSING | No customer-specific agreement or approved nonpersonal-only boundary supplied |
+| M85-E14 | R29 | Synthetic attack matrix and path/ZIP/XLSX/CSP/source-tampering/network-observation regressions | VERIFIED | `R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md`, latest hosted tests; page request observation is not host-wide egress monitoring |
+| M85-E15 | R29 | CodeQL scan and GPT-6 High internal read-only review at the pinned code/test SHA | VERIFIED | CodeQL and internal review only; neither is an independent external audit |
+| M85-E16 | R29 | Owner approval of a genuinely independent evaluator, permitted scope and disclosure conditions | MISSING | No evaluator/scope approval or authorized external sharing record supplied |
+| M85-E17 | R29 | Independent dated audit report with environment, commands, findings, severity and omissions at a frozen SHA | MISSING | No external report supplied; AI, Codex and CodeQL cannot create this evidence |
+| M85-E18 | R29 | Independent retest after fixes and evaluator signoff/remaining-risk statement | MISSING | Depends on external findings and authorized retest; no signoff supplied |
+
+These are evidence inventory states, not R-item completion states. The scorecard remains 72/100; weighting and release status are unchanged.
+
 ## Latest exact-SHA rerun — 2026-11-15 KST
 
 At exact code/test SHA `512af5000658f40ed7deefae096f29b886bd1ec0`, [Python/browser #43617898725](https://github.com/hibi89/data2web_studio/actions/runs/43617898725) passed: Windows 525/525; Ubuntu 524 PASS + 1 Windows-only SKIP; hosted Chromium plus installed Chrome/Edge and Tk flows succeeded. [macOS offline #43617898816](https://github.com/hibi89/data2web_studio/actions/runs/43617898816) passed 524 + 1 Windows-only SKIP. [CodeQL #43617898719](https://github.com/hibi89/data2web_studio/actions/runs/43617898719) passed with no new alert; [evidence gate #43617898943](https://github.com/hibi89/data2web_studio/actions/runs/43617898943) succeeded.
