@@ -12,7 +12,6 @@ from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt
 from path_policy import assert_no_links, read_bounded_source
-from secure_output import create_output_directory
 
 PRIVACY_MODES=("NO_PERSONAL_DATA_REVIEWED","OWNER_APPROVED_LOCAL_ONLY")
 
@@ -57,27 +56,24 @@ def deliver_single(source, new_directory, *,
         raise FileExistsError("New customer delivery folder required")
     # No recursive automatic cleanup: failed delivery folder remains HOLD
     # for human investigation, never overwritten on retry.
-    with create_output_directory(destination) as output_directory:
-        receipt=build(source,destination/"index.html",id_column,title_column,category_column,
-                      approved=True,expected_sha256=expected_sha256,
-                      name=name,theme=theme,sheet=sheet,header_row=header_row,
-                      allow_cached_formulas=allow_cached_formulas,
-                      _output_directory=output_directory)
-        receipt["privacy_classification"]=privacy_classification
-        receipt["status"]="SINGLE_OWNER_APPROVED_LOCAL_DELIVERY_RELEASE_HOLD"
-        receipt["package"]=package_html(destination/"index.html",destination/"delivery.zip",
-                                        receipt,_output_directory=output_directory)
-        # ZIP creation can take time. Abort receipt generation if the source
-        # changed during packaging; a partial new folder remains HOLD for review.
-        if hashlib.sha256(read_bounded_source(source,max_bytes=MAX_BYTES)).hexdigest()!=expected_sha256:
-            raise ValueError("Source modified during package creation; output HOLD")
-        receipt["receipt_file"]=write_receipt(destination/"receipt.json",receipt,
-                                              _output_directory=output_directory)
-        # The create-only ZIP was verified before the receipt existed. Verify the
-        # *whole* folder after the final write; corruption or partial publication
-        # must fail closed. Preserve partial artifacts for manual inspection.
-        from verify_customer_folder import verify_customer_folder
-        verify_customer_folder(destination)
-        receipt["delivery_folder_created"]=True
-        receipt["sale_approved"]=False
-        return receipt
+    destination.mkdir(mode=0o700,exist_ok=False)
+    receipt=build(source,destination/"index.html",id_column,title_column,category_column,
+                  approved=True,expected_sha256=expected_sha256,
+                  name=name,theme=theme,sheet=sheet,header_row=header_row,
+                  allow_cached_formulas=allow_cached_formulas)
+    receipt["privacy_classification"]=privacy_classification
+    receipt["status"]="SINGLE_OWNER_APPROVED_LOCAL_DELIVERY_RELEASE_HOLD"
+    receipt["package"]=package_html(destination/"index.html",destination/"delivery.zip",receipt)
+    # ZIP creation can take time. Abort receipt generation if the source
+    # changed during packaging; a partial new folder remains HOLD for review.
+    if hashlib.sha256(read_bounded_source(source,max_bytes=MAX_BYTES)).hexdigest()!=expected_sha256:
+        raise ValueError("Source modified during package creation; output HOLD")
+    receipt["receipt_file"]=write_receipt(destination/"receipt.json",receipt)
+    # The create-only ZIP was verified before the receipt existed. Verify the
+    # *whole* folder after the final write; corruption or partial publication
+    # must fail closed. Preserve partial artifacts for manual inspection.
+    from verify_customer_folder import verify_customer_folder
+    verify_customer_folder(destination)
+    receipt["delivery_folder_created"]=True
+    receipt["sale_approved"]=False
+    return receipt

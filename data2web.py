@@ -4,6 +4,7 @@ import csv
 import hashlib
 import html
 import json
+import os
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
 from secure_output import create_output_file, open_output_directory

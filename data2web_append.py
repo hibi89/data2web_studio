@@ -7,15 +7,13 @@ source deletion. The manifest is not a digital signature or commercial approval.
 from __future__ import annotations
 import hashlib
 import json
+import os
 from pathlib import Path
 from data2web import read_table, MAX_ROWS, MAX_COLS, MAX_BYTES
 from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt, assert_receipt_path_available
 from path_policy import assert_no_links, read_bounded_source
-from secure_output import (
-    create_output_directory, create_output_file, open_output_directory,
-)
 
 CONTRACT="DATA2WEB_INPUT_APPROVALS_V1"
 COMBINED="DATA2WEB_APPENDED_SOURCE_V1"
@@ -145,8 +143,7 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
              zip_path=zip_path,receipt_path=receipt_path)
 
 def _build_approved_append_doc(doc,approval_manifest,html_path,*,
-                                confirm,ack_plaintext,zip_path=None,receipt_path=None,
-                                _output_directory=None):
+                                confirm,ack_plaintext,zip_path=None,receipt_path=None):
     if confirm!="APPROVE" or ack_plaintext is not True:
         raise ValueError("Explicit owner append approval is required")
     validate_approval_doc(doc)
@@ -167,89 +164,43 @@ def _build_approved_append_doc(doc,approval_manifest,html_path,*,
                 not z.parent.is_dir() or z.parent.is_symlink()):
             raise FileExistsError("Append ZIP output must be new")
     assert_receipt_path_available(receipt_path)
-    owned_output_directories=[]
-    try:
-        html_parent_info=html_path.parent.lstat()
-        if _output_directory is None:
-            html_output_directory=open_output_directory(
-                html_path.parent,
-                expected_identity=(html_parent_info.st_dev,html_parent_info.st_ino)
-            )
-            owned_output_directories.append(html_output_directory)
-        else:
-            html_output_directory=_output_directory
-            if html_path.absolute().parent != html_output_directory.path:
-                raise ValueError("Output directory handle does not match HTML parent")
-
-        zip_output_directory=None
-        if zip_path is not None:
-            if Path(zip_path).absolute().parent == html_output_directory.path:
-                zip_output_directory=html_output_directory
-            else:
-                zip_parent=Path(zip_path).parent
-                zip_parent_info=zip_parent.lstat()
-                zip_output_directory=open_output_directory(
-                    zip_parent,
-                    expected_identity=(zip_parent_info.st_dev,zip_parent_info.st_ino)
-                )
-                owned_output_directories.append(zip_output_directory)
-
-        receipt_output_directory=None
-        if receipt_path is not None:
-            if Path(receipt_path).absolute().parent == html_output_directory.path:
-                receipt_output_directory=html_output_directory
-            else:
-                receipt_parent=Path(receipt_path).parent
-                receipt_parent_info=receipt_parent.lstat()
-                receipt_output_directory=open_output_directory(
-                    receipt_parent,
-                    expected_identity=(receipt_parent_info.st_dev,receipt_parent_info.st_ino)
-                )
-                owned_output_directories.append(receipt_output_directory)
-
-        markup=render_html(columns,rows,[mapping["id"],mapping["title"],mapping["category"]],
-                           identity,name=doc.get("name","DATA2WEB"),theme=doc.get("theme","office"),
-                           source_receipts=sources)
-        raw=markup.encode("utf-8")
-        if len(raw)>MAX_OUTPUT:
-            raise ValueError("HTML output exceeds offline delivery limit")
+    markup=render_html(columns,rows,[mapping["id"],mapping["title"],mapping["category"]],
+                       identity,name=doc.get("name","DATA2WEB"),theme=doc.get("theme","office"),
+                       source_receipts=sources)
+    raw=markup.encode("utf-8")
+    if len(raw)>MAX_OUTPUT:
+        raise ValueError("HTML output exceeds offline delivery limit")
+    for path,sha in files:
+        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
+            raise ValueError("Input mutated before publish")
+    fd=os.open(html_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    with os.fdopen(fd,"wb") as output:
+        output.write(raw)
+    for path,sha in files:
+        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
+            raise ValueError("Input mutated after publish; output HOLD")
+    outsha=hashlib.sha256(read_bounded_source(html_path,max_bytes=MAX_OUTPUT)).hexdigest()
+    if outsha!=hashlib.sha256(raw).hexdigest():
+        raise ValueError("Output differs from generated HTML")
+    receipt={
+        "source_sha256":identity,"output_sha256":outsha,
+        "rows":len(rows),"columns":columns,"mapping":mapping,
+        "sheet":None,"header_row":1,"cached_formulas":False,
+        "source_receipts":sources,
+        "privacy_classification":doc["approval"]["privacy_classification"],
+        "sale_approved":False,
+        "status":"OWNER_APPROVED_APPEND_LOCAL_ONLY_RELEASE_HOLD",
+    }
+    if zip_path is not None:
+        receipt["package"]=package_html(html_path,zip_path,receipt)
+        # The pre-write checks are not sufficient when packaging races a
+        # source edit. The receipt is issued only after the post-ZIP hashes.
         for path,sha in files:
             if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-                raise ValueError("Input mutated before publish")
-        with create_output_file(html_path,directory=html_output_directory) as output:
-            output.write(raw)
-        for path,sha in files:
-            if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-                raise ValueError("Input mutated after publish; output HOLD")
-        outsha=hashlib.sha256(read_bounded_source(html_path,max_bytes=MAX_OUTPUT)).hexdigest()
-        if outsha!=hashlib.sha256(raw).hexdigest():
-            raise ValueError("Output differs from generated HTML")
-        receipt={
-            "source_sha256":identity,"output_sha256":outsha,
-            "rows":len(rows),"columns":columns,"mapping":mapping,
-            "sheet":None,"header_row":1,"cached_formulas":False,
-            "source_receipts":sources,
-            "privacy_classification":doc["approval"]["privacy_classification"],
-            "sale_approved":False,
-            "status":"OWNER_APPROVED_APPEND_LOCAL_ONLY_RELEASE_HOLD",
-        }
-        if zip_path is not None:
-            receipt["package"]=package_html(
-                html_path,zip_path,receipt,
-                _output_directory=zip_output_directory
-            )
-            for path,sha in files:
-                if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-                    raise ValueError("Approved source modified during ZIP packaging; output HOLD")
-        if receipt_path is not None:
-            receipt["receipt_file"]=write_receipt(
-                receipt_path,receipt,
-                _output_directory=receipt_output_directory
-            )
-        return receipt
-    finally:
-        for output_directory in reversed(owned_output_directories):
-            output_directory.close()
+                raise ValueError("Approved source modified during ZIP packaging; output HOLD")
+    if receipt_path is not None:
+        receipt["receipt_file"]=write_receipt(receipt_path,receipt)
+    return receipt
 
 def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_plaintext):
     """Existing manifest-driven CLI API; preserves all v1 semantics."""
@@ -291,15 +242,14 @@ def _deliver_approved_append_doc(doc, approval_manifest, destination, *,
             not path.parent.is_dir() or path.parent.is_symlink() or
             path.name in ("", ".", "..")):
         raise FileExistsError("Delivery destination must be a new folder")
-    with create_output_directory(path) as output_directory:
-        result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
-                  confirm=confirm,ack_plaintext=ack_plaintext,
-                  zip_path=path/"delivery.zip",receipt_path=path/"receipt.json",
-                  _output_directory=output_directory)
-        # Do not advertise an approved customer folder until the independently
-        # checked HTML, ZIP and *final* receipt agree on disk.
-        from verify_customer_folder import verify_customer_folder
-        verify_customer_folder(path)
-        result["delivery_folder_created"]=True
-        result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
-        return result
+    path.mkdir(mode=0o700,exist_ok=False)
+    result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
+              confirm=confirm,ack_plaintext=ack_plaintext,
+              zip_path=path/"delivery.zip",receipt_path=path/"receipt.json")
+    # Do not advertise an approved customer folder until the independently
+    # checked HTML, ZIP and *final* receipt agree on disk.
+    from verify_customer_folder import verify_customer_folder
+    verify_customer_folder(path)
+    result["delivery_folder_created"]=True
+    result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
+    return result
