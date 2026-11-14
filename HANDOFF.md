@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 CI 검증 추가 — 2026-11-14 KST · A 우선/후속 B GitHub 반영
+1. 목표·정본: 앞선 10항 인수인계의 전략 A 우선 납품/B EXE 후속, R01–R33 전체100점, 현재72/100 그대로.
+2. 변경: 신규 JSON 로드맵·4종 안전 회귀/권리 인벤토리/승인 패킷/보안감사 계획, 고객 사전접수/납품 QA 템플릿. 정책 방향만 사용자 승인, 판매/개인정보/권리/유료 감사 미승인.
+3. 최신 정확 문서 SHA `e0ad8b849c2771ff9aa47bc1fbaae95e7f6ccdd7`: [Python+browser #43534569192](https://github.com/hibi89/data2web_studio/actions/runs/43534569192) **4/4 SUCCESS**, Windows298PASS/Ubuntu297PASS+1SKIP, 신규4종 로드맵 test 전부 PASS. [Final blueprint gate #43534569433](https://github.com/hibi89/data2web_studio/actions/runs/43534569433) SUCCESS. 이전 native EXE source SHA `4af5b70cd6340f334ed16f293b80d923688265bc`, [#43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) SUCCESS; 이번 문서 HEAD에서 Windows EXE 추가 빌드 불필요(엔트리 코드 변경0).
+4. 현재 점수: 22 verified72, 11 pending28, 85 목표13점 부족. RELEASE HOLD/SALE NO-GO/[작업중], PR#4 Draft, 크몽 상품 실제 미등록.
+5. 차단: R07/21/25/26의 본인/고객 사용권·개인정보/보존·라이선스 정책 실승인, R29 외부 독립 보안감사 미실행. CI PASS를 대신 점수 인정하면 안 됨.
+6. 저장소/브랜치 SHA: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113` 문서 코드 기능 HEAD `e0ad8b849c2771ff9aa47bc1fbaae95e7f6ccdd7`; 주요 `docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md`, `data/a_first_b_later_roadmap_v1.json`.
+7. Production: 오프라인 owner-preview Windows EXE private, 이번 문서만 배포0/Vercel 해당없음, signed EXE/고객외부 배포0.
+8. 원본/보안: 고객 원본/실데이터·개인정보·비밀 저장소 미추가, 점수표·original REA_Web·main 및 상품등록 이력 보존. 사전 승인 없는 라이선스/NOTICE 생성0.
+9. 다음 우선순위: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`의 코드권리/자료수신·삭제책임/상품가격·환불·지원 1회 최소개입 승인 및 외부보안감사 별도 비용·제3자 전송 승인. 전까지 AI는 내부 합성 보안회귀·실제 LICENSE inventory·안전 제품화 자료 정리. 85점은 R07/21/25/26/29 모두 실승인/독립감사/정확_SHA 재검증 후에만.
+10. 기준: 2026-11-14 KST GitHub 실행 결과 직접 확인, 신규 문서 기준 SHA `e0ad8b849c2771ff9aa47bc1fbaae95e7f6ccdd7`; 이번 기록은 후속 문서 커밋에 담기므로 최종 HEAD 재확인.
+
 ## 2026-11-14 KST · 사용자 전략 승인(A 납품 우선, B EXE 후속) + 개발/승인 인수인계
 1. **목표·확정사항·기술:** 제품 DATA2WEB Studio 오프라인 입력 CSV/TSV/평면 JSON/XLSX→HTML+ZIP+receipt. **A 결과물 제작/납품형 우선**, **B native Windows EXE 독립 라이선스 판매 후속**을 사용자 확정. 기술구현 B(stdlib 파서)와 상업전략 A/B 혼동 금지; 원래 R01~R33 분모100 불변.
 2. **완료 기능·변경·근거:** 기존 소유자 Win11 실제 합성 CSV GUI→고객폴더 verify:true/Chrome·Edge hosted CI 성공 보존. 이번 문서/구조 추가: `docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md`, `docs/OWNER_APPROVAL_PACKET_A_20261114.md`, `docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md`, `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md`, `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`, `data/a_first_b_later_roadmap_v1.json`, `test_strategy_roadmap.py`. 라이선스 조건 무근거 확정/고객 서류 대신 승인표시 없음.

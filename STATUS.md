@@ -1,5 +1,10 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · A/B 장기 로드맵/승인 안전게이트의 최신 정확 SHA CI 검증 성공
+- **제품 HEAD `e0ad8b849c2771ff9aa47bc1fbaae95e7f6ccdd7`**: [Windows/Ubuntu Python + Chrome/Edge/Chromium #43534569192](https://github.com/hibi89/data2web_studio/actions/runs/43534569192) **4/4 SUCCESS**; Windows `298/298` PASS, Ubuntu `297 PASS/1 SKIP`. 신규 `test_strategy_roadmap.py`의 무승인 판매·점수표 일치·중복 득점 금지·EXE 후속 미출시 등 **4종 테스트 모두 PASS**. [Final blueprint gate #43534569433](https://github.com/hibi89/data2web_studio/actions/runs/43534569433) **SUCCESS**.
+- 이 증거는 승인된 **A 결과물 납품 선행 / B EXE 후속 방향의 로드맵·자동계약 일치성** 증거다. **R07/R21/R25/R26의 실제 법적/데이터 승인 및 R29 외부독립 감사 완료 증거는 아니다**. 공식 `72/100`, 목표85까지13, `[작업중]`, RELEASE HOLD/SALE NO-GO, 크몽 등록0, 승인 외부전송/유료서비스0 유지. 문서·점수표·기존 원본 안전.
+
+
 ## 2026-11-14 KST · 사용자 A오프라인 납품 우선 / B Windows EXE 후속 확정 및 로드맵·승인/감사 양식 등록
 - 사용자 지시: 기존 최종설계 + 개발판단을 수용, **A 고객 HTML+ZIP+receipt 제작 서비스 선행**, **B native Windows EXE 별도 판매는 후속**, 후속 개발 계획 GitHub 기록·진행 승인. 대상은 로컬 처리/내부 개발 및 문서화이며, 실제 IP/PII/보존기간/가격/판매/유료 감사·외부 전송·권한 변경은 미승인.
 - 신규: `docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md` (85/95/100 R01–R33 고정 전수, 책임·순서·고객가치·제품 B/AX 확장), `data/a_first_b_later_roadmap_v1.json` + `test_strategy_roadmap.py` (점수표 정합성·미판매 계약 자동검사), `docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md` (ZIP 현재3멤버/HTML 자체 CSS·JS·PyInstaller·test-only 부속 구분/라이선스 실제 승인 미완), `docs/OWNER_APPROVAL_PACKET_A_20261114.md` (형의 최소개입 일괄 승인), `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md` (데이터 최소화 사전 접수/납품), `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md` (외부 독립 감사 범위·증거/권한), 기존 `docs/FINAL_DESIGN.md`/정책/AGENTS/README에서 연결.
