@@ -17,6 +17,9 @@ import tempfile
 import time
 from pathlib import Path
 
+from path_policy import assert_no_links
+from secure_output import create_output_file, open_output_directory
+
 STATUS = "UNSIGNED_PRIVATE_PREVIEW_ONLY_RELEASE_HOLD"
 def _run(executable, args, *, expected=0, env=None):
     process = subprocess.run([str(executable), *map(str, args)], text=True,
@@ -104,12 +107,17 @@ def _desktop_window(executable):
 
 def acceptance(executable, manifest_path):
     exe = Path(executable).resolve(strict=True)
+    manifest_path = Path(manifest_path).absolute()
     if os.name != "nt" or exe.suffix.lower() != ".exe":
         raise ValueError("Windows EXE required")
     if exe.parent.name != "DATA2WEB-LOCAL":
         raise ValueError("Unexpected private onedir preview layout")
-    if manifest_path.exists():
+    assert_no_links(manifest_path, allow_missing_leaf=True)
+    if manifest_path.exists() or manifest_path.is_symlink():
         raise FileExistsError("Preview manifest must be create-only")
+    if not manifest_path.parent.is_dir() or manifest_path.parent.is_symlink():
+        raise ValueError("Preview manifest parent must be an existing real directory")
+    parent_info = manifest_path.parent.lstat()
     with tempfile.TemporaryDirectory(prefix="data2web-native-preview-") as scratch:
         root = Path(scratch)
         # This PATH deliberately contains no Python executable: native CLI must
@@ -180,10 +188,18 @@ def acceptance(executable, manifest_path):
         "commercial_rights_verified":False,
         "sale_approved":False,
     }
-    manifest_path.parent.mkdir(parents=True, exist_ok=True)
-    with manifest_path.open("x", encoding="utf-8") as stream:
-        json.dump(report, stream, ensure_ascii=True, sort_keys=True, indent=2)
-        stream.write("\n")
+    output_directory = open_output_directory(
+        manifest_path.parent,
+        expected_identity=(parent_info.st_dev, parent_info.st_ino),
+    )
+    try:
+        raw_manifest = (
+            json.dumps(report, ensure_ascii=True, sort_keys=True, indent=2) + "\n"
+        ).encode("utf-8")
+        with create_output_file(manifest_path, directory=output_directory) as stream:
+            stream.write(raw_manifest)
+    finally:
+        output_directory.close()
     return {"status":"PASS_SYNTHETIC_HOSTED_ONLY", "preview_sha256":report["exe_sha256"],
             "file_count":len(files), "native_tk_window_seen":desktop_ok,
             "customer_pc_verified":False,"sale_approved":False}
