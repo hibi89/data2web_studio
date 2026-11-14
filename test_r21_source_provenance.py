@@ -23,6 +23,33 @@ class SourceProvenanceGate(unittest.TestCase):
         self.assertFalse(result["commercial_release_approved"])
         self.assertEqual(result["score_addition"],0)
 
+    def test_windows_crlf_checkout_is_same_git_blob(self):
+        # Git checkout autocrlf modifies the WORKTREE representation only.
+        from r21_source_provenance import source_checkout_matches_git_blob
+        before=b"first line\nsecond line\n"
+        expected=git_blob_oid(before)
+        checked_out=before.replace(b"\n",b"\r\n")
+        self.assertTrue(source_checkout_matches_git_blob(checked_out,expected))
+        self.assertFalse(source_checkout_matches_git_blob(
+            checked_out+b"unexpected\r\n",expected
+        ))
+        self.assertFalse(source_checkout_matches_git_blob(
+            checked_out.replace(b"second",b"altered"),expected
+        ))
+        self.assertFalse(source_checkout_matches_git_blob(
+            b"first line\rsecond line\n",expected
+        ))
+
+    def test_source_pins_survive_windows_style_worktree_line_endings(self):
+        with tempfile.TemporaryDirectory() as temp:
+            dest=Path(temp)
+            for filename in ROLES:
+                raw=(ROOT/filename).read_bytes()
+                # Match Git's checkout transformation, never rewrite source repo.
+                self.assertNotIn(b"\r\n",raw)
+                (dest/filename).write_bytes(raw.replace(b"\n",b"\r\n"))
+            self.assertEqual(check_source_provenance(root=dest)["source_files_verified"],6)
+
     def test_git_blob_oid_against_known_reference(self):
         self.assertEqual(git_blob_oid(b"hello\n"),
                          "ce013625030ba8dba906f756967f9e9ca394464a")

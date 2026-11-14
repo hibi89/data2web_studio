@@ -39,6 +39,23 @@ def git_blob_oid(data):
     ).hexdigest()
 
 
+def source_checkout_matches_git_blob(raw, expected):
+    """Accept Git's text checkout CRLF normalization, not changed code.
+
+    Git blob identities are computed on repository LF bytes, while Windows
+    worktree checkout can convert line endings to CRLF. This normalization is
+    limited to whole text line endings; other changes remain fail-closed.
+    """
+    if git_blob_oid(raw)==expected:
+        return True
+    if b"\r\n" not in raw:
+        return False
+    normalized=raw.replace(b"\r\n",b"\n")
+    if b"\r" in normalized:
+        return False
+    return git_blob_oid(normalized)==expected
+
+
 def _unique(pairs):
     result={}
     for k,v in pairs:
@@ -103,7 +120,7 @@ def check_source_provenance(*,root=ROOT,manifest=None):
         source=root/item["path"]
         from path_policy import read_bounded_source
         raw=read_bounded_source(source,max_bytes=200_000)
-        if git_blob_oid(raw)!=item["git_blob_sha1"]:
+        if not source_checkout_matches_git_blob(raw,item["git_blob_sha1"]):
             raise ValueError("Shipping producer source drift requires R21 review")
     return {
         "contract":CONTRACT,
