@@ -142,6 +142,18 @@ def verify_customer_folder(destination):
         assert_no_links(member)
         if not member.is_file():
             raise ValueError("Customer folder member became unsafe")
+    # The directory may remain unchanged while a writer edits an existing
+    # HTML, receipt or ZIP in-place after its earlier validated snapshot.
+    # Re-read each bounded file by its identity-checked handle before success.
+    # This narrows persistent byte-replacement races; no pathname API provides
+    # a fully atomic snapshot against concurrent hostile writers.
+    for name, snapshot, limit in (
+        ("index.html", html, 20_000_000),
+        ("receipt.json", rbytes, 256_000),
+        ("delivery.zip", zip_snapshot, MAX_ARCHIVE),
+    ):
+        if read_bounded_source(root/name, max_bytes=limit) != snapshot:
+            raise ValueError("Customer artifact changed during verification")
     if _folder_identity(root) != starting_identity:
         raise ValueError("Customer folder changed during final inventory")
     return {
