@@ -33,6 +33,8 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
             fields = reader.fieldnames
             if not fields:
                 raise ValueError("Missing header")
+            if len(fields) > MAX_COLS:
+                raise ValueError("CSV column count limit")
             rows = []
             for record in reader:
                 if len(rows) >= MAX_ROWS:
