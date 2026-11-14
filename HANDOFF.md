@@ -1,3 +1,47 @@
+## 2026-11-15 KST — 보안 수정 및 다음 실행 인수인계 (코드/테스트 SHA `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`)
+
+### 현재 GitHub 상태
+
+- Repository: `hibi89/data2web_studio`
+- Branch: `feature/final-blueprint-p85-evidence-20261113`
+- PR #4: Draft / Open / Unmerged. `main` HEAD는 `0cf4adbfe745c10fdb103db09185ea495fb769aa`로 유지.
+- 이후 STATUS/HANDOFF/증거 기록 갱신은 docs-only 커밋이며, 제품·테스트를 실행한 최신 SHA는 `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`.
+
+### 구현 및 독립 검수
+
+`secure_output.py`를 이용해 create-only 산출물 생성을 실제 폴더 핸들에 고정했다. Windows에서는 조상 디렉터리까지 no-delete sharing 핸들을 유지하고 상대 경로로 파일/디렉터리를 생성한다. POSIX에서는 신뢰 소유권/권한을 확인하고 dir-fd 기준으로 생성한다. HTML, 단일/append 전달, ZIP, 영수증, portable/Windows 패키지 및 주요 로컬 보고서 경로를 대상으로 한다. 사용자 데이터 네트워크 전송, 배포, 유료 서비스, secrets/권한 변경은 없다.
+
+GPT-6 High의 GitHub-only source review는 92dca18의 secure writer와 fault-injection test seams에서 actionable security finding을 찾지 않았다. 검수자가 R21 producer blob drift를 별도 source-review blocker로 표시했고, mechanical pin update를 권고하지 않았다. POSIX same-UID 악성 동시 조상 rename 방지는 입증하지 않았다. 이 내부 검수는 독립 R29 외부 감사가 아니다.
+
+### 정확 SHA 검증 결과
+
+| GitHub Actions | 결과 | 근거 |
+|---|---|---|
+| [Python/browser #43641997390](https://github.com/hibi89/data2web_studio/actions/runs/43641997390) | **FAIL** | browser job PASS, Windows Chrome/Edge/Tk job PASS. Windows unittest 531: 524 PASS, 5 ERROR, 1 FAIL, 1 SKIP; Ubuntu 531: 521 PASS, 5 ERROR, 1 FAIL, 4 SKIP. |
+| [macOS offline #43641997419](https://github.com/hibi89/data2web_studio/actions/runs/43641997419) | **FAIL** | 531 tests: 521 PASS, 5 ERROR, 1 FAIL, 4 SKIP. |
+| [CodeQL #43641997418](https://github.com/hibi89/data2web_studio/actions/runs/43641997418) | **PASS** | public-source scan completed. |
+| [Synthetic product preview #43641997407](https://github.com/hibi89/data2web_studio/actions/runs/43641997407) | **PASS** | synthetic hosted preview only. |
+| [Final evidence gate #43641997648](https://github.com/hibi89/data2web_studio/actions/runs/43641997648) | **PASS / UNASSESSED** | No approved evidence manifest; no score awarded. |
+
+실패 6개는 변경된 `data2web_single.py`, `data2web_append.py`, `delivery.py`, `receipt_utils.py`의 현재 blob이 `data/r21_source_provenance_v1.json`의 source pins와 다른 것을 provenance guard가 거부한 결과다. 원래 pin을 변경하지 않았으며 권한 없는 검토 완료/권리 확인으로 처리하지 않았다. 그 외 suite의 출력 생성 경합 tests, A07 동의 초기화, A25 보존기한·잘못된 UTF-8·위조 보고서, A26 consent/privacy flow 및 A29 internal synthetic preaudit checks는 통과했다. R29 preaudit 보고도 7개 synthetic check PASS, `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 점수 +0이다.
+
+### 작업 ID 및 공식 결과
+
+- **재확인 완료:** P00–P02; A07-03, A25-01, A26-02 관련 회귀; A29-01 internal synthetic preaudit.
+- **R21 검토 대기:** A21-01/02, P03, G85-02. A21의 원본 source pin 중 네 생산자 blob이 바뀌었고 provenance guard가 fail-closed 한다.
+- **외부/고객 증거 대기:** A07-04/05, A21-03/04/05/06, A25-03/04, A26-03/04, A29-03/04/05/06/07, G85-01/03/04. G85-02도 R21 pin gate가 해결되고 전체 matrix가 정확 SHA에서 통과할 때까지 BLOCKED.
+- Scorecard는 R01–R33 전체 범위, 100점 분모와 owner-approved 가중치를 유지한다. 현재 **72/100**, 22 VERIFIED / 11 PENDING, 증가 0, 목표까지 +13. RELEASE HOLD / SALE NO-GO 그대로.
+
+### 다음 실행 순서와 필요한 증거
+
+1. 네 producer source blob에 대한 R21 source-change review를 owner-approved 범위에서 완료한다. 그전에는 provenance hash를 바꾸거나 current pin check를 PASS로 기록하지 않는다.
+2. review 승인 후 공식 source pin 갱신 조건을 확인하고, 새 정확 SHA에서 Python Windows/Ubuntu, macOS, Chromium, Windows Chrome/Edge/Tk, CodeQL, preview, final evidence gate 전체를 재실행한다.
+3. R07 실제 rightsholder authority와 고객 consent, R21 상업 재배포 권리와 LICENSE/NOTICE 결정, R25 실제 고객 custody·return/disposal 기록, R26 고객별 처리 근거와 plaintext consent를 받는다. R25의 기존 7개 정책 승인/합성 파기 drill은 이미 유효하다. 다시 요청하지 않는다.
+4. R29는 사용자가 승인한 독립 평가자, 실제 외부 findings, remediation retest, 최종 signoff가 필요하다. Codex/High/CodeQL/Actions 결과로 대체하지 않는다.
+5. 다섯 R packet의 전체 증거를 수용한 뒤에만 G85-01~04와 공식 점수를 재검증한다.
+
+Do not merge PR #4, change `main`, deploy, upload customer data, add paid services, or change secrets/permissions.
+
 ## 2026-11-15 KST — Windows directory-junction security regression, exact tested HEAD `c99f3d4`
 
 1. **Repository/PR:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; PR #4 remains Draft/Open/Unmerged, base `feature/p85-ui-crossbrowser-20261113`. Tested source/test/workflow HEAD: `c99f3d482a3972ff4de52c6df91f118854c383db`. Product implementation remains at `512af500`; this update is a docs-only `[skip ci]` follow-up.

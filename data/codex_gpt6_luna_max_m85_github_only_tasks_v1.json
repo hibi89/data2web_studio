@@ -1,6 +1,6 @@
 {
   "contract": "DATA2WEB_CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_V1",
-  "snapshot_date_kst": "2026-11-15 01:55",
+  "snapshot_date_kst": "2026-11-15 06:21",
   "repository": "hibi89/data2web_studio",
   "branch": "feature/final-blueprint-p85-evidence-20261113",
   "source_branch_sha_at_plan": "1c582db78fb3ac91f37ddbab27b18124c08a5419",
@@ -83,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Read current GitHub source/scorecard/evidence at exact tested PR HEAD c99f3d482a3972ff4de52c6df91f118854c383db. Product implementation remains on 512af500; current test/workflow changes are in this verified head. Official score 72, 22 VERIFIED/11 PENDING."
+      "current_note": "Read latest GitHub source, scorecard and evidence at tested code/test SHA 92dca1824e24700dc38f8f9fa4ae3775488c2d3f. Official score remains 72, 22 VERIFIED/11 PENDING; PR #4 Draft/Open/Unmerged; main unchanged."
     },
     {
       "id": "P01",
@@ -131,7 +131,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Completed docs/M85_ACCEPTANCE_EVIDENCE_INDEX_20261114.md with 18 stable non-identifying tracking IDs (M85-E01..E18), per-artifact VERIFIED/INCOMPLETE/MISSING classifications, and all five overall R packets marked INCOMPLETE. No customer/private proofs or points were added."
+      "current_note": "Evidence index retains 18 stable non-identifying IDs and five incomplete R packets. M85-E05 is now INCOMPLETE because four current R21 producer blobs differ from the historic pins; no private proof or point was added."
     },
     {
       "id": "P03",
@@ -142,7 +142,7 @@
       "depends_on": [
         "P00"
       ],
-      "status_snapshot": "PASS_EXACT_SHA",
+      "status_snapshot": "BLOCKED_R21_SOURCE_REVIEW",
       "work": "Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.",
       "acceptance": "No regression and no mistaken CI-Ready=customer-approved claim.",
       "evidence": "Test run URLs exact SHA, PASS/FAIL/SKIP log and OS/browser scope.",
@@ -155,9 +155,9 @@
         "test_blueprint_score.py",
         "shipping_rights_preflight.py"
       ],
-      "blocker": null,
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Exact PR HEAD c99f3d482a3972ff4de52c6df91f118854c383db: Python/browser #43636589005, macOS #43636589137, CodeQL #43636589034 and gate #43636589543 passed. 527 tests ran on Windows/Ubuntu/macOS; two junction cases pass on Windows and explicitly skip elsewhere; Ubuntu/macOS each have 3 platform-specific skips. Chrome/Edge/Chromium PASS. Gate output UNASSESSED."
+      "current_note": "At exact 92dca18, Python/browser and macOS full test jobs fail closed in R21 source provenance (5 errors + 1 failure each OS suite); Chromium, Windows Chrome/Edge/Tk, CodeQL, synthetic preview and evidence gate pass. Final gate says UNASSESSED."
     },
     {
       "id": "A07-01",
@@ -230,7 +230,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Consent-reset and pre-confirmation regression paths passed hosted Windows/Ubuntu and Tk browser acceptance at 512af500."
+      "current_note": "Consent reset on mapping/destination changes passed in the exact 92dca18 Windows, Ubuntu and macOS full-suite logs; overall jobs remain failed only at the separate R21 source-provenance blocker."
     },
     {
       "id": "A07-04",
@@ -289,7 +289,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "RECONCILIATION_COMPLETE",
+      "status_snapshot": "REVALIDATE_SOURCE_ASSET_RECONCILIATION",
       "work": "Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.",
       "acceptance": "Complete real A shipping inventory vs whitelist; all provenance unknowns labeled pending, no fake LICENSE.",
       "evidence": "Git-linked inventory with source SHA and actual synthetic ZIP member evidence.",
@@ -302,9 +302,9 @@
         "data/r21_source_provenance_v1.json",
         "docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md"
       ],
-      "blocker": null,
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Shipping members and synthetic create-only delivery checks reconciled; no extra EXE/vendor bundle inferred."
+      "current_note": "Handle-anchored delivery changes alter four producer blobs; reconcile the current shipped source set after the authorized R21 source-change review. No product/rights approval inferred."
     },
     {
       "id": "A21-02",
@@ -315,7 +315,7 @@
       "depends_on": [
         "A21-01"
       ],
-      "status_snapshot": "PROVENANCE_RECHECK_COMPLETE_RIGHTS_PENDING",
+      "status_snapshot": "BLOCKED_R21_SOURCE_REVIEW",
       "work": "For every shipped asset/derivation enumerate author, origin SHA, upstream reference, vendor license/NOTICE obligations and unresolved chains; do not infer IP ownership from AI generation or GitHub owner.",
       "acceptance": "Every actually shipped text/JS/CSS artifact has a rights-evidence or explicit unresolved flag; no accidental EXE bundling.",
       "evidence": "Versioned chain-of-title/third-party dependency matrix, unknowns kept as blockers.",
@@ -326,9 +326,9 @@
         "docs/ORIGIN_AND_LICENSE.md",
         "docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md"
       ],
-      "blocker": null,
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Six producer Git blob pins and shipped asset origin inventory rechecked; provenance does not establish derivative/commercial rights or NOTICE clearance."
+      "current_note": "The source provenance guard correctly rejects four changed producer blobs at 92dca18. Original manifest remains untouched; no mechanical pin refresh or owner rights claim."
     },
     {
       "id": "A21-03",
@@ -448,7 +448,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Max-date, malformed UTF-8 and report-integrity regressions are covered by the full exact-SHA hosted suite; original/result no-auto-delete boundary retained."
+      "current_note": "Malformed UTF-8 HOLD and extreme receipt timestamp/date/report integrity tests passed in Windows, Ubuntu and macOS exact 92dca18 runs; overall matrix is blocked by separate R21 source drift."
     },
     {
       "id": "A25-02",
@@ -564,7 +564,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Single/batch consent reset, pre-confirmation validation and malformed metadata HOLD regressions passed the latest hosted Windows/Ubuntu and UI jobs."
+      "current_note": "Single/batch consent reset and pre-confirmation privacy flow passed in exact 92dca18 hosted runs; overall matrix is blocked by separate R21 source drift."
     },
     {
       "id": "A26-03",
@@ -622,7 +622,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "INTERNAL_SYNTHETIC_PREAUDIT_RECHECK_COMPLETE_EXTERNAL_PENDING",
+      "status_snapshot": "INTERNAL_PREAUDIT_PASS_EXTERNAL_PENDING_R21_GATE_BLOCKED",
       "work": "Freeze independent evaluator's threat scope: XSS/CSP/CSV formula, XLSX zip bomb and XML entities, ZIP/receipt, TOCTOU symlink/hardlink/junction, interruptions, offline network.",
       "acceptance": "Threat matrix has reproducible positive/negative test cases, supported OS constraints and residual risks; no claim of external audit.",
       "evidence": "Synthetic case inventory, fixture hashes, exact source SHA.",
@@ -633,9 +633,9 @@
       "touchpoints": [
         "docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md"
       ],
-      "blocker": null,
+      "blocker": "INDEPENDENT_EXTERNAL_AUDIT_PENDING",
       "point_award_by_task": 0,
-      "current_note": "Exact HEAD c99f3d4: six direct assess()/write_new_report() spoof/report-forgery regressions remain covered; two real Windows mklink /J ancestry tests verify target identity and specific reparse rejection. Both junction tests passed on Windows; Ubuntu/macOS explicitly skip. High P3 test weakness fixed at af0b530; follow-up found no issue. Synthetic only; independent R29 audit remains pending."
+      "current_note": "Exact 92dca18 secure_output parent-link/relative-create checks passed; Windows ancestor rename lock passed; POSIX trust-mode checks passed; internal preaudit reports 7/7. Full suites stop on R21 blob drift. GPT-6 High source-only review found no actionable issue; not independent R29 acceptance."
     },
     {
       "id": "A29-02",
@@ -810,7 +810,7 @@
       "depends_on": [
         "G85-01"
       ],
-      "status_snapshot": "EXACT_SHA_CI_PASS_ACCEPTANCE_BLOCKED",
+      "status_snapshot": "BLOCKED_EXACT_SHA_R21_SOURCE_REVIEW",
       "work": "Run last exact-code-SHA Windows/Ubuntu Python, Chrome/Edge/Chromium, portable v1/v2, privacy/R21/R29 regression and CodeQL using existing free runners.",
       "acceptance": "All required CI jobs SUCCESS at exact code SHA with PASS/FAIL/SKIP, browser assets/API/zip/receipt intact; buyer acceptance separate.",
       "evidence": "Actions URL/run/job, browser and no-network evidence; no doc-SHA confusion.",
@@ -823,9 +823,9 @@
         " .github/workflows/python-tests.yml",
         ".github/workflows/final-blueprint-gate.yml"
       ],
-      "blocker": null,
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Exact HEAD c99f3d4 Python/Ubuntu/Windows-browser/macOS/CodeQL/evidence-gate Actions succeeded; all OS suites ran 527 tests with documented platform skips. Evidence gate output remains UNASSESSED with no manifest; G85 acceptance is still blocked by owner/customer/external packets."
+      "current_note": "At 92dca18 the exact full Python/Ubuntu/Windows/macOS workflows are not PASS because the R21 source-pin guard fails closed; browser jobs, CodeQL, synthetic preview and final evidence workflow pass. Evidence gate is UNASSESSED, no manifest."
     },
     {
       "id": "G85-03",

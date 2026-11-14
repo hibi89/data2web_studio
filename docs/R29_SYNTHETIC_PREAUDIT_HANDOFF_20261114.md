@@ -1,3 +1,11 @@
+## 2026-11-15 KST · Handle-anchored output creation at exact code/test HEAD
+
+At `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`, output producers use `secure_output.py` to create files relative to a verified, held directory handle. Windows tests pass for ancestor rename denial and relative create; POSIX tests pass for trusted ancestry refusal and relative create. The pre-open parent link race test passes on Windows, Ubuntu and macOS. The R29 internal synthetic preaudit step reports all seven configured checks passing and score addition 0.
+
+Exact Actions [Python/browser #43641997390](https://github.com/hibi89/data2web_studio/actions/runs/43641997390) and [macOS #43641997419](https://github.com/hibi89/data2web_studio/actions/runs/43641997419) remain overall FAIL because R21 source provenance rejects changed producer blobs. Browser, Windows Chrome/Edge/Tk, CodeQL [#43641997418](https://github.com/hibi89/data2web_studio/actions/runs/43641997418), synthetic preview [#43641997407](https://github.com/hibi89/data2web_studio/actions/runs/43641997407) and evidence gate [#43641997648](https://github.com/hibi89/data2web_studio/actions/runs/43641997648) succeeded; the evidence gate is `UNASSESSED` without an approved manifest.
+
+GPT-6 High's source-only review of the exact head found no actionable code issue. POSIX same-UID hostile ancestry changes are not established as prevented. Internal tests, High review, CodeQL and Actions do not count as an independent audit. R29 remains PENDING, external evaluator/findings/retest/signoff remain missing, score addition 0, RELEASE HOLD / SALE NO-GO.
+
 ## 2026-11-15 KST · Windows directory-junction source/output rejection at exact HEAD
 
 `path_policy.assert_no_links()` checks Windows `FILE_ATTRIBUTE_REPARSE_POINT`; the prior test file used symlinks but did not exercise a real directory junction. Added two synthetic Windows-only regressions in `test_path_policy.py`: source reads through a junction and output creation through a junction parent. The helper uses `cmd.exe mklink /J`, verifies the reparse attribute, verifies `junction/source.csv.samefile(self.source)`, and cleans the junction before the temporary directory. Both tests require the specific reparse-point rejection; output test confirms no target was created.

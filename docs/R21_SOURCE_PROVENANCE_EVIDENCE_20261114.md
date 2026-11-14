@@ -1,3 +1,14 @@
+## 2026-11-15 KST update — producer source drift; R21 review required
+
+At code/test SHA `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`, the four delivery producer files below contain handle-anchored create-only output changes and no longer match the historic pins in `data/r21_source_provenance_v1.json` (snapshot `0219a10c03cab826220a78af128cffdae995ac9f`):
+
+- `data2web_single.py`: `b24e7495f4c43131dcbd986ac7bb75dfd3d979c0`
+- `data2web_append.py`: `92ccab387a61f9546d13bf9c48a97875e84ae740`
+- `delivery.py`: `c0013e445f3d4b419314c795d387643abc176f48`
+- `receipt_utils.py`: `137f4086fe08cfe22722186ffc0b47aa30957817`
+
+The R21 provenance check deliberately remains fail-closed with `Shipping producer source drift requires R21 review`. The historic pin manifest has **not** been mechanically refreshed. GPT-6 High read-only review found the anchored writer changes reasonable, but that code review is not an owner source-origin/rights review, commercial license, NOTICE decision, or R29 independent audit. R21 source-change review and actual commercial redistribution rights remain distinct pending gates. Until the authorized source review is recorded, the current R21 source provenance and full exact-SHA test matrix are blocked.
+
 # R21 — 납품 생성 소스 Git blob 핀 및 권리 미확정 증거 (2026-11-14 KST)
 
 **공식 완성률: 72/100. R21 = PENDING / R29 = PENDING / RELEASE HOLD.**

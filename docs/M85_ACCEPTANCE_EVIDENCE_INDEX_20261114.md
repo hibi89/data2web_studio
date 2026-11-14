@@ -1,3 +1,11 @@
+## 2026-11-15 KST — latest output-path hardening evidence at `92dca18`
+
+The exact code/test revision is `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`. New `secure_output.py` routes create-only output through verified directory handles; hosted Windows verifies ancestor rename denial and relative creation, while Ubuntu/macOS pass POSIX trusted-ancestry and relative-create regressions. The source-only GPT-6 High review found no actionable issue in these changes or test seams. Internal R29 preaudit reports all seven synthetic checks passing, but still says `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`.
+
+Current Actions: Python/browser #43641997390 and macOS #43641997419 are **FAIL** because the R21 provenance guard rejects four changed producer blobs; browser, Windows Chrome/Edge/Tk, CodeQL #43641997418, synthetic preview #43641997407 and final gate #43641997648 succeeded. The gate itself reports `UNASSESSED`, with no approved manifest. Current exact suite logs show the output-race, A07 consent-reset, A25 retention, and A26 privacy/consent regressions pass; the R21 source pin tests fail closed.
+
+The original `data/r21_source_provenance_v1.json` remains untouched. Four producer files now differ from their historic pins; see the latest R21 source evidence note. Therefore M85-E05's historic pin evidence does not verify the current producer source set and is now `INCOMPLETE`. No rights, customer acceptance, external audit, or points are inferred from this internal engineering work.
+
 # M85 acceptance evidence index — 2026-11-15 KST
 
 Scope: R07/R21/R25/R26/R29. Public-safe repository evidence only; no private customer proof, signatures or legal attestations. No partial points.
@@ -20,7 +28,7 @@ Evidence IDs below are stable, non-identifying tracking references, not signatur
 | M85-E02 | R07 | Per-order rights, shared-data, plaintext and privacy checklist template | VERIFIED | `A07_PER_ORDER_RIGHTS_CHECKLIST_20261114.md`; blank form, not customer assent |
 | M85-E03 | R07 | Actual rightsholder/provider authority and scoped customer permission to use/transform/deliver a real source | MISSING | No customer or private legal proof supplied; the checklist cannot establish it |
 | M85-E04 | R07 | Before/after source identity and bytes tied to an authorized real acceptance case | MISSING | No real source case or private hash record supplied |
-| M85-E05 | R21 | Shipped asset inventory and six producer Git blob identity pins | VERIFIED | `R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md`, `R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md`, latest source preflight; identity is not ownership |
+| M85-E05 | R21 | Historic shipped asset inventory and producer blob pins | INCOMPLETE | At 92dca18 four producer blobs differ from the historic pin manifest; source-change review required; pin identity is not ownership or commercial rights |
 | M85-E06 | R21 | Rightsholder chain, derivative-work rights, commercial redistribution license and third-party NOTICE obligations | MISSING | No actual rights instrument or approved NOTICE decision supplied |
 | M85-E07 | R21 | Rights-driven LICENSE/NOTICE package decision and allowed/forbidden-member migration tests | MISSING | Depends on M85-E06; no license is invented or added |
 | M85-E08 | R25 | Seven owner-approved internal policies and named operator record | VERIFIED | `R25_OWNER_APPROVAL_AND_SYNTHETIC_CUSTODY_20261114.md`; policy approval only |
