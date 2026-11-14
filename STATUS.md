@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 overdue HOLD report regression
+- Found a real internal contradiction: `review_copy` can legitimately set `manual_disposal_action_due=True` for overdue sensitive/unconsented operator copies while retaining the higher-priority privacy/rights HOLD reason; `validate_result` rejected that report, preventing `write_new_report`. Fixed to allow the specific HOLD reasons while still rejecting fabricated approval and manual-action status mismatch. Code SHA `c5a9ef5592bf0be53209b270f70e927265c3b7a5`.
+- Added synthetic regression for sensitive overdue, unconsented overdue, and sensitive purpose-completed-before-day-7, including create-only report write; test SHA `4d3618bcfaf9865df0705a3920c251e155bebbb7`.
+- User deferred nonessential CI until later; no test execution evidence this turn. R25 owner attestation and independent custody/disposal evidence remain missing. Official locked score 72/100, R25 PENDING, RELEASE HOLD. No source deletion, customer data, or approval changes.
+
 ## 2026-11-14 KST — R25 malformed UTF-8 retention CLI fail-closed
 - Inspected current `operator_copy_retention.py` and `test_operator_copy_retention.py`. CLI `parse_metadata(raw.decode("utf-8"))` can raise `UnicodeDecodeError` but top-level exception handler omitted UnicodeError, causing an uncaught traceback. Fixed in `7042aad0b272d9fe75bd0522d89eea1e7d8297b1`.
 - Added subprocess regression using invalid bytes (255,254,128) asserting exit code 2, structured `INVALID_LOCAL_RETENTION_METADATA` HOLD and no traceback, test commit `3aea2011892d0c81007b8c50c2996bf0f44f0c0a`.
