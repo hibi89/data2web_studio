@@ -1,3 +1,10 @@
+## 2026-11-15 KST — 최신 R21 기술 증거 PASS와 85점 수용 패킷 구분
+
+- **M85-E05 기술 부분 최신화:** 현재 v2 provenance registry가 실제 producer 6/6 Git blob에 일치. `9c8cfdcb1c10482ad6184a581991626b7e42138c` exact-SHA Windows/Ubuntu [#43647752145](https://github.com/hibi89/data2web_studio/actions/runs/43647752145)와 macOS [#43647752125](https://github.com/hibi89/data2web_studio/actions/runs/43647752125) **모두 PASS**, 전체 Python OS별 533테스트, FAIL 0. CodeQL [#43647752124](https://github.com/hibi89/data2web_studio/actions/runs/43647752124) SUCCESS.
+- **전체 M85-E05는 여전히 INCOMPLETE:** 테스트 성공은 소스의 상업적 권리 및 제3자 NOTICE/납품 허가 증거가 아니다. R21 +4 부여 안 함. 이전 v1에서 발견된 4개 pin drift는 v1을 변경하지 않고 v2로 해결하였음.
+- 최종 Evidence Gate [#43647752518](https://github.com/hibi89/data2web_studio/actions/runs/43647752518) 실행 SUCCESS이지만 결과 `UNASSESSED` / 독립 수용 증빙 없음. R07/R21/R25/R26/R29 5패킷 모두 전체 미완료. R25 사용자 기존 7개 정책 승인·합성 파기 PASS는 유지하며 실 고객 보관/파기와 구분.
+- 점수표 고정 33개/100점, **22 VERIFIED=72점**, 목표85 +13은 실제 권리·고객·독립외부 수용 없이 획득 불가. `[작업중]`, RELEASE HOLD/SALE NO-GO 유지.
+
 ## 2026-11-15 KST — M85-E05 최신 기술 재검증 진행 상태
 
 - GPT-6가 역사적 v1 registry를 변경하지 않고 현행 6개 생산자 blob을 v2 기술 registry로 재고정함 (code/test SHA `968d031f373054974c1bdae585dd61d12086ddf9`). `data/r21_source_provenance_v2.json`의 현재 소스 해시 6개는 GitHub 조회값과 일치함.
