@@ -459,7 +459,7 @@
       "depends_on": [
         "A25-01"
       ],
-      "status_snapshot": "PARTIAL_SYNTHETIC",
+      "status_snapshot": "TEMPLATE_COMPLETE_REAL_CUSTOMER_RECORD_PENDING",
       "work": "Prepare an unfilled custody/owner role, where/when data copied, rights, purpose, manual deletion or return authority, legal exception and record checklist.",
       "acceptance": "Customer source and result retention separate; explicit records for custody, expiry, action and no-copy case; no customer identifiers in public repo.",
       "evidence": "Redacted receipt/retention notice and operator manual checklist.",
@@ -471,7 +471,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Checklist/template remains useful; actual source/result custody, expiry, return and disposal trace is not in public evidence."
+      "current_note": "docs/A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md satisfies the unfilled source/result copy, custody, expiry, return/disposal, legal-exception and no-copy checklist. No real customer record or evidence was added; A25-03/04 and R25 acceptance remain blocked."
     },
     {
       "id": "A25-03",
