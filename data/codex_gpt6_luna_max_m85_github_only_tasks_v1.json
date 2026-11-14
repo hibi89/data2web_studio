@@ -65,7 +65,9 @@
     "latest_codeql_run": 43644268143,
     "latest_final_evidence_gate_run": 43644268362,
     "latest_final_evidence_gate_status": "PASS_WORKFLOW_UNASSESSED",
-    "latest_macos_at_validation_sha": "NOT_RUN"
+    "latest_macos_at_validation_sha": "NOT_RUN",
+    "a21_01_reconciliation_sha": "320aebc23163019f85e1c345857ff4ed3da8147a",
+    "a21_01_reconciliation_status": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING"
   },
   "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
   "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
@@ -298,7 +300,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "REVALIDATE_SOURCE_ASSET_RECONCILIATION",
+      "status_snapshot": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING",
       "work": "Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.",
       "acceptance": "Complete real A shipping inventory vs whitelist; all provenance unknowns labeled pending, no fake LICENSE.",
       "evidence": "Git-linked inventory with source SHA and actual synthetic ZIP member evidence.",
@@ -313,7 +315,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Exact 320aebc revalidation confirms four producer blobs differ from the historic six-source pin manifest. Record drift; do not reconcile pins without authorized R21 source review. Native manifest output hardening is hosted PASS, but this is not commercial-rights acceptance."
+      "current_note": "At exact 320aebc23163019f85e1c345857ff4ed3da8147a, Git tree comparison reconciles all six R21 producer files: data2web_web.py and data2web_tabular.py match historic pins; delivery.py, receipt_utils.py, data2web_single.py, and data2web_append.py have the four documented current blob IDs. Current source, rights inventory, and independent verifiers agree on exactly 3 customer-folder members and 3 ZIP members; HTML CSS/JS is self-contained; owner EXE/runtime, upstream golden source, and CI test dependencies are excluded from A delivery. Windows/Ubuntu folder, single-delivery, receipt, and create-only tests pass. The integrated synthetic rights preflight remains stopped by the source-drift guard. Technical inventory is reconciled; A21-02 source review and A21-03 rights/NOTICE acceptance remain blocked."
     },
     {
       "id": "A21-02",
