@@ -71,9 +71,13 @@ def run_case(kind):
                 assert all(not x.instate(["selected"]) for x in checks)
                 assert privacy[0].get()==""
                 mapping[2].set("category")
+                # Destination changes invalidate consent just like mapping
+                # changes; select it before granting the final scope.
+                buttons["상위 폴더 선택"].invoke()
+                assert all(not x.instate(["selected"]) for x in checks)
+                assert privacy[0].get()==""
                 for checkbox in checks:checkbox.invoke()
                 privacy[0].set("NO_PERSONAL_DATA_REVIEWED")
-                buttons["상위 폴더 선택"].invoke()
                 buttons["새 다중 고객 폴더 생성·검증"].invoke()
                 assert output.is_dir(), "Batch wizard did not create customer folder"
                 result=verify_customer_folder(output)
