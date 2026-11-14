@@ -153,6 +153,7 @@ class OperatorCopyRetentionTests(unittest.TestCase):
             (present,"operator_copy_present_claimed",False),
             (present,"manual_disposal_action_due",False),
             (present,"reason_code","NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED"),
+            (present,"reason_code","WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED"),
             (no_copy,"retention_due_utc","2026-11-21T12:00:00Z"),
             (no_copy,"manual_disposal_action_due",True),
             (no_copy,"reason_code","WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED"),
