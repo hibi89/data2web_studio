@@ -1,3 +1,15 @@
+## 2026-11-14 KST / 최신 R06 XLSX+생성 HTML FD 기반 검증 인수인계 (100% 목표)
+1. 목적/확정: DATA2WEB A 오프라인 HTML+ZIP+receipt 우선/B EXE 판매 후순위, 사용자 R01–R33 100점 정본과 0원 지출 규정 유지. Python3.11/Chrome Edge Chromium, 무계정·오프라인.
+2. 구현: XLSX 무시트 inspect의 직접 read_bytes 제거/8MB FD snapshot; 단일HTML 출력 20MB 초과 사전 거절, 단일·다중 결과 모두 FD 20MB 재읽기 + SHA 확인, 생성 중 문제는 기존 파일 삭제 없이 HOLD. 신규 합성12회귀(7 XLSX 원본 경합 + 5 생성 결과 변조/상한).
+3. 테스트: 정확 기능 SHA ed89a0dcc852c755f8de5c824d0e9b3308b80ebd. [Win/Ubuntu CI #43545781220](https://github.com/hibi89/data2web_studio/actions/runs/43545781220) 4/4 SUCCESS Win357/357 Ubuntu356/1SKIP, Chrome Edge Chromium. [Mac #43545781226](https://github.com/hibi89/data2web_studio/actions/runs/43545781226) SUCCESS 356/1SKIP Chromium offline. [CodeQL #43545781182](https://github.com/hibi89/data2web_studio/actions/runs/43545781182) SUCCESS, [score #43545781503](https://github.com/hibi89/data2web_studio/actions/runs/43545781503) SUCCESS. 이전 80efc7f349be4db6ce7c2cb4b0b92b027090771a의 Windows 미서명 native Preview #43545367017 SUCCESS. 정확 SHA/실행범위 구분.
+4. 현재: 공식 전체 최종완성률 72/100 22 VERIFIED 11 PENDING28. 목표100 미달. 신규 자동시험이 실제 고객/독립감사 인정점수 아님. [작업중]/RELEASE HOLD/SALE NO-GO, 크몽 미등록, PR4 Draft.
+5. 문제/시도/전환: 기존 studio.py 경로 확인후 Path.read_bytes와 단일/append output Path.read_bytes는 핸들 상태변경/크기 사후 검사가 부족. 기존 read_bounded_source 재사용으로 최소 수정했고 새12회귀와 Win/Linux/macOS success. 추가 TOCTOU는 파일시스템 경합/Windows 실제 고객/외부검토 미검증으로 R06 그대로 PENDING. CodeQL alerts 건수/인간 독립 R29 아직 모름. 무료 리뷰 issue #5 OPEN/no comments.
+6. 저장소: hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113. 실제 소스 검증 SHA ed89a0dcc852c755f8de5c824d0e9b3308b80ebd; 복구 기준 직전 80efc7f349be4db6ce7c2cb4b0b92b027090771a, 그 전 f04197f0a753ea0de92bec47bb2dc49489d0596f. 경로 studio.py/data2web.py/data2web_append.py/test_xlsx_inspection_snapshot.py/test_output_snapshot_security.py/docs/R06_FD_SNAPSHOT_HARDENING_20261114.md. 이 문서의 HEAD는 별도.
+7. Production/실행: python -m unittest discover -v; public standard GitHub CI Windows/Ubuntu/macOS runners, offline file URL. Vercel 미적용/실구매자 Production URL 없음; 상품화 A는 로컬 납품형.
+8. 원본·백업/비밀: 기존 main/REA_Web, scorecard/정본·오프라인 생성 ZIP 계약/기존 고객 원본 불변. 고객 파일·개인정보·token/API key GitHub/AI 전송0. 실제 상업권리/NOTICE 확인 없이 재배포 승인하지 않음. 7일 합성 데모 GitHub Actions artifact는 임시 자료.
+9. 다음/승인: 13:00 KST 예약된 사용자 묶음(Automation_fb2b044b906c8191a2b2adbf69add50e 활성)에서 개인 계정·저작권/상품등록·독립 고객기기 항목만 제시, 이미 성공한 사용자 합성 Win 검사는 반복 요구 금지. 무료 외부 R29 인간 평가자/실고객 권리/서면·개인정보·정산 판매 승인을 받아야 전체 100가능. 나머지 자체 코드/안전/상품문안·CI와 중앙 kmong [작업중] 동기화는 GPT 실행.
+10. 기준 시점/범위: 2026-11-14 KST, 정확 code SHA CI·Mac/Win/Linux 및 최초 native ZIP 테스트 확인, 새 문서 SHA와 실제 코드 SHA를 구별. 미확인 항목 무득점, 유료서비스0원.
+
 ## HANDOFF 최신 / 2026-11-14 KST / CSP JS hash 강제 및 13시 개입 분리
 1. 목표/기술: 사용자 DATA2WEB 최종설계 R01–R33 전체100, 0원, A offline HTML/ZIP/receipt 납품 우선, B unsigned EXE 후순위. Python3.11 stdlib, Chrome/Edge/Chromium.
 2. 완료: 정적 JS 실행 CSP sha256 only, 기존 script unsafe-inline 제거. CSS inline 유지. 신규6회귀, 12개 비식별 주문검사 회귀 및 합성 크몽 미리보기 보존. 신규 서버/유료API 없음.
