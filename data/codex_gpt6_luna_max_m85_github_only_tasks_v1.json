@@ -50,7 +50,7 @@
     "functional_ci_run": 43617898725,
     "hosted_windows_pass": 525,
     "hosted_ubuntu_pass": 524,
-    "latest_changes_test_status": "CI_UNVERIFIED_EXACT_SHA_968d031f",
+    "latest_changes_test_status": "HOSTED_3_OS_PASS_EXACT_SHA_9c8cfdc",
     "R25_policy_approved": true,
     "R25_synthetic_deletion": "PASS_LIMITED_ASSISTANT_CONTAINER",
     "R25_real_operator_evidence": "PENDING",
@@ -73,7 +73,18 @@
     "last_prior_failed_ci_run": 43644268104,
     "r21_historic_registry": "data/r21_source_provenance_v1.json",
     "r21_current_registry": "data/r21_source_provenance_v2.json",
-    "r21_latest_code_test_sha": "968d031f373054974c1bdae585dd61d12086ddf9"
+    "r21_latest_code_test_sha": "9c8cfdcb1c10482ad6184a581991626b7e42138c",
+    "hosted_windows_python_pass": 532,
+    "hosted_ubuntu_python_pass": 529,
+    "hosted_macos_python_pass": 529,
+    "hosted_windows_python_skip": 1,
+    "hosted_ubuntu_python_skip": 4,
+    "hosted_macos_python_skip": 4,
+    "r21_python_browser_ci_run": 43647752145,
+    "r21_macos_ci_run": 43647752125,
+    "r21_codeql_run": 43647752124,
+    "r21_final_gate_run": 43647752518,
+    "r21_final_gate_report": "UNASSESSED_NO_APPROVED_EVIDENCE_MANIFEST"
   },
   "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
   "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
@@ -159,7 +170,7 @@
       "depends_on": [
         "P00"
       ],
-      "status_snapshot": "CODE_FIX_COMMITTED_EXACT_SHA_CI_UNVERIFIED",
+      "status_snapshot": "PASS_EXACT_SHA_HOSTED_ALL_PLATFORMS",
       "work": "Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.",
       "acceptance": "No regression and no mistaken CI-Ready=customer-approved claim.",
       "evidence": "Test run URLs exact SHA, PASS/FAIL/SKIP log and OS/browser scope.",
@@ -172,9 +183,9 @@
         "test_blueprint_score.py",
         "shipping_rights_preflight.py"
       ],
-      "blocker": "EXACT_SHA_CI_UNVERIFIED",
+      "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Technical source drift fixed via original v1-preserving v2 registry and added regressions at code/test SHA 968d031f373054974c1bdae585dd61d12086ddf9. Full Windows/Ubuntu/macOS hosted Actions run conclusions are not accessible through PR-only run lookup or legacy combined statuses; no PASS claimed, R21 rights HOLD retained."
+      "current_note": "At exact source/workflow SHA 9c8cfdcb1c10482ad6184a581991626b7e42138c, GitHub Python/browser Actions #43647752145 4/4 jobs SUCCESS, macOS offline #43647752125 SUCCESS, CodeQL #43647752124 SUCCESS; Windows 533 tests 532 PASS/1 SKIP, Ubuntu 529 PASS/4 SKIP, macOS 529 PASS/4 SKIP; final evidence workflow #43647752518 SUCCESS but UNASSESSED. All tests hosted/synthetic/browser only; no real customer acceptance or +points."
     },
     {
       "id": "A07-01",
@@ -306,7 +317,7 @@
         "P01",
         "P02"
       ],
-      "status_snapshot": "TECHNICAL_SOURCE_V2_RECONCILED_CI_UNVERIFIED",
+      "status_snapshot": "PASS_TECHNICAL_PIN_AND_PACKAGE_EXACT_SHA",
       "work": "Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.",
       "acceptance": "Complete real A shipping inventory vs whitelist; all provenance unknowns labeled pending, no fake LICENSE.",
       "evidence": "Git-linked inventory with source SHA and actual synthetic ZIP member evidence.",
@@ -319,9 +330,9 @@
         "data/r21_source_provenance_v1.json",
         "docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md"
       ],
-      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Six producer Git blob IDs retrieved from live GitHub at code SHA 968d031f; v2 source registry pins current producer bytes while historical v1 remains immutable. Folder and ZIP inventory unchanged. Technical exact-SHA CI still unverified; legal rights and NOTICE pending."
+      "current_note": "Current v2 provenance registry pins all six actual producer Git blobs. Old v1 remains unmodified. Exact-SHA R21 source provenance + shipping rights preflight and broad Windows/Ubuntu/macOS hosted regressions passed #43647752145/#43647752125; preflight returns HOLD_OWNER_IP_NOTICE_EXTERNAL_AUDIT, not legal clearance."
     },
     {
       "id": "A21-02",
@@ -332,7 +343,7 @@
       "depends_on": [
         "A21-01"
       ],
-      "status_snapshot": "SOURCE_HISTORY_RECORDED_V2_CI_PENDING_RIGHTS_BLOCKED",
+      "status_snapshot": "PASS_TECHNICAL_SOURCE_HISTORY_RIGHTS_BLOCKED",
       "work": "For every shipped asset/derivation enumerate author, origin SHA, upstream reference, vendor license/NOTICE obligations and unresolved chains; do not infer IP ownership from AI generation or GitHub owner.",
       "acceptance": "Every actually shipped text/JS/CSS artifact has a rights-evidence or explicit unresolved flag; no accidental EXE bundling.",
       "evidence": "Versioned chain-of-title/third-party dependency matrix, unknowns kept as blockers.",
@@ -343,9 +354,9 @@
         "docs/ORIGIN_AND_LICENSE.md",
         "docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md"
       ],
-      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "blocker": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
       "point_award_by_task": 0,
-      "current_note": "Prior SHA lineage and 92dca182 anchored-output change reviewed; v2 pins current producer blobs, v1 archived unchanged. New v2 test committed at 968d031f, hosted CI not confirmed. Author Git metadata cannot prove commercial redistribution rights; owner/legal review still required."
+      "current_note": "GitHub source lineage and current reviewed v2 producer hashes recorded; 6/6 exact SHA hosted preflight PASS at 9c8cfdc, original historical v1 preserved. Author metadata and source hashes are NOT authorship, copyright ownership, commercial redistribution license or NOTICE approval; A21-03 owner/rights-holder evidence remains pending."
     },
     {
       "id": "A21-03",
@@ -827,7 +838,7 @@
       "depends_on": [
         "G85-01"
       ],
-      "status_snapshot": "R21_PIN_REPAIR_COMMITTED_CI_UNVERIFIED",
+      "status_snapshot": "PASS_EXACT_SHA_TECHNICAL_CI_GATE_ONLY",
       "work": "Run last exact-code-SHA Windows/Ubuntu Python, Chrome/Edge/Chromium, portable v1/v2, privacy/R21/R29 regression and CodeQL using existing free runners.",
       "acceptance": "All required CI jobs SUCCESS at exact code SHA with PASS/FAIL/SKIP, browser assets/API/zip/receipt intact; buyer acceptance separate.",
       "evidence": "Actions URL/run/job, browser and no-network evidence; no doc-SHA confusion.",
@@ -840,9 +851,9 @@
         " .github/workflows/python-tests.yml",
         ".github/workflows/final-blueprint-gate.yml"
       ],
-      "blocker": "EXACT_SHA_CI_UNVERIFIED",
+      "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Exact test/code SHA 968d031f373054974c1bdae585dd61d12086ddf9 contains v2 registry, fail-closed source pin validator, new v1/v2 regression and unchanged R25 pending score. Previous exact-SHA run #43644268104 failed (R21 drift); replacement Actions CI not independently observed. 85 gate remains BLOCKED."
+      "current_note": "Exact SHA 9c8cfdcb1c10482ad6184a581991626b7e42138c: Python/browser 4 jobs SUCCESS #43647752145, macOS #43647752125 SUCCESS, CodeQL #43647752124 SUCCESS. Windows/Ubuntu/macOS 533 tests each, FAIL 0 (Win 1 SKIP, Ubuntu/macOS 4 SKIP). Evidence workflow #43647752518 SUCCESS but report UNASSESSED. Thus G85-02 technical CI passes, while G85-01/03/04 and all five R07/R21/R25/R26/R29 full acceptance packets remain BLOCKED and official score 72."
     },
     {
       "id": "G85-03",
