@@ -48,6 +48,8 @@ def main():
             "id,title,category,amount,notes\n" +
             "".join(f"P{i},Precision {i},A,999999999999.9999,exact\n" for i in range(12)),
             encoding="utf-8")
+        collision=root/"category_label_collision.csv"
+        collision.write_text('id,title,category,amount,notes\nC1,Missing,,1,ok\nC2,Literal default,— 분류 없음 —,2,ok\nC3,Literal suffix,— 분류 없음 (2) —,3,ok\n',encoding="utf-8")
         with sync_playwright() as p:
             browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
                      else p.chromium.launch(channel=args.channel,headless=True))
@@ -154,6 +156,22 @@ def main():
             secondary.locator("#metric").select_option("amount")
             expect(secondary.locator("#chart-summary")).to_contain_text("11,999,999,999,999.9988")
             expect(secondary.locator("#chart-bars .chart-value")).to_have_text("11,999,999,999,999.9988")
+            # A generated blank-category label must never duplicate a literal
+            # customer category with the same text or numbered suffix.
+            secondary.locator("#csv").set_input_files(str(collision))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#count")).to_have_text("3건")
+            expect(secondary.locator("#category-total")).to_have_text("3")
+            expect(secondary.locator("#chart-bars .chart-row")).to_have_count(3)
+            labels=secondary.locator("#chart-bars .chart-key").all_text_contents()
+            assert len(set(labels))==3, labels
+            assert "— 분류 없음 (3) —" in labels, labels
+            secondary.locator("#category").select_option(label="— 분류 없음 (3) —")
+            expect(secondary.locator("#count")).to_have_text("1건")
+            expect(secondary.locator("#body tr").first).to_contain_text("C1")
+            secondary.locator("#category").select_option("")
+            expect(secondary.locator("#count")).to_have_text("3건")
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
             mob=mobile.new_page()
