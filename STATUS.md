@@ -1,3 +1,8 @@
+## 2026-11-14 KST — Instant P00/P02 evidence indexing (official 72/100 unchanged)
+- Verified locked scorecard directly: 33 requirements, weight 100, 22 VERIFIED = 72, 11 PENDING = 28. P00 score inspection complete; full command/CI rerun not performed in this turn, so P03 remains pending.
+- P02 public-safe evidence index committed: [M85 evidence index](docs/M85_ACCEPTANCE_EVIDENCE_INDEX_20261114.md). Five M85 requirements R07/R21/R25/R26/R29 remain PENDING due to real owner/rights/privacy/operational and independent external audit evidence. No customer data, fake rights, or point changes.
+- Source baseline docs SHA `ef6ba6c00e4aef7febca5b0a86568729d2b8252d`, last verified functional SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7`; index commit `8b437b40d7cb54b28313cd6f4a4995b67ff9a01b`. P01 rollback inventory, P03 fresh CI baseline, A07-01 and other M85 technical reviews remain next. This turn's changes are documentation only; no new CI success asserted. RELEASE HOLD / SALE NO-GO, main untouched.
+
 ## 2026-11-14 KST — 최종 역할 수정: Instant는 100점까지 중간 점검 자체 진행, High는 100점 이후 1회 검수
 - 첫 High 실행계획에서 `A07-05/A21-06/A25-04/A26-04/A29-07/G85-04/G95-01`를 High로 둔 것은 사용자의 **Instant가 100점까지 작업한다**는 요구와 충돌했다. 위 7개 Task를 **INSTANT 담당**으로 정정하고 역할·선행·증거·승인 구분을 보존했다. **High 담당은 `G100-02` 하나**다. 외부 독립 감사(R29)는 제3자 EXTERNAL 그대로, 사용자·고객 권리/개인정보 동의는 OWNER 그대로.
 - 최종 실행계획 50개(준비4/85단계30/95단계9/100단계7), 72→85(+13)→95(+10)→100(+5) 점수는 실제 증거 외 가산 금지. 공식72/100, [작업중], RELEASE HOLD / SALE NO-GO. 기존 코드는 미변경, docs-only [skip ci].
