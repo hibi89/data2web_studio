@@ -141,7 +141,7 @@ def diagnose_customer_folder(destination):
         "sale_approved": False,
     }
     try:
-        assert_no_links(root)
+        assert_no_links(root, allow_missing_leaf=True)
         if not root.is_dir():
             return {**base, "reason_code": "MISSING_OR_UNSAFE_DIRECTORY"}
         observed = {p.name for p in root.iterdir()}
