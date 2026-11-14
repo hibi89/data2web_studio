@@ -83,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Re-read current GitHub source, scorecard and evidence. Exact current PR HEAD 8ea6fe8671d18f0de1e6d931d8721f7227d8307e rerun completed; score remains 72, 22 VERIFIED/11 PENDING."
+      "current_note": "Re-read current GitHub source, scorecard and evidence at tested PR HEAD 25dd273eb1903ab283293de906de214114dcb3af; product/test SHA remains 512af500. Official score 72, 22 VERIFIED/11 PENDING."
     },
     {
       "id": "P01",
@@ -157,7 +157,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "At exact PR HEAD 8ea6fe8671d18f0de1e6d931d8721f7227d8307e: Python/browser #43619959890, macOS #43619959862, CodeQL #43619959861 and gate #43619960034 passed; logs distinguish OS/browser PASS and SKIP."
+      "current_note": "At exact PR HEAD 25dd273eb1903ab283293de906de214114dcb3af: Python/browser #43634647382, macOS #43634647412, CodeQL #43634647356 and gate #43634647742 passed; Win 525/525, Ubuntu 524+1 Windows-only SKIP, macOS 525/525; log contains platform/browser PASS and SKIP."
     },
     {
       "id": "A07-01",
@@ -635,7 +635,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "At exact PR HEAD 8ea6fe8, the six direct assess()/write_new_report() spoof/forgery regressions passed within 24/24 module tests on Windows, Ubuntu and macOS; CodeQL passed. Internal synthetic only; independent R29 audit remains pending."
+      "current_note": "At exact PR HEAD 25dd273, the six direct assess()/write_new_report() spoof/forgery cases passed within 24/24 module tests on Windows, Ubuntu and macOS; full suite, CodeQL and synthetic preaudit passed. Internal synthetic only; independent R29 audit remains pending."
     },
     {
       "id": "A29-02",
@@ -825,7 +825,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Latest exact-SHA Python/OS/browser/CodeQL checks passed, but G85 final acceptance is blocked by missing customer/rights/external evidence and remaining full acceptance scope."
+      "current_note": "At exact PR HEAD 25dd273, full hosted Windows/Ubuntu/macOS tests, browser flows, CodeQL and evidence gate passed; final acceptance remains blocked by incomplete owner/customer/external packets."
     },
     {
       "id": "G85-03",
