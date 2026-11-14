@@ -1,3 +1,9 @@
+## 2026-11-14 KST · 사용자 확정 A 우선 개발/후속 B EXE 운영 지침
+- 상품화 **A: 오프라인 HTML+ZIP+영수증 결과물 납품형 우선**, B: Windows EXE 독립 판매는 나중. 기존 최종설계의 구현기술 B(stdlib 파서)와 이름 혼동 금지. [정본 개발 로드맵](docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md)과 [기계가 읽는 3단계 계약](data/a_first_b_later_roadmap_v1.json)을 확인하고 작업 판단.
+- 72→85는 R07/R21/R25/R26/R29 완전 수용13점, 85→95의 R23/R27/R30/R32(10점), 95→100 R06/R33(5점)은 **계획 시나리오**일 뿐 증거 없는 득점 금지. R21 상업용 LICENSE/NOTICE는 IP/제3자 권리자 승인 뒤 구현·테스트, R29는 외부독립 감사보고+재검증 필수.
+- 형의 최소개입: 정책/법적권리/개인정보/가격·지원·환불을 [일괄 승인 패킷](docs/OWNER_APPROVAL_PACKET_A_20261114.md)으로 한 번에 검토, 유료 감사·제3자 자료 제공·계정권한/릴리스는 반드시 별도 명시 승인. 사용자의 “A안 승인/ㄱ”은 **상품기획 방향 승인**이지 무제한 판매/권리 허가가 아님.
+- 지속 개발은 새 코드/테스트 → 정확 SHA CI → 실브라우저/Windows 현장 증거 → 완전수용 항목 점수 재평가 → `STATUS.md` / `HANDOFF.md` / 크몽 중앙 [작업중] 원장 원자적 갱신. 이후 B/AX도 고객 원본·비밀/민감자료 외부 전송 없이 독립 진행.
+
 > **[OWNER-FINAL-BLUEPRINT-100 | 2026-11-13 KST · 사용자 확정]** 최종완성률은 **사용자 최종설계도 전체 100%**를 기준으로만 계산한다. AI 총괄/담당자의 임의 축소·가중치 조정·MVP/합성 CI/내부 기술 85·95%를 최종완성률로 전용 금지. REQ별 구현 경로·정확 SHA 실행 검증·미구현·미검증·사용자 승인 가중치 추적표를 갖춰 산정하고, 미비하면 공식 `UNASSESSED(재산정 대기)`. 기존 내부 점수/마커·등록이력·판매 HOLD 보존. 크몽 상품 원장은 해총 `kmong-productization`에 증빙과 함께 최신화. [공통 정본](https://github.com/hibi89/hackathon-command-center-2026/blob/kmong-productization/docs/strategy/FINAL_BLUEPRINT_COMPLETION_STANDARD_20261113.md). 문서 갱신 자체는 제품 완료나 배포가 아님.
 
 # DATA2WEB Studio — 개발 규율 (2026-11-12 KST)

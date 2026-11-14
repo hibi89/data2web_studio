@@ -1,3 +1,16 @@
+## 2026-11-14 · 사용자 확정 A 우선 납품 + 후속 B EXE / 전체 개발 로드맵
+
+**상업화 우선순위:** 고객 로컬용 HTML·ZIP·검증영수증 **A 결과물 제작 서비스 먼저** → Python/Tk/PyInstaller의 **B 독립 Windows EXE 라이선스·상용배포는 후속**. 기존 R01–R33 가중치100/검증72, 타 원본 제품 보존, 승인 전 판매·외부 전송·유료 감사 금지.
+
+- [A/B 전체 제품·72→85→95→100 개발 로드맵](docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md)
+- [R21/R33 실제 납품 자산·저작권·제3자 라이선스 조사표](docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md)
+- [형이 실제 승인할 것만 한데 모은 승인 패킷](docs/OWNER_APPROVAL_PACKET_A_20261114.md)
+- [고객 미수집 사전질문·로컬 납품 검수 단계](docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md)
+- [R29 독립 외부 보안감사 요청서/수용기준](docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md)
+- [기계검증 로드맵](data/a_first_b_later_roadmap_v1.json) / `python -m unittest test_strategy_roadmap -v`
+
+**현재 공식 최종설계 72/100; 목표85까지13점.** R07/R21/R25/R26/R29의 사용자 권리·개인정보/운영 승인 및 외부독립 감사 미완. `[작업중]`, RELEASE HOLD/SALE NO-GO 유지. 형의 A안 **방향승인만** 확정; 가격/상업사용권/상품등록/고객 자료 수신/감사비용의 포괄승인 아님.
+
 ## 2026-11-14 · Windows GUI 인터럽트 명시 종료 및 실EXE 회귀
 
 `studio.py`의 Tk `KeyboardInterrupt`는 `{"action":"desktop","sale_approved":false,"status":"INTERRUPTED"}`와 종료코드130으로 기록하고 원본/경로/민감내용을 노출하지 않는다. 정상 창 닫기는 기존 코드0 유지. 정확 기능 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c`: [Windows·Ubuntu/Browser CI #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) **4/4 SUCCESS** (Win294 PASS, Ubuntu293PASS/1SKIP, Chrome/Edge/Chromium PASS). 첫 네이티브 빌드 자체검증 실패는 [#43531946776](https://github.com/hibi89/data2web_studio/actions/runs/43531946776)에 기록되고, redacted 상태 진단을 추가한 SHA `4af5b70cd6340f334ed16f293b80d923688265bc`에서 [native 재검증 #43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) **SUCCESS**. 간헐 원인 미확인, 소유자 PC 새 EXE 검증 대기. [세부와 실제 최종85 수용 경로](docs/R32_INTERRUPT_AND_R01_R33_TO_85_PLAN_20261114.md).

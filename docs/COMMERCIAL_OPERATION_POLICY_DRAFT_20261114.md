@@ -1,3 +1,5 @@
+> **[2026-11-14 KST · 사용자 방향 선택 확정]** 기존 A(오프라인 HTML 결과물 납품형) 우선과 후속 B(독립 Windows EXE)는 사용자가 명시 승인했다. 이 파일의 SKU·49,000/129,000/249,000원, 수정/지원/환불, 개인정보·보존/파기, 제3자 라이선스·NOTICE, 외부 감사 비용·고객 원본 취급 및 크몽 등록은 **여전히 승인되지 않은 초안**이다. 실제 결정/승인 문서는 [A 상품화 및 후속 EXE 상세 로드맵](A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md) / [사용자 일괄 승인 패킷](OWNER_APPROVAL_PACKET_A_20261114.md). RELEASE HOLD/SALE NO-GO.
+
 # DATA2WEB Studio — 상품화·권리·데이터·지원/환불 운영 기준 제안 v0.1
 
 **작성: 2026-11-14 KST · 제안 및 내부 운영설계 · 비공개 초안 · RELEASE HOLD/SALE NO-GO**

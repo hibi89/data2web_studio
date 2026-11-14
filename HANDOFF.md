@@ -1,5 +1,16 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 2026-11-14 KST · 사용자 전략 승인(A 납품 우선, B EXE 후속) + 개발/승인 인수인계
+1. **목표·확정사항·기술:** 제품 DATA2WEB Studio 오프라인 입력 CSV/TSV/평면 JSON/XLSX→HTML+ZIP+receipt. **A 결과물 제작/납품형 우선**, **B native Windows EXE 독립 라이선스 판매 후속**을 사용자 확정. 기술구현 B(stdlib 파서)와 상업전략 A/B 혼동 금지; 원래 R01~R33 분모100 불변.
+2. **완료 기능·변경·근거:** 기존 소유자 Win11 실제 합성 CSV GUI→고객폴더 verify:true/Chrome·Edge hosted CI 성공 보존. 이번 문서/구조 추가: `docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md`, `docs/OWNER_APPROVAL_PACKET_A_20261114.md`, `docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md`, `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md`, `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`, `data/a_first_b_later_roadmap_v1.json`, `test_strategy_roadmap.py`. 라이선스 조건 무근거 확정/고객 서류 대신 승인표시 없음.
+3. **테스트:** 기존 정확 기능 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c` [Python/browser #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) 4/4 SUCCESS, native `4af5b70cd6340f334ed16f293b80d923688265bc` [#43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) 1/1 SUCCESS. 신규 roadmap Python test(4종) 및 최신 문서 SHA CI 결과는 별도 확인; 실제 외부 IP/보안/고객 수용 미검증.
+4. **현재 상태:** 공식22개 VERIFIED=72/100, 11 PENDING=28, 목표85까지13. `[작업중]`/RELEASE HOLD/SALE NO-GO, 크몽 상품 미등록, PR#4 Draft.
+5. **오류/차단·대안:** R21 상업저작권/NOTICE 사용자 미승인, R07/R25/R26 실고객 권리·보존/파기·개인정보 미확정, R29 외부독립 감사+재검증 없음. 자체 CI만으로 수용 불가. 라이선스·보존·지원 정책을 먼저 형의 [승인 패킷](docs/OWNER_APPROVAL_PACKET_A_20261114.md)으로 최소개입 일괄 검토, 감사 의뢰는 비용/외부송신 범위 별도 승인. 새 EXE 소유자 PC 검증은 미완.
+6. **저장소/브랜치/SHA/경로:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 변경 전 문서 HEAD `4cc8fb7a74d719f2731db2c864ffde8aec1c7fce`, 변경 중간 `0242ce68bd6a4b1ae96214523ee446de6e9e0f84`. 최종 SHA push 후 실제 조회 필수. 주요 로드맵 JSON/테스트·문서 경로 위 2. 중앙 `hibi89/hackathon-command-center-2026@kmong-productization` 갱신 필요.
+7. **Production/실행/환경:** 오프라인 Windows owner preview EXE only(실고객 미배포), `DATA2WEB-LOCAL.exe desktop/self-check --browsers/verify-customer`; Python3.11 stdlib, hosted Chromium/Chrome/Edge, PyInstaller6.22.3 private Windows CI. Vercel/Production 미적용, 외부 서버/API/고객 데이터 전송 기능0.
+8. **원본/백업/보안:** 원래 `REQUIREMENTS.md`, scorecard/weight/원본 REA_Web/main, 고객 실파일/사진 및 크몽 등록완료 이력 무수정. 소유자 실제 합성 verified:true 출력/구EXE 정본 SHA 유지. `LICENSE`/`NOTICE` 신규 확정·재배포/데이터 수신/유료 승인 없음.
+9. **다음 우선순위·완료기준·승인:** P1 IP/NOTICE 정본 확인, P2 소유자 정책/동의 승인, P3 외부 독립 R29 보안감사(별도 승인), P4 결함수정·정확 SHA E2E·R07/21/25/26/29 전체 통과 후만 `blueprint_score.py` 85점, P5 A 고객 수용/표준 크몽 운영, P6 EXE B 코드서명/실기기/유지관리, P7 AX 자동화; 95/100은 [후속 로드맵](docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md) 참조. 형은 사용권·보존/파기 책임·상품 운영 정책·비용/외부송신만 승인, 불명확하면 HOLD.
+10. **갱신·기준:** 2026-11-14 KST GitHub 현재 제품/중앙 정본과 사용자 지시 비교, 원본 검증 SHA 명시. 문서 갱신/자동테스트가 제품 85나 판매허가 증명 아님; 최신 코드/CI/중앙원장 SHA 별도 확인.
 ## 최신 인수인계 — 2026-11-14 KST · Tk Ctrl+C 수동중단 보강과 85점 외부수용 잠금
 1. **목표·범위:** DATA2WEB Studio 독립 로컬 CSV/JSON/XLSX/TSV→HTML/ZIP·Windows GUI, R01–R33 고정100점/목표85.
 2. **코드 변경:** `studio.py` Tk `KeyboardInterrupt` redacted JSON `status=INTERRUPTED,sale_approved=false`, exit130, 정상 종료0; `test_desktop_interrupt.py` 신규 회귀3. `native_windows_acceptance.py` 실패 시 민감 출력 없는 상태 진단.

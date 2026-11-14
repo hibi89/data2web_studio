@@ -1,5 +1,12 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 사용자 A오프라인 납품 우선 / B Windows EXE 후속 확정 및 로드맵·승인/감사 양식 등록
+- 사용자 지시: 기존 최종설계 + 개발판단을 수용, **A 고객 HTML+ZIP+receipt 제작 서비스 선행**, **B native Windows EXE 별도 판매는 후속**, 후속 개발 계획 GitHub 기록·진행 승인. 대상은 로컬 처리/내부 개발 및 문서화이며, 실제 IP/PII/보존기간/가격/판매/유료 감사·외부 전송·권한 변경은 미승인.
+- 신규: `docs/A_FIRST_B_LATER_PRODUCT_ROADMAP_20261114.md` (85/95/100 R01–R33 고정 전수, 책임·순서·고객가치·제품 B/AX 확장), `data/a_first_b_later_roadmap_v1.json` + `test_strategy_roadmap.py` (점수표 정합성·미판매 계약 자동검사), `docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md` (ZIP 현재3멤버/HTML 자체 CSS·JS·PyInstaller·test-only 부속 구분/라이선스 실제 승인 미완), `docs/OWNER_APPROVAL_PACKET_A_20261114.md` (형의 최소개입 일괄 승인), `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md` (데이터 최소화 사전 접수/납품), `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md` (외부 독립 감사 범위·증거/권한), 기존 `docs/FINAL_DESIGN.md`/정책/AGENTS/README에서 연결.
+- **85점 최소 후보** R07(2)+R21(4)+R25(2)+R26(2)+R29(3)=13점. R21 IP/NOTICE 사용자 실제 승인·R07/R26 자료/개인정보 권한·R25 보존/파기 책임·R29 외부 감사 보고/재검증 **모두 없으므로 각 PENDING**. 문서·자체 테스트가 외부 감사를 대체하지 않음.
+- **정본72/100 (22 VERIFIED, 11 PENDING28)** 유지; `[작업중]` / RELEASE HOLD/SALE NO-GO / 크몽 미등록, Draft PR#4, 원본·점수표·가격 확정·기존 등록완료 이력 변경0. CI와 중앙원장 SHA 별도 확인 후 기록.
+
+
 ## 2026-11-14 KST · Windows GUI 인터럽트 redacted 종료 보강, EXE 재빌드·한 번의 간헐 실패 후 PASS
 - **코드 SHA `0995e5824dea0c667ab13bc5fea191eca3ce705c`**: `studio.py` Tk 화면 실행 도중 `KeyboardInterrupt` 발생 시 원본/경로를 출력하지 않고 `status=INTERRUPTED,sale_approved=false` JSON·exit130 반환; 정상 종료0 유지. `test_desktop_interrupt.py` **3종 회귀 추가**. [Python/브라우저 #43531946750](https://github.com/hibi89/data2web_studio/actions/runs/43531946750) **4/4 SUCCESS**(Win294 PASS, Ubuntu293 PASS+1SKIP, 실 브라우저 E2E), [score gate #43531947120](https://github.com/hibi89/data2web_studio/actions/runs/43531947120) SUCCESS.
 - 첫 [native #43531946776](https://github.com/hibi89/data2web_studio/actions/runs/43531946776) Windows EXE **빌드 성공, 합성 브라우저 자체검증 종료코드 비0로 FAIL**. 세부 원인은 이전 진단에 없음→`native_windows_acceptance.py` redacted status/report를 보강한 SHA `4af5b70cd6340f334ed16f293b80d923688265bc`에서 [Windows native #43532271904](https://github.com/hibi89/data2web_studio/actions/runs/43532271904) **1/1 SUCCESS**. 간헐 실패 원인 미확인으로 보존, 누락된 검사를 PASS로 취급하지 않음.
