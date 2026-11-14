@@ -1,0 +1,893 @@
+{
+  "contract": "DATA2WEB_CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_V1",
+  "snapshot_date_kst": "2026-11-15",
+  "repository": "hibi89/data2web_studio",
+  "branch": "feature/final-blueprint-p85-evidence-20261113",
+  "source_branch_sha_at_plan": "1c582db78fb3ac91f37ddbab27b18124c08a5419",
+  "pr": 4,
+  "pr_state": "DRAFT_OPEN_UNMERGED",
+  "owner_scope": "AUTHORIZE_DOC_PLANNING_AND_GITHUB_ONLY_CODEX_EXECUTION_NOT_RELEASE",
+  "baseline": {
+    "official_points": 72,
+    "denominator": 100,
+    "complete_requirements": 22,
+    "pending_requirements": 11,
+    "target_points": 85,
+    "shortfall": 13,
+    "requirements": {
+      "R07": 2,
+      "R21": 4,
+      "R25": 2,
+      "R26": 2,
+      "R29": 3
+    }
+  },
+  "canon": {
+    "design": [
+      "REQUIREMENTS.md",
+      "docs/FINAL_DESIGN.md"
+    ],
+    "weights": "data/final_blueprint_scorecard_v1.json",
+    "existing_wbs": "data/gpt6_execution_plan_r01_r33_v1.json",
+    "existing_wbs_blob_sha": "26569cd67b98e66e408bd178bd562196a8b4d19e"
+  },
+  "github_only": {
+    "local_pc": false,
+    "local_checkouts": false,
+    "customer_data": false,
+    "source_code_third_party_upload": false,
+    "uses_existing_workflows": true,
+    "docs_only_skip_ci": true,
+    "ci_required_before_score_upgrade": true,
+    "production_deploy": false,
+    "auto_merge": false,
+    "force_push": false,
+    "paid_spend": false,
+    "secrets_or_permissions_changes": false
+  },
+  "known_current_evidence": {
+    "functional_verified_sha": "512af5000658f40ed7deefae096f29b886bd1ec0",
+    "functional_ci_run": 43617898725,
+    "hosted_windows_pass": 525,
+    "hosted_ubuntu_pass": 524,
+    "latest_changes_test_status": "MIXED_EXACT_SHA_320AEBC_R21_PIN_GATE_FAIL",
+    "R25_policy_approved": true,
+    "R25_synthetic_deletion": "PASS_LIMITED_ASSISTANT_CONTAINER",
+    "R25_real_operator_evidence": "PENDING",
+    "R29_real_independent_audit": "PENDING",
+    "hosted_ubuntu_windows_only_skip": 1,
+    "owner_pc_windows10_11": "NOT_VERIFIED",
+    "latest_validation_sha": "320aebc23163019f85e1c345857ff4ed3da8147a",
+    "latest_python_browser_run": 43644268104,
+    "latest_python_browser_status": "FAIL_R21_SOURCE_REVIEW_GATE",
+    "latest_native_windows_preview_run": 43644268111,
+    "latest_native_windows_preview_status": "PASS_SYNTHETIC_HOSTED_ONLY",
+    "latest_codeql_run": 43644268143,
+    "latest_final_evidence_gate_run": 43644268362,
+    "latest_final_evidence_gate_status": "PASS_WORKFLOW_UNASSESSED",
+    "latest_macos_at_validation_sha": "NOT_RUN",
+    "a21_01_reconciliation_sha": "320aebc23163019f85e1c345857ff4ed3da8147a",
+    "a21_01_reconciliation_status": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING",
+    "a21_02_repository_lineage_status": "GITHUB_HISTORY_MAPPED_NO_RIGHTS_PROOF",
+    "a21_02_lineage_sha": "320aebc23163019f85e1c345857ff4ed3da8147a"
+  },
+  "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
+  "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
+  "tasks": [
+    {
+      "id": "P00",
+      "stage": "PREP",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [],
+      "status_snapshot": "PASS_EXACT_SHA",
+      "work": "Read HANDOFF→STATUS→AGENTS→REQUIREMENTS→FINAL_DESIGN→scorecard→latest source; compare repo branch and PR SHA.",
+      "acceptance": "Enumerate actual 33/100, 22 VERIFIED, 11 PENDING, latest tested code SHA separately from docs HEAD.",
+      "evidence": "Read-only SHA, scorecard contract, baseline diff in STATUS.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py",
+        "python -m unittest test_blueprint_score -v"
+      ],
+      "touchpoints": [
+        "HANDOFF.md",
+        "STATUS.md",
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Focused P00 scorecard contract check passed in exact run #43644268104 (11/11); full Python matrix at 320aebc remains failed only on six R21 source-provenance checks. Score remains 72/100."
+    },
+    {
+      "id": "P01",
+      "stage": "PREP",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P00"
+      ],
+      "status_snapshot": "PASS_NO_OVERWRITE_BOUNDARY_RECORDED",
+      "work": "Secure previous non-destructive rollback reference and inventory customer/REA_Web protected paths; check auth identity, existing branch and CI budget.",
+      "acceptance": "Explicit rollback SHA and original/no-overwrite boundary; no new branch/release/repo/rights change.",
+      "evidence": "Git commit parent SHA + protected paths listed; no private materials.",
+      "commands_in_github_actions": [
+        "python -m unittest test_customer_folder -v"
+      ],
+      "touchpoints": [
+        "AGENTS.md",
+        "docs/ORIGIN_AND_LICENSE.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Rollback parent 954cfe03 recorded; protected originals/customer data and main were not changed; no local checkout, release or merge."
+    },
+    {
+      "id": "P02",
+      "stage": "PREP",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P00"
+      ],
+      "status_snapshot": "EVIDENCE_INDEX_COMPLETE",
+      "work": "Open evidence index per R with unique opaque IDs and a public-safe checklist; no customer names, data, screenshots, private paths or permission tokens.",
+      "acceptance": "Each R07/R21/R25/R26/R29 evidence indexed as VERIFIED/INCOMPLETE/MISSING without assigning points.",
+      "evidence": "New redacted evidence reference index and missing list.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md",
+        "docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Evidence index retains 18 stable non-identifying IDs and five incomplete R packets. M85-E05 is now INCOMPLETE because four current R21 producer blobs differ from the historic pins; no private proof or point was added."
+    },
+    {
+      "id": "P03",
+      "stage": "PREP",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P00"
+      ],
+      "status_snapshot": "BLOCKED_R21_SOURCE_REVIEW",
+      "work": "Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.",
+      "acceptance": "No regression and no mistaken CI-Ready=customer-approved claim.",
+      "evidence": "Test run URLs exact SHA, PASS/FAIL/SKIP log and OS/browser scope.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v",
+        "python shipping_rights_preflight.py",
+        "python zero_cost_gate.py"
+      ],
+      "touchpoints": [
+        "test_blueprint_score.py",
+        "shipping_rights_preflight.py"
+      ],
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "point_award_by_task": 0,
+      "current_note": "At exact 320aebc, Python/browser #43644268104 failed only on six R21 source-provenance tests (Windows 524 PASS/5 ERROR/1 FAIL/1 SKIP; Ubuntu 521 PASS/5 ERROR/1 FAIL/4 SKIP). Chromium and Windows Chrome/Edge/Tk jobs, native Windows preview #43644268111, CodeQL #43644268143, and evidence workflow #43644268362 passed; gate report is UNASSESSED. macOS was not run. Four producer blobs still require authorized R21 source review."
+    },
+    {
+      "id": "A07-01",
+      "stage": "M85",
+      "requirement": "R07",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P02"
+      ],
+      "status_snapshot": "EVIDENCE_RECHECK_COMPLETE_RIGHTS_PENDING",
+      "work": "Map raw-source custody, user-of-record, owner-created copies, browser plaintext output and shared-data rights; reuse existing order_intake_preflight to avoid duplicate workflow.",
+      "acceptance": "Data flow states input rights, no cloud upload, source hash invariance, unsafe types HOLD; missing legal rights clearly isolated.",
+      "evidence": "Redacted dataflow/threat review linked to source SHA.",
+      "commands_in_github_actions": [
+        "python -m unittest test_order_intake_preflight -v"
+      ],
+      "touchpoints": [
+        "order_intake_preflight.py",
+        "docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Existing intake/data-flow and no-upload evidence rechecked; actual customer source authority and consent remain unavailable."
+    },
+    {
+      "id": "A07-02",
+      "stage": "M85",
+      "requirement": "R07",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A07-01"
+      ],
+      "status_snapshot": "TEMPLATE_RECORDED",
+      "work": "Prepare per-order right-to-use/transform/distribute confirmation checklist, user/third-party shared rights distinction, plaintext delivery and revocation triggers; only anonymous template.",
+      "acceptance": "Specific customer/source/authority/consent/date scope fields for future private records; no fictional signatures or third-party agreement.",
+      "evidence": "Unfilled and redacted customer-rights form; review labels not approvals.",
+      "commands_in_github_actions": [
+        "python -m unittest test_order_intake_preflight -v"
+      ],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Per-order rights/privacy/plaintext checklist remains an unfilled template, not a customer signature."
+    },
+    {
+      "id": "A07-03",
+      "stage": "M85",
+      "requirement": "R07",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A07-02"
+      ],
+      "status_snapshot": "PASS_EXACT_SHA",
+      "work": "Audit both desktop single/batch consent-reset paths and CLI on source/sheet/header/ID mapping/file replacement; fix only reproduced omission.",
+      "acceptance": "Invalid/missing consent or changed input fails closed; source bytes and existing customer outputs identical to pretest.",
+      "evidence": "Synthetic changed-source SHA, direct CLI and GUI regression evidence.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v"
+      ],
+      "touchpoints": [
+        "data2web_desktop.py",
+        "data2web_single.py",
+        "data2web_append.py",
+        "test_acceptance.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Consent-reset regressions remain PASS in the hosted Windows Tk/browser flow at exact 320aebc (#43644268104, windows-browsers job); the full Python matrix fails only on separate R21 provenance checks. No customer acceptance is claimed."
+    },
+    {
+      "id": "A07-04",
+      "stage": "M85",
+      "requirement": "R07",
+      "legacy_assignee": "OWNER",
+      "executor": "OWNER",
+      "depends_on": [
+        "A07-02",
+        "A07-03"
+      ],
+      "status_snapshot": "BLOCKED_OWNER",
+      "work": "Confirm actual rights/authority and obtain specific owner/provider permission plus scope for one authorized acceptance case using approved private/local channel only.",
+      "acceptance": "Real source authorization and consent can be independently checked; no private proof or source uploaded to public GitHub/ChatGPT.",
+      "evidence": "Owner/customer dated authorization held privately; GitHub only opaque status/reviewer reference.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": "NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT",
+      "point_award_by_task": 0,
+      "current_note": "No real source owner/provider authorization and customer-specific consent evidence is available in the permitted public-only workflow."
+    },
+    {
+      "id": "A07-05",
+      "stage": "M85",
+      "requirement": "R07",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A07-01",
+        "A07-03",
+        "A07-04"
+      ],
+      "status_snapshot": "BLOCKED_OWNER_EVIDENCE",
+      "work": "Review rights/consent provenance and source-before/after SHA, exact tested code SHA and residual privacy limits.",
+      "acceptance": "Entire R07 source preservation + actual rights/consent satisfied; otherwise leave R07 PENDING.",
+      "evidence": "Signed/referenced Instant item-level review without customer data in repo.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Cannot accept R07 from templates or synthetic CI; wait for real scoped authority/consent and source SHA evidence."
+    },
+    {
+      "id": "A21-01",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P01",
+        "P02"
+      ],
+      "status_snapshot": "TECHNICAL_INVENTORY_RECONCILED_INTEGRATED_PIN_GATE_PENDING",
+      "work": "Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.",
+      "acceptance": "Complete real A shipping inventory vs whitelist; all provenance unknowns labeled pending, no fake LICENSE.",
+      "evidence": "Git-linked inventory with source SHA and actual synthetic ZIP member evidence.",
+      "commands_in_github_actions": [
+        "python shipping_rights_preflight.py",
+        "python r21_source_provenance.py"
+      ],
+      "touchpoints": [
+        "data/shipping_rights_inventory_v1.json",
+        "data/r21_source_provenance_v1.json",
+        "docs/R21_R33_SHIPPING_LICENSE_INVENTORY_20261114.md"
+      ],
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "point_award_by_task": 0,
+      "current_note": "At exact 320aebc23163019f85e1c345857ff4ed3da8147a, Git tree comparison reconciles all six R21 producer files: data2web_web.py and data2web_tabular.py match historic pins; delivery.py, receipt_utils.py, data2web_single.py, and data2web_append.py have the four documented current blob IDs. Current source, rights inventory, and independent verifiers agree on exactly 3 customer-folder members and 3 ZIP members; HTML CSS/JS is self-contained; owner EXE/runtime, upstream golden source, and CI test dependencies are excluded from A delivery. Windows/Ubuntu folder, single-delivery, receipt, and create-only tests pass. The integrated synthetic rights preflight remains stopped by the source-drift guard. Technical inventory is reconciled; A21-02 source review and A21-03 rights/NOTICE acceptance remain blocked."
+    },
+    {
+      "id": "A21-02",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A21-01"
+      ],
+      "status_snapshot": "BLOCKED_R21_SOURCE_REVIEW",
+      "work": "For every shipped asset/derivation enumerate author, origin SHA, upstream reference, vendor license/NOTICE obligations and unresolved chains; do not infer IP ownership from AI generation or GitHub owner.",
+      "acceptance": "Every actually shipped text/JS/CSS artifact has a rights-evidence or explicit unresolved flag; no accidental EXE bundling.",
+      "evidence": "Versioned chain-of-title/third-party dependency matrix, unknowns kept as blockers.",
+      "commands_in_github_actions": [
+        "python shipping_rights_preflight.py"
+      ],
+      "touchpoints": [
+        "docs/ORIGIN_AND_LICENSE.md",
+        "docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md"
+      ],
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "point_award_by_task": 0,
+      "current_note": "GitHub-only history is now mapped for all six producer files at exact 320aebc23163019f85e1c345857ff4ed3da8147a: earliest path commit, latest path commit, current blob, and historic pin state are recorded in docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md. GitHub author/account metadata is hibi89 across the returned histories; this is not proof of legal authorship, coauthor consent, commercial rights, or NOTICE status. Four producer files last changed at 92dca182 and still fail the historic pin gate. Rights-holder/source-origin review and third-party/vendor license inventory remain pending; do not refresh pins or claim redistribution permission."
+    },
+    {
+      "id": "A21-03",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "OWNER",
+      "executor": "OWNER",
+      "depends_on": [
+        "A21-02"
+      ],
+      "status_snapshot": "BLOCKED_OWNER",
+      "work": "Obtain actual rights-holder confirmation or license for derived code/templates, commercial redistribution scope and any third-party NOTICE; explicitly decide customer usage terms.",
+      "acceptance": "Rights documents and each required notice licensed for the actual A deliverable; not merely owner planning direction.",
+      "evidence": "Private owner/legal/rights-holder evidence and public-safe approval scope, reviewer ID.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
+      "point_award_by_task": 0,
+      "current_note": "Actual rightsholder/license and commercial redistribution/NOTICE decision not supplied."
+    },
+    {
+      "id": "A21-04",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A21-03"
+      ],
+      "status_snapshot": "BLOCKED_DEPENDENCY",
+      "work": "Only after verified rights decision: choose (1) no extra member when legally justified; or (2) versioned approved LICENSE/NOTICE packaging contract, migrating builder/verifier/receipt together without breaking v1.",
+      "acceptance": "Allowed contents match actual authorized rights text and deterministic ZIP, versioned v2 when needed; no overwrite, no invented license.",
+      "evidence": "Exact legal text provenance ref, package contract version, signed owner authorization, code diff.",
+      "commands_in_github_actions": [
+        "python -m unittest test_shipping_rights_preflight -v",
+        "python -m unittest test_customer_folder -v"
+      ],
+      "touchpoints": [
+        "delivery.py",
+        "verify_delivery.py",
+        "verify_customer_folder.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Package/license contract depends on verified A21-03 rights decision."
+    },
+    {
+      "id": "A21-05",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A21-04"
+      ],
+      "status_snapshot": "BLOCKED_DEPENDENCY",
+      "work": "Run synthetic allowed/forbidden license member, duplicate/ZIP-slip/modified notice, old v1 compatibility, receipt hash and create-only failure rollback.",
+      "acceptance": "Valid authorized package passes independent verifier; malicious/unapproved member and old-data corruption fail closed, old v1 still accepted.",
+      "evidence": "Windows/Ubuntu and Chrome/Edge exact-SHA source/test evidence, ZIP hash and manifest contract.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v",
+        "python shipping_rights_preflight.py"
+      ],
+      "touchpoints": [
+        "test_shipping_rights_preflight.py",
+        "test_customer_folder.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Unapproved LICENSE/NOTICE package tests must wait for the authorized packaging contract; no license was invented."
+    },
+    {
+      "id": "A21-06",
+      "stage": "M85",
+      "requirement": "R21",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A21-03",
+        "A21-05"
+      ],
+      "status_snapshot": "BLOCKED_DEPENDENCY",
+      "work": "Review owner/third-party rights proof, final shipped bytes and license text/NOTICE obligations, migration, exact-SHA CI.",
+      "acceptance": "Entire R21 including real commercial use permission and v1/v2 verifier correctness accepted or 4 points stay pending.",
+      "evidence": "Instant item review and exact rights decision reference, not hypothetical license.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Full R21 acceptance awaits real rights decision and any resulting packaging migration/CI."
+    },
+    {
+      "id": "A25-01",
+      "stage": "M85",
+      "requirement": "R25",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P02"
+      ],
+      "status_snapshot": "PASS_EXACT_SHA",
+      "work": "Map owner-approved max 7-day temporary operator copy, earlier purpose-completion handling, legal exceptions, originals/outputs never auto-delete; compare current retention utility.",
+      "acceptance": "No accidental deletion/upload; policy mismatch fails closed and actual disposal is not certified by metadata.",
+      "evidence": "Policy-vs-code map and synthetic time boundary tests.",
+      "commands_in_github_actions": [
+        "python -m unittest test_operator_copy_retention -v"
+      ],
+      "touchpoints": [
+        "operator_copy_retention.py",
+        "data/zero_cost_owner_policy_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Focused operator-copy retention step passed at exact 320aebc in Python/browser run #43644268104 on Windows and Ubuntu. Full suites fail only on the separate six R21 source-provenance checks; macOS was not run at this SHA."
+    },
+    {
+      "id": "A25-02",
+      "stage": "M85",
+      "requirement": "R25",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A25-01"
+      ],
+      "status_snapshot": "TEMPLATE_COMPLETE_REAL_CUSTOMER_RECORD_PENDING",
+      "work": "Prepare an unfilled custody/owner role, where/when data copied, rights, purpose, manual deletion or return authority, legal exception and record checklist.",
+      "acceptance": "Customer source and result retention separate; explicit records for custody, expiry, action and no-copy case; no customer identifiers in public repo.",
+      "evidence": "Redacted receipt/retention notice and operator manual checklist.",
+      "commands_in_github_actions": [
+        "python -m unittest test_operator_copy_retention -v"
+      ],
+      "touchpoints": [
+        "docs/R07_R25_R26_LOCAL_COPY_RETENTION_20261114.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "docs/A25_02_COPY_CUSTODY_RECORD_TEMPLATE_20261115.md satisfies the unfilled source/result copy, custody, expiry, return/disposal, legal-exception and no-copy checklist. No real customer record or evidence was added; A25-03/04 and R25 acceptance remain blocked."
+    },
+    {
+      "id": "A25-03",
+      "stage": "M85",
+      "requirement": "R25",
+      "legacy_assignee": "OWNER",
+      "executor": "OWNER",
+      "depends_on": [
+        "A25-02"
+      ],
+      "status_snapshot": "POLICY_APPROVED_SYNTHETIC_PASS_REAL_EVIDENCE_BLOCKED",
+      "work": "Actually confirm responsible operator, permitted custody, disposal/return procedure and where separate private evidence is retained; execute a real authorized no-copy/copy-retention acceptance trace.",
+      "acceptance": "Owner explicitly owns policy and genuine handling log exists; never claim physical deletion without action evidence.",
+      "evidence": "Private acceptance evidence/ref, public-safe policy signoff only.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": "NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE",
+      "point_award_by_task": 0,
+      "current_note": "User's operator appointment, seven approved policies and synthetic disposal drill remain accepted; actual customer custody/return/disposal proof is missing and was not requested again."
+    },
+    {
+      "id": "A25-04",
+      "stage": "M85",
+      "requirement": "R25",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A25-01",
+        "A25-03"
+      ],
+      "status_snapshot": "BLOCKED_REAL_CUSTOMER_EVIDENCE",
+      "work": "Compare actual operator evidence with source-preservation, duration and manual-only protocol; check legal exceptions not silently bypassed.",
+      "acceptance": "Complete R25 policy notice and actual accountable practice satisfied; else hold.",
+      "evidence": "Instant item review plus retention acceptance reference.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "No real handling record exists to revalidate against the approved manual-only retention protocol."
+    },
+    {
+      "id": "A26-01",
+      "stage": "M85",
+      "requirement": "R26",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P02"
+      ],
+      "status_snapshot": "SCOPE_RECHECK_COMPLETE_CUSTOMER_BASIS_PENDING",
+      "work": "Reconcile personal/sensitive/medical/payment identifiers, shared/confidential, unknown scope, allowed nonpersonal only; map plaintext and offline exposure.",
+      "acceptance": "Default HOLD for personal/sensitive/unclear rights and explicit safe classification; no encryption/anonymous-data fiction.",
+      "evidence": "Synthetic privacy class matrix, mappings and negative cases.",
+      "commands_in_github_actions": [
+        "python -m unittest test_order_intake_preflight -v"
+      ],
+      "touchpoints": [
+        "order_intake_preflight.py",
+        "data2web_desktop.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Privacy/preflight boundaries and plaintext exposure rechecked; customer-specific lawful processing basis and consent are not established."
+    },
+    {
+      "id": "A26-02",
+      "stage": "M85",
+      "requirement": "R26",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A26-01"
+      ],
+      "status_snapshot": "PASS_EXACT_SHA",
+      "work": "Audit frontend checkbox reset for replaced/altered source, rights, plaintext and privacy classification across single and batch; update tests only for reproduced gap.",
+      "acceptance": "No persistence of stale sensitive approval across dataset revisions; file values not sent over network.",
+      "evidence": "CI/browser negative-flow evidence, clear notices/HOLD response.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v"
+      ],
+      "touchpoints": [
+        "data2web_desktop.py",
+        "browser_final_blueprint_probe.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Focused privacy-scope/consent preflight passed at exact 320aebc in Python/browser run #43644268104; Windows Chrome/Edge/Tk flow also passed. Full suites fail only on separate R21 source-provenance checks; no customer-specific legal basis is established."
+    },
+    {
+      "id": "A26-03",
+      "stage": "M85",
+      "requirement": "R26",
+      "legacy_assignee": "OWNER",
+      "executor": "OWNER",
+      "depends_on": [
+        "A26-01",
+        "A26-02"
+      ],
+      "status_snapshot": "BLOCKED_OWNER",
+      "work": "For an actual lawful use case obtain owner and client decisions about data type/accessors/retention/transfers, explicit plaintext use and whether sensitive-data flow is rejected.",
+      "acceptance": "Specific scoped customer agreement or documented nonpersonal-only boundary; no blanket approval inferred.",
+      "evidence": "Private dated consent and operator acceptance; public-safe redacted reference.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": "NON_DELEGABLE_PER_CUSTOMER_PRIVACY_CONSENT",
+      "point_award_by_task": 0,
+      "current_note": "No customer-specific data scope, accessor, retention/transfer basis or explicit plaintext consent was provided."
+    },
+    {
+      "id": "A26-04",
+      "stage": "M85",
+      "requirement": "R26",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A26-02",
+        "A26-03"
+      ],
+      "status_snapshot": "BLOCKED_CUSTOMER_EVIDENCE",
+      "work": "Verify privacy scope and actual permission against implementation and plaintext warnings; never treat program checkbox alone as legal agreement.",
+      "acceptance": "Full R26 personally sensitive data handling/rejection and real consent scope accepted; otherwise pending.",
+      "evidence": "Instant item review plus consent reference.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Program checkboxes and synthetic flows cannot establish the customer's legal agreement."
+    },
+    {
+      "id": "A29-01",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "P01",
+        "P02"
+      ],
+      "status_snapshot": "INTERNAL_PREAUDIT_PASS_EXTERNAL_PENDING_R21_GATE_BLOCKED",
+      "work": "Freeze independent evaluator's threat scope: XSS/CSP/CSV formula, XLSX zip bomb and XML entities, ZIP/receipt, TOCTOU symlink/hardlink/junction, interruptions, offline network.",
+      "acceptance": "Threat matrix has reproducible positive/negative test cases, supported OS constraints and residual risks; no claim of external audit.",
+      "evidence": "Synthetic case inventory, fixture hashes, exact source SHA.",
+      "commands_in_github_actions": [
+        "python security_audit_preaudit.py",
+        "python -m unittest discover -v"
+      ],
+      "touchpoints": [
+        "docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md"
+      ],
+      "blocker": "INDEPENDENT_EXTERNAL_AUDIT_PENDING",
+      "point_award_by_task": 0,
+      "current_note": "At exact 320aebc, focused R29 internal synthetic preaudit and Chromium/Chrome/Edge flows pass; native Windows preview #43644268111 passes after manifest path anchoring; CodeQL #43644268143 passes. Full Python matrix is blocked by six unrelated R21 source-pin checks. High source review found no actionable issue; none of this is independent audit acceptance."
+    },
+    {
+      "id": "A29-02",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A29-01"
+      ],
+      "status_snapshot": "REPRODUCIBLE_INTERNAL_BUNDLE_READY_EXTERNAL_PENDING",
+      "work": "Prepare public-source-only reproducible audit bundle/instructions, source freeze and risk register, with existing internal CodeQL and browser CI clearly labeled self-check.",
+      "acceptance": "Another evaluator can independently run tests without customer data, secrets, private access or false PASS.",
+      "evidence": "SHA-pin commands/expected outputs and failure reporting template.",
+      "commands_in_github_actions": [
+        "python security_audit_preaudit.py",
+        "python shipping_rights_preflight.py"
+      ],
+      "touchpoints": [
+        "docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Current synthetic public-source evidence includes exact 320aebc native Windows preview #43644268111 and evidence gate #43644268362 (workflow PASS, report UNASSESSED). R21 source drift still fails the full Python matrix; external R29 review and approval remain absent."
+    },
+    {
+      "id": "A29-03",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "OWNER",
+      "executor": "OWNER",
+      "depends_on": [
+        "A29-02"
+      ],
+      "status_snapshot": "BLOCKED_OWNER",
+      "work": "Select/approve a genuinely independent external reviewer and specific scope, any agreement or public-source sharing, zero-cost budget; no paid purchase or access grant absent new approval.",
+      "acceptance": "Documented external evaluator independence, permitted public-only materials and no unauthorized spend/transmission.",
+      "evidence": "Owner approval/evaluator identity scope held privately, public-safe reference.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      ],
+      "blocker": "INDEPENDENT_REVIEWER_AND_EXTERNAL_DISCLOSURE_APPROVAL",
+      "point_award_by_task": 0,
+      "current_note": "No owner-approved independent evaluator, audit scope or external disclosure decision is recorded."
+    },
+    {
+      "id": "A29-04",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "EXTERNAL",
+      "executor": "EXTERNAL",
+      "depends_on": [
+        "A29-03"
+      ],
+      "status_snapshot": "BLOCKED_EXTERNAL",
+      "work": "Independently reproduce attack matrix against frozen exact SHA in real supported environments and issue dated findings with severity, omissions, environment, command logs.",
+      "acceptance": "Actual independent signed/attributable findings and limit descriptions, not a self-run AI/CodeQL report.",
+      "evidence": "External SHA-pinned review report, anonymized location and finding IDs.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md"
+      ],
+      "blocker": "REAL_INDEPENDENT_HUMAN_AUDIT_REQUIRED",
+      "point_award_by_task": 0,
+      "current_note": "No genuinely independent external findings exist; self-review, CodeQL and hosted CI do not satisfy this task."
+    },
+    {
+      "id": "A29-05",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A29-04"
+      ],
+      "status_snapshot": "BLOCKED_EXTERNAL_FINDINGS",
+      "work": "Implement least-invasive fixes for confirmed external findings, preserve originals/v1 ZIP and no-network contract, add reproducing regressions.",
+      "acceptance": "Each finding has fix commit or documented accepted blocker, Windows/Ubuntu/browser CI on exact fix SHA.",
+      "evidence": "Finding→fix SHA→test table, data and secrets absent.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v",
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "path_policy.py",
+        "verify_delivery.py",
+        "verify_customer_folder.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "No independent findings are available to remediate; reassess only after A29-04."
+    },
+    {
+      "id": "A29-06",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "EXTERNAL",
+      "executor": "EXTERNAL",
+      "depends_on": [
+        "A29-05"
+      ],
+      "status_snapshot": "BLOCKED_EXTERNAL_RETEST",
+      "work": "Same independent evaluator retests fixes on new SHA, records unfixable risks, gaps, and signoff/remaining-blocker status.",
+      "acceptance": "External final retest confirms closure or explicitly blocks R29; no self-signed completion.",
+      "evidence": "Independent dated recheck SHA report, signed/attributable reviewer.",
+      "commands_in_github_actions": [],
+      "touchpoints": [
+        "docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md"
+      ],
+      "blocker": "EXTERNAL_RETEST_AND_SIGNOFF",
+      "point_award_by_task": 0,
+      "current_note": "No external findings/fixes are available for an independent retest or signoff."
+    },
+    {
+      "id": "A29-07",
+      "stage": "M85",
+      "requirement": "R29",
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A29-04",
+        "A29-06"
+      ],
+      "status_snapshot": "BLOCKED_EXTERNAL_SIGNOFF",
+      "work": "Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate Instant with external.",
+      "acceptance": "Complete R29 acceptance only after external signoff and verified no blocking findings; else PENDING.",
+      "evidence": "Instant R29 score review linking external IDs and code SHA.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "R29 acceptance cannot be independently verified without external evaluator identity, scope and final signoff."
+    },
+    {
+      "id": "G85-01",
+      "stage": "M85",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "A07-05",
+        "A21-06",
+        "A25-04",
+        "A26-04",
+        "A29-07"
+      ],
+      "status_snapshot": "BLOCKED_MISSING_ACCEPTANCE_PACKETS",
+      "work": "Assemble five complete item-level evidence packets with provenance and no private material in repo; reconcile 2+4+2+2+3 points.",
+      "acceptance": "Each requirement fully accepted independently; none receives partial point for templates, self tests or false attestations.",
+      "evidence": "R07/R21/R25/R26/R29 acceptance matrix, exact SHA of reviewed functionality.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "docs/FINAL_BLUEPRINT_WEIGHTING_100_APPROVED_20261114.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "The five full item-level R07/R21/R25/R26/R29 acceptance packets are incomplete."
+    },
+    {
+      "id": "G85-02",
+      "stage": "M85",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "G85-01"
+      ],
+      "status_snapshot": "BLOCKED_EXACT_SHA_R21_SOURCE_REVIEW",
+      "work": "Run last exact-code-SHA Windows/Ubuntu Python, Chrome/Edge/Chromium, portable v1/v2, privacy/R21/R29 regression and CodeQL using existing free runners.",
+      "acceptance": "All required CI jobs SUCCESS at exact code SHA with PASS/FAIL/SKIP, browser assets/API/zip/receipt intact; buyer acceptance separate.",
+      "evidence": "Actions URL/run/job, browser and no-network evidence; no doc-SHA confusion.",
+      "commands_in_github_actions": [
+        "python -m unittest discover -v",
+        "python blueprint_score.py",
+        "python shipping_rights_preflight.py"
+      ],
+      "touchpoints": [
+        " .github/workflows/python-tests.yml",
+        ".github/workflows/final-blueprint-gate.yml"
+      ],
+      "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
+      "point_award_by_task": 0,
+      "current_note": "At exact 320aebc, Python/browser #43644268104 fails only at six R21 source-pin checks (Windows 531: 524 PASS/5 ERROR/1 FAIL/1 SKIP; Ubuntu 531: 521 PASS/5 ERROR/1 FAIL/4 SKIP). Browser, Windows browser, native preview #43644268111, CodeQL #43644268143 and evidence gate #43644268362 workflow pass; gate result is UNASSESSED. macOS was not run; no score award."
+    },
+    {
+      "id": "G85-03",
+      "stage": "M85",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "G85-02"
+      ],
+      "status_snapshot": "BLOCKED_MISSING_ACCEPTANCE_PACKETS",
+      "work": "Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.",
+      "acceptance": "Score mechanically equals 85/100, 33 items and 100 denominator unchanged, all five VERIFIED and other six PENDING; publish audit diff.",
+      "evidence": "Scorecard JSON diff, exact SHA score command and evidence links.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py",
+        "python -m unittest test_blueprint_score -v"
+      ],
+      "touchpoints": [
+        "data/final_blueprint_scorecard_v1.json",
+        "blueprint_score.py"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Do not modify scorecard states until all five complete acceptance proofs exist; score remains exactly 72."
+    },
+    {
+      "id": "G85-04",
+      "stage": "M85",
+      "requirement": null,
+      "legacy_assignee": "INSTANT",
+      "executor": "CODEX_GPT6_LUNA_MAX_GITHUB_ONLY",
+      "depends_on": [
+        "G85-03"
+      ],
+      "status_snapshot": "BLOCKED_EXTERNAL_AND_OWNER_EVIDENCE",
+      "work": "Instant 85 milestone evidence gate (High final review only after 100): confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.",
+      "acceptance": "Authorize 85 report only when all five complete; otherwise return blocked IDs to Instant and preserve prior score; keep RELEASE HOLD.",
+      "evidence": "Instant acceptance memo with item verdicts, STATUS/HANDOFF consistency.",
+      "commands_in_github_actions": [
+        "python blueprint_score.py"
+      ],
+      "touchpoints": [
+        "STATUS.md",
+        "HANDOFF.md"
+      ],
+      "blocker": null,
+      "point_award_by_task": 0,
+      "current_note": "Final 85 report is unauthorized until owner/customer rights, retention/privacy records, independent R29 audit and exact-SHA evidence are accepted."
+    }
+  ]
+}

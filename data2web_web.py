@@ -1,13 +1,16 @@
 """Render a self-contained, network-free HTML data browser."""
 from __future__ import annotations
+import base64
+import hashlib
 import html
 import json
+import re
 
 THEMES = ("office", "cafe", "inventory")
 TEMPLATE = r'''<!doctype html>
 <html lang="ko" data-theme="__THEME__">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src __SCRIPT_HASH__; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>__TITLE__ · DATA2WEB</title>
 <style>
 :root{color-scheme:dark;--bg:#0c1625;--surface:#152438;--edge:#29405b;--ink:#ecf4ff;--muted:#a6bed6;--accent:#77dbd4}
@@ -33,7 +36,31 @@ table{border-collapse:collapse;width:100%;min-width:540px}th,td{text-align:left;
 th{color:var(--accent)}tbody tr{cursor:pointer}tbody tr:hover{background:var(--edge)}
 .table-scroll{overflow:auto}.pages{display:flex;gap:12px;align-items:center;margin-top:16px}pre{white-space:pre-wrap;overflow-wrap:anywhere}
 small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12px}
-@media print{body{background:white;color:black}.controls,.pages,.import,.chart-controls{display:none!important}.surface,.stat{border:1px solid #888}th{color:black}.bar-track{border:1px solid #999}.bar-fill{background:#777}.dashboard{grid-template-columns:repeat(3,1fr)}}
+@page{size:A4 portrait;margin:13mm}
+@media print{
+ body{background:white;color:black;font-size:10pt;line-height:1.4}
+ main{max-width:none;padding:0}
+ .controls,.pages,.import,.chart-controls,#detail-panel{display:none!important}
+ .surface,.stat{border:1px solid #888}
+ .surface{padding:10px;margin-top:14px}
+ header{padding:0 0 10px}
+ h1{font-size:18pt}
+ h2{font-size:12pt}
+ .dashboard{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .stat{padding:8px;break-inside:avoid}
+ .stat strong{font-size:14pt}
+ .table-scroll{overflow:visible}
+ table{min-width:0;width:100%;table-layout:fixed}
+ th,td{padding:5px 6px;max-width:none;overflow-wrap:anywhere;word-break:break-word}
+ th{color:#222}
+ thead{display:table-header-group}
+ tr{break-inside:avoid;page-break-inside:avoid}
+ .chart-row{break-inside:avoid}
+ .bar-track{border:1px solid #999}
+ .bar-fill{background:#777}
+ .muted,p,small,.eyebrow,label{color:#333}
+ #print-scope{display:block}
+}
 </style></head>
 <body><main>
 <header><small>DATA2WEB Studio · LOCAL ONLY</small><h1>__TITLE__</h1>
@@ -49,10 +76,10 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 </section>
 <section class="surface" aria-label="표 검색">
 <div class="controls"><label>검색 <input id="search" type="search" placeholder="모든 열에서 검색"></label>
-<label>분류 <select id="category"><option value="">전체</option></select></label>
+<label>분류 (Ctrl/⌘ 다중 선택) <select id="category" multiple size="4" aria-label="분류 여러 개 선택"><option value="" selected>전체</option></select></label>
 <label>정렬 <select id="sort"></select></label>
 <button id="direction" type="button">오름차순</button></div>
-<p id="count" role="status"></p><div class="table-scroll"><table><thead id="head"></thead><tbody id="body"></tbody></table></div>
+<p id="count" role="status"></p><p id="print-scope" class="muted">인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.</p><div class="table-scroll"><table aria-label="검색 결과 데이터 표"><thead id="head"></thead><tbody id="body"></tbody></table></div>
 <nav class="pages" aria-label="페이지"><button id="prev" type="button">이전</button><span id="page"></span><button id="next" type="button">다음</button></nav></section>
 <section class="surface" aria-label="분류별 통계">
 <h2>분류별 요약 차트</h2>
@@ -60,7 +87,7 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 <div id="chart-bars" role="img" aria-label="범주별 집계 막대 그래프"></div>
 <p id="chart-summary" aria-live="polite" class="muted">데이터를 준비하고 있습니다.</p>
 </section>
-<section class="surface"><h2>선택한 항목</h2><pre id="details" aria-live="polite">항목을 선택하세요.</pre></section>
+<section class="surface" id="detail-panel"><h2>선택한 항목</h2><pre id="details" aria-live="polite">항목을 선택하세요.</pre></section>
 <section class="surface import"><h2>동일 구조 CSV 교체</h2>
 <p class="warning">컬럼명과 순서가 같은 CSV만 선택할 수 있습니다. 교체는 로컬 메모리에서만 반영되고, 새 HTML을 저장해야 유지됩니다. 새 HTML에도 모든 셀의 평문이 포함됩니다.</p>
 <label>로컬 CSV <input id="csv" type="file" accept=".csv,text/csv"></label>
@@ -77,49 +104,76 @@ const d=JSON.parse($("dataset").textContent);
 const state={rows:d.rows.slice(),columns:d.columns.slice(),mapping:d.mapping.slice(),sourceSha:d.source_sha256,changed:false};
 const [idKey,titleKey,categoryKey]=state.mapping;
 const chartMaxCategories=10;
+// The placeholder for an empty cell must never equal a real customer category.
+function blankCategoryLabel(names){
+ let label="— 분류 없음 —",suffix=2;
+ while(names.has(label)){label="— 분류 없음 ("+suffix+") —";suffix++}
+ return label
+}
+// An aggregated "other" series must never mimic a real customer category.
+function groupCategoryLabel(names,count){
+ const base="기타 "+count+"개 분류";let label=base,suffix=2;
+ while(names.has(label)){label=base+" (묶음 "+suffix+")";suffix++}
+ return label
+}
 const metrics=document.getElementById("metric");
 const numberPattern=/^[+-]?(?:\d{1,12}(?:\.\d{1,4})?|\.\d{1,4})$/;
-function safeNumber(value){const str=value.trim();if(!numberPattern.test(str))return null;
- const n=Number(str);return Number.isFinite(n)&&Math.abs(n)<=1e12?n:null}
+// Scale accepted four-place decimals to exact BigInt units. Do not round
+// financial-looking totals through IEEE-754 before displaying them.
+function safeScaled(value){const str=value.trim();if(!numberPattern.test(str))return null;
+ const sign=str.startsWith("-")?-1n:1n;
+ const unsigned=str.replace(/^[+-]/,""),parts=unsigned.split(".");
+ const whole=BigInt(parts[0]||"0"),frac=BigInt((parts[1]||"").padEnd(4,"0"));
+ const scaled=sign*(whole*10000n+frac);
+ return scaled>=-10000000000000000n&&scaled<=10000000000000000n?scaled:null}
+function formatScaled(value){
+ const negative=value<0n,positive=negative?-value:value;
+ const whole=(positive/10000n).toLocaleString("ko-KR");
+ const fraction=String(positive%10000n).padStart(4,"0").replace(/0+$/,"");
+ return (negative?"-":"")+whole+(fraction?"."+fraction:"")
+}
 function numericMetrics(){const current=metrics.value;metrics.replaceChildren();const base=document.createElement("option");base.value="";base.textContent="분류별 건수";metrics.append(base);
  for(const key of state.columns){if([idKey,titleKey,categoryKey].includes(key))continue;
  let observed=0,usable=true;
  for(const row of state.rows){const value=row[key].trim();if(!value)continue;
- const amount=safeNumber(value);if(amount===null||amount<0){usable=false;break}observed++}
+ const amount=safeScaled(value);if(amount===null||amount<0n){usable=false;break}observed++}
  if(usable&&observed){const option=document.createElement("option");option.value=key;option.textContent=key+" 합계 (빈 값 제외)";metrics.append(option)}
  }
  metrics.value=[...metrics.options].some(x=>x.value===current)?current:""}
 function renderChart(filtered){
  const field=metrics.value;
- const frequencies=new Map();let validValues=0,blankValues=0,sum=0;
+ const frequencies=new Map();let validValues=0,blankValues=0,sum=0n;
  for(const record of filtered){
-  const category=record[categoryKey]||"(미분류)";
-  let amount=1;
-  if(field){const raw=record[field].trim();const parsed=safeNumber(raw);
-   if(!raw){amount=0;blankValues++}
-   else if(parsed===null||parsed<0){amount=0;blankValues++}
+  // The blank value must remain a separate key from a literal '(미분류)'.
+  const category=record[categoryKey];
+  let amount=field?0n:1;
+  if(field){const raw=record[field].trim();const parsed=safeScaled(raw);
+   if(!raw){blankValues++}
+   else if(parsed===null||parsed<0n){blankValues++}
    else{amount=parsed;validValues++;sum+=parsed}}
-  frequencies.set(category,(frequencies.get(category)||0)+amount)
+  frequencies.set(category,(frequencies.get(category)??(field?0n:0))+amount)
  }
- let ranked=[...frequencies.entries()].sort((a,b)=>b[1]-a[1]||collator.compare(a[0],b[0]));
- if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],0);
- ranked=ranked.slice(0,chartMaxCategories-1).concat([["기타 "+(frequencies.size-chartMaxCategories+1)+"개 분류",remainder]])}
- const largest=Math.max(0,...ranked.map(x=>x[1]));
+ let ranked=[...frequencies.entries()].sort((a,b)=>a[1]===b[1]?collator.compare(a[0],b[0]):(a[1]>b[1]?-1:1));
+ if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],field?0n:0);
+ const groupLabel=groupCategoryLabel(new Set(frequencies.keys()),frequencies.size-chartMaxCategories+1);
+ ranked=ranked.slice(0,chartMaxCategories-1).concat([[groupLabel,remainder]])}
+ const blankLabel=blankCategoryLabel(new Set(frequencies.keys()));
+ const largest=ranked.length?Number(ranked[0][1]):0;
  const bars=$("chart-bars");bars.replaceChildren();
  for(const [category,value] of ranked){
   const line=document.createElement("div");line.className="chart-row";
-  const name=document.createElement("span");name.className="chart-key";name.textContent=category;
+  const name=document.createElement("span");name.className="chart-key";name.textContent=category===""?blankLabel:category;
   const track=document.createElement("div");track.className="bar-track";
   const fill=document.createElement("div");fill.className="bar-fill";
-  fill.style.width=(largest>0?100*value/largest:0)+"%";track.append(fill);
-  const label=document.createElement("span");label.className="chart-value";label.textContent=field?value.toLocaleString("ko-KR",{maximumFractionDigits:4}):String(value);
+  fill.style.width=(largest>0?100*Number(value)/largest:0)+"%";track.append(fill);
+  const label=document.createElement("span");label.className="chart-value";label.textContent=field?formatScaled(value):String(value);
   line.append(name,track,label);bars.append(line)
  }
  if(!ranked.length){bars.textContent="현재 조건에 맞는 자료가 없습니다."}
  $("chart-note").textContent=field?"숫자열 "+field+"의 산술합. 빈 셀 제외 · 단위/회계 의미 추정 없음":"현재 조건에 해당하는 레코드 수";
- const expected=field?sum:filtered.length;
+ const expected=field?formatScaled(sum):filtered.length.toLocaleString("ko-KR");
  $("chart-summary").textContent=(field?"집계된 숫자 셀 "+validValues+"개 · 빈 셀 "+blankValues+"개 · 합계 ":"표시된 행 ") +
- expected.toLocaleString("ko-KR",{maximumFractionDigits:4})+" · 고유 분류 "+frequencies.size+"개";
+ expected+" · 고유 분류 "+frequencies.size+"개";
  $("total-rows").textContent=state.rows.length.toLocaleString("ko-KR");
  $("filtered-rows").textContent=filtered.length.toLocaleString("ko-KR");
  $("category-total").textContent=new Set(state.rows.map(x=>x[categoryKey])).size.toLocaleString("ko-KR");
@@ -136,12 +190,23 @@ $("sort").value=titleKey;
 const header=document.createElement("tr");
 for(const name of state.columns){const th=document.createElement("th");th.textContent=name;header.append(th)}
 $("head").replaceChildren(header);
-function categoryOptions(){const current=$("category").value;$("category").replaceChildren();const all=document.createElement("option");all.value="";all.textContent="전체";$("category").append(all);
-for(const name of [...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare)){const opt=document.createElement("option");opt.value=name;opt.textContent=name;$("category").append(opt)}
-$("category").value=[...$("category").options].some(x=>x.value===current)?current:""}
-function render(){const query=$("search").value.toLocaleLowerCase();
+function categoryOptions(preserveSelection=true){
+const previous=preserveSelection?[...$("category").selectedOptions].filter(x=>!x.dataset.all).map(x=>x.value):[];
+$("category").replaceChildren();
+const names=[...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare);
+const blankLabel=blankCategoryLabel(new Set(names));
+const effective=previous.filter(x=>names.includes(x));
+const all=document.createElement("option");all.value="";all.dataset.all="true";all.textContent="전체";all.selected=!effective.length;$("category").append(all);
+for(const name of names){const opt=document.createElement("option");opt.value=name;opt.textContent=name||blankLabel;opt.selected=effective.includes(name);$("category").append(opt)}
+}
+function render(){
+ // A prior selected record may belong to a different filter or even a
+ // different imported source. Never serialize a stale detail into new HTML.
+ $("details").textContent="항목을 선택하세요.";
+ const query=$("search").value.toLocaleLowerCase();
+const activeCategories=[...$("category").selectedOptions].filter(x=>!x.dataset.all).map(x=>x.value);
 const sortKey=$("sort").value;
-const filtered=state.rows.filter(r=>(!$("category").value||r[categoryKey]===$("category").value)&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
+const filtered=state.rows.filter(r=>(!activeCategories.length||activeCategories.includes(r[categoryKey]))&&state.columns.some(k=>r[k].toLocaleLowerCase().includes(query)));
 filtered.sort((a,b)=>{let v=collator.compare(a[sortKey],b[sortKey]);if(v===0)v=collator.compare(a[idKey],b[idKey]);return descending?-v:v});
 renderChart(filtered);
 const locallyReplaced=state.changed||d.import_status==="USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED";
@@ -149,13 +214,15 @@ $("import-warning").hidden=!locallyReplaced;
 $("sheet-warning").hidden=locallyReplaced||d.source_sheet===null;
 $("formula-warning").hidden=locallyReplaced||!d.cached_formulas;
 $("source-line").textContent=locallyReplaced?"현재 출처: 사용자 로컬 CSV 교체 · 새 SHA 검증 필요":
- "승인 원본 SHA256: "+String(d.source_sha256||"미제공").slice(0,20)+"…"+(d.source_sheet?" · 시트: "+d.source_sheet:"");
+ "승인 "+(d.source_receipts?"다중 원본 종합 SHA256: ":"원본 SHA256: ")+String(d.source_sha256||"미제공").slice(0,20)+"…"+(d.source_sheet?" · 시트: "+d.source_sheet:"");
 const pages=Math.max(1,Math.ceil(filtered.length/PAGE));page=Math.max(0,Math.min(page,pages-1));$("body").replaceChildren();
 for(const record of filtered.slice(page*PAGE,(page+1)*PAGE)){const tr=document.createElement("tr");tr.tabIndex=0;
 for(const key of state.columns){const td=document.createElement("td");td.textContent=record[key];tr.append(td)}
 const detail=()=>{$("details").textContent=JSON.stringify(record,null,2)};
-tr.addEventListener("click",detail);tr.addEventListener("keydown",e=>{if(e.key==="Enter")detail()});$("body").append(tr)}
+tr.setAttribute("aria-label","상세 보기: "+record[titleKey]);
+tr.addEventListener("click",detail);tr.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();detail()}});$("body").append(tr)}
 $("count").textContent=filtered.length+"건";$("page").textContent=(page+1)+" / "+pages;
+$("print-scope").textContent="인쇄 범위: "+filtered.length+"건 중 화면 "+(page+1)+"/"+pages+"페이지의 최대 "+PAGE+"행. 전체 데이터는 오프라인 HTML을 이용하세요.";
 $("prev").disabled=page===0;$("next").disabled=page===pages-1}
 $("search").addEventListener("input",()=>{page=0;render()});$("category").addEventListener("change",()=>{page=0;render()});
 $("sort").addEventListener("change",()=>{page=0;render()});
@@ -164,34 +231,54 @@ $("direction").onclick=()=>{descending=!descending;$("direction").textContent=de
 $("prev").onclick=()=>{page--;render()};$("next").onclick=()=>{page++;render()};
 function parseCSV(text){
  if(text.charCodeAt(0)===0xfeff)text=text.slice(1);
- const table=[];let record=[],cell="",quoted=false,closed=false;
+ const table=[];let record=[],cell="",quoted=false,closed=false,touched=false;
  function pushCell(){record.push(cell);cell="";closed=false}
  function pushRow(){pushCell();table.push(record);record=[]}
  for(let i=0;i<text.length;i++){const c=text[i];
  if(quoted){if(c==='"'){if(text[i+1]==='"'){cell+='"';i++}else{quoted=false;closed=true}}else cell+=c;continue}
+ // Physical blank lines are ignored by Python csv.DictReader. An explicit
+ // quoted empty cell is different and must NOT be silently dropped.
+ if(c==="\r"||c==="\n"){
+  if(touched)pushRow();
+  if(c==="\r"&&text[i+1]==="\n")i++;
+  touched=false;continue
+ }
+ touched=true;
  if(c==='"'&&!cell&&!closed){quoted=true;continue}
  if(c===","){pushCell();continue}
- if(c==="\r"||c==="\n"){pushRow();if(c==="\r"&&text[i+1]==="\n")i++;continue}
  if(closed)throw Error("닫힌 따옴표 뒤에 잘못된 문자가 있습니다");
  if(c==='"')throw Error("인용 형식이 잘못되었습니다");
  cell+=c;if(cell.length>MAX_CELL)throw Error("셀 길이 제한 초과")
  }
  if(quoted)throw Error("닫히지 않은 따옴표");
- if(cell!==""||record.length)pushRow();
+ if(touched)pushRow();
  return table;
 }
+// Replacing a selected file invalidates the last reviewed CSV and consent.
+let csvSelectionRevision=0, csvConsentRevision=0, importedRevision=-1;
+$("ack").addEventListener("change",()=>{csvConsentRevision++;importedRevision=-1;});
+$("csv").addEventListener("change",()=>{
+  csvSelectionRevision++;importedRevision=-1;
+  $("ack").checked=false;
+  $("notice").textContent="새 CSV를 선택했습니다. 자료 권리와 평문 포함을 다시 확인하세요.";
+});
 $("replace").onclick=async()=>{
  try{
   if(!$("ack").checked)throw Error("데이터 권리 및 평문 저장 확인이 필요합니다");
   const f=$("csv").files[0];if(!f||f.size>MAX_FILE||!f.name.toLowerCase().endsWith(".csv"))throw Error("8MB 이하 CSV 파일을 선택하세요");
-  const table=parseCSV(await f.text());if(table.length<1)throw Error("CSV 헤더가 없습니다");
+  const fileRevision=csvSelectionRevision, consentRevision=csvConsentRevision;
+  const decoded=new TextDecoder("utf-8",{fatal:true}).decode(await f.arrayBuffer());
+  if(fileRevision!==csvSelectionRevision||consentRevision!==csvConsentRevision||
+     $("csv").files[0]!==f||!$("ack").checked)
+    throw Error("CSV 선택 또는 승인이 검사 중 변경됐습니다. 다시 승인하세요");
+   const table=parseCSV(decoded);if(table.length<1)throw Error("CSV 헤더가 없습니다");
   if(table[0].length!==state.columns.length||table[0].some((h,i)=>h!==state.columns[i]))throw Error("승인된 헤더/순서와 다릅니다");
   if(table.length-1>MAX_ROWS)throw Error("행수 제한 초과");
   const draft=[],ids=new Set();
   for(const row of table.slice(1)){if(row.length!==state.columns.length||row.some(v=>v.length>MAX_CELL))throw Error("행 길이/셀 상한 오류");
    const item={};state.columns.forEach((name,i)=>{item[name]=row[i]});
    if(!item[idKey]||ids.has(item[idKey]))throw Error("ID 누락 또는 중복");ids.add(item[idKey]);draft.push(item)}
-  state.rows=draft;state.changed=true;page=0;$("search").value="";categoryOptions();numericMetrics();render();
+  state.rows=draft;state.changed=true;importedRevision=fileRevision;page=0;$("search").value="";categoryOptions(false);numericMetrics();render();
   $("notice").textContent=draft.length+"개 행을 로컬 메모리에 반영했습니다. 새 HTML 저장을 누르세요.";
  }catch(error){$("notice").textContent="HOLD: "+error.message}
 };
@@ -201,9 +288,10 @@ function safeJSON(obj){
 }
 $("save").onclick=()=>{
  try{
- if(!state.changed||!$("ack").checked)throw Error("명시적으로 승인된 CSV 교체 후에만 저장합니다");
+ if(!state.changed||!$("ack").checked||importedRevision!==csvSelectionRevision)
+    throw Error("현재 선택한 CSV를 새로 승인하고 교체한 후에만 저장합니다");
  const doc={...d,rows:state.rows,source_sha256:null,source_sheet:null,source_header_row:1,
-  cached_formulas:false,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
+  cached_formulas:false,source_receipts:null,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
  $("dataset").textContent=safeJSON(doc);
  const blob=new Blob(["<!doctype html>\n"+document.documentElement.outerHTML],{type:"text/html;charset=utf-8"});
  const a=document.createElement("a");const url=URL.createObjectURL(blob);a.href=url;a.download="DATA2WEB-local-updated.html";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -214,7 +302,7 @@ categoryOptions();numericMetrics();render();window.DATA2WEB_READY=true;
 })();
 </script></body></html>'''
 
-def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False):
+def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False, source_receipts=None):
     if theme not in THEMES or not name.strip() or len(name) > 100:
         raise ValueError("Invalid theme/title")
     payload = {
@@ -223,6 +311,7 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
         "import_status": "OWNER_APPROVED_LOCAL_BUILD",
         "source_sheet": source_sheet, "source_header_row": source_header_row,
         "cached_formulas": cached_formulas,
+        "source_receipts": source_receipts,
     }
     safe_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     for original, escaped in (("&", r"\u0026"), ("<", r"\u003c"), (">", r"\u003e"),
@@ -230,6 +319,22 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
         safe_json = safe_json.replace(original, escaped)
     if TEMPLATE.count("__PAYLOAD__") != 1:
         raise RuntimeError("Broken renderer template")
-    return (TEMPLATE.replace("__THEME__", theme)
-            .replace("__TITLE__", html.escape(name, quote=True))
-            .replace("__PAYLOAD__", safe_json))
+    # Only this exact static JS may execute; the hash includes whitespace.
+    # A locally saved HTML update retains this unchanged JS block.
+    if (TEMPLATE.count("<script>") != 1 or
+            TEMPLATE.count("__SCRIPT_HASH__") != 1 or
+            TEMPLATE.count("script-src __SCRIPT_HASH__") != 1):
+        raise RuntimeError("Broken static script or CSP template")
+    static_script = TEMPLATE.split("<script>", 1)[1].split("</script>", 1)[0]
+    script_hash = base64.b64encode(hashlib.sha256(static_script.encode("utf-8")).digest()).decode("ascii")
+    source = "'sha256-" + script_hash + "'"
+    # Replace only placeholders in the original template, never tokens that
+    # happen to occur inside customer cells or the document title.
+    replacements = {
+        "__THEME__": theme,
+        "__TITLE__": html.escape(name, quote=True),
+        "__PAYLOAD__": safe_json,
+        "__SCRIPT_HASH__": source,
+    }
+    return re.sub(r"__(?:THEME|TITLE|PAYLOAD|SCRIPT_HASH)__",
+                  lambda match: replacements[match.group(0)], TEMPLATE)

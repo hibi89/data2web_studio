@@ -1,0 +1,90 @@
+name: DATA2WEB zero-cost macOS offline acceptance
+on:
+  push:
+    branches: ["feature/final-blueprint-p85-evidence-20261113"]
+    paths:
+      - "data2web*.py"
+      - "studio.py"
+      - "delivery.py"
+      - "verify_delivery.py"
+      - "verify_customer_folder.py"
+      - "receipt_utils.py"
+      - "path_policy.py"
+      - "secure_output.py"
+      - "package_portable.py"
+      - "client_local_rehearsal.py"
+      - "kmong_independent_buyer_request.py"
+      - "kmong_registration_kit.py"
+      - "kmong_weekend_demo.py"
+      - "package_windows_bundle.py"
+      - "test_secure_output.py"
+      - "test_zip_offline_csp.py"
+      - "test_output_snapshot_security.py"
+      - "test_snapshot_safety.py"
+      - "order_intake_preflight.py"
+      - "test_order_intake_preflight.py"
+      - "blueprint_score.py"
+      - "test_blueprint_score.py"
+      - "test_customer_folder.py"
+      - "data/**"
+      - "operator_copy_retention.py"
+      - "test_operator_copy_retention.py"
+      - "zero_cost_gate.py"
+      - "r21_source_provenance.py"
+      - "shipping_rights_preflight.py"
+      - "security_audit_preaudit.py"
+      - "test_security_audit_preaudit.py"
+      - "test_path_policy.py"
+      - "test_script_hash_csp.py"
+      - "browser_p85_probe.py"
+      - "browser_single_delivery_probe.py"
+      - "browser_print_accessibility_probe.py"
+      - ".github/workflows/macos-zero-cost-acceptance.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macos-offline:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - name: Checkout pinned branch source without persisted token
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Use real on-disk CI temp root, not macOS /var symlink
+        run: |
+          mkdir -p "$PWD/.ci-real-temp"
+          chmod 700 "$PWD/.ci-real-temp"
+          echo "TMPDIR=$(cd .ci-real-temp && pwd -P)" >> "$GITHUB_ENV"
+          python -c 'import os,pathlib; p=pathlib.Path(".ci-real-temp").resolve(strict=True); print("TEMP_ROOT_CANONICAL:",p); assert p.is_dir() and not p.is_symlink()'
+      - name: Focused P00 scorecard contract regressions
+        run: python -m unittest test_blueprint_score -v
+      - name: Focused P01 customer-folder preservation regressions
+        run: python -m unittest test_customer_folder -v
+      - name: Python full synthetic and policy regressions
+        run: python -m unittest discover -v
+      - name: Focused R25 operator-copy retention regressions
+        run: python -m unittest test_operator_copy_retention -v
+      - name: Focused R26 privacy-scope and consent preflight regressions
+        run: python -m unittest test_order_intake_preflight -v
+      - name: R29 internal synthetic security preaudit (external audit remains pending)
+        run: python security_audit_preaudit.py
+      - name: Offline synthetic customer self-check
+        run: python studio.py self-check
+      - name: Anonymous local preorder scope check
+        run: python order_intake_preflight.py --synthetic-self-check
+      - name: Install test-only offline Chromium and PDF parser
+        run: |
+          python -m pip install playwright==1.56.0 pypdf==5.9.0
+          python -m playwright install chromium
+      - name: macOS Chromium actual file URL and responsive dashboard QA
+        run: python browser_p85_probe.py --channel chromium
+      - name: macOS Chromium single customer folder ZIP receipt verification
+        run: python browser_single_delivery_probe.py --channel chromium
+      - name: macOS A4 browser print and accessibility acceptance
+        run: python browser_print_accessibility_probe.py --channel chromium

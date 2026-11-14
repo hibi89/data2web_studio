@@ -1,0 +1,60 @@
+{
+  "contract": "DATA2WEB_ZERO_UPFRONT_COST_POLICY_V1",
+  "recorded_at_kst": "2026-11-14",
+  "owner_authorization": "OWNER_APPROVED_ALL_ZERO_UPFRONT_COST_OPERATIONAL_DEFAULTS",
+  "owner_approval_limit": "INTERNAL_OPERATIONAL_POLICY_ONLY_NOT_CUSTOMER_OR_THIRD_PARTY_RIGHTS_PROOF",
+  "approved_upfront_budget_krw": 0,
+  "any_paid_service_or_purchase_allowed": false,
+  "use_paid_code_signing": false,
+  "use_paid_security_audit": false,
+  "use_paid_ai_or_cloud_api": false,
+  "use_paid_runner": false,
+  "deployment_track": "A_OFFLINE_HTML_ZIP_RECEIPT_FIRST",
+  "exe_track": "B_UNSIGNED_OWNER_PREVIEW_ONLY_NOT_CUSTOMER_SALE",
+  "security_scan": "GITHUB_PUBLIC_REPO_STANDARD_RUNNER_CODEQL_NO_ADDED_CASH",
+  "security_scan_is_independent_human_audit": false,
+  "external_independent_audit_completed": false,
+  "source_customer_upload_to_github_or_ai": false,
+  "customer_source_policy": "REJECT_PERSONAL_SENSITIVE_OR_UNCLEAR_RIGHTS_REQUIRE_PER_ORDER_RIGHTS_CONSENT",
+  "operator_local_customer_data_max_retention_days": 7,
+  "source_deletion_mode": "MANUAL_AUTHORIZED_ONLY_NO_AUTODELETE_CUSTOMER_ORIGINAL",
+  "output_plaintext_warning_required": true,
+  "customer_internal_use_nonexclusive_only_after_rights_cleared": true,
+  "external_disclosure_scope": "ONLY_EXISTING_PUBLIC_REPO_SOURCE_AND_SYNTHETIC_FIXTURES_NO_CUSTOMER_DATA",
+  "sku_policy_status": "OWNER_APPROVED_INTERNAL_DEFAULTS_NOT_PUBLISHED",
+  "skus": [
+    {
+      "name": "BASIC",
+      "price_krw": 49000,
+      "source_limit": 1,
+      "row_limit": 1000,
+      "revision_count": 1,
+      "defect_support_days": 7
+    },
+    {
+      "name": "PRO",
+      "price_krw": 129000,
+      "source_limit": 3,
+      "row_limit": 5000,
+      "revision_count": 2,
+      "defect_support_days": 14
+    },
+    {
+      "name": "BUSINESS",
+      "price_krw": 249000,
+      "source_limit": 10,
+      "row_limit": 10000,
+      "revision_count": 3,
+      "defect_support_days": 30
+    }
+  ],
+  "refund_policy": "FOLLOW_APPLICABLE_LAW_AND_MARKETPLACE_POLICY_NO_BLANKET_NO_REFUNDS",
+  "actual_marketplace_listing_approved": false,
+  "shipping_ip_rights_evidence_complete": false,
+  "per_customer_data_rights_verified": false,
+  "release_status": "RELEASE_HOLD_SALE_NO_GO",
+  "final_blueprint_score_unchanged": 72,
+  "final_blueprint_denominator": 100,
+  "target_score": 85,
+  "work_marker": "[작업중]"
+}

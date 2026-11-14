@@ -17,3 +17,8 @@
 ## 권리 불확실성
 - 원본 코드의 정확한 작성·저작권/상용권리, 제3자 라이선스/NOTICE, 엑셀 파서의 권리는 **미승인**.
 - 단순 GitHub PRIVATE 설정이나 코드 SHA/CI SUCCESS가 법적 사용권을 증명하지 않는다.
+
+## 2026-11-13 실제 원본 동등성 테스트 참고 (상업적 이관 아님)
+- 원본 공개 `hibi89/REA_Web` 브랜치 HEAD `7b6b68111efd906f9d929b5e2f577699b26399ee`를 DATA2WEB CI Ubuntu runner에 `actions/checkout` `persist-credentials:false`로 **일시 읽기 전용 checkout**. 다음 단계에서 GitHub 작업 디렉터리만 삭제되며, upstream 원본 브랜치/소스 수정0, 신규 DATA2WEB Git 트리에 upstream source blob/원본 템플릿 추가0.
+- 새 독립 비교 스크립트 `upstream_runtime_golden.py`는 원본 `rea.mvp`/ `rea.lite_builder` **실제 Python CLI**와 원본 Lite HTML `file://` 렌더를 구동; DATA2WEB 결과와 공통 CSV/JSON 의미 동등 및 업데이트/재저장·수치/테마/오류를 검사. `d311c47f1b85382f1d4ce43dfacdabcdc7e85612` [CI #43392272159](https://github.com/hibi89/data2web_studio/actions/runs/43392272159) PASS.
+- 원본 라이선스/상업적 재배포권이 승인됐다는 뜻이 아님; 원본 소스는 고객 상품에 포함/판매하지 않음. 새로 만든 standalone Python/CSS/JS의 상업적 라이선스/고객 약관도 미승인, RELEASE HOLD. 원본 프로젝트의 SHA·공개 상태가 향후 달라지면 본 검증은 **위 핀 커밋 한정**.

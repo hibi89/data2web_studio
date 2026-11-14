@@ -1,0 +1,133 @@
+{
+  "contract": "DATA2WEB_A_FIRST_B_LATER_ROADMAP_V1",
+  "accepted_direction_kst": "2026-11-14",
+  "owner_direction_authorized": "A_RESULT_DELIVERY_FIRST_B_NATIVE_EXE_LATER",
+  "authorization_limits": "DIRECTION_AND_DOCUMENTATION_ONLY_NOT_LICENSE_IP_PRIVACY_PRICE_CUSTOMER_UPLOAD_EXTERNAL_SPEND_OR_RELEASE_APPROVAL",
+  "scorecard_path": "data/final_blueprint_scorecard_v1.json",
+  "baseline_verified_points": 72,
+  "target_points": 85,
+  "score_change_allowed_only_when_full_requirement_acceptance_evidence": true,
+  "release_controls": {
+    "release_status": "RELEASE_HOLD_SALE_NO_GO",
+    "sale_approved": false,
+    "product_listing_approved": false,
+    "customer_source_upload_approved": false,
+    "paid_external_audit_approved": false,
+    "working_marker": "[작업중]"
+  },
+  "strategy": {
+    "A": "OFFLINE_HTML_ZIP_RECEIPT_DELIVERY_INITIAL_PRODUCT",
+    "B": "NATIVE_WINDOWS_EXE_INDEPENDENT_LICENSE_FUTURE_ONLY",
+    "source_handling": "CUSTOMER_OWNED_RIGHTS_VERIFIED_SYNTHETIC_OR_MINIMIZED_INPUT_LOCAL_FIRST",
+    "price_support": "DRAFT_ONLY_49000_129000_249000_KRW_NOT_OWNER_APPROVED"
+  },
+  "milestones": [
+    {
+      "id": "A_TO_85",
+      "order": 1,
+      "status": "BLOCKED_EXTERNAL_ACCEPTANCE",
+      "target_points_after_full_acceptance": 85,
+      "requirements": [
+        "R07",
+        "R21",
+        "R25",
+        "R26",
+        "R29"
+      ],
+      "assistant_next": [
+        "Confirm source/license inventory for shipped HTML/CSS/JS and ZIP vs EXE",
+        "Prepare owner rights/privacy/retention approval packet",
+        "Write copy-ready no-personal-data customer intake and delivery QA",
+        "Prepare independent audit threat model and synthetic test matrix",
+        "After approvals implement approved LICENSE/NOTICE packaging and regression tests"
+      ],
+      "owner_approvals": [
+        "Actual code/asset ownership and use licenses",
+        "Data custody/retention/erasure policy and privacy responsibility",
+        "Plaintext output/rights consent wording",
+        "Any third-party audit spend or external disclosure"
+      ],
+      "external_acceptance": [
+        "Independent security reviewer report for R29 plus remediation and recheck",
+        "Specific legally authorized source/consent evidence for R07/R26 and signed policies"
+      ],
+      "current_points_added": 0
+    },
+    {
+      "id": "A_85_TO_95",
+      "order": 2,
+      "status": "NOT_STARTED",
+      "target_points_after_full_acceptance": 95,
+      "requirements": [
+        "R23",
+        "R27",
+        "R30",
+        "R32"
+      ],
+      "assistant_next": [
+        "Finalize customer standard order form and service support boundaries",
+        "Run independent real-device browser and package acceptance after explicit permission",
+        "Support signed/reproducible launcher documentation and test on supported real OS",
+        "Verify real marketplace listing text and final price only after owner release consent"
+      ],
+      "owner_approvals": [
+        "Final SKU/prices/revisions/support/refund and platform listing",
+        "Real customer independent acceptance and compliant data access",
+        "Signing certificate and publishing decision when applicable"
+      ],
+      "external_acceptance": [
+        "Customer Win10/11 plus macOS/Linux scoped real device tests",
+        "Independent build, rights and packaging review"
+      ],
+      "current_points_added": 0
+    },
+    {
+      "id": "FULL_BLUEPRINT_95_TO_100",
+      "order": 3,
+      "status": "NOT_STARTED",
+      "target_points_after_full_acceptance": 100,
+      "requirements": [
+        "R06",
+        "R33"
+      ],
+      "assistant_next": [
+        "Complete race-condition source/file integrity independent verification",
+        "Perform product purchasing/contract/support/refund acceptance and final R01-R33 audit",
+        "Document rollback, signed binaries, versioning and genuine customer support escalation"
+      ],
+      "owner_approvals": [
+        "Commercial redistribution, customer purchase/refund and legal usage GO",
+        "Production/publication and security/permission changes"
+      ],
+      "external_acceptance": [
+        "Independent Win10/11 source TOCTOU and file safety review",
+        "Actual customer purchase/refund or contract acceptance evidence"
+      ],
+      "current_points_added": 0
+    }
+  ],
+  "post_blueprint_future": [
+    {
+      "id": "B_NATIVE_EXE_COMMERCIAL",
+      "prerequisites": [
+        "A_TO_85",
+        "LEGAL_IP_NOTICE",
+        "SIGNED_WINDOWS_RELEASE",
+        "REAL_CUSTOMER_DEVICE_ACCEPTANCE"
+      ],
+      "status": "FUTURE_NOT_FOR_SALE",
+      "notes": "Keep owner-only unsigned EXE separate; signing, Python/Tcl/Tk bundled license check, installer/update/uninstall, Windows 10/11 tests, support matrix and rollback; do not imply automatic sale at 85."
+    },
+    {
+      "id": "AX_SCALE_AUTOMATION",
+      "prerequisites": [
+        "PROVEN_DEMAND",
+        "USER_APPROVAL",
+        "DATA_MINIMIZATION",
+        "NO_CUSTOMER_UPLOAD_BY_DEFAULT"
+      ],
+      "status": "FUTURE_NO_AUTOMATION_ENABLED",
+      "notes": "Standardized local order questionnaire, intake/receipt evidence, batch deliveries and templates; no autonomous customer transmission or marketplace upload."
+    }
+  ]
+}
