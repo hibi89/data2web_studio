@@ -110,6 +110,12 @@ function blankCategoryLabel(names){
  while(names.has(label)){label="— 분류 없음 ("+suffix+") —";suffix++}
  return label
 }
+// An aggregated "other" series must never mimic a real customer category.
+function groupCategoryLabel(names,count){
+ const base="기타 "+count+"개 분류";let label=base,suffix=2;
+ while(names.has(label)){label=base+" (묶음 "+suffix+")";suffix++}
+ return label
+}
 const metrics=document.getElementById("metric");
 const numberPattern=/^[+-]?(?:\d{1,12}(?:\.\d{1,4})?|\.\d{1,4})$/;
 // Scale accepted four-place decimals to exact BigInt units. Do not round
@@ -149,7 +155,8 @@ function renderChart(filtered){
  }
  let ranked=[...frequencies.entries()].sort((a,b)=>a[1]===b[1]?collator.compare(a[0],b[0]):(a[1]>b[1]?-1:1));
  if(ranked.length>chartMaxCategories){const remainder=ranked.slice(chartMaxCategories-1).reduce((acc,x)=>acc+x[1],field?0n:0);
- ranked=ranked.slice(0,chartMaxCategories-1).concat([["기타 "+(frequencies.size-chartMaxCategories+1)+"개 분류",remainder]])}
+ const groupLabel=groupCategoryLabel(new Set(frequencies.keys()),frequencies.size-chartMaxCategories+1);
+ ranked=ranked.slice(0,chartMaxCategories-1).concat([[groupLabel,remainder]])}
  const blankLabel=blankCategoryLabel(new Set(frequencies.keys()));
  const largest=ranked.length?Number(ranked[0][1]):0;
  const bars=$("chart-bars");bars.replaceChildren();
