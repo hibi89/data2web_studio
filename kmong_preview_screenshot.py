@@ -13,6 +13,7 @@ from pathlib import Path
 
 from kmong_weekend_demo import LEAF, REPORT, SOURCE, sample_csv_bytes
 from path_policy import assert_no_links
+from secure_output import create_output_directory, create_output_file
 from verify_customer_folder import verify_customer_folder
 
 
@@ -40,12 +41,10 @@ def capture(root):
     assert_no_links(screenshots, allow_missing_leaf=True)
     if screenshots.is_symlink() or screenshots.exists():
         raise FileExistsError("Screenshots are create-only")
-    screenshots.mkdir(mode=0o700, exist_ok=False)
-
     from playwright.sync_api import sync_playwright, expect
     errors = []
     remote_requests = []
-    paths = []
+    captures = []
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True)
         try:
@@ -57,17 +56,17 @@ def capture(root):
             expect(page.locator("#count")).to_have_text("8건")
             expect(page.locator("#category-total")).to_have_text("3")
             one = screenshots / "01-dashboard.png"
-            page.screenshot(path=str(one), full_page=False)
-            paths.append(one)
+            one_bytes = page.screenshot(full_page=False)
+            captures.append((one.name, one_bytes))
             page.locator("#search").fill("가상 노트")
             expect(page.locator("#count")).to_have_text("1건")
             two = screenshots / "02-search-filter.png"
-            page.screenshot(path=str(two), full_page=False)
-            paths.append(two)
+            two_bytes = page.screenshot(full_page=False)
+            captures.append((two.name, two_bytes))
             # Official Kmong 4:3 cover at 652x488, all authored from the
             # proven synthetic local screenshot. No third-party graphic or
             # external request, no price or unverified ranking on the cover.
-            preview_data = base64.b64encode(one.read_bytes()).decode("ascii")
+            preview_data = base64.b64encode(one_bytes).decode("ascii")
             cover_html = ("""<!doctype html><html lang="ko"><meta charset="utf-8">
             <style>
               *{box-sizing:border-box}
@@ -102,8 +101,8 @@ def capture(root):
                 cover.set_content(cover_html, wait_until="load")
                 expect(cover.locator("#headline")).to_contain_text("오프라인 웹 대시보드로")
                 three = screenshots / "03-kmong-main-652x488.png"
-                cover.screenshot(path=str(three), full_page=False)
-                paths.append(three)
+                three_bytes = cover.screenshot(full_page=False)
+                captures.append((three.name, three_bytes))
             finally:
                 cover.close()
         finally:
@@ -119,18 +118,29 @@ def capture(root):
         "sale_approved": False,
         "screenshots": [],
     }
-    for file in paths:
-        raw = file.read_bytes()
+    for name, raw in captures:
         if not raw.startswith(b"\x89PNG\r\n\x1a\n") or not 1000 <= len(raw) <= 8_000_000:
             raise ValueError("Screenshot missing, malformed or too large")
         manifest["screenshots"].append({
-            "filename": file.name,
+            "filename": name,
             "sha256": hashlib.sha256(raw).hexdigest(),
             "bytes": len(raw),
         })
-    with (screenshots / "CAPTURE_EVIDENCE.json").open("x", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, sort_keys=True, indent=2)
-        f.write("\n")
+    output_directory = create_output_directory(screenshots)
+    try:
+        for name, raw in captures:
+            target = output_directory.path / name
+            with create_output_file(target, directory=output_directory) as stream:
+                stream.write(raw)
+        raw_manifest = (
+            json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+        ).encode("utf-8")
+        with create_output_file(
+                output_directory.path / "CAPTURE_EVIDENCE.json",
+                directory=output_directory) as stream:
+            stream.write(raw_manifest)
+    finally:
+        output_directory.close()
     return manifest
 
 
