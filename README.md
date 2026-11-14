@@ -1,3 +1,5 @@
+> **[GPT-6 High 설계 공시 · 2026-11-14 KST]** DATA2WEB 최종설계 R01–R33 **72→85→95→100 전체 실행 WBS**: [Instant 개발 작업별 실행계획](docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md) · [머신리더블 Task·차단·검수 원장](data/gpt6_execution_plan_r01_r33_v1.json). 현 공식 **72/100**, 즉시 85 달성 주장 아님. `[작업중]` / `RELEASE HOLD/SALE NO-GO` 유지. High가 설계/최종검수, Instant가 개발/CI. 실제 IP/개인정보/독립감사 수용은 사용자·외부인이 필요.
+
 ## 2026-11-14 · R29 보안 사전감사 및 Chrome/Edge 일시 실행 실패 회복 완전 CI 검증
 
 최신 코드 SHA `d7e029ae838a15f6f7a952cdf920341a6e3ad6b0` [Windows+Ubuntu/Chrome+Edge+Chromium #43538001797](https://github.com/hibi89/data2web_studio/actions/runs/43538001797) **4/4 SUCCESS** (Win315 PASS, Ubuntu314 PASS+1SKIP), [final blueprint gate #43538002050](https://github.com/hibi89/data2web_studio/actions/runs/43538002050) SUCCESS. Chrome/Edge 프로세스 transient 시작 오류에 한해서만 새로운 로컬 프로필로 최대1회 재시도하고, 실제 DOM과 합성 2행 콘텐츠가 없으면 재시도 없이 `HOLD`. 이전 두 번의 실패[#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883), [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617)]는 [실패·복구 문서](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md)에 보존.

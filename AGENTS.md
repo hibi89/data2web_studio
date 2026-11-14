@@ -1,3 +1,5 @@
+> **[2026-11-14 KST · GPT-6 High 최종설계/Instant 실행 역할 위임]** [33개 요구 R01–R33 실행 설계·72→85→95→100 WBS](docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md) 및 [원자 작업·선행조건 JSON](data/gpt6_execution_plan_r01_r33_v1.json)을 **다음 `ㄱ`의 실제 실행 기준**으로 사용. GPT-6 High=최종설계·최종검수; GPT-6 Instant=백엔드/프론트엔드 코드·회귀·정확 SHA CI·STATUS/HANDOFF. 단 외부 독립 R29 감사는 High/Instant 어느 쪽도 대체 불가. 현재 공식 72/100, 계획만으로 85/100 선언 금지. 기본 0원·고객원본/비밀 외부전송 금지·원본/고객출력 자동삭제/무덮어쓰기·SALE NO-GO·Draft PR 상태 유지. Task 수행 후 현재 HEAD와 테스트 SHA·다음 작업 ID를 인수인계에 기록. 사용자가 다음 채팅/모델을 열어야 실행이 이어지며 백그라운드 자동전환은 없음.
+
 > **[2026-11-14 KST · 사용자 0원 위임 최신 지침]** 추가 지출 0원, A 오프라인 HTML/ZIP/receipt 우선, 공개 소스의 무료 GitHub CodeQL/기존 표준 Actions만 허용. 무료 운영 기본안(SKU/비민감자료 우선/보유 최대7일·수동삭제/법정 환불권 보존)은 승인됨. 자세한 사항 `docs/ZERO_COST_OWNER_AUTHORIZATION_20261114.md`. 외부 고객·제3자 권리 증빙/독립 보안감사·실구매/등록 증거는 **승인이나 CodeQL로 대체 불가**. 72/100, RELEASE HOLD, [작업중] 유지. 아래 과거 'SKU 미승인' 문구는 당시 기록이며 0원 내부 정책 승인만 최신화됨.
 
 ## 2026-11-14 KST · 사용자 확정 A 우선 개발/후속 B EXE 운영 지침
