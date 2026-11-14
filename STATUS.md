@@ -1,3 +1,9 @@
+## 2026-11-14 22:44 KST — Codex GPT-6 Luna Max GitHub-only M85 세부작업 공시
+- 사용자 요청에 따라 [Codex GPT-6 Luna Max · GitHub-only 72→85 실행 공시](docs/CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_EXECUTION_20261114.md)와 [34개 작업 JSON](data/codex_gpt6_luna_max_m85_github_only_tasks_v1.json)을 개발 브랜치에 공시함. 기존 50작업 72→100 정본을 보존하고 **준비4 + M85 30 = 34개**만 분리, 기술 작업의 실행자를 Codex Luna Max로 지정, OWNER/EXTERNAL 진짜 증거 항목은 그대로 차단. 기존 scorecard 정확 합계 **22/33 VERIFIED=72/100, 미검증 11개=28점; 85까지 R07(+2)/R21(+4)/R25(+2)/R26(+2)/R29(+3)=13점**.
+- 문서 계획 공시 전 HEAD `1c582db78fb3ac91f37ddbab27b18124c08a5419`, 큐 JSON 커밋 `c449d6a721e853dfb806cd44ddade85f2e336353`, 세부 지시서 커밋 `66074fbebb6ce9d2fe579bbb3e2e07330514f93e`. 정본 34개 ID/의존성/배점 계약 readback 검증. 원본 WBS/weight/코드/테스트 변경 없음.
+- **이번 문서 작업의 실행 테스트 0건**(docs-only `[skip ci]`). 앞선 기준 검증 기능 SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7` Windows507 PASS/Ubuntu506 PASS+1SKIP·브라우저 PASS는 이전 실증이고 최근 R25/권리/동의 수정의 최신 CI 성공은 아니다. Codex는 P03 → A07-03/A25-01/A26-02 → A21/A29 준비 → 조건부 G85에 집중.
+- R25 운영자 지정과 7개 정책 승인·격리 합성 파기 PASS는 유지. 실제 고객 권리·사본 보관·파기와 R29 진짜 외부 독립감사, R21 상업 권리/NOTICE는 미검증. **본 공시로 85 달성/출시/고객 처리 주장 금지**, `[작업중]` 및 RELEASE HOLD/SALE NO-GO 유지. 고객 파일·비밀 GitHub 업로드 금지, 사용자 로컬 작업 없음.
+
 ## 2026-11-14 KST — R25 max-UTC report validator hardening
 - Found `validate_result` computed `reviewed + timedelta(days=7)`, which raises `OverflowError` for canonical year-9999 review times even though report parsing itself accepts those dates. Changed to duration comparison `due - reviewed > timedelta(days=7)`, avoiding arithmetic overflow while retaining fail-closed deadline bounds. Code SHA `80c69f643ae7a39f08c22df27797972cb3e00793`.
 - Added max-UTC report validation regression (test SHA `61329ec8311fe51a1b16c886932251ec97bfc1de`). CI deferred at owner's request; **tests not executed**. No claim of PASS.
