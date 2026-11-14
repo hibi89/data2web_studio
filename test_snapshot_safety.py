@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import data2web
+import path_policy
 from path_policy import read_bounded_source
 
 
@@ -34,16 +35,16 @@ class SnapshotSafety(unittest.TestCase):
     def test_simulated_path_swap_before_open_detected(self):
         replacement=self.root/"replacement.csv"
         replacement.write_bytes(self.source.read_bytes())
-        original_open=os.open
+        original_open=path_policy._open_source_readonly
         called=[False]
 
-        def swap_and_open(path,flags,*args,**kwargs):
+        def swap_and_open(path,flags):
             if Path(path)==self.source.absolute() and not called[0]:
                 called[0]=True
                 os.replace(replacement,self.source)
-            return original_open(path,flags,*args,**kwargs)
+            return original_open(path,flags)
 
-        with patch("os.open",side_effect=swap_and_open):
+        with patch("path_policy._open_source_readonly",side_effect=swap_and_open):
             with self.assertRaises(ValueError):
                 read_bounded_source(self.source)
         self.assertTrue(called[0])
@@ -59,31 +60,45 @@ class SnapshotSafety(unittest.TestCase):
         initial_mtime_ns=alias.stat().st_mtime_ns
         original_read=os.read
         mutated=[False]
+        write_denied=[]
 
         def mutate_through_alias(fd,size):
             data=original_read(fd,size)
             if not mutated[0]:
                 mutated[0]=True
-                with alias.open("r+b") as stream:
-                    stream.write(b"X")
-                changed=alias.stat()
-                # Windows may defer/coarsen write-time updates for an open
-                # file. Pin a distinct timestamp so this regression tests
-                # the identity check deterministically on every hosted OS.
-                os.utime(
-                    alias,
-                    ns=(changed.st_atime_ns,initial_mtime_ns+10_000_000_000),
-                )
+                try:
+                    with alias.open("r+b") as stream:
+                        stream.write(b"X")
+                except PermissionError as error:
+                    write_denied.append(error)
+                else:
+                    changed=alias.stat()
+                    # POSIX has no mandatory share-deny lock. Pin a distinct
+                    # mtime so the metadata-change path is deterministic.
+                    os.utime(
+                        alias,
+                        ns=(changed.st_atime_ns,initial_mtime_ns+10_000_000_000),
+                    )
             return data
 
         with patch("os.read",side_effect=mutate_through_alias):
-            with self.assertRaisesRegex(
-                ValueError,"Source changed during bounded file-handle read"
-            ):
-                read_bounded_source(self.source)
+            if os.name=="nt":
+                snapshot=read_bounded_source(self.source)
+            else:
+                with self.assertRaisesRegex(
+                    ValueError,"Source changed during bounded file-handle read"
+                ):
+                    read_bounded_source(self.source)
         self.assertTrue(mutated[0])
-        self.assertNotEqual(alias.read_bytes(),original_bytes)
-        self.assertNotEqual(alias.stat().st_mtime_ns,initial_mtime_ns)
+        if os.name=="nt":
+            self.assertEqual(len(write_denied),1)
+            self.assertEqual(write_denied[0].winerror,32)
+            self.assertEqual(snapshot,original_bytes)
+            self.assertEqual(self.source.read_bytes(),original_bytes)
+        else:
+            self.assertFalse(write_denied)
+            self.assertNotEqual(alias.read_bytes(),original_bytes)
+            self.assertNotEqual(alias.stat().st_mtime_ns,initial_mtime_ns)
 
     def test_read_table_rejects_source_mutated_during_parse(self):
         original=self.source.read_bytes()
