@@ -1,3 +1,8 @@
+## 2026-11-14 KST — Instant P00/P02 evidence indexing (official 72/100 unchanged)
+- Verified locked scorecard directly: 33 requirements, weight 100, 22 VERIFIED = 72, 11 PENDING = 28. P00 score inspection complete; full command/CI rerun not performed in this turn, so P03 remains pending.
+- P02 public-safe evidence index committed: [M85 evidence index](docs/M85_ACCEPTANCE_EVIDENCE_INDEX_20261114.md). Five M85 requirements R07/R21/R25/R26/R29 remain PENDING due to real owner/rights/privacy/operational and independent external audit evidence. No customer data, fake rights, or point changes.
+- Source baseline docs SHA `ef6ba6c00e4aef7febca5b0a86568729d2b8252d`, last verified functional SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7`; index commit `8b437b40d7cb54b28313cd6f4a4995b67ff9a01b`. P01 rollback inventory, P03 fresh CI baseline, A07-01 and other M85 technical reviews remain next. This turn's changes are documentation only; no new CI success asserted. RELEASE HOLD / SALE NO-GO, main untouched.
+
 ## HANDOFF — 2026-11-14 KST — GPT-6 High 설계 완료; Instant 100까지 실행; High 최종 검수만
 1. **역할 정정:** R07/R21/R25/R26/R29의 항목별 수용 및 85·95점 중간 게이트는 Instant가 실제 증거에 기반하여 검증. High는 **G100-02에서 100점 개발 이후 최종 재감사만** 수행. R29 별도 외부 감사 및 실제 OWNER/고객 승인 요건은 절대 대체하지 않음.
 2. **변경:** 총50개 Task의 7개 내부 리뷰 역할을 High→Instant로 수정, 의존성과 R01–R33 확정 가중치 보존. 계획 경로 `docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md`, 기계 Task `data/gpt6_execution_plan_r01_r33_v1.json`.
