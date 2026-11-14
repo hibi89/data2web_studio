@@ -68,7 +68,7 @@ def build_demo(destination):
     evidence = verify_customer_folder(folder)
     verified_zip = verify_zip(folder / "delivery.zip")
     if (not evidence["verified"] or evidence["sale_approved"] is not False
-            or not verified_zip["verified"] or verified_zip["sale_approved"] is not False
+            or not verified_zip["verified"] or verified_zip["status"] != "INTEGRITY_VERIFIED_NOT_SALE_APPROVED"
             or source.read_bytes() != content
             or evidence["rows"] != len(DEMO_ROWS)):
         raise RuntimeError("Synthetic preview integrity failed; HOLD")
