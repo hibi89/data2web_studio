@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 extreme receipt date overflow guard
+- Reviewed `operator_copy_retention.py`: `received + timedelta(days=7)` can raise `OverflowError` for a syntactically valid year-9999 receipt when a synthetic clock is at that instant. Added fail-closed `ValueError` conversion rather than an uncaught error (code `976cd67f3a0ad19030d0f77aa1929d2de911c148`).
+- Added regression `test_extreme_receipt_timestamp_fails_closed` for `9999-12-31T23:59:59Z` (test `9de49b05f8f05c879a2d0a0e43f625fcdc004458`). User deferred nonessential CI; tests **not executed** this turn.
+- Locked official score **72/100** remains unchanged; R25 actual operator authorization, custody and disposal evidence missing. RELEASE HOLD. No customer source, real files, deletion or policy changed.
+
 ## 2026-11-14 KST — R25 overdue HOLD report regression
 - Found a real internal contradiction: `review_copy` can legitimately set `manual_disposal_action_due=True` for overdue sensitive/unconsented operator copies while retaining the higher-priority privacy/rights HOLD reason; `validate_result` rejected that report, preventing `write_new_report`. Fixed to allow the specific HOLD reasons while still rejecting fabricated approval and manual-action status mismatch. Code SHA `c5a9ef5592bf0be53209b270f70e927265c3b7a5`.
 - Added synthetic regression for sensitive overdue, unconsented overdue, and sensitive purpose-completed-before-day-7, including create-only report write; test SHA `4d3618bcfaf9865df0705a3920c251e155bebbb7`.
