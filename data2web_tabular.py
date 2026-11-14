@@ -232,6 +232,17 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
         root = _xml(archive, selected["part"])
         if root.find(X + "mergeCells") is not None:
             raise ValueError("Merged worksheet cells are unsupported")
+        # Hidden worksheet content may contain values the owner did not review.
+        # Never silently publish or discard it; require a new visible-source SHA.
+        sheet_format = root.find(X + "sheetFormatPr")
+        if (sheet_format is not None and
+                sheet_format.get("zeroHeight", "0").strip().lower() not in ("0", "false")):
+            raise ValueError("Hidden XLSX default rows: unhide and re-approve source")
+        cols = root.find(X + "cols")
+        if cols is not None:
+            for col in cols.findall(X + "col"):
+                if col.get("hidden", "0").strip().lower() not in ("0", "false"):
+                    raise ValueError("Hidden XLSX columns: unhide and re-approve source")
         sheetdata = root.find(X + "sheetData")
         if sheetdata is None:
             raise ValueError("Missing worksheet rows")
@@ -249,6 +260,8 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 raise ValueError("Unsorted, repeated, or oversized worksheet row")
             row_seen.add(number)
             previous_row = number
+            if node.get("hidden", "0").strip().lower() not in ("0", "false"):
+                raise ValueError("Hidden XLSX rows: unhide and re-approve source")
             if number < header_row:
                 continue
             cells = {}
