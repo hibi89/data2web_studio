@@ -162,8 +162,8 @@ $("sort").value=titleKey;
 const header=document.createElement("tr");
 for(const name of state.columns){const th=document.createElement("th");th.textContent=name;header.append(th)}
 $("head").replaceChildren(header);
-function categoryOptions(){
-const previous=[...$("category").selectedOptions].map(x=>x.value).filter(Boolean);
+function categoryOptions(preserveSelection=true){
+const previous=preserveSelection?[...$("category").selectedOptions].map(x=>x.value).filter(Boolean):[];
 $("category").replaceChildren();
 const names=[...new Set(state.rows.map(r=>r[categoryKey]))].sort(collator.compare);
 const effective=previous.filter(x=>names.includes(x));
@@ -242,7 +242,7 @@ $("replace").onclick=async()=>{
   for(const row of table.slice(1)){if(row.length!==state.columns.length||row.some(v=>v.length>MAX_CELL))throw Error("행 길이/셀 상한 오류");
    const item={};state.columns.forEach((name,i)=>{item[name]=row[i]});
    if(!item[idKey]||ids.has(item[idKey]))throw Error("ID 누락 또는 중복");ids.add(item[idKey]);draft.push(item)}
-  state.rows=draft;state.changed=true;importedRevision=fileRevision;page=0;$("search").value="";categoryOptions();numericMetrics();render();
+  state.rows=draft;state.changed=true;importedRevision=fileRevision;page=0;$("search").value="";categoryOptions(false);numericMetrics();render();
   $("notice").textContent=draft.length+"개 행을 로컬 메모리에 반영했습니다. 새 HTML 저장을 누르세요.";
  }catch(error){$("notice").textContent="HOLD: "+error.message}
 };
@@ -294,5 +294,5 @@ def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme
     source = "'sha256-" + script_hash + "'"
     return (TEMPLATE.replace("__THEME__", theme)
             .replace("__TITLE__", html.escape(name, quote=True))
-            .replace("__PAYLOAD__", safe_json)
-            .replace("__SCRIPT_HASH__", source))
+            .replace("__SCRIPT_HASH__", source)
+            .replace("__PAYLOAD__", safe_json))
