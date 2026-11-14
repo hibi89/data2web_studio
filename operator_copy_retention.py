@@ -220,9 +220,17 @@ def validate_result(record):
             raise ValueError("Copy-absent report cannot claim deadline or action due")
         if record["reason_code"] != "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
             raise ValueError("Copy-absent report must retain unverified status")
-    if record["manual_disposal_action_due"] and record["reason_code"] != (
-            "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE"):
-        raise ValueError("Manual disposal flag and reason disagree")
+    if record["manual_disposal_action_due"]:
+        # A sensitive/unknown source or missing consent remains HOLD, but
+        # overdue custody must still surface the separate manual action flag.
+        if record["reason_code"] not in {
+                "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE",
+                "PERSONAL_CONFIDENTIAL_OR_UNKNOWN_SCOPE_HOLD",
+                "PER_ORDER_RIGHTS_OR_PLAINTEXT_CONSENT_PENDING",
+        }:
+            raise ValueError("Manual disposal flag and reason disagree")
+        if due > reviewed:
+            raise ValueError("Future deadline cannot require overdue disposal")
     if record["reason_code"] == "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE" and not (
             record["manual_disposal_action_due"]):
         raise ValueError("Disposal-due report cannot suppress manual action")
