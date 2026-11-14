@@ -1,3 +1,12 @@
+## 2026-11-15 KST — GPT-6 직접 R21 provenance 복구 / R25 승인 기록 최신화
+
+- **GitHub 실행:** `data/r21_source_provenance_v1.json` 기존 blob `11796f9174fec88e29335d5f19bfe3038636787a` 보존. 현재 생산자 6개 Git blob에 대한 `data/r21_source_provenance_v2.json` 신규 생성(`53fcbc7`), `r21_source_provenance.py`의 활성 registry/contract를 v2로 전환(`6072b30`), R25 scorecard의 구 '미승인' 설명만 실제 내부 7개 승인 및 합성 파기 기록으로 정정(`f4dd219`), v1 불변·v2 새 SHA·HOLD 여부 회귀 2개 추가(`968d031f373054974c1bdae585dd61d12086ddf9`). 기존 R01–R33 weight/state/증거 점수는 변경하지 않음.
+- **원인/검증 범위:** 기존 CI #43644268104 Windows/Ubuntu 전체 6개 오류는 역사적 v1 핀과 새 directory-handle producer 코드 4개 불일치에 기인. 현재 GitHub 조회 상 v2 여섯 해시는 실제 producer blob과 동일. 그러나 새 code SHA `968d031f...`의 Actions 실행 로그는 연결 도구(PR-filtered run lookup/legacy combined statuses)로 볼 수 없어 **CI 결과 미검증**. 기존 브라우저/CodeQL 성공을 새 SHA의 성공으로 재사용하지 않음.
+- **작업 원장:** 34작업 JSON의 P03/A21-01/A21-02/G85-02를 v2 수정 커밋·CI 대기 및 실제 권리 차단으로 갱신. 증거 인덱스 M85-E05는 기술 해시 복구와 별개로 CI/법적 확인 부족하여 INCOMPLETE.
+- **점수/릴리스:** 공식 **72/100**(22/33 VERIFIED, 11 PENDING). R07(+2), R21(+4), R25(+2), R26(+2), R29(+3) 법적 동의·실고객 증거·독립 보안감사 패킷 미완성. 사용자 본인 R25 운영자 지정 및 내부 7개 정책 승인, 합성 파기 PASS는 유지. R25 실 고객 파기 완료를 주장하지 않음. **RELEASE HOLD / SALE NO-GO**, PR #4 Draft/Unmerged, main/REA_Web 원본 변경 없음.
+- **다음 검증:** 정확 code SHA `968d031f...`의 GitHub-hosted Windows/Ubuntu 전체 unittest, 브라우저, macOS, CodeQL, native Windows preview 실행 결과/Job 로그 확인. Fail이면 해당 CI 실패만 수정, PASS면 기술 복구 완료로 기록하되 공식 +0 유지. 외부 독립 R29 평가/실 고객 권리·보존·프라이버시/NOTICE 승인은 별도 후속.
+- **환경/보호:** GitHub-only, 고객자료·개인정보·시크릿/유료 API 외부 전송 및 권한/배포/판매 변경 없음. 불가피한 사람 승인/독립감사는 미검증. 본 문서 갱신은 docs-only `[skip ci]`, 코드 완료/CI PASS로 해석 금지.
+
 ## 2026-11-15 KST — GPT-6 High evidence audit
 
 Read-only review of A21 source/blob tables, GitHub path history, package contracts, task ledger, and Actions #43644268104/#43644268111/#43644268143/#43644268362 at docs HEAD `6dc2830fcd196eaac9a5589c964059107d1e2052` found no actionable discrepancy. No tests were run in that review. This is internal review evidence only; it does not satisfy R29 independent external audit or owner rights acceptance.
