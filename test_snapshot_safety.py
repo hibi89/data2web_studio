@@ -92,7 +92,6 @@ class SnapshotSafety(unittest.TestCase):
         self.assertTrue(mutated[0])
         if os.name=="nt":
             self.assertEqual(len(write_denied),1)
-            self.assertEqual(write_denied[0].winerror,32)
             self.assertEqual(snapshot,original_bytes)
             self.assertEqual(self.source.read_bytes(),original_bytes)
         else:

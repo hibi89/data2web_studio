@@ -64,14 +64,14 @@ class XlsxSheetInspectionSnapshot(unittest.TestCase):
     def test_same_size_path_swap_during_fd_open_is_rejected(self):
         replacement = self.root / "replacement.xlsx"
         replacement.write_bytes(self.workbook)
-        real_open = os.open
+        real_open = path_policy._open_source_readonly
         swapped = [False]
         def rename_before_open(path, flags, *args, **kwargs):
             if Path(path) == self.source.absolute() and not swapped[0]:
                 swapped[0] = True
                 os.replace(replacement, self.source)
             return real_open(path, flags, *args, **kwargs)
-        with patch("os.open", side_effect=rename_before_open):
+        with patch("path_policy._open_source_readonly", side_effect=rename_before_open):
             code, answer = self.call_inspect()
         self.assertTrue(swapped[0])
         self.assertEqual(code, 2)
