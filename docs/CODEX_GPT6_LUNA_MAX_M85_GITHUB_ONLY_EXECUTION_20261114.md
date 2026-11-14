@@ -1,3 +1,10 @@
+## 2026-11-15 KST — exact-SHA continuation at `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+- The Windows native acceptance manifest now writes through a held output-directory handle after checking the same parent identity recorded before the hosted acceptance run. Exact-SHA native owner-preview passed; GPT-6 High source review found no actionable issue.
+- [Python/browser #43644268104](https://github.com/hibi89/data2web_studio/actions/runs/43644268104) failed only on six R21 provenance checks for four changed producer blobs. Windows: 531 tests (524 PASS, 5 ERROR, 1 FAIL, 1 SKIP); Ubuntu: 531 (521 PASS, 5 ERROR, 1 FAIL, 4 SKIP). Focused P00/P01, R25, R26, and internal R29 steps passed; Chromium and Windows Chrome/Edge/Tk jobs passed.
+- [Native Windows preview #43644268111](https://github.com/hibi89/data2web_studio/actions/runs/43644268111) PASS, synthetic hosted-only; manifest states customer PC not verified and sale not approved. [CodeQL #43644268143](https://github.com/hibi89/data2web_studio/actions/runs/43644268143) PASS. [Evidence gate #43644268362](https://github.com/hibi89/data2web_studio/actions/runs/43644268362) workflow PASS, report `UNASSESSED`. macOS not run at this SHA.
+- P03/G85-02 remain blocked until an authorized R21 source review. No mechanical provenance pin update was made. Score remains 72/100, +0; RELEASE HOLD / SALE NO-GO unchanged. Docs-only `[skip ci]` commits following this source SHA are not code-test evidence.
+
 ## 2026-11-15 KST — latest exact-SHA status
 
 - Latest code/test SHA: `512af5000658f40ed7deefae096f29b886bd1ec0`; product fix commit `3a6d7588e8f5e58e51b1b0f7e6c1eaf9b2a917cf` adds a Windows `CreateFileW` read handle with `FILE_SHARE_READ` only, held through final file identity checks. This narrows concurrent writes/deletes through ordinary Windows sharing.
