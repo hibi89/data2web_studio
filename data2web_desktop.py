@@ -77,6 +77,92 @@ def deliver_reviewed(review, destination, mapping, *, owner_has_rights,
          name=name,theme=theme)
 
 
+def inspect_owner_batch(sources, *, options=None):
+    """Review 2-10 same-directory files without creating a manifest on disk.
+
+    Every input is parsed independently; all must share the exact ordered
+    header schema. The unchanged SHA and per-XLSX sheet/cache preferences
+    are carried into the final checked append core.
+    """
+    paths=tuple(Path(source) for source in sources)
+    if not 2<=len(paths)<=10:
+        raise ValueError("Select two to ten sources for the batch")
+    configurations=tuple(options) if options is not None else tuple({} for _ in paths)
+    if len(configurations)!=len(paths):
+        raise ValueError("A separate configuration is required per source")
+    origin=paths[0].absolute().parent
+    assert_no_links(origin)
+    keys=set()
+    reviewed=[]
+    total=0
+    original_columns=None
+    for path,settings in zip(paths,configurations):
+        assert_no_links(path)
+        if path.absolute().parent!=origin or path.name.casefold() in keys:
+            raise ValueError("Batch files must have distinct names in one real folder")
+        keys.add(path.name.casefold())
+        if not isinstance(settings,dict) or set(settings)-{
+                "sheet","header_row","allow_cached_formulas"}:
+            raise ValueError("Only XLSX sheet/header/cache settings are permitted")
+        if path.suffix.lower()!=".xlsx" and (
+                settings.get("sheet") is not None or
+                settings.get("header_row",1)!=1 or
+                settings.get("allow_cached_formulas",False) is not False):
+            raise ValueError("Non-XLSX file cannot use workbook-specific settings")
+        review=inspect_owner_input(path,**settings)
+        if original_columns is None:
+            original_columns=review.columns
+        elif review.columns!=original_columns:
+            raise ValueError("All batch sources need identical ordered headers")
+        total+=review.count
+        from data2web import MAX_ROWS
+        if total>MAX_ROWS:
+            raise ValueError("Combined row limit exceeded")
+        reviewed.append(review)
+    return tuple(reviewed)
+
+
+def deliver_reviewed_batch(reviews,destination,mapping,*,
+                           owner_has_rights,plaintext_ack,
+                           privacy_classification,name="DATA2WEB",theme="office"):
+    """Build a single delivery folder from explicitly reviewed multiple files.
+
+    Source SHA, ordered headers and cross-source duplicate IDs are rechecked by
+    the existing append engine; this is not a commercial rights certificate.
+    """
+    items=tuple(reviews)
+    if not 2<=len(items)<=10 or any(not isinstance(r,ReviewedInput) for r in items):
+        raise ValueError("Batch delivery requires two to ten inspected records")
+    if owner_has_rights is not True or plaintext_ack is not True:
+        raise ValueError("Explicit batch source rights and plaintext review required")
+    if privacy_classification not in PRIVACY_CHOICES or theme not in THEMES:
+        raise ValueError("Privacy classification and theme required")
+    if (not isinstance(mapping,dict) or set(mapping)!={"id","title","category"}
+            or not all(isinstance(x,str) and x for x in mapping.values())
+            or len(set(mapping.values()))!=3
+            or not all(value in items[0].columns for value in mapping.values())):
+        raise ValueError("Three distinct approved batch field mappings required")
+    source_dir=items[0].source.absolute().parent
+    if any(r.source.absolute().parent!=source_dir or r.columns!=items[0].columns
+           for r in items):
+        raise ValueError("Batch reviews must describe same-folder identical columns")
+    doc={
+        "contract":"DATA2WEB_INPUT_APPROVALS_V1",
+        "sources":[{
+            "filename":r.source.name,"sha256":r.sha256,"sheet":r.sheet,
+            "header_row":r.header_row,
+            "allow_cached_formulas":r.allow_cached_formulas,
+        } for r in items],
+        "mapping":dict(mapping),
+        "approval":{"rights_and_plaintext_ack":True,
+                    "privacy_classification":privacy_classification},
+        "name":name,"theme":theme,
+    }
+    from data2web_append import deliver_reviewed_sources
+    return deliver_reviewed_sources(doc,source_dir,destination,
+                    confirm="APPROVE",ack_plaintext=True)
+
+
 def desktop_main():
     try:
         import tkinter as tk
