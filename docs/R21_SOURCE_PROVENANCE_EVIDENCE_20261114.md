@@ -1,3 +1,25 @@
+## 2026-11-15 KST update — exact six-file blob comparison at `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+The PR code tree at `320aebc23163019f85e1c345857ff4ed3da8147a` was read through GitHub's Git tree endpoint and compared with the original R21 pin manifest snapshot `0219a10c03cab826220a78af128cffdae995ac9f`. This is a source identity comparison only.
+
+| R21 producer | Pinned blob | Actual blob at `320aebc` | State |
+|---|---|---|---|
+| `data2web_web.py` | `65bd8fe16d7b284f553d5185ed369650cc83d82f` | `65bd8fe16d7b284f553d5185ed369650cc83d82f` | MATCH |
+| `delivery.py` | `52075fc6ebdb5f886a2c05725b4c1aabf4b0dbba` | `c0013e445f3d4b419314c795d387643abc176f48` | DRIFT |
+| `receipt_utils.py` | `02378bc8b18e6a37f225dc2c132fa9456551af64` | `137f4086fe08cfe22722186ffc0b47aa30957817` | DRIFT |
+| `data2web_single.py` | `bc1c8499f48c7f1f8b7b0d0b3b713d9328d05fc6` | `b24e7495f4c43131dcbd986ac7bb75dfd3d979c0` | DRIFT |
+| `data2web_append.py` | `3770f6bfc3bbe9e634e694226027eda0bd0c8f38` | `92ccab387a61f9546d13bf9c48a97875e84ae740` | DRIFT |
+| `data2web_tabular.py` | `66c2fb8910b1202ae3b0301e8b615158d9a5fac9` | `66c2fb8910b1202ae3b0301e8b615158d9a5fac9` | MATCH |
+
+The customer A delivery boundary was cross-checked in current code and tests:
+- `delivery.py` emits `index.html`, `manifest.json`, `README_KO.txt` into the ZIP; `verify_delivery.py` independently allows exactly those three members.
+- `verify_customer_folder.py` independently requires exactly `index.html`, `delivery.zip`, and `receipt.json`.
+- `receipt_utils.py` creates the local receipt. The synthetic inventory lists all four A artifacts and keeps every rights state pending.
+- The HTML renderer keeps CSS/JS inside the generated HTML. At exact `320aebc23163019f85e1c345857ff4ed3da8147a`, hosted Chromium and Windows Chrome/Edge logs report local-file owner flows with `network0`. The owner-only Windows EXE/runtime, upstream golden test source, and CI-only test dependencies are excluded from A customer delivery.
+- Exact [Python/browser #43644268104](https://github.com/hibi89/data2web_studio/actions/runs/43644268104) logs show customer-folder, single-delivery, receipt, and create-only regressions passing on Windows and Ubuntu. The integrated `test_manifest_matches_real_synthetic_zip_receipt_and_stays_hold` cannot complete because the first source-provenance check correctly rejects the four changed blobs. Thus the detailed output-contract checks pass, while the full integrated shipping preflight remains blocked.
+
+A21-01 technical inventory reconciliation is recorded; source-origin acceptance and real rights/NOTICE decisions remain separate A21-02/A21-03 work. No source pins, score, license, or sale state were changed. This table is not an owner source review, copyright opinion, commercial permission, or external audit.
+
 ## 2026-11-15 KST update — producer source drift; R21 review required
 
 At code/test SHA `92dca1824e24700dc38f8f9fa4ae3775488c2d3f`, the four delivery producer files below contain handle-anchored create-only output changes and no longer match the historic pins in `data/r21_source_provenance_v1.json` (snapshot `0219a10c03cab826220a78af128cffdae995ac9f`):
