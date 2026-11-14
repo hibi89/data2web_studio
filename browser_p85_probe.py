@@ -106,6 +106,15 @@ def main():
             expect(secondary.locator("#chart-summary")).to_contain_text("표시된 행 2")
             secondary.locator("#metric").select_option("amount")
             expect(secondary.locator("#chart-summary")).to_contain_text("18")
+            # A category selected from an earlier source is never silently
+            # carried over to a newly reviewed CSV, even when names match.
+            secondary.locator("#category").select_option("B")
+            expect(secondary.locator("#count")).to_have_text("1건")
+            secondary.locator("#csv").set_input_files(str(changed))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#count")).to_have_text("2건")
+            expect(secondary.locator("#category")).to_have_values([""])
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
             mob=mobile.new_page()
