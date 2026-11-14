@@ -5,6 +5,15 @@ on:
     paths:
       - "kmong_weekend_demo.py"
       - "kmong_preview_screenshot.py"
+      - "kmong_registration_kit.py"
+      - "test_kmong_registration_kit.py"
+      - "docs/KMONG_WEEKEND_REGISTRATION_READY_20261114.md"
+      - "docs/KMONG_WEEKEND_LISTING_20261114.md"
+      - "docs/OWNER_APPROVAL_PACKET_A_20261114.md"
+      - "docs/OWNER_ACTIONS_1300_KST_20261114.md"
+      - "docs/ZERO_COST_OWNER_AUTHORIZATION_20261114.md"
+      - "docs/KMONG_LOCAL_PREORDER_TRIAGE_20261114.md"
+      - "docs/R22_ZIP_STRICT_CSP_INTEGRITY_20261114.md"
       - "test_kmong_weekend_demo.py"
       - ".github/workflows/kmong-synthetic-preview.yml"
       - "data2web.py"
@@ -42,6 +51,10 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Capture actual rendered local dashboard and filtered view
         run: python kmong_preview_screenshot.py --root ./kmong-preview-synthetic
+      - name: Regression-test create-only registration kit builder
+        run: python -m unittest test_kmong_registration_kit -v
+      - name: Build canonical seller ZIP from real synthetic Chromium screenshots
+        run: python kmong_registration_kit.py --preview ./kmong-preview-synthetic --output ./kmong-registration-ready.zip --source-sha "$GITHUB_SHA"
       - name: Recheck score and zero-cost policy (never auto-approve sale)
         run: |
           python blueprint_score.py
@@ -51,5 +64,12 @@ jobs:
         with:
           name: DATA2WEB-KMONG-SYNTHETIC-DEMO
           path: kmong-preview-synthetic/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload zero-customer-data seller registration ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATA2WEB-KMONG-REGISTRATION-KIT
+          path: kmong-registration-ready.zip
           if-no-files-found: error
           retention-days: 7
