@@ -16,6 +16,7 @@ from path_policy import assert_no_links, read_bounded_source
 from zero_cost_gate import POLICY, SCORE, _read, validate_policy
 
 CONTRACT = "DATA2WEB_OPERATOR_COPY_RETENTION_REVIEW_V1"
+RESULT_CONTRACT = "DATA2WEB_OPERATOR_COPY_RETENTION_RESULT_V2"
 KEYS = {
     "contract", "operator_copy_present", "received_at_utc", "source_scope",
     "purpose_completed", "legal_retention_exception_claimed",
@@ -145,13 +146,15 @@ def review_copy(doc, *, as_of=None):
 
     # There is intentionally no 'disposal complete' output or approval.
     return {
-        "contract": "DATA2WEB_OPERATOR_COPY_RETENTION_RESULT_V1",
+        "contract": RESULT_CONTRACT,
         "status": "REVIEW_ONLY_RELEASE_HOLD",
         "reason_code": reason,
         "reviewed_at_utc": _utc(now),
         "operator_copy_present_claimed": doc["operator_copy_present"],
         "retention_due_utc": _utc(due) if due is not None else None,
         "retention_policy_max_days": limit,
+        "purpose_completed_claimed": doc["purpose_completed"],
+        "legal_retention_exception_claimed": doc["legal_retention_exception_claimed"],
         "manual_disposal_action_due": bool(
             doc["operator_copy_present"] and
             (doc["purpose_completed"] or now >= due) and
@@ -172,14 +175,15 @@ def validate_result(record):
     if not isinstance(record, dict) or set(record) != {
         "contract", "status", "reason_code", "reviewed_at_utc",
         "operator_copy_present_claimed", "retention_due_utc",
-        "retention_policy_max_days", "manual_disposal_action_due",
+        "retention_policy_max_days", "purpose_completed_claimed",
+        "legal_retention_exception_claimed", "manual_disposal_action_due",
         "customer_source_bytes_read", "customer_rights_independently_verified",
         "actual_customer_consent_verified", "independent_disposal_verified",
         "automatic_deletion_performed", "sale_approved", "release",
         "score_addition",
     }:
         raise ValueError("Unexpected report fields")
-    if (record["contract"] != "DATA2WEB_OPERATOR_COPY_RETENTION_RESULT_V1"
+    if (record["contract"] != RESULT_CONTRACT
             or record["status"] != "REVIEW_ONLY_RELEASE_HOLD"
             or record["release"] != "RELEASE_HOLD_SALE_NO_GO"):
         raise ValueError("Report cannot authorize customer intake or commercial release")
@@ -203,10 +207,13 @@ def validate_result(record):
             record["retention_policy_max_days"] != 7 or
             type(record["score_addition"]) is not int or record["score_addition"] != 0 or
             type(record["manual_disposal_action_due"]) is not bool or
-            type(record["operator_copy_present_claimed"]) is not bool):
+            type(record["operator_copy_present_claimed"]) is not bool or
+            type(record["purpose_completed_claimed"]) is not bool or
+            type(record["legal_retention_exception_claimed"]) is not bool):
         raise ValueError("Invalid status or policy values")
     reviewed = _parse_utc(record["reviewed_at_utc"])
     due_text = record["retention_due_utc"]
+    due = None
     if record["operator_copy_present_claimed"]:
         if due_text is None:
             raise ValueError("Copy-present report must include retention deadline")
@@ -224,6 +231,22 @@ def validate_result(record):
             raise ValueError("Copy-absent report cannot claim deadline or action due")
         if record["reason_code"] != "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
             raise ValueError("Copy-absent report must retain unverified status")
+    expected_manual_action_due = bool(
+        record["operator_copy_present_claimed"]
+        and not record["legal_retention_exception_claimed"]
+        and (record["purpose_completed_claimed"] or
+             (due is not None and reviewed >= due))
+    )
+    if record["manual_disposal_action_due"] is not expected_manual_action_due:
+        raise ValueError("Manual disposal flag disagrees with deadline, purpose, or exception")
+    if (record["reason_code"] == "LEGAL_EXCEPTION_REQUIRES_MANUAL_EVIDENCE_REVIEW"
+            and not record["legal_retention_exception_claimed"]):
+        raise ValueError("Legal-exception reason requires an explicit exception claim")
+    if (record["legal_retention_exception_claimed"] and record["reason_code"] in {
+            "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE",
+            "WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED",
+    }):
+        raise ValueError("Legal-exception claim disagrees with reason")
     if record["manual_disposal_action_due"]:
         # A sensitive/unknown source or missing consent remains HOLD, but
         # overdue custody must still surface the separate manual action flag.

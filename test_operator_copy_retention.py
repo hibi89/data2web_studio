@@ -199,6 +199,44 @@ class OperatorCopyRetentionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_result(forged)
 
+    def test_report_action_flag_tracks_deadline_purpose_and_exception(self):
+        overdue_docs=[]
+        sensitive=doc_at(8)
+        sensitive["source_scope"]="PERSONAL_OR_SENSITIVE"
+        overdue_docs.append(sensitive)
+        unconsented=doc_at(8)
+        unconsented["per_order_rights_claimed"]=False
+        overdue_docs.append(unconsented)
+        early_purpose=doc_at(1)
+        early_purpose["source_scope"]="PERSONAL_OR_SENSITIVE"
+        early_purpose["purpose_completed"]=True
+        overdue_docs.append(early_purpose)
+
+        for doc in overdue_docs:
+            with self.subTest(scope=doc["source_scope"],
+                              purpose_completed=doc["purpose_completed"],
+                              rights=doc["per_order_rights_claimed"]):
+                report=review_copy(doc,as_of=NOW)
+                self.assertTrue(report["manual_disposal_action_due"])
+                self.assertIs(validate_result(report),report)
+                forged=deepcopy(report)
+                forged["manual_disposal_action_due"]=False
+                with self.assertRaisesRegex(ValueError,"Manual disposal flag"):
+                    validate_result(forged)
+
+        exception=doc_at(15)
+        exception["legal_retention_exception_claimed"]=True
+        report=review_copy(exception,as_of=NOW)
+        self.assertTrue(report["legal_retention_exception_claimed"])
+        self.assertFalse(report["manual_disposal_action_due"])
+        self.assertEqual(report["reason_code"],
+                         "LEGAL_EXCEPTION_REQUIRES_MANUAL_EVIDENCE_REVIEW")
+        self.assertIs(validate_result(report),report)
+        forged=deepcopy(report)
+        forged["manual_disposal_action_due"]=True
+        with self.assertRaisesRegex(ValueError,"Manual disposal flag"):
+            validate_result(forged)
+
     def test_report_create_only_and_redacted(self):
         record=review_copy(doc_at(1),as_of=NOW)
         with tempfile.TemporaryDirectory() as tmp:
@@ -242,6 +280,7 @@ class OperatorCopyRetentionTests(unittest.TestCase):
         self.assertFalse(result["automatic_deletion_performed"])
         self.assertFalse(result["sale_approved"])
         self.assertEqual(result["retention_policy_max_days"],7)
+        self.assertEqual(result["contract"],"DATA2WEB_OPERATOR_COPY_RETENTION_RESULT_V2")
 
 
 if __name__=="__main__":
