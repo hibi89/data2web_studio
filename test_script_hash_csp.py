@@ -47,8 +47,9 @@ class ScriptHashPolicy(unittest.TestCase):
                 self.assertEqual(POLICY.search(standard).group(1),
                                  POLICY.search(adversarial).group(1))
                 self.assertIn(r"\u003c", adversarial)
-                self.assertIsNone(re.search(
-                    r"</script\s*>\s*<script\b", adversarial, re.IGNORECASE))
+                self.assertEqual(SCRIPT.findall(standard),
+                                 SCRIPT.findall(adversarial))
+                self.assertEqual(len(SCRIPT.findall(adversarial)), 1)
                 verify_delivery._validate_offline_html_csp(
                     adversarial.encode("utf-8"))
 
