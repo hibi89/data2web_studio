@@ -1,3 +1,30 @@
+## 2026-11-15 KST — Native Windows manifest output and exact-SHA handoff (`320aebc23163019f85e1c345857ff4ed3da8147a`)
+
+### GitHub state
+- Repository: `hibi89/data2web_studio`
+- Branch: `feature/final-blueprint-p85-evidence-20261113`
+- PR #4: Draft / Open / Unmerged
+- Code and test SHA: `320aebc23163019f85e1c345857ff4ed3da8147a`. Docs-only `[skip ci]` commits follow it and do not change the tested source SHA.
+- `main` remains `0cf4adbfe745c10fdb103db09185ea495fb769aa`.
+
+### Change and review
+`native_windows_acceptance.py` validates the manifest path, rejects linked ancestry and an existing leaf, records the output directory identity before the long hosted acceptance, and later creates the manifest relative to a held handle for that same directory. The handle closes in `finally`. The existing Windows owner-preview workflow passed at this exact SHA. GPT-6 High reviewed the code against its parent and found no actionable issue; this was source review only, not R29 independent audit.
+
+### Exact-SHA evidence
+- [Python/browser #43644268104](https://github.com/hibi89/data2web_studio/actions/runs/43644268104): **FAIL** because R21 provenance rejected four changed producer blobs. Windows ran 531 tests: 524 PASS, 5 ERROR, 1 FAIL, 1 SKIP. Ubuntu ran 531: 521 PASS, 5 ERROR, 1 FAIL, 4 SKIP. All six failures say `Shipping producer source drift requires R21 review`. Focused P00/P01, R25 retention, R26 privacy preflight, and R29 internal preaudit steps passed. [Chromium](https://github.com/hibi89/data2web_studio/actions/runs/43644268104/job/132598415047) and [Windows Chrome/Edge/Tk](https://github.com/hibi89/data2web_studio/actions/runs/43644268104/job/132598415247) browser jobs passed.
+- [Native Windows preview #43644268111](https://github.com/hibi89/data2web_studio/actions/runs/43644268111): **PASS**, synthetic hosted-only. Its manifest reports `PASS_SYNTHETIC_HOSTED_ONLY`, `native_tk_window_seen=true`, `customer_pc_verified=false`, and `sale_approved=false`; no customer files were included.
+- [CodeQL #43644268143](https://github.com/hibi89/data2web_studio/actions/runs/43644268143): **PASS**.
+- [Final evidence gate #43644268362](https://github.com/hibi89/data2web_studio/actions/runs/43644268362): workflow **PASS**, report `UNASSESSED`, no approved evidence manifest and no official score.
+- macOS was not run at `320aebc`. Tests not listed above remain **미검증** at this SHA.
+
+### Task and score state
+P00/P01 focused checks pass and P02 remains complete. P03 and G85-02 remain `BLOCKED_R21_SOURCE_REVIEW`. A07-03, A25-01 and A26-02 targeted regressions pass; A21-01 records the producer drift, while A21-02 waits on authorized R21 review. A29-01 internal synthetic checks pass, but external audit acceptance is absent. G85-01/03/04 remain blocked on owner, customer, or external evidence.
+
+Official score remains **72/100**, 22 VERIFIED / 11 PENDING; this work adds **0 points**. The fixed scorecard, `[작업중]`, RELEASE HOLD and SALE NO-GO are unchanged.
+
+### Evidence needed before the next acceptance step
+First obtain authorized R21 review of changed producer sources; only then reconcile pins by the approved process and rerun the full matrix. Separately still needed: R07 actual source rights and consent; R21 commercial redistribution rights and LICENSE/NOTICE decision; R25 customer custody/return/disposal records; R26 customer-specific privacy basis and consent; and R29 owner-approved independent auditor, findings, remediation retest and signoff. Existing seven R25 policy approvals and the synthetic destruction drill remain accepted and are not being requested again.
+
 ## 2026-11-15 KST — 출력경합 추가 보강 및 인수인계 (`b3850cde8249ac39aae474326cbdb02274ad0fd1`)
 
 ### GitHub 위치
