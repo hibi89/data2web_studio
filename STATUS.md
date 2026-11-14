@@ -1,3 +1,10 @@
+## 2026-11-15 KST — A21-01 source and customer-package reconciliation at `320aebc23163019f85e1c345857ff4ed3da8147a`
+
+- Compared all six R21 producer pins against the Git tree at exact code/test SHA `320aebc23163019f85e1c345857ff4ed3da8147a`: two match and four drift. The per-file comparison is in [R21 source provenance evidence](https://github.com/hibi89/data2web_studio/blob/320aebc23163019f85e1c345857ff4ed3da8147a/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md). The old pin manifest remains unchanged; source drift still fails closed pending A21-02 review.
+- Cross-checked current source and independent verifier contracts: A-customer folder is exactly `index.html`, `delivery.zip`, `receipt.json`; ZIP is exactly `index.html`, `manifest.json`, `README_KO.txt`. Existing hosted `test_customer_folder`, `test_single_delivery`, receipt/create-only tests passed on Windows and Ubuntu at this SHA. The integrated shipping-rights preflight test stops at the source-pin guard, so the full integrated preflight remains blocked.
+- A-scope HTML CSS/JS are self-contained in `data2web_web.py`; exact-SHA Chromium and Windows Chrome/Edge browser logs report local-file flows with `network0`. The owner-only EXE, Python/Tcl/Tk/PyInstaller runtime, upstream golden source, and Playwright/pypdf test tools remain explicitly outside the A customer package.
+- **A21-01 technical inventory:** reconciled and recorded. **A21-02/03:** still blocked for authorized source-origin review and actual rights/NOTICE evidence. This inventory is not a license or commercial-use approval. Score remains 72/100, increase 0, RELEASE HOLD / SALE NO-GO unchanged.
+
 ## 2026-11-15 KST — Windows native preview output anchoring at exact code/test SHA `320aebc23163019f85e1c345857ff4ed3da8147a`
 
 - **GitHub state:** `hibi89/data2web_studio`, branch `feature/final-blueprint-p85-evidence-20261113`, PR #4 Draft/Open/Unmerged. `main` remains `0cf4adbfe745c10fdb103db09185ea495fb769aa`. This code/test SHA is followed by docs-only `[skip ci]` updates; those docs commits are not test SHAs.
