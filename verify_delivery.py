@@ -46,7 +46,9 @@ def _validate_offline_html_csp(html):
         rb'<meta http-equiv="Content-Security-Policy" content="([^"]+)">',
         html
     )
-    scripts = re.findall(rb"<script>(.*?)</script>", html, flags=re.DOTALL)
+    scripts = re.findall(
+        rb"<script>(.*?)</script>", html, flags=re.DOTALL | re.IGNORECASE
+    )
     if (len(meta) != 1 or len(scripts) != 1
             or len(re.findall(rb"<script\b", html, flags=re.IGNORECASE)) != 2
             or len(re.findall(rb"</script\s*>", html, flags=re.IGNORECASE)) != 2

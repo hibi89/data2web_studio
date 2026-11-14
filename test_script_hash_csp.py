@@ -4,8 +4,9 @@ import hashlib
 import re
 import unittest
 from data2web_web import TEMPLATE, render_html
+import verify_delivery
 
-SCRIPT = re.compile(r"<script>(.*?)</script>", re.DOTALL)
+SCRIPT = re.compile(r"<script>(.*?)</script>", re.DOTALL | re.IGNORECASE)
 POLICY = re.compile(r"script-src 'sha256-([^']+)'")
 
 def sample(title="synthetic"):
@@ -35,12 +36,36 @@ class ScriptHashPolicy(unittest.TestCase):
         rogue = base64.b64encode(hashlib.sha256((script+"\nwindow.UNAPPROVED=1;").encode()).digest()).decode()
         self.assertNotEqual(POLICY.search(page).group(1), rogue)
 
-    def test_script_ending_payload_is_escaped(self):
+    def test_script_ending_payload_is_escaped_case_insensitively(self):
         standard = sample()
-        adversarial = sample("</script><script>alert('x')</script>")
-        self.assertEqual(POLICY.search(standard).group(1), POLICY.search(adversarial).group(1))
-        self.assertIn(r"\u003c/script\u003e", adversarial)
-        self.assertNotIn("</script><script>alert", adversarial)
+        for payload in (
+            "</script><script>alert('x')</script>",
+            "</SCRIPT><SCRIPT>window.XSS_PROBE=1</SCRIPT>",
+        ):
+            with self.subTest(payload=payload):
+                adversarial = sample(payload)
+                self.assertEqual(POLICY.search(standard).group(1),
+                                 POLICY.search(adversarial).group(1))
+                self.assertIn(r"\u003c", adversarial)
+                self.assertIsNone(re.search(
+                    r"</script\s*>\s*<script\b", adversarial, re.IGNORECASE))
+                verify_delivery._validate_offline_html_csp(
+                    adversarial.encode("utf-8"))
+
+    def test_csp_verifier_recognizes_uppercase_static_script_tags(self):
+        page = sample()
+        uppercase = page.replace("<script>", "<SCRIPT>")
+        closing = uppercase.rfind("</script>")
+        self.assertGreaterEqual(closing, 0)
+        uppercase = (uppercase[:closing] + "</SCRIPT>" +
+                     uppercase[closing + len("</script>"):])
+        verify_delivery._validate_offline_html_csp(uppercase.encode("utf-8"))
+
+    def test_csp_verifier_rejects_extra_uppercase_executable_script(self):
+        page = sample().replace(
+            "</body>", "<SCRIPT>window.UNAPPROVED=1</SCRIPT></body>")
+        with self.assertRaises(ValueError):
+            verify_delivery._validate_offline_html_csp(page.encode("utf-8"))
 
     def test_different_user_data_uses_same_approved_script(self):
         for title in ("테스트", "<b>HTML</b>", "=1+1", "&quot;"):

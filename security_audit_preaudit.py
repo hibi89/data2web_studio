@@ -13,6 +13,7 @@ import io
 import json
 import os
 from pathlib import Path
+from html.parser import HTMLParser
 import tempfile
 from zipfile import ZipFile, ZIP_STORED
 
@@ -25,6 +26,28 @@ CONTRACT = "DATA2WEB_R29_INTERNAL_PREAUDIT_V1"
 SCOPE = ("XSS_SCRIPT_END_TAG", "CSV_FORMULA_TEXT", "ORIGINAL_BYTES_PRESERVED",
          "ZIP_STATUS_FORGERY_BLOCKED", "CUSTOMER_FOLDER_TAMPER_BLOCKED",
          "EXISTING_DESTINATION_NOT_OVERWRITTEN", "OFFLINE_LOCAL_DELIVERY")
+
+
+class _OutputMarkupAudit(HTMLParser):
+    """Collect parsed output elements while treating JSON script data as text."""
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.elements = []
+        self.dataset_parts = []
+        self.in_dataset = False
+
+    def handle_starttag(self, tag, attrs):
+        normalized = {str(key).lower(): value for key, value in attrs}
+        self.elements.append((tag.lower(), normalized))
+        self.in_dataset = tag.lower() == "script" and normalized.get("id") == "dataset"
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "script":
+            self.in_dataset = False
+
+    def handle_data(self, data):
+        if self.in_dataset:
+            self.dataset_parts.append(data)
 
 
 def _sha(data):
@@ -51,7 +74,8 @@ def internal_synthetic_probes():
         writer = csv.writer(buf)
         writer.writerow(("id", "title", "category"))
         writer.writerow(("S1", "</script><script>window.XSS_PROBE=1</script>", "B"))
-        writer.writerow(("S2", '=HYPERLINK("https://invalid.example","probe")', "A"))
+        formula_probe = '=HYPERLINK("https://invalid.example","probe")'
+        writer.writerow(("S2", formula_probe, "A"))
         before = buf.getvalue().encode("utf-8")
         source.write_bytes(before)
         dest = root / "new-customer-folder"
@@ -72,9 +96,27 @@ def internal_synthetic_probes():
             and b"</script><script>window.XSS_PROBE=1" not in html
             and b"\\u003c/script\\u003e" in html
         )
+        markup = _OutputMarkupAudit()
+        markup.feed(html.decode("utf-8"))
+        markup.close()
+        try:
+            embedded_rows = (
+                json.loads("".join(markup.dataset_parts))["rows"]
+                if len(markup.dataset_parts) == 1 else []
+            )
+        except (KeyError, TypeError, ValueError):
+            embedded_rows = []
+        active_tags = {"a", "iframe", "object", "embed", "form"}
+        uri_attributes = {"href", "src", "action", "formaction", "xlink:href"}
         checks["CSV_FORMULA_TEXT"] = (
-            b"HYPERLINK" in html and b"https://invalid.example" in html
-            and b"<iframe" not in html
+            len(embedded_rows) > 1
+            and isinstance(embedded_rows[1], dict)
+            and embedded_rows[1].get("title") == formula_probe
+            and not any(tag in active_tags for tag, _ in markup.elements)
+            and not any(
+                name.lower().startswith("on") or name.lower() in uri_attributes
+                for _, attrs in markup.elements for name in attrs
+            )
         )
         checks["ORIGINAL_BYTES_PRESERVED"] = source.read_bytes() == before
         checks["OFFLINE_LOCAL_DELIVERY"] = (
