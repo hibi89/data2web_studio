@@ -85,13 +85,10 @@ def main(argv=None):
             if args.source.suffix.lower()==".xlsx" and args.sheet is None:
                 import hashlib
                 from data2web_tabular import list_xlsx_sheets
-                from path_policy import assert_no_links
-                assert_no_links(args.source)
-                if (args.source.is_symlink() or not args.source.is_file()
-                        or args.source.stat().st_size>8_000_000):
-                    raise ValueError("Unsafe XLSX source")
-                raw=args.source.read_bytes()
-                if len(raw)>8_000_000: raise ValueError("Unsafe XLSX size")
+                from path_policy import read_bounded_source
+                # A single identity-checked bounded FD snapshot.
+                # Avoid path.stat() -> read_bytes() TOCTOU and unbounded reads.
+                raw=read_bounded_source(args.source,max_bytes=8_000_000)
                 result={"status":"XLSX_SHEETS_REQUIRE_EXPLICIT_SELECTION",
                         "source_sha256":hashlib.sha256(raw).hexdigest(),
                         "sheets":list_xlsx_sheets(raw),"plaintext_warning":True}
