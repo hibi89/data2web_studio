@@ -41,6 +41,8 @@ def main():
         changed=root/"changed.csv"
         # Physical blank CSV lines are legal and ignored by the backend.
         changed.write_text('\nid,title,category,amount,notes\nX1,"Updated row",A,7,ok\n\nX2,"<script>alert(1)</script>",B,11,safe\n\n',encoding="utf-8")
+        uncategorized=root/"uncategorized.csv"
+        uncategorized.write_text('id,title,category,amount,notes\\nZ1,Uncategorized,,5,blank\\nZ2,Classified,B,7,ok\\n',encoding="utf-8")
         with sync_playwright() as p:
             browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
                      else p.chromium.launch(channel=args.channel,headless=True))
@@ -124,6 +126,17 @@ def main():
             secondary.locator("#ack").check()
             secondary.locator("#replace").click()
             expect(secondary.locator("#notice")).to_contain_text("HOLD")
+            expect(secondary.locator("#count")).to_have_text("2건")
+            # Empty category is a valid source value distinct from 'All'.
+            secondary.locator("#csv").set_input_files(str(uncategorized))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#count")).to_have_text("2건")
+            secondary.locator("#category").select_option(label="— 분류 없음 —")
+            expect(secondary.locator("#count")).to_have_text("1건")
+            expect(secondary.locator("#body tr")).to_have_count(1)
+            expect(secondary.locator("#body tr").first).to_contain_text("Z1")
+            secondary.locator("#category").select_option("")
             expect(secondary.locator("#count")).to_have_text("2건")
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
