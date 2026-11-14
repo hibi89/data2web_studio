@@ -10,13 +10,13 @@ import argparse
 import hashlib
 import io
 import json
-import os
 from pathlib import Path
 import re
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
 from kmong_weekend_demo import LEAF, REPORT, SOURCE, sample_csv_bytes
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file, open_output_directory
 from verify_customer_folder import verify_customer_folder
 
 CONTRACT = "DATA2WEB_INDEPENDENT_BUYER_TEST_REQUEST_V1"
@@ -197,16 +197,21 @@ def create_request(output, preview, *, source_sha):
     if (target.suffix.lower() != ".zip" or target.exists() or target.is_symlink()
             or not target.parent.is_dir() or target.parent.is_symlink()):
         raise FileExistsError("A fresh ZIP output under existing safe parent is required")
-    fd = os.open(target, os.O_CREAT | os.O_EXCL | os.O_WRONLY
-                 | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0), 0o600)
-    with os.fdopen(fd, "wb") as out:
-        with ZipFile(out, "w", compression=ZIP_STORED, allowZip64=False) as archive:
-            for name, blob in sorted(members.items()):
-                member = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
-                member.compress_type = ZIP_STORED
-                member.external_attr = 0o100600 << 16
-                archive.writestr(member, blob)
-    return verify_request(target)
+    parent_info=target.parent.lstat()
+    output_directory=open_output_directory(
+        target.parent,expected_identity=(parent_info.st_dev,parent_info.st_ino)
+    )
+    try:
+        with create_output_file(target,directory=output_directory) as out:
+            with ZipFile(out, "w", compression=ZIP_STORED, allowZip64=False) as archive:
+                for name, blob in sorted(members.items()):
+                    member = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+                    member.compress_type = ZIP_STORED
+                    member.external_attr = 0o100600 << 16
+                    archive.writestr(member, blob)
+        return verify_request(target)
+    finally:
+        output_directory.close()
 
 
 def main():

@@ -9,10 +9,10 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timedelta, timezone
 import json
-import os
 from pathlib import Path
 
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file
 from zero_cost_gate import POLICY, SCORE, _read, validate_policy
 
 CONTRACT = "DATA2WEB_OPERATOR_COPY_RETENTION_REVIEW_V1"
@@ -274,11 +274,7 @@ def write_new_report(path, record):
         )) + "\n").encode("utf-8")
     if len(data) > MAX_REPORT:
         raise ValueError("Retention report is too large")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(
-        os, "O_BINARY", 0
-    ) | getattr(os, "O_NOFOLLOW", 0)
-    fd = os.open(target, flags, 0o600)
-    with os.fdopen(fd, "wb") as writer:
+    with create_output_file(target) as writer:
         writer.write(data)
 
 

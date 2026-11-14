@@ -1,4 +1,4 @@
-"""Synthetic output-parent replacement regressions for anchored creates."""
+"""Synthetic regressions for safe, anchored output creation."""
 import os
 import stat
 import subprocess
@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import data2web
-from secure_output import open_output_directory
+from secure_output import create_output_file, open_output_directory
 
 
 class OutputPathRace(unittest.TestCase):
@@ -50,47 +50,54 @@ class OutputPathRace(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    def test_parent_replacement_after_anchor_does_not_redirect_build(self):
-        real_create = data2web.create_output_file
+    def test_build_rejects_parent_link_inserted_before_open(self):
+        real_open = data2web.open_output_directory
         swapped = False
 
-        def replace_then_create(path, *, directory=None, mode=0o600):
+        def replace_then_open(path, *, expected_identity=None):
             nonlocal swapped
-            if not swapped:
-                parent = open_output_directory(Path(path).parent)
-                os.replace(self.selected, self.held)
-                self._make_link()
-                swapped = True
-                try:
-                    return parent.create_file(Path(path).name, mode)
-                finally:
-                    parent.close()
-            return real_create(path, directory=directory, mode=mode)
+            os.replace(self.selected, self.held)
+            self._make_link()
+            swapped = True
+            return real_open(path, expected_identity=expected_identity)
 
         target = self.selected / "generated.html"
-        with patch.object(data2web, "create_output_file", replace_then_create):
-            with self.assertRaises(ValueError):
+        with patch.object(data2web, "open_output_directory", replace_then_open):
+            with self.assertRaisesRegex(ValueError, "reparse point forbidden"):
                 data2web.build(
                     self.source, target, "id", "title", "category", approved=True
                 )
         self.assertTrue(swapped)
-        self.assertTrue((self.held / "generated.html").is_file())
+        self.assertFalse((self.held / "generated.html").exists())
         self.assertFalse((self.alternate / "generated.html").exists())
-        self.assertIn("Synthetic title", (self.held / "generated.html").read_text(
-            encoding="utf-8"
-        ))
 
-    def test_child_create_is_relative_to_pinned_directory(self):
+    def test_create_file_is_relative_to_verified_directory(self):
         with open_output_directory(self.selected) as parent:
-            os.replace(self.selected, self.held)
-            self._make_link()
-            with parent.create_file("receipt.json") as stream:
+            with create_output_file(self.selected / "receipt.json", directory=parent) as stream:
                 stream.write(b'{"synthetic":true}\n')
         self.assertEqual(
-            (self.held / "receipt.json").read_bytes(),
+            (self.selected / "receipt.json").read_bytes(),
             b'{"synthetic":true}\n',
         )
-        self.assertFalse((self.alternate / "receipt.json").exists())
+
+    def test_posix_rejects_other_user_writable_ancestry(self):
+        if os.name == "nt":
+            self.skipTest("POSIX ancestry mode checks")
+        self.selected.chmod(0o777)
+        try:
+            with self.assertRaisesRegex(ValueError, "writable by other users"):
+                open_output_directory(self.selected)
+        finally:
+            self.selected.chmod(0o700)
+
+    def test_windows_handle_prevents_ancestor_rename(self):
+        if os.name != "nt":
+            self.skipTest("Windows directory share semantics")
+        with open_output_directory(self.selected):
+            with self.assertRaises(OSError):
+                os.replace(self.selected, self.held)
+        self.assertTrue(self.selected.is_dir())
+        self.assertFalse(self.held.exists())
 
 
 if __name__ == "__main__":

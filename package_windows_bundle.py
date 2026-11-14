@@ -7,11 +7,11 @@ The bundle includes no customer records, credentials or remote endpoints.
 from __future__ import annotations
 import hashlib
 import json
-import os
 from pathlib import Path
 
 from package_portable import create_portable
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_directory, create_output_file
 
 FILE_NAMES={"DATA2WEB.pyz","RUN_DESKTOP.cmd","RUN_SELFCHECK.cmd","VERIFY_CUSTOMER.cmd",
             "README_LOCAL_KO.txt","BUNDLE_MANIFEST.json"}
@@ -77,40 +77,43 @@ def create_windows_bundle(directory, *, source_directory=None):
     if (target.exists() or target.is_symlink() or
         not target.parent.is_dir() or target.parent.is_symlink() or target.name in ("",".","..")):
         raise FileExistsError("Windows launcher bundle must be a new directory")
-    target.mkdir(mode=0o700,exist_ok=False)
-    # On error, leave incomplete directory in HOLD for inspection, never delete.
-    result=create_portable(target/"DATA2WEB.pyz",source_directory=source_directory)
-    scripts={
-        "RUN_DESKTOP.cmd":_launcher("desktop"),
-        "RUN_SELFCHECK.cmd":_launcher("self-check"),
-        "VERIFY_CUSTOMER.cmd":_launcher("verify-customer"),
-        "README_LOCAL_KO.txt":(
-            "DATA2WEB local testing bundle (UNSIGNED, RELEASE HOLD)\n"
-            "Requires user-installed Python 3.11+ (Tk required for desktop UI).\n"
-            "RUN_SELFCHECK.cmd generates only synthetic data and checks local Chrome + Edge.\n"
-            "RUN_DESKTOP.cmd opens a user-reviewed local file dialog; user approves source rights.\n"
-            "VERIFY_CUSTOMER.cmd takes an exact local customer folder path as first argument.\n"
-            "The checks do not establish data rights, software license, sale approval or vendor signature.\n"
-            "Files are never sent to a server. An incomplete or tampered bundle must be held.\n"
-        ).encode("utf-8")
-    }
-    for name,content in scripts.items():
-        p=target/name
-        with p.open("xb") as stream:
-            stream.write(content)
-    entries={"DATA2WEB.pyz":read_bounded_source(target/"DATA2WEB.pyz",max_bytes=MAX_FILE),
-             **scripts}
-    doc=_manifest(entries)
-    encoded=(json.dumps(doc,ensure_ascii=False,sort_keys=True,separators=(",",":"))+"\n").encode("utf-8")
-    with (target/"BUNDLE_MANIFEST.json").open("xb") as stream:
-        stream.write(encoded)
-    verified=verify_windows_bundle(target)
-    if not verified["verified"]:
-        raise ValueError("Generated bundle failed independent integrity verification")
-    return {"created":True,"verified":True,
-            "bundle_sha256":hashlib.sha256(encoded).hexdigest(),
-            "portable_sha256":result["sha256"],
-            "signed_executable":False,"sale_approved":False}
+    with create_output_directory(target) as output_directory:
+        # On error, leave incomplete directory in HOLD for inspection, never delete.
+        result=create_portable(
+            target/"DATA2WEB.pyz",source_directory=source_directory,
+            _output_directory=output_directory
+        )
+        scripts={
+            "RUN_DESKTOP.cmd":_launcher("desktop"),
+            "RUN_SELFCHECK.cmd":_launcher("self-check"),
+            "VERIFY_CUSTOMER.cmd":_launcher("verify-customer"),
+            "README_LOCAL_KO.txt":(
+                "DATA2WEB local testing bundle (UNSIGNED, RELEASE HOLD)\n"
+                "Requires user-installed Python 3.11+ (Tk required for desktop UI).\n"
+                "RUN_SELFCHECK.cmd generates only synthetic data and checks local Chrome + Edge.\n"
+                "RUN_DESKTOP.cmd opens a user-reviewed local file dialog; user approves source rights.\n"
+                "VERIFY_CUSTOMER.cmd takes an exact local customer folder path as first argument.\n"
+                "The checks do not establish data rights, software license, sale approval or vendor signature.\n"
+                "Files are never sent to a server. An incomplete or tampered bundle must be held.\n"
+            ).encode("utf-8")
+        }
+        for name,content in scripts.items():
+            with create_output_file(target/name,directory=output_directory) as stream:
+                stream.write(content)
+        entries={"DATA2WEB.pyz":read_bounded_source(target/"DATA2WEB.pyz",max_bytes=MAX_FILE),
+                 **scripts}
+        doc=_manifest(entries)
+        encoded=(json.dumps(doc,ensure_ascii=False,sort_keys=True,separators=(",",":"))+"\n").encode("utf-8")
+        with create_output_file(target/"BUNDLE_MANIFEST.json",directory=output_directory) as stream:
+            stream.write(encoded)
+        verified=verify_windows_bundle(target)
+        if not verified["verified"]:
+            raise ValueError("Generated bundle failed independent integrity verification")
+        return {"created":True,"verified":True,
+                "bundle_sha256":hashlib.sha256(encoded).hexdigest(),
+                "portable_sha256":result["sha256"],
+                "signed_executable":False,"sale_approved":False}
+
 
 
 def _reject_duplicates(pairs):

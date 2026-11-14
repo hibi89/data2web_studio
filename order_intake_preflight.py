@@ -2,9 +2,9 @@
 from __future__ import annotations
 import argparse
 import json
-import os
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file
 from zero_cost_gate import POLICY, SCORE, _read, validate_policy
 
 CONTRACT = "DATA2WEB_ANONYMOUS_PREORDER_V2"
@@ -180,9 +180,7 @@ def write_new_report(path, record):
     assert_no_links(target, allow_missing_leaf=True)
     if target.is_symlink() or target.exists() or not target.parent.is_dir():
         raise FileExistsError("Report path must be new")
-    fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL |
-                 getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0), 0o600)
-    with os.fdopen(fd, "wb") as dest:
+    with create_output_file(target) as dest:
         dest.write((json.dumps(record, ensure_ascii=True, sort_keys=True) + "\n").encode("utf-8"))
 
 def main(argv=None):

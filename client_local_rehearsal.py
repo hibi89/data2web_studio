@@ -131,35 +131,41 @@ def save_rehearsal_evidence(output_path, *, with_browsers=True):
     Only a user-selected output path is written; no upload is performed.
     """
     from path_policy import assert_no_links
+    from secure_output import create_output_file, open_output_directory
     output=Path(output_path)
     assert_no_links(output,allow_missing_leaf=True)
     if output.exists() or output.is_symlink() or not output.parent.is_dir():
         raise FileExistsError("Evidence requires a new path in an existing directory")
-    observed=self_check(with_browsers=with_browsers)
-    report={
-        "contract":"DATA2WEB_LOCAL_DEVICE_EVIDENCE_V1",
-        "recorded_at_utc":datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z"),
-        "scope":"SYNTHETIC_LOCAL_DEVICE_CHECK_ONLY",
-        "results":observed,
-        "evidence_type":"UNSIGNED_SELF_REPORT_NOT_INDEPENDENT_CERTIFICATION",
-        "customer_original_data_inspected":False,
-        "actual_customer_acceptance":False,
-        "customer_rights_verified":False,
-        "commercial_distribution_approved":False,
-        "network_upload_performed":False,
-        "personal_device_identifiers_recorded":False,
-    }
-    raw=(json.dumps(report,sort_keys=True,ensure_ascii=True,separators=(",",":"))+"\n").encode("utf-8")
-    flags=os.O_WRONLY|os.O_CREAT|os.O_EXCL|getattr(os,"O_BINARY",0)|getattr(os,"O_NOFOLLOW",0)
-    fd=os.open(output,flags,0o600)
-    with os.fdopen(fd,"wb") as stream:
-        stream.write(raw)
-    return {"status":observed["status"],
-            "contract":report["contract"],
-            "evidence_sha256":hashlib.sha256(raw).hexdigest(),
-            "scope":report["scope"],
+    parent_info=output.parent.lstat()
+    output_directory=open_output_directory(
+        output.parent,expected_identity=(parent_info.st_dev,parent_info.st_ino)
+    )
+    try:
+        observed=self_check(with_browsers=with_browsers)
+        report={
+            "contract":"DATA2WEB_LOCAL_DEVICE_EVIDENCE_V1",
+            "recorded_at_utc":datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z"),
+            "scope":"SYNTHETIC_LOCAL_DEVICE_CHECK_ONLY",
+            "results":observed,
+            "evidence_type":"UNSIGNED_SELF_REPORT_NOT_INDEPENDENT_CERTIFICATION",
+            "customer_original_data_inspected":False,
             "actual_customer_acceptance":False,
-            "commercial_distribution_approved":False}
+            "customer_rights_verified":False,
+            "commercial_distribution_approved":False,
+            "network_upload_performed":False,
+            "personal_device_identifiers_recorded":False,
+        }
+        raw=(json.dumps(report,sort_keys=True,ensure_ascii=True,separators=(",",":"))+"\n").encode("utf-8")
+        with create_output_file(output,directory=output_directory) as stream:
+            stream.write(raw)
+        return {"status":observed["status"],
+                "contract":report["contract"],
+                "evidence_sha256":hashlib.sha256(raw).hexdigest(),
+                "scope":report["scope"],
+                "actual_customer_acceptance":False,
+                "commercial_distribution_approved":False}
+    finally:
+        output_directory.close()
 
 
 def main():

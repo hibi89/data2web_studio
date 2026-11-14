@@ -11,7 +11,6 @@ import csv
 import hashlib
 import io
 import json
-import os
 from pathlib import Path
 from html.parser import HTMLParser
 import tempfile
@@ -19,6 +18,7 @@ from zipfile import ZipFile, ZIP_STORED
 
 from data2web_single import deliver_single
 from path_policy import assert_no_links
+from secure_output import create_output_file
 from verify_customer_folder import verify_customer_folder
 from verify_delivery import verify_zip
 
@@ -189,10 +189,7 @@ def write_report(target):
         raise FileExistsError("New report path within an existing safe directory required")
     blob = (json.dumps(result, ensure_ascii=True, sort_keys=True,
                        separators=(",", ":")) + "\n").encode("utf-8")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
-    flags |= getattr(os, "O_NOFOLLOW", 0)
-    fd = os.open(path, flags, 0o600)
-    with os.fdopen(fd, "wb") as out:
+    with create_output_file(path) as out:
         out.write(blob)
     return {"status": result["status"], "report_sha256": _sha(blob),
             "independent_security_audit_completed": False, "score_addition": 0}

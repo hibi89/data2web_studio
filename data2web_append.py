@@ -7,14 +7,15 @@ source deletion. The manifest is not a digital signature or commercial approval.
 from __future__ import annotations
 import hashlib
 import json
-import os
 from pathlib import Path
 from data2web import read_table, MAX_ROWS, MAX_COLS, MAX_BYTES
 from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt, assert_receipt_path_available
 from path_policy import assert_no_links, read_bounded_source
-from secure_output import create_output_directory, create_output_file
+from secure_output import (
+    create_output_directory, create_output_file, open_output_directory,
+)
 
 CONTRACT="DATA2WEB_INPUT_APPROVALS_V1"
 COMBINED="DATA2WEB_APPENDED_SOURCE_V1"
@@ -166,44 +167,89 @@ def _build_approved_append_doc(doc,approval_manifest,html_path,*,
                 not z.parent.is_dir() or z.parent.is_symlink()):
             raise FileExistsError("Append ZIP output must be new")
     assert_receipt_path_available(receipt_path)
-    markup=render_html(columns,rows,[mapping["id"],mapping["title"],mapping["category"]],
-                       identity,name=doc.get("name","DATA2WEB"),theme=doc.get("theme","office"),
-                       source_receipts=sources)
-    raw=markup.encode("utf-8")
-    if len(raw)>MAX_OUTPUT:
-        raise ValueError("HTML output exceeds offline delivery limit")
-    for path,sha in files:
-        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-            raise ValueError("Input mutated before publish")
-    with create_output_file(html_path,directory=_output_directory) as output:
-        output.write(raw)
-    for path,sha in files:
-        if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-            raise ValueError("Input mutated after publish; output HOLD")
-    outsha=hashlib.sha256(read_bounded_source(html_path,max_bytes=MAX_OUTPUT)).hexdigest()
-    if outsha!=hashlib.sha256(raw).hexdigest():
-        raise ValueError("Output differs from generated HTML")
-    receipt={
-        "source_sha256":identity,"output_sha256":outsha,
-        "rows":len(rows),"columns":columns,"mapping":mapping,
-        "sheet":None,"header_row":1,"cached_formulas":False,
-        "source_receipts":sources,
-        "privacy_classification":doc["approval"]["privacy_classification"],
-        "sale_approved":False,
-        "status":"OWNER_APPROVED_APPEND_LOCAL_ONLY_RELEASE_HOLD",
-    }
-    if zip_path is not None:
-        receipt["package"]=package_html(html_path,zip_path,receipt,
-                                         _output_directory=_output_directory)
-        # The pre-write checks are not sufficient when packaging races a
-        # source edit. The receipt is issued only after the post-ZIP hashes.
+    owned_output_directories=[]
+    try:
+        html_parent_info=html_path.parent.lstat()
+        if _output_directory is None:
+            html_output_directory=open_output_directory(
+                html_path.parent,
+                expected_identity=(html_parent_info.st_dev,html_parent_info.st_ino)
+            )
+            owned_output_directories.append(html_output_directory)
+        else:
+            html_output_directory=_output_directory
+            if html_path.absolute().parent != html_output_directory.path:
+                raise ValueError("Output directory handle does not match HTML parent")
+
+        zip_output_directory=None
+        if zip_path is not None:
+            if Path(zip_path).absolute().parent == html_output_directory.path:
+                zip_output_directory=html_output_directory
+            else:
+                zip_parent=Path(zip_path).parent
+                zip_parent_info=zip_parent.lstat()
+                zip_output_directory=open_output_directory(
+                    zip_parent,
+                    expected_identity=(zip_parent_info.st_dev,zip_parent_info.st_ino)
+                )
+                owned_output_directories.append(zip_output_directory)
+
+        receipt_output_directory=None
+        if receipt_path is not None:
+            if Path(receipt_path).absolute().parent == html_output_directory.path:
+                receipt_output_directory=html_output_directory
+            else:
+                receipt_parent=Path(receipt_path).parent
+                receipt_parent_info=receipt_parent.lstat()
+                receipt_output_directory=open_output_directory(
+                    receipt_parent,
+                    expected_identity=(receipt_parent_info.st_dev,receipt_parent_info.st_ino)
+                )
+                owned_output_directories.append(receipt_output_directory)
+
+        markup=render_html(columns,rows,[mapping["id"],mapping["title"],mapping["category"]],
+                           identity,name=doc.get("name","DATA2WEB"),theme=doc.get("theme","office"),
+                           source_receipts=sources)
+        raw=markup.encode("utf-8")
+        if len(raw)>MAX_OUTPUT:
+            raise ValueError("HTML output exceeds offline delivery limit")
         for path,sha in files:
             if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
-                raise ValueError("Approved source modified during ZIP packaging; output HOLD")
-    if receipt_path is not None:
-        receipt["receipt_file"]=write_receipt(receipt_path,receipt,
-                                               _output_directory=_output_directory)
-    return receipt
+                raise ValueError("Input mutated before publish")
+        with create_output_file(html_path,directory=html_output_directory) as output:
+            output.write(raw)
+        for path,sha in files:
+            if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
+                raise ValueError("Input mutated after publish; output HOLD")
+        outsha=hashlib.sha256(read_bounded_source(html_path,max_bytes=MAX_OUTPUT)).hexdigest()
+        if outsha!=hashlib.sha256(raw).hexdigest():
+            raise ValueError("Output differs from generated HTML")
+        receipt={
+            "source_sha256":identity,"output_sha256":outsha,
+            "rows":len(rows),"columns":columns,"mapping":mapping,
+            "sheet":None,"header_row":1,"cached_formulas":False,
+            "source_receipts":sources,
+            "privacy_classification":doc["approval"]["privacy_classification"],
+            "sale_approved":False,
+            "status":"OWNER_APPROVED_APPEND_LOCAL_ONLY_RELEASE_HOLD",
+        }
+        if zip_path is not None:
+            receipt["package"]=package_html(
+                html_path,zip_path,receipt,
+                _output_directory=zip_output_directory
+            )
+            for path,sha in files:
+                if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
+                    raise ValueError("Approved source modified during ZIP packaging; output HOLD")
+        if receipt_path is not None:
+            receipt["receipt_file"]=write_receipt(
+                receipt_path,receipt,
+                _output_directory=receipt_output_directory
+            )
+        return receipt
+    finally:
+        for output_directory in reversed(owned_output_directories):
+            output_directory.close()
 
 def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_plaintext):
     """Existing manifest-driven CLI API; preserves all v1 semantics."""

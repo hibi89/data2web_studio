@@ -9,7 +9,6 @@ import argparse
 import hashlib
 import io
 import json
-import os
 from pathlib import Path
 import re
 import struct
@@ -17,6 +16,7 @@ from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
 from kmong_weekend_demo import LEAF, REPORT, SOURCE, sample_csv_bytes
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file, open_output_directory
 from verify_customer_folder import verify_customer_folder
 
 ROOT = Path(__file__).resolve().parent
@@ -170,19 +170,24 @@ def create_registration_kit(output, preview, *, source_sha, source_root=ROOT):
     if (target.suffix.lower() != ".zip" or target.is_symlink() or target.exists()
             or not target.parent.is_dir() or target.parent.is_symlink()):
         raise FileExistsError("Fresh registration ZIP in existing real directory required")
-    fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL |
-                 getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0), 0o600)
-    with os.fdopen(fd, "wb") as file:
-        with ZipFile(file, "w", compression=ZIP_STORED, allowZip64=False) as archive:
-            for name, data in sorted(members.items()):
-                info = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
-                info.compress_type = ZIP_STORED
-                info.external_attr = 0o100600 << 16
-                archive.writestr(info, data)
-    checked = verify_kit(target)
-    if checked["member_count"] != 12:
-        raise AssertionError("Registration pack was not verified")
-    return checked
+    parent_info=target.parent.lstat()
+    output_directory=open_output_directory(
+        target.parent,expected_identity=(parent_info.st_dev,parent_info.st_ino)
+    )
+    try:
+        with create_output_file(target,directory=output_directory) as file:
+            with ZipFile(file, "w", compression=ZIP_STORED, allowZip64=False) as archive:
+                for name, data in sorted(members.items()):
+                    info = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+                    info.compress_type = ZIP_STORED
+                    info.external_attr = 0o100600 << 16
+                    archive.writestr(info, data)
+        checked = verify_kit(target)
+        if checked["member_count"] != 12:
+            raise AssertionError("Registration pack was not verified")
+        return checked
+    finally:
+        output_directory.close()
 
 
 def main():

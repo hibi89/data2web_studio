@@ -4,10 +4,9 @@ import csv
 import hashlib
 import html
 import json
-import os
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
-from secure_output import create_output_file
+from secure_output import create_output_file, open_output_directory
 
 MAX_BYTES = 8_000_000
 MAX_ROWS = 10000
@@ -99,42 +98,54 @@ def build(input_file, output_file, id_column, title_column, category_column, app
         raise ValueError("Explicit plaintext/ownership approval required")
     if Path(input_file).suffix.lower() == ".xlsx" and not sheet:
         raise ValueError("XLSX requires explicit owner sheet selection")
-    fields, rows, digest = read_table(input_file, sheet=sheet, header_row=header_row,
-                                     allow_cached_formulas=allow_cached_formulas)
-    if expected_sha256 is not None and digest != expected_sha256:
-        raise ValueError("Source SHA256 changed since owner inspection")
-    mapping = [id_column, title_column, category_column]
-    if len(set(mapping)) != 3 or not all(col in fields for col in mapping):
-        raise ValueError("Select three distinct existing columns")
-    ids = [r[id_column] for r in rows]
-    if any(not i for i in ids) or len(ids) != len(set(ids)):
-        raise ValueError("Missing or duplicate IDs")
     target = Path(output_file)
     if target.is_symlink() or target.exists():
         raise FileExistsError("Output must be a new file")
     assert_no_links(target,allow_missing_leaf=True)
     if target.suffix.lower() != ".html" or target.is_symlink() or target.exists() or not target.parent.is_dir() or target.parent.is_symlink():
         raise FileExistsError("Output must be a new file in an existing directory")
-    from data2web_web import render_html
-    markup = render_html(fields, rows, mapping, digest, name=name, theme=theme,
-                         source_sheet=sheet, source_header_row=header_row,
-                         cached_formulas=allow_cached_formulas)
-    output_bytes = markup.encode("utf-8")
-    if len(output_bytes) > 20_000_000:
-        raise ValueError("Output HTML exceeds local delivery limit")
-    with create_output_file(target, directory=_output_directory) as stream:
-        stream.write(output_bytes)
-    if hashlib.sha256(read_bounded_source(input_file,max_bytes=MAX_BYTES)).hexdigest() != digest:
-        raise ValueError("Source modified after generation; output HOLD")
-    # Reopen using an identity-checked, size-bounded descriptor. A mutable
-    # output pathname must not bypass the same safety checks as source input.
-    output_digest = hashlib.sha256(read_bounded_source(target,max_bytes=20_000_000)).hexdigest()
-    if output_digest != hashlib.sha256(output_bytes).hexdigest():
-        raise ValueError("Output integrity mismatch; output HOLD")
-    return {"source_sha256": digest, "output_sha256": output_digest, "rows": len(rows),
-            "columns": fields, "mapping": {"id": id_column, "title": title_column, "category": category_column},
-            "theme": theme, "sheet": sheet, "header_row": header_row,
-            "cached_formulas": allow_cached_formulas, "sale_approved": False}
+    parent_info=target.parent.lstat()
+    owns_output_directory = _output_directory is None
+    if owns_output_directory:
+        _output_directory = open_output_directory(
+            target.parent, expected_identity=(parent_info.st_dev,parent_info.st_ino)
+        )
+    elif target.parent.absolute() != _output_directory.path:
+        raise ValueError("Output directory handle does not match target parent")
+    try:
+        fields, rows, digest = read_table(input_file, sheet=sheet, header_row=header_row,
+                                         allow_cached_formulas=allow_cached_formulas)
+        if expected_sha256 is not None and digest != expected_sha256:
+            raise ValueError("Source SHA256 changed since owner inspection")
+        mapping = [id_column, title_column, category_column]
+        if len(set(mapping)) != 3 or not all(col in fields for col in mapping):
+            raise ValueError("Select three distinct existing columns")
+        ids = [r[id_column] for r in rows]
+        if any(not i for i in ids) or len(ids) != len(set(ids)):
+            raise ValueError("Missing or duplicate IDs")
+        from data2web_web import render_html
+        markup = render_html(fields, rows, mapping, digest, name=name, theme=theme,
+                             source_sheet=sheet, source_header_row=header_row,
+                             cached_formulas=allow_cached_formulas)
+        output_bytes = markup.encode("utf-8")
+        if len(output_bytes) > 20_000_000:
+            raise ValueError("Output HTML exceeds local delivery limit")
+        with create_output_file(target, directory=_output_directory) as stream:
+            stream.write(output_bytes)
+        if hashlib.sha256(read_bounded_source(input_file,max_bytes=MAX_BYTES)).hexdigest() != digest:
+            raise ValueError("Source modified after generation; output HOLD")
+        # Reopen using an identity-checked, size-bounded descriptor. A mutable
+        # output pathname must not bypass the same safety checks as source input.
+        output_digest = hashlib.sha256(read_bounded_source(target,max_bytes=20_000_000)).hexdigest()
+        if output_digest != hashlib.sha256(output_bytes).hexdigest():
+            raise ValueError("Output integrity mismatch; output HOLD")
+        return {"source_sha256": digest, "output_sha256": output_digest, "rows": len(rows),
+                "columns": fields, "mapping": {"id": id_column, "title": title_column, "category": category_column},
+                "theme": theme, "sheet": sheet, "header_row": header_row,
+                "cached_formulas": allow_cached_formulas, "sale_approved": False}
+    finally:
+        if owns_output_directory:
+            _output_directory.close()
 
 def main():
     parser = argparse.ArgumentParser()
