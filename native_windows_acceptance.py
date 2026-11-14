@@ -24,7 +24,28 @@ def _run(executable, args, *, expected=0, env=None):
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                              timeout=100, check=False, env=env)
     if process.returncode != expected:
-        raise AssertionError("Native command returned unexpected exit code")
+        # Only synthetic smoke commands are used by this hosted test. Report
+        # bounded, allow-listed status fields rather than raw stdout/stderr,
+        # which could expose source records or machine/user paths.
+        try:
+            diagnostic = json.loads(process.stdout.strip())
+            status = diagnostic.get("status") if isinstance(diagnostic,dict) else None
+            browsers = diagnostic.get("browser_results") if isinstance(diagnostic,dict) else None
+            if status not in ("PARTIAL_HOLD","HOLD","PASS_SYNTHETIC_ONLY"):
+                status = "OTHER_OR_MISSING"
+            if not isinstance(browsers,dict):
+                browsers = {}
+            allow = {"HOLD_EXECUTION_FAILED","HOLD_NONZERO_EXIT",
+                     "HOLD_BROWSER_NOT_INSTALLED","HOLD_BROWSER_RENDER_NOT_CONFIRMED",
+                     "HOLD_BROWSER_CONTENT_NOT_VISIBLE","PASS_SYNTHETIC_LOCAL_FILE"}
+            browsers = {key:val if val in allow else "UNKNOWN"
+                        for key,val in browsers.items() if key in ("chrome","edge")}
+        except (ValueError,TypeError):
+            status,browsers = "INVALID_JSON",{}
+        raise AssertionError(
+            f"Native command exit {process.returncode}, expected {expected}; "
+            f"action={args[0]}; status={status}; synthetic_browser_results={browsers}"
+        )
     try:
         result = json.loads(process.stdout.strip())
     except json.JSONDecodeError as exc:
