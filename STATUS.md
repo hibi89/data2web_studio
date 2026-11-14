@@ -1,3 +1,7 @@
+## 2026-11-14 KST — R25 expired-copy report bypass closed
+- Verified source inspection found `validate_result` could accept `WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED` even when the report's due timestamp was at/before review time. Added fail-closed comparison in `operator_copy_retention.py` commit `3d3a3eec5bb3a47da8faa13faf61571058607565` and a negative regression case in `test_operator_copy_retention.py` commit `72633ae9e1777d9465e54be7b6695e67aa6cd5de`.
+- Tests/CI not executed or confirmed in this session; GitHub workflow/commit-status interfaces returned no relevant runs/statuses in prior attempt. Actual customer custody/owner evidence and independent acceptance absent. R25 PENDING, official 72/100, RELEASE HOLD.
+
 ## 2026-11-14 KST — R25 report consistency hardening
 - Read `operator_copy_retention.py`, `test_operator_copy_retention.py`, and approved zero-cost policy. Found `validate_result` accepted forged contradictory `operator_copy_present_claimed`/due date/manual-disposal flags even while correctly rejecting false sale approval. Hardened report schema consistency (code SHA `0c0a65f78bf6e74910b9fbe54db4bca23dc47c9d`).
 - Added eight forged-report negative cases to `test_operator_copy_retention.py` (test SHA `a5c89151b8d1f102b52c8a6588ecf17dbad9573f`). **Not executed this turn**; exact-SHA CI pending. No customer files touched, no auto-delete.
