@@ -4,6 +4,7 @@ on:
     branches: ["feature/final-blueprint-p85-evidence-20261113"]
     paths:
       - "kmong_weekend_demo.py"
+      - "kmong_preview_screenshot.py"
       - "test_kmong_weekend_demo.py"
       - ".github/workflows/kmong-synthetic-preview.yml"
       - "data2web_single.py"
@@ -27,6 +28,12 @@ jobs:
         run: python -m unittest test_kmong_weekend_demo -v
       - name: Make and independently verify artificial demonstration package
         run: python kmong_weekend_demo.py --output ./kmong-preview-synthetic
+      - name: Install free Chromium for genuine synthetic UI screenshots
+        run: |
+          python -m pip install playwright==1.56.0
+          python -m playwright install --with-deps chromium
+      - name: Capture actual rendered local dashboard and filtered view
+        run: python kmong_preview_screenshot.py --root ./kmong-preview-synthetic
       - name: Recheck score and zero-cost policy (never auto-approve sale)
         run: |
           python blueprint_score.py
