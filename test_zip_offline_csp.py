@@ -80,7 +80,7 @@ class ZipOfflineCsp(unittest.TestCase):
                     info.compress_type=ZIP_STORED
                     info.external_attr=0o100600<<16
                     archive.writestr(info,self.members[name])
-        with self.assertRaisesRegex(ValueError,"duplicated or unsafe ZIP members"):
+        with self.assertRaisesRegex(ValueError,"Unexpected, duplicated, or unsafe ZIP members"):
             verify_zip(output)
 
     def test_tampered_network_policy_with_recomputed_manifest_is_rejected(self):
