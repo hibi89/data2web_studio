@@ -1,3 +1,8 @@
+## 2026-11-14 KST — A21-01 source/package reconciliation; test execution blocked by missing checkout
+- Inspected `delivery.py`, `verify_delivery.py`, `verify_customer_folder.py`, `shipping_rights_preflight.py`, `r21_source_provenance.py`, two R21 inventories. Confirmed three ZIP names, three customer folder names and six pinned source producers; detailed [A21-01 reconciliation](docs/A21_01_SHIPPING_MEMBER_RECONCILIATION_20261114.md), commit `0801b42de8ebe6364b94cc819e8dcb0d289676c6`.
+- Local private repository checkout unavailable in current runtime (git remote could not resolve github.com); exact current-turn regression test/CI **not executed**. Prior consent reset code commit `9d5d71a9757b19e014f46abf7a1c607292c35bdd`, static test commit `630c1eb4028a6c326e750bdd4fb99d900c08be26`; both still awaiting execution. Do not assert PASS or alter score.
+- Next priority: obtain runnable checkout or hosted CI evidence for `python -m unittest test_consent_reset_bindings -v` and full suite, then A21-02; R07/R21 remain PENDING, 72/100, RELEASE HOLD.
+
 ## 2026-11-14 KST — A07-03 recipient/destination consent scope fix
 - Changed `data2web_desktop.py` single form to reset rights/plaintext/privacy when `parent` or `folder` changes, and batch form when `batch_parent` or `batch_leaf` changes. Existing source/sheet/header/mapping reset behavior preserved. Code commit `9d5d71a9757b19e014f46abf7a1c607292c35bdd`.
 - Added `test_consent_reset_bindings.py` static AST regression for both binding sets and syntax parse, commit `630c1eb4028a6c326e750bdd4fb99d900c08be26`. Tests **not executed** in this tool session; Windows Tk interactive verification and full P03 CI remain PENDING. Do not claim test PASS.
