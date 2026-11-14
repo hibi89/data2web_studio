@@ -132,7 +132,8 @@ function renderChart(filtered){
  const field=metrics.value;
  const frequencies=new Map();let validValues=0,blankValues=0,sum=0n;
  for(const record of filtered){
-  const category=record[categoryKey]||"(미분류)";
+  // The blank value must remain a separate key from a literal '(미분류)'.
+  const category=record[categoryKey];
   let amount=field?0n:1;
   if(field){const raw=record[field].trim();const parsed=safeScaled(raw);
    if(!raw){blankValues++}
@@ -147,7 +148,7 @@ function renderChart(filtered){
  const bars=$("chart-bars");bars.replaceChildren();
  for(const [category,value] of ranked){
   const line=document.createElement("div");line.className="chart-row";
-  const name=document.createElement("span");name.className="chart-key";name.textContent=category;
+  const name=document.createElement("span");name.className="chart-key";name.textContent=category===""?"— 분류 없음 —":category;
   const track=document.createElement("div");track.className="bar-track";
   const fill=document.createElement("div");fill.className="bar-fill";
   fill.style.width=(largest>0?100*Number(value)/largest:0)+"%";track.append(fill);
