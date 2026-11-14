@@ -123,7 +123,10 @@ def review_copy(doc, *, as_of=None):
         received = _parse_utc(doc["received_at_utc"])
         if received > now:
             raise ValueError("Future receipt cannot establish retention compliance")
-        due = received + timedelta(days=limit)
+        try:
+            due = received + timedelta(days=limit)
+        except OverflowError as error:
+            raise ValueError("Receipt date exceeds representable retention window") from error
     else:
         due = None
 
