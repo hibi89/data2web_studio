@@ -43,6 +43,11 @@ def main():
         changed.write_text('\nid,title,category,amount,notes\nX1,"Updated row",A,7,ok\n\nX2,"<script>alert(1)</script>",B,11,safe\n\n',encoding="utf-8")
         uncategorized=root/"uncategorized.csv"
         uncategorized.write_text('id,title,category,amount,notes\\nZ1,Uncategorized,,5,blank\\nZ2,Classified,B,7,ok\\n',encoding="utf-8")
+        precise=root/"precise_decimals.csv"
+        precise.write_text(
+            "id,title,category,amount,notes\n" +
+            "".join(f"P{i},Precision {i},A,999999999999.9999,exact\n" for i in range(12)),
+            encoding="utf-8")
         with sync_playwright() as p:
             browser=(p.chromium.launch(headless=True) if args.channel=="chromium"
                      else p.chromium.launch(channel=args.channel,headless=True))
@@ -138,6 +143,14 @@ def main():
             expect(secondary.locator("#body tr").first).to_contain_text("Z1")
             secondary.locator("#category").select_option("")
             expect(secondary.locator("#count")).to_have_text("2건")
+            # Exact arithmetic on high-value four-decimal synthetic inputs.
+            secondary.locator("#csv").set_input_files(str(precise))
+            secondary.locator("#ack").check()
+            secondary.locator("#replace").click()
+            expect(secondary.locator("#count")).to_have_text("12건")
+            secondary.locator("#metric").select_option("amount")
+            expect(secondary.locator("#chart-summary")).to_contain_text("11,999,999,999,999.9988")
+            expect(secondary.locator("#chart-bars .chart-value")).to_have_text("11,999,999,999,999.9988")
             assert secondary.locator("img").count()==0
             mobile=browser.new_context(viewport={"width":390,"height":844},device_scale_factor=1,is_mobile=False)
             mob=mobile.new_page()
