@@ -211,7 +211,8 @@ def validate_result(record):
         if due_text is None:
             raise ValueError("Copy-present report must include retention deadline")
         due = _parse_utc(due_text)
-        if due > reviewed + timedelta(days=7):
+        # Compare as a duration: adding seven days to year 9999 overflows.
+        if due - reviewed > timedelta(days=7):
             raise ValueError("Retention deadline cannot exceed seven days from review")
         if record["reason_code"] == "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
             raise ValueError("Copy-present report cannot claim no copy")
