@@ -45,9 +45,10 @@ class SourceProvenanceGate(unittest.TestCase):
             dest=Path(temp)
             for filename in ROLES:
                 raw=(ROOT/filename).read_bytes()
-                # Match Git's checkout transformation, never rewrite source repo.
-                self.assertNotIn(b"\r\n",raw)
-                (dest/filename).write_bytes(raw.replace(b"\n",b"\r\n"))
+                # Normalize Git's text checkout LF/CRLF on any runner before
+                # simulating a Windows-style worktree in this temporary copy.
+                canonical=raw.replace(b"\r\n",b"\n")
+                (dest/filename).write_bytes(canonical.replace(b"\n",b"\r\n"))
             self.assertEqual(check_source_provenance(root=dest)["source_files_verified"],6)
 
     def test_git_blob_oid_against_known_reference(self):
