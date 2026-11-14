@@ -1,3 +1,9 @@
+## 2026-11-15 KST — M85-E05 최신 기술 재검증 진행 상태
+
+- GPT-6가 역사적 v1 registry를 변경하지 않고 현행 6개 생산자 blob을 v2 기술 registry로 재고정함 (code/test SHA `968d031f373054974c1bdae585dd61d12086ddf9`). `data/r21_source_provenance_v2.json`의 현재 소스 해시 6개는 GitHub 조회값과 일치함.
+- 아래 이전에 기록된 **4 DRIFT는 역사적 v1과 바뀐 소스 간 비교로 유효한 과거 진단**이며, 활성 검증기는 v2로 변경됨. GitHub Actions 새 exact-SHA CI는 이 조회 환경에서 확인되지 않았으므로 **M85-E05 상태는 여전히 INCOMPLETE**(기술 CI + 상업적 권리 확인 필요).
+- R07/R21/R25/R26/R29 증빙 패킷은 전부 미완성. 특히 R25 사용자 정책 승인 7개와 합성 수동파기 PASS는 유지하며 실 고객 파기 증거로 승격하지 않음. R29 독립 인간 감사 부재 그대로. **현재 공식 72/100, +0, SALE NO-GO.**
+
 ## 2026-11-15 KST — A21-02 GitHub history evidence
 
 Recorded first and latest path commits plus current Git blob IDs for all six producer files. The GitHub account/author metadata is consistent across the returned histories, but it is not a rights certificate. Four producer blobs drift; source review, actual rights-holder confirmation, and vendor/NOTICE determination remain pending. Details: [R21 source provenance evidence](https://github.com/hibi89/data2web_studio/blob/feature/final-blueprint-p85-evidence-20261113/docs/R21_SOURCE_PROVENANCE_EVIDENCE_20261114.md).
