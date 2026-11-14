@@ -18,6 +18,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Focused P00 scorecard contract regressions
+        run: python -m unittest test_blueprint_score -v
+      - name: Focused P01 customer-folder preservation regressions
+        run: python -m unittest test_customer_folder -v
       - name: Focused R25 operator-copy retention regressions
         run: python -m unittest test_operator_copy_retention -v
       - name: Focused R26 privacy-scope and consent preflight regressions

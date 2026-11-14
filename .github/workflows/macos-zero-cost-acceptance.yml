@@ -14,6 +14,9 @@ on:
       - "test_output_snapshot_security.py"
       - "order_intake_preflight.py"
       - "test_order_intake_preflight.py"
+      - "blueprint_score.py"
+      - "test_blueprint_score.py"
+      - "test_customer_folder.py"
       - "operator_copy_retention.py"
       - "test_operator_copy_retention.py"
       - "zero_cost_gate.py"
@@ -48,6 +51,10 @@ jobs:
           chmod 700 "$PWD/.ci-real-temp"
           echo "TMPDIR=$(cd .ci-real-temp && pwd -P)" >> "$GITHUB_ENV"
           python -c 'import os,pathlib; p=pathlib.Path(".ci-real-temp").resolve(strict=True); print("TEMP_ROOT_CANONICAL:",p); assert p.is_dir() and not p.is_symlink()'
+      - name: Focused P00 scorecard contract regressions
+        run: python -m unittest test_blueprint_score -v
+      - name: Focused P01 customer-folder preservation regressions
+        run: python -m unittest test_customer_folder -v
       - name: Python full synthetic and policy regressions
         run: python -m unittest discover -v
       - name: Focused R25 operator-copy retention regressions
