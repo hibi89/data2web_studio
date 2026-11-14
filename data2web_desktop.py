@@ -163,6 +163,18 @@ def deliver_reviewed_batch(reviews,destination,mapping,*,
                     confirm="APPROVE",ack_plaintext=True)
 
 
+
+def bind_consent_reset(variables, rights, plaintext, privacy):
+    """Bind consent to exact mapping and delivery destination (Tk or Tcl)."""
+    def clear(*_):
+        rights.set(False)
+        plaintext.set(False)
+        privacy.set("")
+    for variable in variables:
+        variable.trace_add("write", clear)
+    return clear
+
+
 def desktop_main():
     try:
         import tkinter as tk
@@ -258,12 +270,9 @@ def desktop_main():
     ttk.Label(checks,text="개인정보 검수 상태 (자동 법적 승인 아님)").pack(anchor="w",pady=(5,0))
     ttk.Combobox(checks,textvariable=privacy,values=PRIVACY_CHOICES,state="readonly",width=38).pack(anchor="w")
 
-    def reset_consent(*_):
-        # Rights/PII/plaintext acknowledgement belongs to this exact reviewed
-        # dataset AND its ID/title/category mapping, never to a previous file.
-        rights.set(False)
-        plaintext.set(False)
-        privacy.set("")
+    # Consent is scoped to the inspected data, mapping, and output destination.
+    reset_consent=bind_consent_reset(
+        (id_key,title_key,category_key,parent,folder),rights,plaintext,privacy)
 
     def reset_review():
         reviewed[0]=None
@@ -278,9 +287,6 @@ def desktop_main():
 
     for var in (source,sheet,header,cached):
         var.trace_add("write",lambda *_:reset_review())
-    for var in (id_key,title_key,category_key,parent,folder):
-        # Destination changes may change the recipient or delivery scope.
-        var.trace_add("write",reset_consent)
 
     def choose_source():
         chosen=filedialog.askopenfilename(parent=root,title="고객 소유 표 데이터",
@@ -375,14 +381,9 @@ def desktop_main():
         batch_plaintext=tk.BooleanVar(value=False)
         batch_privacy=tk.StringVar(value="")
 
-        def clear_batch_consent(*_):
-            batch_rights.set(False)
-            batch_plaintext.set(False)
-            batch_privacy.set("")
-
-        for variable in (batch_id,batch_title,batch_category,batch_parent,batch_leaf):
-            # Never carry a previous recipient/scope approval to a new folder.
-            variable.trace_add("write",clear_batch_consent)
+        clear_batch_consent=bind_consent_reset(
+            (batch_id,batch_title,batch_category,batch_parent,batch_leaf),
+            batch_rights,batch_plaintext,batch_privacy)
 
         def clear_batch_review():
             batch_reviews[0]=None
