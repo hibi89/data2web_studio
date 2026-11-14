@@ -5,8 +5,11 @@ Only synthetic OOXML fixtures. No real customer files or network access.
 from __future__ import annotations
 
 import hashlib
+import io
 import tempfile
 import unittest
+import zipfile
+from xml.etree import ElementTree as ET
 from pathlib import Path
 
 from data2web import build, read_table
@@ -37,6 +40,29 @@ class XlsxExplicitEmptyRowIntegrity(unittest.TestCase):
 
     def test_structurally_blank_row_without_cells_is_skipped(self):
         self.make_sheet([["A1", "Safe", "Blue"], [None, None, None]])
+        _, rows, _ = read_table(self.source, sheet="Inventory")
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["id"], "A1")
+
+    def test_formatting_only_empty_cell_is_not_a_data_row(self):
+        # Excel may write styled cells with no <v> or <is>. Those remain
+        # blank visual separators, unlike explicit empty string values.
+        raw = self.make_sheet([["A1", "Safe", "Blue"], [None, None, None]])
+        rebuilt = io.BytesIO()
+        ns = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+        with zipfile.ZipFile(io.BytesIO(raw)) as original, zipfile.ZipFile(
+            rebuilt, "w", compression=zipfile.ZIP_DEFLATED
+        ) as output:
+            for filename in original.namelist():
+                part = original.read(filename)
+                if filename == "xl/worksheets/sheet1.xml":
+                    root = ET.fromstring(part)
+                    data = root.find(ns + "sheetData")
+                    third = next(row for row in data if row.get("r") == "3")
+                    ET.SubElement(third, ns + "c", {"r": "A3", "s": "1"})
+                    part = ET.tostring(root, encoding="utf-8")
+                output.writestr(filename, part)
+        self.source.write_bytes(rebuilt.getvalue())
         _, rows, _ = read_table(self.source, sheet="Inventory")
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["id"], "A1")
