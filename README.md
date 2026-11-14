@@ -1,3 +1,8 @@
+## 2026-11-14 · R29 독립 감사 준비: 고객자료 없는 내부 합성 증거
+- `python security_audit_preaudit.py`(외부 업로드0) 또는 `python security_audit_preaudit.py --output <새로 만들 로컬>.json`(create-only)으로 합성 데이터의 XSS/CSV수식문자·ZIP허위판매·고객폴더변조·동일폴더무덮어쓰기·CSP 7개 시험. `test_security_audit_preaudit.py` 회귀5종. 내장 결과 `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 독립감사/권리승인 false, 추가점수0. [상세](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
+- 최근 hosted Windows 브라우저 시작 간헐 실패 [#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) → 독립된 새 프로필로 최대1회 실패 복구. 첫 수정 [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617)에서는 정규식 이스케이프 실수로 FAIL. SHA `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 복구했지만 **정확 HEAD CI 미확인 상태**. 실패를 숨기지 않고 검증 전 성공 주장 금지.
+- 공식 최종설계 72/100, 85까지13점·외부독립 감사와 실권리 정책 미완·RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-14 · A안 고객 납품 구성·상업적 권리 HOLD 자동검증
 
 `python shipping_rights_preflight.py`를 실행하면 **고객 원본이 아닌 합성 CSV**로 실제 HTML/ZIP/receipt 패키지를 생성/재검증하고, [권리 인벤토리](data/shipping_rights_inventory_v1.json)와 허용 멤버가 일치하는지 확인한다. `python -m unittest test_shipping_rights_preflight -v`는 허위 상업 권리·외부 보안감사·LICENSE/NOTICE 주장/멤버 삽입 등을 **6종 회귀**로 거부한다. [CI #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796) Windows/Ubuntu + Chrome/Edge/Chromium 4/4 SUCCESS. [근거와 한계](docs/R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md).

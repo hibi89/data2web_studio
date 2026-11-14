@@ -19,3 +19,8 @@
 ## 다음 단계와 형 개입 최소화
 - 무료·외부 전송 없이 내부 preaudit CI 완료 후, 형의 `OWNER_APPROVAL_PACKET_A_20261114.md` 권리·개인정보·보존 정책 일괄 승인 및 **R29에 실제 독립 평가자를 쓰는 방법/비용/공유범위**만 사용자 결정 대기.
 - 동의 전: 유료 감사·계정권한 확대·상업 배포·고객파일 수령·실고객 접속 **전부 미시행**.
+
+## 2026-11-14 KST · Windows hosted Chrome 간헐 실패와 제한된 복구
+- [1차 #43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883): 전체 CI FAIL, 기존 CMD 기반 self-check에서 Chrome `HOLD_EXECUTION_FAILED`, Edge 정상. 악성 입력 R29 프로브 failure가 아님.
+- [2차 #43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617): transient launch retry 신규 추가됐으나 regex 두 번 이스케이프해 기존 DOM 보기도 실패. `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 한 줄 정규식 복구. **최신 빌드/실브라우저 CI 통과 확인 전 미검증**.
+- 리트라이 1번은 Chrome/Edge 명령 실행 실패/비0 종료에만, 독립된 새 임시 프로필로 수행. 정상 종료지만 렌더/2개 합성값이 빠지면 그대로 `HOLD`. 실행횟수로 수용점수 부풀림 금지.

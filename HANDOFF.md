@@ -1,5 +1,17 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 2026-11-14 KST · R29 합성 사전감사 및 Chrome 1회 복구
+1. **목표·정본:** DATA2WEB 오프라인 결과물(A) 우선/Windows EXE(B) 후속, R01–R33 고정100점, 최종85 목표.
+2. **완료/변경:** `security_audit_preaudit.py`·`test_security_audit_preaudit.py` 신규(내부7개 합성 공격/5개 create-only·HOLD·무자료 보고 테스트). Windows hosted Chrome 간헐 시작 실패 시 `client_local_rehearsal._headless_browser` 최대1회 별도 프로필 재시도(총2회), DOM 실2행/2개 셀 미검증 시 HOLD. `test_browser_transient_retry.py` 6개 경계 테스트. 외부 자료 전송/고객파일0.
+3. **테스트 증거:** 첫 SHA `2516ff76e3bab6e431c2b423d3112579f908c027` [#43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) Windows hosted CMD `Chrome HOLD_EXECUTION_FAILED`로 4/4 FAIL. 해당 실패 원인 intermittent 브라우저 실행. 재시도 SHA `7313b4420b1e82a8a76ad3dbc2728baff4a35b42` [#43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617) Ubuntu Python 4개 regex 테스트 FAIL(원인: escape 2번); SHA `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 정상 regex 문자열로 복구. **이 SHA 최신 CI는 미검증/미트리거, 별도 확인 필요.** 이전 안정 SHA `2c77ce68bbe8735c0b98facbe4df19709802497a` [CI #43536152529](https://github.com/hibi89/data2web_studio/actions/runs/43536152529) 4/4 PASS; 이전 성공을 신규 SHA PASS로 혼동 금지.
+4. **상태:** R01–R33 검증22개=72/100, 11개 PENDING=28, 85까지13 부족. RELEASE HOLD/SALE NO-GO, `[작업중]`, PR#4 Draft.
+5. **오류·재시도:** Chrome sporadic startup no DOM verified → bounded retry1회; 잘못된 정규식 escape로 자체 테스트 실패 → 원인 확정 한 줄 수정. 두 번째 CI 실패를 숨기거나 무한 rerun 금지. 수정 SHA의 실제 Actions 결과 확인 후 다음 판단.
+6. **repo/브랜치/SHA/경로:** `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 직전 코드 HEAD `7b00aba8dcb674f138493a4b3e04a29e12b801fa`; `client_local_rehearsal.py`, `security_audit_preaudit.py`, `test_browser_transient_retry.py`, `test_security_audit_preaudit.py`, [보안 preaudit 문서](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
+7. **배포/환경:** GitHub Actions Windows/Ubuntu Python3.11/Chrome Edge Chromium, 실 사용자 Win11 구 EXE verified:true 기록 보존. 최신 EXE 새빌드 없음, Vercel/Production 미적용.
+8. **원본·보안/복구:** 고객 원본/PC 경로·고객 스크린샷/개인정보 GitHub 업로드0, `--output`은 로컬 새 JSON create-only, 사용자 승인 전 외부감사 의뢰/권한·비밀 송신0. 안전 복구 기준 SHA `2c77ce68bbe8735c0b98facbe4df19709802497a`. main/원본/scorecard 불변.
+9. **다음 우선순위:** 최신 SHA CI 불확실성 확인; 정상 후 체계화된 독립감사 합성 증거를 검토 승인된 외부 평가자에게 제공하는 과정(비용/공유범위 사용자 사전승인), R07/R21/R25/R26 실제 운영·권리 확인. R29 외부 독립 감사 없는 자체 보고서는 점수0.
+10. **확인일시·범위:** 2026-11-14 KST, 소스/Actions job log 직접 확인; 이번 문서가 추가되면 HEAD 다시 확인하고 이전 실패 기록 보존.
+
 ## 최신 인수인계 — 2026-11-14 KST · A안 납품 저작권/재배포 사전검증기 6종 PASS
 1. 목적/정본: DATA2WEB Studio 로컬 표형자료→HTML/ZIP 영수증 A 납품 우선, B native EXE 후속; R01–R33 고정100점/목표85.
 2. 변경: `shipping_rights_preflight.py` + `data/shipping_rights_inventory_v1.json` + `test_shipping_rights_preflight.py` 신규. 합성 고객 폴더 생성→독립 `verify_zip/verify_customer_folder`→ZIP 3멤버/고객 폴더3멤버/권리 조사표 일치 검사. 권리/외부독립 감사/출시 허위 승인 상태 금지, 항상 RELEASE HOLD, 중복 JSON 거부, 실제 고객 파일 읽기0.

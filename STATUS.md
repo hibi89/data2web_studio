@@ -1,5 +1,14 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · R29 독립 감사 증거 사전패킷 + Windows Chrome transient 복구
+- **구현:** `security_audit_preaudit.py`, `test_security_audit_preaudit.py` (기능 SHA `2516ff76e3bab6e431c2b423d3112579f908c027`). 합성 2행 입력 기반 HTML script-end/XSS 텍스트, CSV formula, 원본 SHA 보존, ZIP release status 위조, 기존 출력 무덮어쓰기, 고객폴더 변조 거부, 오프라인 CSP 등 **7개 내부 보안 프로브** 및 **5개 회귀**. `--output`은 명시된 새 로컬 JSON 파일만 O_EXCL로 생성·무업로드. 항상 `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 독립감사/권리/판매 `false`, `score_addition=0`. [독립평가자용 준비 문서](docs/R29_SYNTHETIC_PREAUDIT_HANDOFF_20261114.md).
+- **실패 증거 1:** [Python/browser #43537183883](https://github.com/hibi89/data2web_studio/actions/runs/43537183883) 전체 **FAIL** — 신규 7개 preaudit 내부 범위 때문이 아니라 기존 Windows hosted CMD launcher의 Chrome `HOLD_EXECUTION_FAILED`, Edge `PASS_SYNTHETIC_LOCAL_FILE` (간헐 초기 실행 장애), Ubuntu/Browser/Windows 브라우저 개별 검증 경로 성공. 이 실패를 다른 워크플로우 PASS로 대체/숨기지 않음.
+- **복구 설계:** `client_local_rehearsal.py`에서 브라우저 프로세스 시작 실패/비0 종료에 한해 프로필을 완전히 달리해 최대 **추가1회** 재시도, 그래도 실패하면 HOLD. DOM의 2행/실제 셀 렌더 실패는 **재시도 없이 HOLD**, 미인증·재활성화를 성공으로 바꾸지 않음. `test_browser_transient_retry.py` 6종으로 timeout/OSError/nonzero/retry 프로필/렌더부재 경계 검증.
+- **실패 증거 2:** 새 재시도 SHA `7313b4420b1e82a8a76ad3dbc2728baff4a35b42` [CI #43537507617](https://github.com/hibi89/data2web_studio/actions/runs/43537507617) **FAIL**: 내부 regex 문자열이 `rb'...\\\\s...'`로 이중 이스케이프되어 4개 테스트가 실제 DOM을 미검출. 해당 원인 **확정**.
+- **최소 수정:** 정확 SHA `7b00aba8dcb674f138493a4b3e04a29e12b801fa`에서 regex를 정상 `rb'...\\s...'`로 한 줄 복원. 구 구현 정상 DOM 정규식 의미와 일치. 최신 SHA CI가 별도로 등록/성공한 것 확인 전 **미검증**으로 표기, CI가 아예 나타나지 않은 경우 workflow 트리거 경로 확인 필요. 증거 없는 4/4 성공 주장 금지.
+- **최종 설계상 차단:** R07/R21/R25/R26 실제 권리·PII·보존/파기 승인과 R29 **외부 독립 감사**가 없어 공식 **72/100**, 목표 85까지 13 부족. 신규 내부 사전검증을 R29 외부감사로 간주하지 않음. `[작업중]` / RELEASE HOLD/SALE NO-GO, 기존 고객원본/외부전송/실판매0, 원본 브랜치 보존.
+
+
 ## 2026-11-14 KST · 실제 합성 납품 자산 권리 preflight·허위 승인 차단 6종 회귀 PASS
 - 기능 SHA `37a06cd77efcf71dd1576576157daef412adf70f`: `shipping_rights_preflight.py`, `data/shipping_rights_inventory_v1.json`, `test_shipping_rights_preflight.py` 신규. **A안 고객 HTML+ZIP+receipt 실제 구조를 합성 자료로 생성/독립검증**하고, 권리·LICENSE/NOTICE·외부감사 결과를 허위로 PASS 표시하지 못하도록 fail closed. 제3자 코드·빌더 EXE는 A 고객 ZIP에 포함하지 않는 구성 경계를 확인. 원본 데이터/점수표/실판매 권한 변경0.
 - [최신 기능 CI #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796): **4/4 SUCCESS**; Windows 304/304, Ubuntu 303 PASS+1 SKIP, hosted Chromium/Chrome/Edge PASS. 신규 6종 독립 테스트 모두 PASS. [정본 게이트 #43535767926](https://github.com/hibi89/data2web_studio/actions/runs/43535767926) SUCCESS. [상세 기술·권리 한계](docs/R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md).
