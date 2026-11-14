@@ -37,7 +37,9 @@ def assess_self_report(request_zip, report_path):
         source_sha = origin["source_commit_sha"]
 
     # Read one bounded local snapshot; never send it anywhere.
-    doc = _read_json(read_bounded_source(report_path, max_bytes=8192))
+    # Freeze one bounded report snapshot for parsing and SHA; no second path read.
+    report_bytes = read_bounded_source(report_path, max_bytes=8192)
+    doc = _read_json(report_bytes)
     blank = _blank_form(source_sha)
     if set(doc) != set(blank):
         raise ValueError("Unknown/identifying fields are forbidden in reviewer result")
@@ -104,8 +106,7 @@ def assess_self_report(request_zip, report_path):
         "observed_result_claim": expected_summary,
         "source_commit_sha": source_sha,
         "request_zip_sha256": package_hash,
-        "report_sha256": hashlib.sha256(read_bounded_source(
-            report_path, max_bytes=8192)).hexdigest(),
+        "report_sha256": hashlib.sha256(report_bytes).hexdigest(),
         "buyer_acceptance_verified": False,
         "independent_human_security_audit_completed": False,
         "sale_approved": False,

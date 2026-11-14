@@ -123,5 +123,22 @@ class BuyerSelfReportTests(unittest.TestCase):
             assess_self_report(self.request, self.report)
 
 
+    def test_report_path_is_read_once_for_integrity_and_validation(self):
+        from unittest.mock import patch
+        import buyer_self_report_intake as intake
+        self.report.write_text(json.dumps(self.claimed_pass()), "utf-8")
+        original = intake.read_bounded_source
+        paths = []
+        def tracking(path, **kw):
+            paths.append(str(path))
+            return original(path, **kw)
+        with patch.object(intake, "read_bounded_source", side_effect=tracking):
+            verdict = assess_self_report(self.request, self.report)
+        self.assertEqual(paths.count(str(self.report)), 1)
+        self.assertEqual(verdict["report_sha256"],
+                         __import__("hashlib").sha256(self.report.read_bytes()).hexdigest())
+        self.assertFalse(verdict["buyer_acceptance_verified"])
+
+
 if __name__ == "__main__":
     unittest.main()
