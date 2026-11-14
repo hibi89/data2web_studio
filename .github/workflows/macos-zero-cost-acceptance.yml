@@ -50,6 +50,12 @@ jobs:
           python -c 'import os,pathlib; p=pathlib.Path(".ci-real-temp").resolve(strict=True); print("TEMP_ROOT_CANONICAL:",p); assert p.is_dir() and not p.is_symlink()'
       - name: Python full synthetic and policy regressions
         run: python -m unittest discover -v
+      - name: Focused R25 operator-copy retention regressions
+        run: python -m unittest test_operator_copy_retention -v
+      - name: Focused R26 privacy-scope and consent preflight regressions
+        run: python -m unittest test_order_intake_preflight -v
+      - name: R29 internal synthetic security preaudit (external audit remains pending)
+        run: python security_audit_preaudit.py
       - name: Offline synthetic customer self-check
         run: python studio.py self-check
       - name: Anonymous local preorder scope check

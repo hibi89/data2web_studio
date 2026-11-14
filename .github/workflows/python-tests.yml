@@ -18,6 +18,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Focused R25 operator-copy retention regressions
+        run: python -m unittest test_operator_copy_retention -v
+      - name: Focused R26 privacy-scope and consent preflight regressions
+        run: python -m unittest test_order_intake_preflight -v
+      - name: R29 internal synthetic security preaudit (external audit remains pending)
+        run: python security_audit_preaudit.py
       - name: Run standalone synthetic and packaging regressions
         run: python -m unittest discover -v
       - name: Verify zero-cost policy constraints
