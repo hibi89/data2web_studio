@@ -76,7 +76,7 @@ def _headless_browser(binary, html, temp):
         # Successful process exit alone is not enough. The browser must have
         # executed live JS and visibly rendered both synthetic source rows.
         if not re.search(
-            rb'<p\\s+id="count"\\s+role="status">2[^<]*</p>', process.stdout
+            rb'<p\s+id="count"\s+role="status">2[^<]*</p>', process.stdout
         ):
             return "HOLD_BROWSER_RENDER_NOT_CONFIRMED"
         if (b"LOCAL-ITEM-1" not in process.stdout or
