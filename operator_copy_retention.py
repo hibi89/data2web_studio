@@ -283,7 +283,7 @@ def main(argv=None):
         return 0 if result["reason_code"] == (
             "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED"
         ) else 2
-    except (OSError, ValueError, TypeError, KeyError):
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError):
         print(json.dumps({
             "status": "HOLD",
             "reason_code": "INVALID_LOCAL_RETENTION_METADATA",
