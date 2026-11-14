@@ -141,6 +141,29 @@ class OperatorCopyRetentionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate_result(record)
 
+    def test_report_cannot_forge_deadline_or_disposal_consistency(self):
+        present=review_copy(doc_at(8),as_of=NOW)
+        absent=doc_at(1)
+        absent["operator_copy_present"]=False
+        absent["received_at_utc"]=None
+        no_copy=review_copy(absent,as_of=NOW)
+        variants=[
+            (present,"retention_due_utc",None),
+            (present,"retention_due_utc","2026-12-31T12:00:00Z"),
+            (present,"operator_copy_present_claimed",False),
+            (present,"manual_disposal_action_due",False),
+            (present,"reason_code","NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED"),
+            (no_copy,"retention_due_utc","2026-11-21T12:00:00Z"),
+            (no_copy,"manual_disposal_action_due",True),
+            (no_copy,"reason_code","WITHIN_7_DAYS_MANUAL_REVIEW_STILL_REQUIRED"),
+        ]
+        for base,key,value in variants:
+            with self.subTest(field=key,value=value):
+                forged=deepcopy(base)
+                forged[key]=value
+                with self.assertRaises(ValueError):
+                    validate_result(forged)
+
     def test_report_create_only_and_redacted(self):
         record=review_copy(doc_at(1),as_of=NOW)
         with tempfile.TemporaryDirectory() as tmp:
