@@ -1,3 +1,8 @@
+## 2026-11-14 KST — R25 malformed UTF-8 retention CLI fail-closed
+- Inspected current `operator_copy_retention.py` and `test_operator_copy_retention.py`. CLI `parse_metadata(raw.decode("utf-8"))` can raise `UnicodeDecodeError` but top-level exception handler omitted UnicodeError, causing an uncaught traceback. Fixed in `7042aad0b272d9fe75bd0522d89eea1e7d8297b1`.
+- Added subprocess regression using invalid bytes (255,254,128) asserting exit code 2, structured `INVALID_LOCAL_RETENTION_METADATA` HOLD and no traceback, test commit `3aea2011892d0c81007b8c50c2996bf0f44f0c0a`.
+- Test execution/CI not independently observed this turn. R25 operational owner evidence still absent. **Official score 72/100 unchanged**, R25 PENDING, RELEASE HOLD. No user files touched or auto-delete introduced.
+
 ## 2026-11-14 KST — A07/R26 anonymous preorder malformed UTF-8 HOLD
 - Source review found `order_intake_preflight.py` CLI error handler omitted `UnicodeError`: malformed UTF-8 input could emit a Python traceback rather than the structured `INVALID_METADATA` HOLD. Added `UnicodeError` handler, code commit `3b0d62b95f711a4d348ddfa753e033963b9d2a82`.
 - Added a real CLI subprocess negative test using `bytes((255,254,128))`, asserting exit 2, structured HOLD, no traceback. Exact test commit `60ac101783715412258c63ea8b1d659d0616c320`. Also parenthesized existing PRO SKU condition without eligibility change (commit `66e4c1b1b564f17579d4ddc7c2b36996637fccbc`).
