@@ -250,8 +250,8 @@
       "weight": 2,
       "state": "PENDING",
       "requirement": "원본/결과 무단 삭제 금지·보유기간/책임 고지",
-      "evidence_scope": "기존 고객파일 무삭제 테스트 PASS",
-      "remaining_limitations": "실제 보존기간·고객자료 파기/책임 정책 사용자 미승인",
+      "evidence_scope": "합성 무삭제 및 수동파기 검증, 사용자 본인 운영책임자 지정과 내부 7개 정책 승인",
+      "remaining_limitations": "내부 정책 승인은 완료했으나 실제 고객 사본의 인수·보관·반환/파기 운영기록 및 독립 증빙은 미확인",
       "source_code_sha": null
     },
     {
