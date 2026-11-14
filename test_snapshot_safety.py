@@ -48,6 +48,31 @@ class SnapshotSafety(unittest.TestCase):
                 read_bounded_source(self.source)
         self.assertTrue(called[0])
 
+    def test_hardlink_alias_mutation_during_bounded_read_is_rejected(self):
+        alias=self.root/"hardlink.csv"
+        try:
+            os.link(self.source,alias)
+        except (OSError,NotImplementedError) as error:
+            self.skipTest(f"Hard link unavailable: {type(error).__name__}")
+        self.assertTrue(self.source.samefile(alias))
+        original_read=os.read
+        mutated=[False]
+
+        def mutate_through_alias(fd,size):
+            data=original_read(fd,size)
+            if not mutated[0]:
+                mutated[0]=True
+                with alias.open("r+b") as stream:
+                    stream.write(b"X")
+            return data
+
+        with patch("os.read",side_effect=mutate_through_alias):
+            with self.assertRaisesRegex(
+                ValueError,"Source changed during bounded file-handle read"
+            ):
+                read_bounded_source(self.source)
+        self.assertTrue(mutated[0])
+
     def test_read_table_rejects_source_mutated_during_parse(self):
         original=self.source.read_bytes()
         mutated=original.replace(b"Original",b"Changed!")

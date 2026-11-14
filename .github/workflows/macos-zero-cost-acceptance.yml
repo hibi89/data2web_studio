@@ -12,6 +12,7 @@ on:
       - "path_policy.py"
       - "test_zip_offline_csp.py"
       - "test_output_snapshot_security.py"
+      - "test_snapshot_safety.py"
       - "order_intake_preflight.py"
       - "test_order_intake_preflight.py"
       - "blueprint_score.py"
