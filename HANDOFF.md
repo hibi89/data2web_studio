@@ -1,3 +1,8 @@
+## 2026-11-14 KST — A07-03 recipient/destination consent scope fix
+- Changed `data2web_desktop.py` single form to reset rights/plaintext/privacy when `parent` or `folder` changes, and batch form when `batch_parent` or `batch_leaf` changes. Existing source/sheet/header/mapping reset behavior preserved. Code commit `9d5d71a9757b19e014f46abf7a1c607292c35bdd`.
+- Added `test_consent_reset_bindings.py` static AST regression for both binding sets and syntax parse, commit `630c1eb4028a6c326e750bdd4fb99d900c08be26`. Tests **not executed** in this tool session; Windows Tk interactive verification and full P03 CI remain PENDING. Do not claim test PASS.
+- A07-03 engineering change made, acceptance pending test/CI; R07 legal/owner acceptance still PENDING, official score 72/100, no release. Next run tests and A21-01 asset inventory.
+
 ## 2026-11-14 KST — A07-02 template and A07-03 static reset review
 - A07-02 blank per-order rights/privacy/plaintext checklist committed in `docs/A07_PER_ORDER_RIGHTS_CHECKLIST_20261114.md` (`c01b2dc3c232fa276e06ab303983268dda1004e2`). No owner/customer assent asserted.
 - A07-03 reviewed single/batch Tk variable traces and CLI approval guards; report `docs/A07_03_CONSENT_RESET_AUDIT_20261114.md` (`5de3ba8b5fe327e128c9c8b4420ec59bb26f1fd3`). Potential recipient/destination-scope reset gap requires synthetic reproduction; no production code changed. Runtime tests and fresh CI NOT RUN. R07 still PENDING; official 72/100, RELEASE HOLD.
