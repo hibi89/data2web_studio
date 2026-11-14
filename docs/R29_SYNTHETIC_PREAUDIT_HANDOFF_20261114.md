@@ -1,3 +1,11 @@
+## 2026-11-15 KST · Windows directory-junction source/output rejection at exact HEAD
+
+`path_policy.assert_no_links()` checks Windows `FILE_ATTRIBUTE_REPARSE_POINT`; the prior test file used symlinks but did not exercise a real directory junction. Added two synthetic Windows-only regressions in `test_path_policy.py`: source reads through a junction and output creation through a junction parent. The helper uses `cmd.exe mklink /J`, verifies the reparse attribute, verifies `junction/source.csv.samefile(self.source)`, and cleans the junction before the temporary directory. Both tests require the specific reparse-point rejection; output test confirms no target was created.
+
+At exact PR HEAD `c99f3d482a3972ff4de52c6df91f118854c383db`, both junction tests passed on hosted Windows. Ubuntu and macOS report them as explicit Windows-only SKIP. Windows/Ubuntu/macOS suites each ran 527 tests; browser jobs for Chromium, Chrome and Edge passed. [Python/browser #43636589005](https://github.com/hibi89/data2web_studio/actions/runs/43636589005), [macOS #43636589137](https://github.com/hibi89/data2web_studio/actions/runs/43636589137), [CodeQL #43636589034](https://github.com/hibi89/data2web_studio/actions/runs/43636589034), and [evidence gate #43636589543](https://github.com/hibi89/data2web_studio/actions/runs/43636589543) succeeded. The macOS workflow now includes `test_path_policy.py` in its push path filter.
+
+High read-only review found one P3 false-positive risk in the initial tests; `af0b530` added target identity and specific error assertions. Follow-up review of that fix and the macOS trigger update found no actionable issue. The tests are static synthetic checks and do not prove ancestry-swap race prevention. R29 remains PENDING, score addition 0, RELEASE HOLD / SALE NO-GO.
+
 ## 2026-11-15 KST · Direct Python caller and saved-report forgery regressions
 
 GitHub Issue #5 asks reviewers to test spoofed rights/privacy inputs passed directly to `assess()` and forged identifiers, status, prices or sale claims passed to `write_new_report()`. At exact PR HEAD `25dd273eb1903ab283293de906de214114dcb3af`, these cases were already present in `test_order_intake_preflight.py`; no duplicate product code was added.

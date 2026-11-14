@@ -83,7 +83,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Re-read current GitHub source, scorecard and evidence at tested PR HEAD 25dd273eb1903ab283293de906de214114dcb3af; product/test SHA remains 512af500. Official score 72, 22 VERIFIED/11 PENDING."
+      "current_note": "Read current GitHub source/scorecard/evidence at exact tested PR HEAD c99f3d482a3972ff4de52c6df91f118854c383db. Product implementation remains on 512af500; current test/workflow changes are in this verified head. Official score 72, 22 VERIFIED/11 PENDING."
     },
     {
       "id": "P01",
@@ -157,7 +157,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "At exact PR HEAD 25dd273eb1903ab283293de906de214114dcb3af: Python/browser #43634647382, macOS #43634647412, CodeQL #43634647356 and gate #43634647742 passed; Win 525/525, Ubuntu 524+1 Windows-only SKIP, macOS 525/525; log contains platform/browser PASS and SKIP."
+      "current_note": "Exact PR HEAD c99f3d482a3972ff4de52c6df91f118854c383db: Python/browser #43636589005, macOS #43636589137, CodeQL #43636589034 and gate #43636589543 passed. 527 tests ran on Windows/Ubuntu/macOS; two junction cases pass on Windows and explicitly skip elsewhere; Ubuntu/macOS each have 3 platform-specific skips. Chrome/Edge/Chromium PASS. Gate output UNASSESSED."
     },
     {
       "id": "A07-01",
@@ -635,7 +635,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "At exact PR HEAD 25dd273, the six direct assess()/write_new_report() spoof/forgery cases passed within 24/24 module tests on Windows, Ubuntu and macOS; full suite, CodeQL and synthetic preaudit passed. Internal synthetic only; independent R29 audit remains pending."
+      "current_note": "Exact HEAD c99f3d4: six direct assess()/write_new_report() spoof/report-forgery regressions remain covered; two real Windows mklink /J ancestry tests verify target identity and specific reparse rejection. Both junction tests passed on Windows; Ubuntu/macOS explicitly skip. High P3 test weakness fixed at af0b530; follow-up found no issue. Synthetic only; independent R29 audit remains pending."
     },
     {
       "id": "A29-02",
@@ -825,7 +825,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "At exact PR HEAD 25dd273, full hosted Windows/Ubuntu/macOS tests, browser flows, CodeQL and evidence gate passed; final acceptance remains blocked by incomplete owner/customer/external packets."
+      "current_note": "Exact HEAD c99f3d4 Python/Ubuntu/Windows-browser/macOS/CodeQL/evidence-gate Actions succeeded; all OS suites ran 527 tests with documented platform skips. Evidence gate output remains UNASSESSED with no manifest; G85 acceptance is still blocked by owner/customer/external packets."
     },
     {
       "id": "G85-03",
