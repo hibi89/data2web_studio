@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file
 from zipfile import ZipFile, ZipInfo, ZIP_STORED
 from verify_delivery import verify_zip
 
@@ -15,7 +16,7 @@ GUIDE = ("DATA2WEB Studio — 로컬 열람 안내\n"
          "5. 이 ZIP의 SHA256 검증은 진위/서명/판매허가를 보증하지 않습니다.\n"
          "6. 원본 파일과 이전 결과를 보관하십시오. 판매/배포 승인: HOLD.\n").encode("utf-8")
 
-def package_html(html_path, zip_path, receipt):
+def package_html(html_path, zip_path, receipt, *, _output_directory=None):
     html_path, zip_path = Path(html_path), Path(zip_path)
     assert_no_links(html_path)
     assert_no_links(zip_path,allow_missing_leaf=True)
@@ -37,7 +38,7 @@ def package_html(html_path, zip_path, receipt):
         "status":"RELEASE_HOLD",
     }
     encoded = (json.dumps(manifest,ensure_ascii=False,sort_keys=True,separators=(",",":"))+"\n").encode("utf-8")
-    with zip_path.open("xb") as file:
+    with create_output_file(zip_path,directory=_output_directory) as file:
         with ZipFile(file,"w",compression=ZIP_STORED,allowZip64=False) as zf:
             for name,data in (("index.html",html),("manifest.json",encoded),("README_KO.txt",GUIDE)):
                 info = ZipInfo(name, date_time=(1980,1,1,0,0,0))

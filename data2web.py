@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_file
 
 MAX_BYTES = 8_000_000
 MAX_ROWS = 10000
@@ -93,7 +94,7 @@ def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
         raise ValueError("Input changed during parsing")
     return fields, normalized, digest
 
-def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office', sheet=None, header_row=1, allow_cached_formulas=False):
+def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office', sheet=None, header_row=1, allow_cached_formulas=False, _output_directory=None):
     if not approved:
         raise ValueError("Explicit plaintext/ownership approval required")
     if Path(input_file).suffix.lower() == ".xlsx" and not sheet:
@@ -121,9 +122,7 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     output_bytes = markup.encode("utf-8")
     if len(output_bytes) > 20_000_000:
         raise ValueError("Output HTML exceeds local delivery limit")
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
-    fd = os.open(target, flags, 0o600)
-    with os.fdopen(fd, "wb") as stream:
+    with create_output_file(target, directory=_output_directory) as stream:
         stream.write(output_bytes)
     if hashlib.sha256(read_bounded_source(input_file,max_bytes=MAX_BYTES)).hexdigest() != digest:
         raise ValueError("Source modified after generation; output HOLD")

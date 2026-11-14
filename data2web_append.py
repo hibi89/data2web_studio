@@ -14,6 +14,7 @@ from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt, assert_receipt_path_available
 from path_policy import assert_no_links, read_bounded_source
+from secure_output import create_output_directory, create_output_file
 
 CONTRACT="DATA2WEB_INPUT_APPROVALS_V1"
 COMBINED="DATA2WEB_APPENDED_SOURCE_V1"
@@ -143,7 +144,8 @@ def build_approved_append(approval_manifest,html_path,*,confirm,ack_plaintext,zi
              zip_path=zip_path,receipt_path=receipt_path)
 
 def _build_approved_append_doc(doc,approval_manifest,html_path,*,
-                                confirm,ack_plaintext,zip_path=None,receipt_path=None):
+                                confirm,ack_plaintext,zip_path=None,receipt_path=None,
+                                _output_directory=None):
     if confirm!="APPROVE" or ack_plaintext is not True:
         raise ValueError("Explicit owner append approval is required")
     validate_approval_doc(doc)
@@ -173,8 +175,7 @@ def _build_approved_append_doc(doc,approval_manifest,html_path,*,
     for path,sha in files:
         if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
             raise ValueError("Input mutated before publish")
-    fd=os.open(html_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
-    with os.fdopen(fd,"wb") as output:
+    with create_output_file(html_path,directory=_output_directory) as output:
         output.write(raw)
     for path,sha in files:
         if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
@@ -192,14 +193,16 @@ def _build_approved_append_doc(doc,approval_manifest,html_path,*,
         "status":"OWNER_APPROVED_APPEND_LOCAL_ONLY_RELEASE_HOLD",
     }
     if zip_path is not None:
-        receipt["package"]=package_html(html_path,zip_path,receipt)
+        receipt["package"]=package_html(html_path,zip_path,receipt,
+                                         _output_directory=_output_directory)
         # The pre-write checks are not sufficient when packaging races a
         # source edit. The receipt is issued only after the post-ZIP hashes.
         for path,sha in files:
             if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
                 raise ValueError("Approved source modified during ZIP packaging; output HOLD")
     if receipt_path is not None:
-        receipt["receipt_file"]=write_receipt(receipt_path,receipt)
+        receipt["receipt_file"]=write_receipt(receipt_path,receipt,
+                                               _output_directory=_output_directory)
     return receipt
 
 def deliver_to_new_directory(approval_manifest, destination, *, confirm, ack_plaintext):
@@ -242,14 +245,15 @@ def _deliver_approved_append_doc(doc, approval_manifest, destination, *,
             not path.parent.is_dir() or path.parent.is_symlink() or
             path.name in ("", ".", "..")):
         raise FileExistsError("Delivery destination must be a new folder")
-    path.mkdir(mode=0o700,exist_ok=False)
-    result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
-              confirm=confirm,ack_plaintext=ack_plaintext,
-              zip_path=path/"delivery.zip",receipt_path=path/"receipt.json")
-    # Do not advertise an approved customer folder until the independently
-    # checked HTML, ZIP and *final* receipt agree on disk.
-    from verify_customer_folder import verify_customer_folder
-    verify_customer_folder(path)
-    result["delivery_folder_created"]=True
-    result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
-    return result
+    with create_output_directory(path) as output_directory:
+        result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
+                  confirm=confirm,ack_plaintext=ack_plaintext,
+                  zip_path=path/"delivery.zip",receipt_path=path/"receipt.json",
+                  _output_directory=output_directory)
+        # Do not advertise an approved customer folder until the independently
+        # checked HTML, ZIP and *final* receipt agree on disk.
+        from verify_customer_folder import verify_customer_folder
+        verify_customer_folder(path)
+        result["delivery_folder_created"]=True
+        result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
+        return result

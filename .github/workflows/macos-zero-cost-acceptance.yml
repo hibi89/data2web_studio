@@ -10,6 +10,8 @@ on:
       - "verify_customer_folder.py"
       - "receipt_utils.py"
       - "path_policy.py"
+      - "secure_output.py"
+      - "test_secure_output.py"
       - "test_zip_offline_csp.py"
       - "test_output_snapshot_security.py"
       - "test_snapshot_safety.py"
