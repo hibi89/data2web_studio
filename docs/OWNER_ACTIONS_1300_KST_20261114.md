@@ -1,3 +1,8 @@
+## 2026-11-14 KST — latest verification before 13:00 batch
+- Full R01–R33 final100, evidence-verified72, 11 missing28, not all 100. New preorder privacy/report hardening passes Windows372/372 and Mac371PASS/1SKIP. Do not ask owner to retest already validated synthetic data in Windows.
+- Human-free public-source CodeQL scan is not R29 independent human audit. Volunteer review GitHub issue#5 updated; no volunteer confirmed, not an owner PC task.
+- Phone potential: own original HTML/CSS/JS/licensing facts & customer-data terms; Kmong account identity/settlement status and seller registration form when actually accessible. Do not send personal documents, credentials or actual client records into chat/GitHub. Any unavailable or unconfirmed step should be marked pending. The 13:00 task should contain only real owner actions and no reapproval of 0KRW/approved SKUs.
+
 ## 2026-11-14 KST update: full 100-point goal, verified72, remaining28
 - The frozen scorecard historical 85 is an intermediate checkpoint, NOT the owner's final goal of all 33 requirements / 100 points. Read-only CLI: python full_goal_status.py.
 - At 13:00 KST, ask only genuinely owner-held tasks: marketplace account verification and settlement state (on phone if available), actual original code/customer-output IP ownership and third-party NOTICE rights (evidence/unknown status), product draft and required customer privacy/data rights, remaining independent outside security/buyer OS evidence. Credentials/ID/actual customer files never go into chat/GitHub.
