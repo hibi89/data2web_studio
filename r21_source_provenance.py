@@ -10,8 +10,8 @@ import json
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parent
-PINS=ROOT/"data"/"r21_source_provenance_v1.json"
-CONTRACT="DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V1"
+PINS=ROOT/"data"/"r21_source_provenance_v2.json"
+CONTRACT="DATA2WEB_R21_SOURCE_PROVENANCE_PINS_V2"
 ROLES={
     "data2web_web.py":"GENERATES_CUSTOMER_HTML_CSS_JS",
     "delivery.py":"GENERATES_ZIP_MANIFEST_GUIDE",
