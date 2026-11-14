@@ -1,3 +1,8 @@
+## 2026-11-14 KST update: full 100-point goal, verified72, remaining28
+- The frozen scorecard historical 85 is an intermediate checkpoint, NOT the owner's final goal of all 33 requirements / 100 points. Read-only CLI: python full_goal_status.py.
+- At 13:00 KST, ask only genuinely owner-held tasks: marketplace account verification and settlement state (on phone if available), actual original code/customer-output IP ownership and third-party NOTICE rights (evidence/unknown status), product draft and required customer privacy/data rights, remaining independent outside security/buyer OS evidence. Credentials/ID/actual customer files never go into chat/GitHub.
+- No immediate PC need; don't rerun existing owner Windows synthetic tests or reapprove free internal prices. Independent security evaluation and real buyer acceptance cannot be fabricated by owner self-attestation or GitHub CI.
+
 # DATA2WEB 13시 사용자 직접 작업 묶음 / 2026-11-14 KST
 
 13:00 KST 한 번만 알려주기로 예약. 실제 알림에는 최신 상태를 재확인하여 불필요한 작업/중복 질문 제외. 내부 추가 현금지출0원·A 납품 우선·3단 SKU 가격은 이미 승인되었으므로 다시 묻지 않는다.
