@@ -1,8 +1,10 @@
 """Independent stdlib package verifier: no import from the builder."""
 from __future__ import annotations
 import argparse
+import base64
 import hashlib
 import json
+import re
 from io import BytesIO
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
@@ -29,6 +31,37 @@ _HEX = set("0123456789abcdef")
 def _is_sha256(value):
     return (isinstance(value, str) and len(value) == 64
             and all(char in _HEX for char in value))
+
+def _validate_offline_html_csp(html):
+    """Validate the HTML's single-static-script CSP safety contract.
+
+    This is a *structural* security check, not a publisher signature.
+    An attacker who can rewrite the ZIP AND recompute every SHA256 may
+    replace both script and matching CSP hash. Source authenticity and
+    reviewer trust still require separate out-of-band evidence.
+    """
+    # Only the generator's data JSON script and one static executable script
+    # may be present; injection or duplicate policy tags are rejected.
+    meta = re.findall(
+        rb'<meta http-equiv="Content-Security-Policy" content="([^"]+)">',
+        html
+    )
+    scripts = re.findall(rb"<script>(.*?)</script>", html, flags=re.DOTALL)
+    if (len(meta) != 1 or len(scripts) != 1
+            or len(re.findall(rb"<script\b", html, flags=re.IGNORECASE)) != 2
+            or len(re.findall(rb"</script\s*>", html, flags=re.IGNORECASE)) != 2
+            or len(re.findall(rb'http-equiv\s*=\s*["\']content-security-policy["\']',
+                              html, flags=re.IGNORECASE)) != 1):
+        raise ValueError("Standalone HTML script or CSP structure changed")
+    digest = base64.b64encode(hashlib.sha256(scripts[0]).digest())
+    approved = (
+        b"default-src 'none'; script-src 'sha256-" + digest +
+        b"'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; "
+        b"form-action 'none'; base-uri 'none'"
+    )
+    if meta[0] != approved:
+        raise ValueError("Offline CSP does not match fixed script and network policy")
+
 
 def verify_zip(path):
     path = Path(path)
@@ -84,6 +117,7 @@ def verify_zip(path):
                     raise ValueError("Member integrity mismatch")
             if not html.startswith(b"<!doctype html>") or b"DATA2WEB" not in html:
                 raise ValueError("Invalid standalone HTML")
+            _validate_offline_html_csp(html)
             if type(manifest.get("rows")) is not int or manifest["rows"] < 0:
                 raise ValueError("Invalid manifest row count")
             if manifest.get("sheet") is not None and not isinstance(manifest["sheet"], str):
