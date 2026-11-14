@@ -1,3 +1,8 @@
+## 2026-11-14 KST — A07-03 headless Tcl regression added
+- Refactored `data2web_desktop.py` single/batch consent callbacks through `bind_consent_reset` without changing mapping/destination reset scope, commit `f10ff24134a6cc4b18979a98da59428a9051a704`.
+- Replaced AST-only test with `test_consent_reset_bindings.py` Tcl interpreter tests for ten mapping/destination variables and unrelated theme, commit `7af452f218b74b591cb0ef927531d03aee4dd521`. No display required; Windows GUI end-to-end still separate.
+- `.github/workflows/python-tests.yml` push trigger includes this branch and unittest discover, but GitHub commit-workflow-run lookup returned no PR-filtered runs for `7af452f`; **CI success not verified**, not a failure diagnosis. Do not award points. R07/R21 PENDING, official 72/100, RELEASE HOLD.
+
 ## 2026-11-14 KST — A21-02 source identity and dependency inspection
 - Direct GitHub fetch confirmed **6/6** current producer blob SHA-1 values match `data/r21_source_provenance_v1.json`; evidence `docs/A21_02_SOURCE_ORIGIN_AND_DEPENDENCY_REVIEW_20261114.md`, commit `0629ab5d8b17c9b864c9eb903384b7068e8aa98d`.
 - Reviewed direct imports of six producers: Python stdlib + internal modules, inline HTML/CSS/JS in `data2web_web.py`; customer A ZIP excludes Python producers and EXE. Import scan is NOT SBOM or copyright clearance. Authorship, derived templates, upstream rights and NOTICE still require actual evidence.
