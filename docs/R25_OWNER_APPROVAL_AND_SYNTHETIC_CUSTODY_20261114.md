@@ -40,3 +40,9 @@ The product owner explicitly approved these seven operational defaults and appoi
 
 ## Owner risk-control instruction (2026-11-14 KST)
 The owner reiterated that preventing unlawful handling and avoiding personal legal exposure is the highest priority. Treat this as a **risk-control instruction**, not a waiver, a legal compliance certification, permission to process customer data, or proof of disposal. Preserve fail-closed customer intake, no unauthorized deletion, no automatic source purge, customer-specific rights and privacy review, statutory exception checks, and RELEASE HOLD until independently evidenced acceptance. Legal obligations vary by data, contract, jurisdiction, and record type; seven days is an internal temporary-copy default only.
+
+
+## 2026-11-14 23:47 KST — R25 report consistency fix and exact-SHA regression
+- Independent internal review identified that a forged overdue sensitive/rights-pending report could set `manual_disposal_action_due=false`. No customer disposal or policy approval was involved; existing seven owner-approved rules remain unchanged.
+- Result JSON is now contract `DATA2WEB_OPERATOR_COPY_RETENTION_RESULT_V2`, carrying explicit `purpose_completed_claimed` and `legal_retention_exception_claimed` booleans. The validator recomputes the action flag from copy presence, due time, purpose completion, and exception claim; a legal exception remains manual-evidence HOLD and suppresses the flag by design.
+- Exact-SHA tests [#43606247844](https://github.com/hibi89/data2web_studio/actions/runs/43606247844) and [macOS #43606247722](https://github.com/hibi89/data2web_studio/actions/runs/43606247722) passed. This validates internal report consistency only; it is not evidence of actual customer custody or disposal. R25 remains PENDING, official 72/100, RELEASE HOLD.
