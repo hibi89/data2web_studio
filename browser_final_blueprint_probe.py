@@ -97,6 +97,20 @@ def main():
             page.locator("#replace").click()
             expect(page.locator("#count")).to_have_text("1건")
             expect(page.locator("#import-warning")).to_be_visible()
+            # A previously approved CSV must never be saved under a new
+            # file selection or after the owner retracts/rechecks consent.
+            page.locator("#ack").uncheck()
+            page.locator("#ack").check()
+            page.locator("#save").click()
+            expect(page.locator("#notice")).to_contain_text("HOLD")
+            page.locator("#csv").set_input_files(str(invalid_utf8))
+            page.locator("#ack").check()
+            page.locator("#save").click()
+            expect(page.locator("#notice")).to_contain_text("HOLD")
+            page.locator("#csv").set_input_files(str(changed))
+            page.locator("#ack").check()
+            page.locator("#replace").click()
+            expect(page.locator("#count")).to_have_text("1건")
             with page.expect_download() as downloaded:
                 page.locator("#save").click()
             saved=directory/"saved-replaced.html"
