@@ -229,8 +229,7 @@ def validate_result(record):
                 "PER_ORDER_RIGHTS_OR_PLAINTEXT_CONSENT_PENDING",
         }:
             raise ValueError("Manual disposal flag and reason disagree")
-        if due > reviewed:
-            raise ValueError("Future deadline cannot require overdue disposal")
+        # Purpose completion may require earlier action, even before day seven.
     if record["reason_code"] == "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE" and not (
             record["manual_disposal_action_due"]):
         raise ValueError("Disposal-due report cannot suppress manual action")
