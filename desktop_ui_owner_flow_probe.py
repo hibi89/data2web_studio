@@ -25,6 +25,8 @@ def test_case(source_kind):
             expected_count=2
         else:
             source.write_text("id,title,category,amount\nA1,First,A,4\nA2,Second,B,5\n",encoding="utf-8")
+            replacement=root_dir/"second-source.csv"
+            replacement.write_text("id,title,category,amount\nS1,Changed sample,C,7\nS2,New sample,C,9\n",encoding="utf-8")
             expected_count=2
         expected_dir=root_dir/"DATA2WEB-customer"
         real_tk=tk.Tk
@@ -62,6 +64,22 @@ def test_case(source_kind):
                          and "NO_PERSONAL_DATA_REVIEWED" in widget.cget("values")]
                 assert len(privacy)==1
                 privacy[0].set("NO_PERSONAL_DATA_REVIEWED")
+                if source_kind=="csv":
+                    # A prior approval of source1 must not survive source2,
+                    # even with the same header/mapping and synthetic contents.
+                    buttons["파일 선택"].invoke()
+                    assert not any(c.instate(["selected"]) for c in approval_boxes
+                                   if c.cget("text").startswith(
+                                      ("이 자료를 사용할 권리","결과 HTML·ZIP"))), "Stale rights/plaintxt consent survived source change"
+                    assert privacy[0].get()=="", "Stale privacy review survived source change"
+                    buttons["SHA·열·중복 검수"].invoke()
+                    buttons["상위 폴더 선택"].invoke()
+                    buttons["새 고객 폴더 생성·독립 검증"].invoke()
+                    assert not expected_dir.exists(), "Unapproved second source was delivered"
+                    for check in approval_boxes:
+                        if check.cget("text").startswith(("이 자료를 사용할 권리","결과 HTML·ZIP")):
+                            check.invoke()
+                    privacy[0].set("NO_PERSONAL_DATA_REVIEWED")
                 buttons["상위 폴더 선택"].invoke()
                 buttons["새 고객 폴더 생성·독립 검증"].invoke()
                 assert expected_dir.is_dir(), "GUI did not actually create the folder"
@@ -79,7 +97,8 @@ def test_case(source_kind):
             win.after(10000,lambda:win.destroy() if win.winfo_exists() else None)
             return win
         with (patch.object(tk,"Tk",new=new_root),
-              patch.object(filedialog,"askopenfilename",return_value=str(source)),
+              patch.object(filedialog,"askopenfilename",
+                  side_effect=[str(source),str(replacement)] if source_kind=="csv" else [str(source)]),
               patch.object(filedialog,"askdirectory",return_value=str(root_dir)),
               patch.object(messagebox,"askyesno",return_value=True),
               patch.object(messagebox,"showinfo",return_value=None)):

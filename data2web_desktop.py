@@ -34,7 +34,7 @@ class ReviewedInput:
 def inspect_sheets(path):
     p=Path(path)
     assert_no_links(p)
-    if p.suffix.lower()!=".xlsx" or not p.is_file() or p.stat().st_size>MAX_BYTES:
+    if p.suffix.lower()!=".xlsx" or not p.is_file():
         raise ValueError("A regular, bounded XLSX file is required")
     from data2web_tabular import list_xlsx_sheets
     data=read_bounded_source(p,max_bytes=MAX_BYTES)
@@ -172,14 +172,28 @@ def desktop_main():
     ttk.Label(checks,text="개인정보 검수 상태 (자동 법적 승인 아님)").pack(anchor="w",pady=(5,0))
     ttk.Combobox(checks,textvariable=privacy,values=PRIVACY_CHOICES,state="readonly",width=38).pack(anchor="w")
 
+    def reset_consent(*_):
+        # Rights/PII/plaintext acknowledgement belongs to this exact reviewed
+        # dataset AND its ID/title/category mapping, never to a previous file.
+        rights.set(False)
+        plaintext.set(False)
+        privacy.set("")
+
     def reset_review():
         reviewed[0]=None
+        reset_consent()
         sha.set("검수 전 — 변경된 설정은 반드시 다시 검수하세요")
+        for box in fields:
+            box["values"]=()
+        for mapped in (id_key,title_key,category_key):
+            mapped.set("")
         for child in table.get_children():
             table.delete(child)
 
     for var in (source,sheet,header,cached):
         var.trace_add("write",lambda *_:reset_review())
+    for var in (id_key,title_key,category_key):
+        var.trace_add("write",reset_consent)
 
     def choose_source():
         chosen=filedialog.askopenfilename(parent=root,title="고객 소유 표 데이터",
