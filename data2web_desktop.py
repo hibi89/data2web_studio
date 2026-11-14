@@ -333,6 +333,9 @@ def desktop_main():
         if not parent.get() or not folder.get().strip() or Path(folder.get()).name!=folder.get().strip() or (
                 "/" in folder.get() or "\\" in folder.get() or folder.get() in (".","..")):
             message.set("HOLD: 상위 폴더와 새로운 단순 폴더명을 지정하세요.");return
+        if not rights.get() or not plaintext.get() or privacy.get() not in PRIVACY_CHOICES:
+            message.set("HOLD: 사용권·평문 노출·개인정보 검수 승인 후 생성할 수 있습니다.")
+            return
         destination=Path(parent.get())/folder.get()
         if not messagebox.askyesno("DATA2WEB 출력 전 최종 확인",
              f"검수 SHA256: {current.sha256}\\n파일: {current.source.name}\\n"
