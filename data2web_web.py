@@ -214,7 +214,11 @@ function parseCSV(text){
  if(cell!==""||record.length)pushRow();
  return table;
 }
+// Replacing a selected file invalidates the last reviewed CSV and consent.
+let csvSelectionRevision=0, csvConsentRevision=0, importedRevision=-1;
+$("ack").addEventListener("change",()=>{csvConsentRevision++;importedRevision=-1;});
 $("csv").addEventListener("change",()=>{
+  csvSelectionRevision++;importedRevision=-1;
   $("ack").checked=false;
   $("notice").textContent="새 CSV를 선택했습니다. 자료 권리와 평문 포함을 다시 확인하세요.";
 });
@@ -222,7 +226,11 @@ $("replace").onclick=async()=>{
  try{
   if(!$("ack").checked)throw Error("데이터 권리 및 평문 저장 확인이 필요합니다");
   const f=$("csv").files[0];if(!f||f.size>MAX_FILE||!f.name.toLowerCase().endsWith(".csv"))throw Error("8MB 이하 CSV 파일을 선택하세요");
+  const fileRevision=csvSelectionRevision, consentRevision=csvConsentRevision;
   const decoded=new TextDecoder("utf-8",{fatal:true}).decode(await f.arrayBuffer());
+  if(fileRevision!==csvSelectionRevision||consentRevision!==csvConsentRevision||
+     $("csv").files[0]!==f||!$("ack").checked)
+    throw Error("CSV 선택 또는 승인이 검사 중 변경됐습니다. 다시 승인하세요");
    const table=parseCSV(decoded);if(table.length<1)throw Error("CSV 헤더가 없습니다");
   if(table[0].length!==state.columns.length||table[0].some((h,i)=>h!==state.columns[i]))throw Error("승인된 헤더/순서와 다릅니다");
   if(table.length-1>MAX_ROWS)throw Error("행수 제한 초과");
@@ -230,7 +238,7 @@ $("replace").onclick=async()=>{
   for(const row of table.slice(1)){if(row.length!==state.columns.length||row.some(v=>v.length>MAX_CELL))throw Error("행 길이/셀 상한 오류");
    const item={};state.columns.forEach((name,i)=>{item[name]=row[i]});
    if(!item[idKey]||ids.has(item[idKey]))throw Error("ID 누락 또는 중복");ids.add(item[idKey]);draft.push(item)}
-  state.rows=draft;state.changed=true;page=0;$("search").value="";categoryOptions();numericMetrics();render();
+  state.rows=draft;state.changed=true;importedRevision=fileRevision;page=0;$("search").value="";categoryOptions();numericMetrics();render();
   $("notice").textContent=draft.length+"개 행을 로컬 메모리에 반영했습니다. 새 HTML 저장을 누르세요.";
  }catch(error){$("notice").textContent="HOLD: "+error.message}
 };
@@ -240,7 +248,8 @@ function safeJSON(obj){
 }
 $("save").onclick=()=>{
  try{
- if(!state.changed||!$("ack").checked)throw Error("명시적으로 승인된 CSV 교체 후에만 저장합니다");
+ if(!state.changed||!$("ack").checked||importedRevision!==csvSelectionRevision)
+    throw Error("현재 선택한 CSV를 새로 승인하고 교체한 후에만 저장합니다");
  const doc={...d,rows:state.rows,source_sha256:null,source_sheet:null,source_header_row:1,
   cached_formulas:false,source_receipts:null,import_status:"USER_LOCAL_CSV_REPLACEMENT_NOT_VERIFIED"};
  $("dataset").textContent=safeJSON(doc);
