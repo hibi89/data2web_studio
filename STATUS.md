@@ -1,5 +1,11 @@
 # DATA2WEB Studio — STATUS
 
+## 2026-11-14 KST · 실제 합성 납품 자산 권리 preflight·허위 승인 차단 6종 회귀 PASS
+- 기능 SHA `37a06cd77efcf71dd1576576157daef412adf70f`: `shipping_rights_preflight.py`, `data/shipping_rights_inventory_v1.json`, `test_shipping_rights_preflight.py` 신규. **A안 고객 HTML+ZIP+receipt 실제 구조를 합성 자료로 생성/독립검증**하고, 권리·LICENSE/NOTICE·외부감사 결과를 허위로 PASS 표시하지 못하도록 fail closed. 제3자 코드·빌더 EXE는 A 고객 ZIP에 포함하지 않는 구성 경계를 확인. 원본 데이터/점수표/실판매 권한 변경0.
+- [최신 기능 CI #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796): **4/4 SUCCESS**; Windows 304/304, Ubuntu 303 PASS+1 SKIP, hosted Chromium/Chrome/Edge PASS. 신규 6종 독립 테스트 모두 PASS. [정본 게이트 #43535767926](https://github.com/hibi89/data2web_studio/actions/runs/43535767926) SUCCESS. [상세 기술·권리 한계](docs/R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md).
+- 공식 최종설계 **72/100 유지**, 목표85까지13. R21은 실제 저작권자·제3자 라이선스 승인과 approved NOTICE shipping 미완; R07/R25/R26 실제 소유자·고객 데이터 권리/보존·개인정보 동의 미승인, R29 외부 독립 보안감사 미실시. 내부 자기검수는 권리 승인/감사 대체 불가. `[작업중]`/RELEASE HOLD/SALE NO-GO/PR#4 Draft/실판매0 유지.
+
+
 ## 2026-11-14 KST · A/B 장기 로드맵/승인 안전게이트의 최신 정확 SHA CI 검증 성공
 - **제품 HEAD `e0ad8b849c2771ff9aa47bc1fbaae95e7f6ccdd7`**: [Windows/Ubuntu Python + Chrome/Edge/Chromium #43534569192](https://github.com/hibi89/data2web_studio/actions/runs/43534569192) **4/4 SUCCESS**; Windows `298/298` PASS, Ubuntu `297 PASS/1 SKIP`. 신규 `test_strategy_roadmap.py`의 무승인 판매·점수표 일치·중복 득점 금지·EXE 후속 미출시 등 **4종 테스트 모두 PASS**. [Final blueprint gate #43534569433](https://github.com/hibi89/data2web_studio/actions/runs/43534569433) **SUCCESS**.
 - 이 증거는 승인된 **A 결과물 납품 선행 / B EXE 후속 방향의 로드맵·자동계약 일치성** 증거다. **R07/R21/R25/R26의 실제 법적/데이터 승인 및 R29 외부독립 감사 완료 증거는 아니다**. 공식 `72/100`, 목표85까지13, `[작업중]`, RELEASE HOLD/SALE NO-GO, 크몽 등록0, 승인 외부전송/유료서비스0 유지. 문서·점수표·기존 원본 안전.

@@ -1,3 +1,9 @@
+## 2026-11-14 · A안 고객 납품 구성·상업적 권리 HOLD 자동검증
+
+`python shipping_rights_preflight.py`를 실행하면 **고객 원본이 아닌 합성 CSV**로 실제 HTML/ZIP/receipt 패키지를 생성/재검증하고, [권리 인벤토리](data/shipping_rights_inventory_v1.json)와 허용 멤버가 일치하는지 확인한다. `python -m unittest test_shipping_rights_preflight -v`는 허위 상업 권리·외부 보안감사·LICENSE/NOTICE 주장/멤버 삽입 등을 **6종 회귀**로 거부한다. [CI #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796) Windows/Ubuntu + Chrome/Edge/Chromium 4/4 SUCCESS. [근거와 한계](docs/R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md).
+
+**의도된 결과는 HOLD**(`status=HOLD_OWNER_IP_NOTICE_EXTERNAL_AUDIT`)이며 승인된 저작권/사용권, 고객 자료 권리, 제3자 LICENSE/NOTICE, 외부독립 R29 감사의 증거가 아니다. 최종설계72/100 유지, 85까지13점. 기존 고객 파일·폴더, 현재 ZIP verifier v1, 미서명 EXE/권리·판매 설정 변경 없음.
+
 ## 2026-11-14 · 사용자 확정 A 우선 납품 + 후속 B EXE / 전체 개발 로드맵
 
 **상업화 우선순위:** 고객 로컬용 HTML·ZIP·검증영수증 **A 결과물 제작 서비스 먼저** → Python/Tk/PyInstaller의 **B 독립 Windows EXE 라이선스·상용배포는 후속**. 기존 R01–R33 가중치100/검증72, 타 원본 제품 보존, 승인 전 판매·외부 전송·유료 감사 금지.

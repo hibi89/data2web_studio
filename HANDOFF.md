@@ -1,5 +1,16 @@
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
+## 최신 인수인계 — 2026-11-14 KST · A안 납품 저작권/재배포 사전검증기 6종 PASS
+1. 목적/정본: DATA2WEB Studio 로컬 표형자료→HTML/ZIP 영수증 A 납품 우선, B native EXE 후속; R01–R33 고정100점/목표85.
+2. 변경: `shipping_rights_preflight.py` + `data/shipping_rights_inventory_v1.json` + `test_shipping_rights_preflight.py` 신규. 합성 고객 폴더 생성→독립 `verify_zip/verify_customer_folder`→ZIP 3멤버/고객 폴더3멤버/권리 조사표 일치 검사. 권리/외부독립 감사/출시 허위 승인 상태 금지, 항상 RELEASE HOLD, 중복 JSON 거부, 실제 고객 파일 읽기0.
+3. 테스트/결과: 기능 SHA `37a06cd77efcf71dd1576576157daef412adf70f` [Actions #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796) **4/4 SUCCESS** Windows304/304, Ubuntu303PASS/1SKIP, Chrome/Edge/Chromium PASS. 신규6회귀 PASS. [score gate #43535767926](https://github.com/hibi89/data2web_studio/actions/runs/43535767926) SUCCESS. `python shipping_rights_preflight.py`는 `HOLD_OWNER_IP_NOTICE_EXTERNAL_AUDIT`을 반환하는 사전검사이며 권리 승인이 아님.
+4. 현재: 22개 VERIFIED 72점, 11 PENDING28점, 목표85에13점 부족. `[작업중]`/RELEASE HOLD/SALE NO-GO, PR#4 Draft, 크몽 미등록.
+5. 차단/원인: 실제 고객 자료 사용허락·저작권/제3자 NOTICE/상업 재배포 정책 미승인, 데이터 수신/보존기간·개인정보 책임 미확정, R29 외부 독립 보안감사 보고서 없음. 내부 자가 CI PASS로 득점 불가. [preflight 보고](docs/R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md). 외부/유료감사 전에 형 사전 승인 필수.
+6. 저장소/브랜치: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`, 정확 기능 SHA `37a06cd77efcf71dd1576576157daef412adf70f`. 이전 `5c3c59bb2532abf43a6b80bc64eab61e2fca9db0`; 코드/원본/scorecard/main 보존.
+7. 환경/프로덕션: Python3.11, hosted Windows/Ubuntu, Chrome·Edge·Chromium, GitHub Actions. Vercel/Production 미적용, unsigned preview EXE B 미판매, 사용자 실Win11 구바이너리 납품 PASS 기록 유지.
+8. 원본/복구: 생성물은 합성 tempfile, 종료 때 자동 제거되는 내부 합성 테스트만. 고객 실원본/로컬 파일 수정·삭제/외부송신0, 민감데이터·경로·토큰 GitHub0. `LICENSE`/NOTICE 실제 파일 신규 생성/판매GO0.
+9. 다음: 사용자가 [승인 패킷](docs/OWNER_APPROVAL_PACKET_A_20261114.md)에서 실제 코드·자료 사용권, 데이터 보존·파기·개인정보, SKU/지원/환불을 명시 확정. 별도 외부 독립보안감사 범위·비용·정보공유 승인 후 실제 R29 진행. 승인된 LICENSE/NOTICE 패키지 마이그레이션/구v1 verifier 회귀 가능. 모든 R07/R21/R25/R26/R29 완전 수용 후 85점 갱신.
+10. 갱신: 2026-11-14 KST GitHub 정확 SHA/CI 직접 조회, 이후 문서 commit HEAD 확인. 정책 방향 A 승인과 판매·법적사용 승인 구별.
 ## 최신 CI 검증 추가 — 2026-11-14 KST · A 우선/후속 B GitHub 반영
 1. 목표·정본: 앞선 10항 인수인계의 전략 A 우선 납품/B EXE 후속, R01–R33 전체100점, 현재72/100 그대로.
 2. 변경: 신규 JSON 로드맵·4종 안전 회귀/권리 인벤토리/승인 패킷/보안감사 계획, 고객 사전접수/납품 QA 템플릿. 정책 방향만 사용자 승인, 판매/개인정보/권리/유료 감사 미승인.

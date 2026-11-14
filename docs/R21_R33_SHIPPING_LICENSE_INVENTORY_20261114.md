@@ -26,3 +26,8 @@
 4. 실제 승인된 권리문서의 법적 적합성, 통합 패키지 근거 확인 후 **그때만 R21 전체 수용 판정**. R21이 충족되어도 전체 release GO는 아님.
 
 **현 상태:** 조사 일부 완료, 라이선스/권리 미확정. `R21=PENDING`, `R33=PENDING`, `SALE NO-GO`.
+
+
+## 2026-11-14 KST · 실제 A 고객 패키지 구성과 권리 사전 자동검증
+- GitHub 기능 SHA `37a06cd77efcf71dd1576576157daef412adf70f`: `shipping_rights_preflight.py` + `data/shipping_rights_inventory_v1.json` + `test_shipping_rights_preflight.py`로 고객 ZIP의 실제 정본3멤버/고객폴더3파일을 **합성 데이터 실행**으로 교차 확인. 출처/권리 미확정 부분은 모두 `PENDING`, 허위 권리/독립감사/상업출시 플래그·미승인 LICENSE 삽입은 fail closed.
+- [CI #43535767796](https://github.com/hibi89/data2web_studio/actions/runs/43535767796) Windows/Ubuntu Python 및 Chrome/Edge/Chromium **4/4 SUCCESS**, 신규6종 회귀 PASS. `R21=PENDING`(권리자/NOTICE 승인 없음), `R29=PENDING`(외부 독립감사 없음), 공식72/100·RELEASE HOLD 유지. [자세한 실행 한계](R21_R29_SHIPPING_RIGHTS_PREFLIGHT_20261114.md).
