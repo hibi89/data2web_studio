@@ -76,11 +76,18 @@ def test_case(source_kind):
                     buttons["상위 폴더 선택"].invoke()
                     buttons["새 고객 폴더 생성·독립 검증"].invoke()
                     assert not expected_dir.exists(), "Unapproved second source was delivered"
-                    for check in approval_boxes:
-                        if check.cget("text").startswith(("이 자료를 사용할 권리","결과 HTML·ZIP")):
-                            check.invoke()
-                    privacy[0].set("NO_PERSONAL_DATA_REVIEWED")
-                buttons["상위 폴더 선택"].invoke()
+                if source_kind=="xlsx":
+                    # Selecting a destination after review invalidates the old
+                    # consent. Re-consent only after the target is fixed.
+                    buttons["상위 폴더 선택"].invoke()
+                assert not any(c.instate(["selected"]) for c in approval_boxes
+                               if c.cget("text").startswith(
+                                  ("이 자료를 사용할 권리","결과 HTML·ZIP")))
+                assert privacy[0].get()==""
+                for check in approval_boxes:
+                    if check.cget("text").startswith(("이 자료를 사용할 권리","결과 HTML·ZIP")):
+                        check.invoke()
+                privacy[0].set("NO_PERSONAL_DATA_REVIEWED")
                 buttons["새 고객 폴더 생성·독립 검증"].invoke()
                 assert expected_dir.is_dir(), "GUI did not actually create the folder"
                 assert verify_customer_folder(expected_dir)["rows"]==expected_count
