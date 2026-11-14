@@ -214,11 +214,16 @@ function parseCSV(text){
  if(cell!==""||record.length)pushRow();
  return table;
 }
+$("csv").addEventListener("change",()=>{
+  $("ack").checked=false;
+  $("notice").textContent="새 CSV를 선택했습니다. 자료 권리와 평문 포함을 다시 확인하세요.";
+});
 $("replace").onclick=async()=>{
  try{
   if(!$("ack").checked)throw Error("데이터 권리 및 평문 저장 확인이 필요합니다");
   const f=$("csv").files[0];if(!f||f.size>MAX_FILE||!f.name.toLowerCase().endsWith(".csv"))throw Error("8MB 이하 CSV 파일을 선택하세요");
-  const table=parseCSV(await f.text());if(table.length<1)throw Error("CSV 헤더가 없습니다");
+  const decoded=new TextDecoder("utf-8",{fatal:true}).decode(await f.arrayBuffer());
+   const table=parseCSV(decoded);if(table.length<1)throw Error("CSV 헤더가 없습니다");
   if(table[0].length!==state.columns.length||table[0].some((h,i)=>h!==state.columns[i]))throw Error("승인된 헤더/순서와 다릅니다");
   if(table.length-1>MAX_ROWS)throw Error("행수 제한 초과");
   const draft=[],ids=new Set();

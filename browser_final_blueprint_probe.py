@@ -81,7 +81,16 @@ def main():
             page.locator("#search").fill("TSV item")
             expect(page.locator("#count")).to_have_text("1건")
             page.locator("#search").fill("")
+            invalid_utf8=directory/"invalid-utf8.csv"
+            invalid_utf8.write_bytes(b"id,title,category,amount\nBAD,\xff,A,99\n")
+            page.locator("#csv").set_input_files(str(invalid_utf8))
+            assert not page.locator("#ack").is_checked(), "New source must invalidate prior plaintext approval"
+            page.locator("#ack").check()
+            page.locator("#replace").click()
+            expect(page.locator("#notice")).to_contain_text("HOLD")
+            expect(page.locator("#count")).to_have_text("4건")
             page.locator("#csv").set_input_files(str(changed))
+            assert not page.locator("#ack").is_checked(), "Second source inherited first approval"
             page.locator("#replace").click()
             expect(page.locator("#notice")).to_contain_text("HOLD")
             page.locator("#ack").check()
