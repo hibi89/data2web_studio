@@ -5,6 +5,13 @@ on:
     paths:
       - "data2web*.py"
       - "studio.py"
+      - "delivery.py"
+      - "verify_delivery.py"
+      - "verify_customer_folder.py"
+      - "receipt_utils.py"
+      - "path_policy.py"
+      - "test_zip_offline_csp.py"
+      - "test_output_snapshot_security.py"
       - "order_intake_preflight.py"
       - "test_order_intake_preflight.py"
       - "browser_p85_probe.py"
