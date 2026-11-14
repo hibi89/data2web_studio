@@ -1,6 +1,6 @@
 {
   "contract": "DATA2WEB_CODEX_GPT6_LUNA_MAX_M85_GITHUB_ONLY_V1",
-  "snapshot_date_kst": "2026-11-15 06:37",
+  "snapshot_date_kst": "2026-11-15",
   "repository": "hibi89/data2web_studio",
   "branch": "feature/final-blueprint-p85-evidence-20261113",
   "source_branch_sha_at_plan": "1c582db78fb3ac91f37ddbab27b18124c08a5419",
@@ -50,13 +50,22 @@
     "functional_ci_run": 43617898725,
     "hosted_windows_pass": 525,
     "hosted_ubuntu_pass": 524,
-    "latest_changes_test_status": "PASS_EXACT_SHA_512AF500",
+    "latest_changes_test_status": "MIXED_EXACT_SHA_320AEBC_R21_PIN_GATE_FAIL",
     "R25_policy_approved": true,
     "R25_synthetic_deletion": "PASS_LIMITED_ASSISTANT_CONTAINER",
     "R25_real_operator_evidence": "PENDING",
     "R29_real_independent_audit": "PENDING",
     "hosted_ubuntu_windows_only_skip": 1,
-    "owner_pc_windows10_11": "NOT_VERIFIED"
+    "owner_pc_windows10_11": "NOT_VERIFIED",
+    "latest_validation_sha": "320aebc23163019f85e1c345857ff4ed3da8147a",
+    "latest_python_browser_run": 43644268104,
+    "latest_python_browser_status": "FAIL_R21_SOURCE_REVIEW_GATE",
+    "latest_native_windows_preview_run": 43644268111,
+    "latest_native_windows_preview_status": "PASS_SYNTHETIC_HOSTED_ONLY",
+    "latest_codeql_run": 43644268143,
+    "latest_final_evidence_gate_run": 43644268362,
+    "latest_final_evidence_gate_status": "PASS_WORKFLOW_UNASSESSED",
+    "latest_macos_at_validation_sha": "NOT_RUN"
   },
   "score_rule": "NO_PARTIAL_POINTS_NO_WEIGHT_CHANGES_NO_UNVERIFIED_COMPLETION; A real independent audit R29 and owner/customer rights/consent cannot be faked by Codex or self review.",
   "decision": "Work through all free GitHub-verifiable steps; if nondelegable gates unavailable, report technically ready and keep 72 rather than pretend 85.",
@@ -83,7 +92,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Latest exact code/test SHA b3850cde8249ac39aae474326cbdb02274ad0fd1; PR #4 remains Draft/Open/Unmerged; main unchanged; locked score is 72/100 (22 VERIFIED/11 PENDING). Docs-only HEAD follows."
+      "current_note": "Focused P00 scorecard contract check passed in exact run #43644268104 (11/11); full Python matrix at 320aebc remains failed only on six R21 source-provenance checks. Score remains 72/100."
     },
     {
       "id": "P01",
@@ -157,7 +166,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "At exact b3850cd, Python/browser #43643553016 failed only at six source-provenance tests because four producer blobs differ from historic pins; CodeQL #43643553049, synthetic preview #43643553075, browser/Windows browser subjobs and gate #43643553369 passed. MacOS not run on this SHA."
+      "current_note": "At exact 320aebc, Python/browser #43644268104 failed only on six R21 source-provenance tests (Windows 524 PASS/5 ERROR/1 FAIL/1 SKIP; Ubuntu 521 PASS/5 ERROR/1 FAIL/4 SKIP). Chromium and Windows Chrome/Edge/Tk jobs, native Windows preview #43644268111, CodeQL #43644268143, and evidence workflow #43644268362 passed; gate report is UNASSESSED. macOS was not run. Four producer blobs still require authorized R21 source review."
     },
     {
       "id": "A07-01",
@@ -230,7 +239,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Consent reset on mapping/destination changes passed in the exact 92dca18 Windows, Ubuntu and macOS full-suite logs; overall jobs remain failed only at the separate R21 source-provenance blocker."
+      "current_note": "Consent-reset regressions remain PASS in the hosted Windows Tk/browser flow at exact 320aebc (#43644268104, windows-browsers job); the full Python matrix fails only on separate R21 provenance checks. No customer acceptance is claimed."
     },
     {
       "id": "A07-04",
@@ -304,7 +313,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Current secure output changes alter four shipped producer blobs. Reconcile shipped-source provenance only after authorized R21 source-change review; no rights claim."
+      "current_note": "Exact 320aebc revalidation confirms four producer blobs differ from the historic six-source pin manifest. Record drift; do not reconcile pins without authorized R21 source review. Native manifest output hardening is hosted PASS, but this is not commercial-rights acceptance."
     },
     {
       "id": "A21-02",
@@ -328,7 +337,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "Original six-source pin manifest stays untouched; four current producer blobs drift. No mechanical pin refresh or commercial rights/NOTICE approval."
+      "current_note": "At exact 320aebc, full Windows/Ubuntu suites fail closed with 'Shipping producer source drift requires R21 review'; original pin manifest remains untouched. Native preview/CodeQL/browser jobs pass. No mechanical pin refresh or commercial rights/NOTICE approval."
     },
     {
       "id": "A21-03",
@@ -448,7 +457,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Malformed UTF-8 HOLD and extreme receipt timestamp/date/report integrity tests passed in Windows, Ubuntu and macOS exact 92dca18 runs; overall matrix is blocked by separate R21 source drift."
+      "current_note": "Focused operator-copy retention step passed at exact 320aebc in Python/browser run #43644268104 on Windows and Ubuntu. Full suites fail only on the separate six R21 source-provenance checks; macOS was not run at this SHA."
     },
     {
       "id": "A25-02",
@@ -564,7 +573,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Single/batch consent reset and pre-confirmation privacy flow passed in exact 92dca18 hosted runs; overall matrix is blocked by separate R21 source drift."
+      "current_note": "Focused privacy-scope/consent preflight passed at exact 320aebc in Python/browser run #43644268104; Windows Chrome/Edge/Tk flow also passed. Full suites fail only on separate R21 source-provenance checks; no customer-specific legal basis is established."
     },
     {
       "id": "A26-03",
@@ -635,7 +644,7 @@
       ],
       "blocker": "INDEPENDENT_EXTERNAL_AUDIT_PENDING",
       "point_award_by_task": 0,
-      "current_note": "At b3850cd, secure_output parent/link/relative-create tests and R29 seven-check synthetic preaudit pass; hosted Chromium screenshot output now uses held output-directory handles; preview report records 3 files, 0 remote requests, 0 JS errors. High source review found no actionable issue; not independent audit."
+      "current_note": "At exact 320aebc, focused R29 internal synthetic preaudit and Chromium/Chrome/Edge flows pass; native Windows preview #43644268111 passes after manifest path anchoring; CodeQL #43644268143 passes. Full Python matrix is blocked by six unrelated R21 source-pin checks. High source review found no actionable issue; none of this is independent audit acceptance."
     },
     {
       "id": "A29-02",
@@ -659,7 +668,7 @@
       ],
       "blocker": null,
       "point_award_by_task": 0,
-      "current_note": "Synthetic public-source audit bundle and current hosted preview evidence are reproducible at b3850cd; R21 source pins block full suite and external R29 approval remains absent."
+      "current_note": "Current synthetic public-source evidence includes exact 320aebc native Windows preview #43644268111 and evidence gate #43644268362 (workflow PASS, report UNASSESSED). R21 source drift still fails the full Python matrix; external R29 review and approval remain absent."
     },
     {
       "id": "A29-03",
@@ -825,7 +834,7 @@
       ],
       "blocker": "R21_SOURCE_PRODUCER_REVIEW_REQUIRED",
       "point_award_by_task": 0,
-      "current_note": "At exact b3850cd Python/Ubuntu suites fail closed on six R21 source-pin checks; browser and Windows browsers, CodeQL, preview and evidence workflow pass. Final gate is UNASSESSED. No macOS run at this SHA."
+      "current_note": "At exact 320aebc, Python/browser #43644268104 fails only at six R21 source-pin checks (Windows 531: 524 PASS/5 ERROR/1 FAIL/1 SKIP; Ubuntu 531: 521 PASS/5 ERROR/1 FAIL/4 SKIP). Browser, Windows browser, native preview #43644268111, CodeQL #43644268143 and evidence gate #43644268362 workflow pass; gate result is UNASSESSED. macOS was not run; no score award."
     },
     {
       "id": "G85-03",
