@@ -1,0 +1,40 @@
+name: DATA2WEB zero-cost synthetic Kmong preview
+on:
+  push:
+    branches: ["feature/final-blueprint-p85-evidence-20261113"]
+    paths:
+      - "kmong_weekend_demo.py"
+      - "test_kmong_weekend_demo.py"
+      - ".github/workflows/kmong-synthetic-preview.yml"
+      - "data2web_single.py"
+      - "verify_customer_folder.py"
+      - "delivery.py"
+      - "data2web_web.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-product-preview:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Synthetic-only no-clobber and deterministic package tests
+        run: python -m unittest test_kmong_weekend_demo -v
+      - name: Make and independently verify artificial demonstration package
+        run: python kmong_weekend_demo.py --output ./kmong-preview-synthetic
+      - name: Recheck score and zero-cost policy (never auto-approve sale)
+        run: |
+          python blueprint_score.py
+          python zero_cost_gate.py
+      - name: Upload ONLY synthetic preview files for owner listing review
+        uses: actions/upload-artifact@v4
+        with:
+          name: DATA2WEB-KMONG-SYNTHETIC-DEMO
+          path: kmong-preview-synthetic/
+          if-no-files-found: error
+          retention-days: 7
