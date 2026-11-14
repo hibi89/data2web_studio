@@ -1,6 +1,6 @@
 # A21-02 — shipped producer origin and dependency review (2026-11-14 KST)
 
-**Evidence scope:** Direct GitHub contents API retrieval and hosted technical checks at `${verifiedSha}`; no customer file, external license-holder confirmation, or legal review.
+**Evidence scope:** Direct GitHub contents API retrieval and hosted technical checks at `48ea586b6ef712176b26c33d1809d3cd9a782d94`; no customer file, external license-holder confirmation, or legal review.
 
 ## Verified source identity
 All six `data/r21_source_provenance_v1.json` Git blob SHA-1 pins matched GitHub's returned current blob IDs (6/6):
@@ -37,4 +37,4 @@ Git blob equality is code identity, **not** author attribution, copyright cleara
 4. Inspect generated output bytes and dependency SBOM in a complete runnable checkout; source import scan does not prove absence of embedded third-party code.
 5. Only after owner/legal confirmation, decide whether v1 requires LICENSE/NOTICE; do not ship invented text or change the strict allowlist before approval.
 
-**Result:** A21-02 source identity and dependency inspection plus 6/6 runtime pin validation complete at `${verifiedSha}`; legal origin, authorship, redistribution and NOTICE evidence remain PENDING. No R21 score award; official 72/100, RELEASE HOLD.
+**Result:** A21-02 source identity and dependency inspection plus 6/6 runtime pin validation complete at `48ea586b6ef712176b26c33d1809d3cd9a782d94`; legal origin, authorship, redistribution and NOTICE evidence remain PENDING. No R21 score award; official 72/100, RELEASE HOLD.
