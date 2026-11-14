@@ -246,6 +246,10 @@ def _deliver_approved_append_doc(doc, approval_manifest, destination, *,
     result=_build_approved_append_doc(doc,approval_manifest,path/"index.html",
               confirm=confirm,ack_plaintext=ack_plaintext,
               zip_path=path/"delivery.zip",receipt_path=path/"receipt.json")
+    # Do not advertise an approved customer folder until the independently
+    # checked HTML, ZIP and *final* receipt agree on disk.
+    from verify_customer_folder import verify_customer_folder
+    verify_customer_folder(path)
     result["delivery_folder_created"]=True
     result["status"]="DELIVERY_FOLDER_CREATED_RELEASE_HOLD_NOT_SALE_APPROVED"
     return result

@@ -69,6 +69,11 @@ def deliver_single(source, new_directory, *,
     if hashlib.sha256(read_bounded_source(source,max_bytes=MAX_BYTES)).hexdigest()!=expected_sha256:
         raise ValueError("Source modified during package creation; output HOLD")
     receipt["receipt_file"]=write_receipt(destination/"receipt.json",receipt)
+    # The create-only ZIP was verified before the receipt existed. Verify the
+    # *whole* folder after the final write; corruption or partial publication
+    # must fail closed. Preserve partial artifacts for manual inspection.
+    from verify_customer_folder import verify_customer_folder
+    verify_customer_folder(destination)
     receipt["delivery_folder_created"]=True
     receipt["sale_approved"]=False
     return receipt
