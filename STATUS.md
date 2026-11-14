@@ -1,3 +1,9 @@
+## 2026-11-14 KST — A07/A26 consent-before-confirmation fix
+- `data2web_desktop.py` single delivery previously opened the final confirmation dialog before validating rights/plaintext/privacy, unlike batch. Added fail-closed consent gate **before** the confirmation dialog; downstream `deliver_reviewed` still independently checks. Code SHA `8fe85d464ae4e2e974c7d3420dc0626370c8e962`.
+- `test_consent_reset_bindings.py` now checks the consent gate precedes the confirmation dialog using AST; also contains headless Tcl callback regressions. Test SHA `10580c4cb6bb5a705985ff5df92b922bca8da280`.
+- GitHub PR-filtered workflow run lookup and combined status lookup for prior test SHA returned empty; this **does not establish** CI success/failure. New code/test still **unexecuted** in this session; exact-SHA CI and Windows Tk remain pending. No source/customer data touched.
+- Locked 100-point scoring has no 1-point pending item; smallest whole requirement is 2 points. Owner rights/retention/privacy evidence and external audit still absent, so **72/100 official**, R07/R25/R26/R21/R29 PENDING, RELEASE HOLD.
+
 ## 2026-11-14 KST — A07-03 headless Tcl regression added
 - Refactored `data2web_desktop.py` single/batch consent callbacks through `bind_consent_reset` without changing mapping/destination reset scope, commit `f10ff24134a6cc4b18979a98da59428a9051a704`.
 - Replaced AST-only test with `test_consent_reset_bindings.py` Tcl interpreter tests for ten mapping/destination variables and unrelated theme, commit `7af452f218b74b591cb0ef927531d03aee4dd521`. No display required; Windows GUI end-to-end still separate.
