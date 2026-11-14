@@ -1,3 +1,9 @@
+## HANDOFF — 2026-11-14 KST — GPT-6 High 설계 완료; Instant 100까지 실행; High 최종 검수만
+1. **역할 정정:** R07/R21/R25/R26/R29의 항목별 수용 및 85·95점 중간 게이트는 Instant가 실제 증거에 기반하여 검증. High는 **G100-02에서 100점 개발 이후 최종 재감사만** 수행. R29 별도 외부 감사 및 실제 OWNER/고객 승인 요건은 절대 대체하지 않음.
+2. **변경:** 총50개 Task의 7개 내부 리뷰 역할을 High→Instant로 수정, 의존성과 R01–R33 확정 가중치 보존. 계획 경로 `docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md`, 기계 Task `data/gpt6_execution_plan_r01_r33_v1.json`.
+3. **다음 `ㄱ`:** Instant가 `P00`부터 실제 개발·테스트/CI/커밋/STATUS/HANDOFF 수행하고 100점 최종 개발·인수증거까지 이어감. High 중간 호출 요구하지 않음. 기술적으로 불가능한 실권리/실구매/외부감사는 BLOCKED로 표시하고 병렬 가능 Task 수행.
+4. **기준·안전:** 기존 공식72/100, 22 VERIFIED/11 PENDING, RELEASE HOLD. 마지막 기능 검증 SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7`, 코드·scorecard·main/PR Draft/원본/고객 데이터/라이선스·보안권한·판매 변경 없음. 문서-only [skip ci] HEAD는 별도, 새 CI 미실행.
+
 ## HANDOFF — 2026-11-14 KST — High 설계 완료 / Instant 구현 준비 (R01–R33 72→100)
 1. **목표·용도·확정 요구·기술:** 사용자 지시로 GPT-6 High가 최종설계 R01–R33(33요구/100점) 기준으로 72→85→95→100 원자 작업 WBS를 설계·레포 공시. High=설계·최종검수, Instant=실제 코드·회귀·GitHub 최신화. A=오프라인 HTML/ZIP/receipt 로컬 데이터 변환기 Python3.11 stdlib/Tk 우선; 후속 B=독립 Windows EXE 상업 판매 별도. 요구와 가중치 보존.
 2. **완료 기능·변경·설계 근거:** 새 [실행계획](docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md)과 [Task JSON](data/gpt6_execution_plan_r01_r33_v1.json), AGENTS/README 상단 진입 링크. 2안 비교: 체크리스트 중심 vs 원자ID/선행차단/주체/증거/테스트/High gate의 실행 WBS; 후자 채택. **코드 구현/권리 인수·점수 변경 없음**, 문서만 추가. 공시된 Task ID를 Instant가 다음 `ㄱ`에 선택/실행/검증할 수 있게 정렬.

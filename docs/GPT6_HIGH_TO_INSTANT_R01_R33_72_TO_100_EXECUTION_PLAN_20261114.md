@@ -6,8 +6,8 @@
 ## 0. 정본·역할·우선순위
 - **법적/기능 정본:** `REQUIREMENTS.md` → `docs/FINAL_DESIGN.md` → `data/final_blueprint_scorecard_v1.json` (33요구·100점 변경 금지). 배점 해설 `docs/FINAL_BLUEPRINT_WEIGHTING_100_APPROVED_20261114.md`. 본 문서는 *실행 지도*이지 원 요구사항 수정안이 아니다.
 - **기준 저장소/브랜치:** `hibi89/data2web_studio` / `feature/final-blueprint-p85-evidence-20261113`, Draft PR #4 Open, 기존 `main` 미변경. 설계 직전 HEAD `bd2500a703d82420a542145ec2804ee1303355b9`; 마지막 **기능 CI 검증 SHA** `1be21c6a3f4ba2426c93a71201d96e274ce22ee7` ([Actions #43595570078](https://github.com/hibi89/data2web_studio/actions/runs/43595570078): Windows 507/507, Ubuntu 506 PASS+1 SKIP, browsers PASS, CodeQL/score gate 별도 SUCCESS). 이 설계 docs-only HEAD는 기능 검증 SHA가 아니다.
-- **GPT-6 High(설계·검수):** 이 세부 계획과 최종설계 일치성 판단. 지정된 `G85-04`, `G95-01`, `G100-02` 관문에서 기능/권리/독립 검증 증거를 재감사. High 스스로는 **외부 독립감사자(R29)**가 아니다.
-- **GPT-6 Instant(구현):** 다음 `ㄱ`부터 `P00` 선행점검 후 가능한 READY 작업을 **실제 코드/테스트/회귀/문서**로 수행. 매 작업 끝에 exact tested source SHA와 docs HEAD 분리, PASS/FAIL/SKIP, `STATUS.md`/`HANDOFF.md` 갱신. 계획·상태 설명만 반복하지 말 것. **사용자 계정의 다른 ChatGPT 모드/채팅이 자동 실행되는 것은 아니므로** 해당 실행 담당에게 본 레포지토리 문서가 전달되어야 함.
+- **GPT-6 High(설계·검수):** 이 세부 계획과 최종설계 일치성 판단. 100점 개발 이후 `G100-02`에서만 기능/권리/독립 검증 증거를 최종 재감사. 85·95 중간 관문은 Instant 담당. High 스스로는 **외부 독립감사자(R29)**가 아니다.
+- **GPT-6 Instant(구현):** 다음 `ㄱ`부터 `P00` 선행점검 후 가능한 READY 작업을 **실제 코드/테스트/회귀/문서**로 수행. 85·95점 중간 수용 판정까지 맡고 매 작업 끝에 exact tested source SHA와 docs HEAD 분리, PASS/FAIL/SKIP, `STATUS.md`/`HANDOFF.md` 갱신. 계획·상태 설명만 반복하지 말 것. **사용자 계정의 다른 ChatGPT 모드/채팅이 자동 실행되는 것은 아니므로** 해당 실행 담당에게 본 레포지토리 문서가 전달되어야 함.
 - **OWNER/EXTERNAL:** 실제 고객 권리·개인정보 서면 동의, 자산 저작권/제3자 라이선스, 보존·파기 운영 책임, 외부 감사·실 OS·실 구매 인수는 코드를 작성하는 AI가 대리할 수 없음. OWNER/EXTERNAL 작업은 별도 사용자 승인·증거가 확보될 때까지 `BLOCKED`.
 - **보호 경계:** 추가 현금 0원, 고객 원본/비밀 GitHub·AI·제3자 전송 금지, 고객 파일/이전 산출물 자동삭제·덮어쓰기 금지, 비승인 LICENSE/NOTICE 생성·판매·실고객 납품 금지, 권한/배포/Vercel/프로젝트 설정·`main` 변경 금지. 외부 공개 소스라도 평가자·범위·전송은 사전 승인.
 - **실행 설계 비교:** (A) 단순 일괄 ‘85% 만들기’는 지연 위험을 숨기고 증거 없이 득점할 유인이 큼. (B) **고정 REQ별 원자 작업 + 선행/차단조건 + 별도 사람 검증 + 자동기술 게이트(선택)**는 관리 비용이 조금 증가하지만 재작업·비용·법적 위험이 낮음. **B 선택.** 기존 구현이 있으면 재작성하지 말고 **근거를 재검사**한 다음 실제 누락만 보완.
@@ -91,10 +91,10 @@
 - **변경·참고 경로:** `docs/OWNER_APPROVAL_PACKET_A_20261114.md`  
 - **차단:** `NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT`; 실제 외부/사용자 확인 전 완료·점수변경 금지
 
-**A07-05 — HIGH / QUEUED_DEPENDENCIES** · 선행 `A07-01 → A07-03 → A07-04`  
+**A07-05 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `A07-01 → A07-03 → A07-04`  
 - **실행:** Review rights/consent provenance and source-before/after SHA, exact tested code SHA and residual privacy limits.
 - **완료 조건:** Entire R07 source preservation + actual rights/consent satisfied; otherwise leave R07 PENDING.
-- **필수 증거:** Signed/referenced High item-level review without customer data in repo.
+- **필수 증거:** Signed/referenced Instant item-level review without customer data in repo.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`
 
@@ -135,10 +135,10 @@
 - **검증:** `python -m unittest discover -v` / `python shipping_rights_preflight.py`  
 - **변경·참고 경로:** `test_shipping_rights_preflight.py`, `test_customer_folder.py`
 
-**A21-06 — HIGH / QUEUED_DEPENDENCIES** · 선행 `A21-03 → A21-05`  
+**A21-06 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `A21-03 → A21-05`  
 - **실행:** Review owner/third-party rights proof, final shipped bytes and license text/NOTICE obligations, migration, exact-SHA CI.
 - **완료 조건:** Entire R21 including real commercial use permission and v1/v2 verifier correctness accepted or 4 points stay pending.
-- **필수 증거:** High item review and exact rights decision reference, not hypothetical license.
+- **필수 증거:** Instant item review and exact rights decision reference, not hypothetical license.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`
 
@@ -165,10 +165,10 @@
 - **변경·참고 경로:** `docs/OWNER_APPROVAL_PACKET_A_20261114.md`  
 - **차단:** `NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE`; 실제 외부/사용자 확인 전 완료·점수변경 금지
 
-**A25-04 — HIGH / QUEUED_DEPENDENCIES** · 선행 `A25-01 → A25-03`  
+**A25-04 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `A25-01 → A25-03`  
 - **실행:** Compare actual operator evidence with source-preservation, duration and manual-only protocol; check legal exceptions not silently bypassed.
 - **완료 조건:** Complete R25 policy notice and actual accountable practice satisfied; else hold.
-- **필수 증거:** High item review plus retention acceptance reference.
+- **필수 증거:** Instant item review plus retention acceptance reference.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`
 
@@ -195,10 +195,10 @@
 - **변경·참고 경로:** `docs/OWNER_APPROVAL_PACKET_A_20261114.md`  
 - **차단:** `NON_DELEGABLE_PER_CUSTOMER_PRIVACY_CONSENT`; 실제 외부/사용자 확인 전 완료·점수변경 금지
 
-**A26-04 — HIGH / QUEUED_DEPENDENCIES** · 선행 `A26-02 → A26-03`  
+**A26-04 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `A26-02 → A26-03`  
 - **실행:** Verify privacy scope and actual permission against implementation and plaintext warnings; never treat program checkbox alone as legal agreement.
 - **완료 조건:** Full R26 personally sensitive data handling/rejection and real consent scope accepted; otherwise pending.
-- **필수 증거:** High item review plus consent reference.
+- **필수 증거:** Instant item review plus consent reference.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`
 
@@ -248,10 +248,10 @@
 - **변경·참고 경로:** `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`  
 - **차단:** `EXTERNAL_RETEST_AND_SIGNOFF`; 실제 외부/사용자 확인 전 완료·점수변경 금지
 
-**A29-07 — HIGH / QUEUED_DEPENDENCIES** · 선행 `A29-04 → A29-06`  
-- **실행:** Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate High with external.
+**A29-07 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `A29-04 → A29-06`  
+- **실행:** Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate Instant with external.
 - **완료 조건:** Complete R29 acceptance only after external signoff and verified no blocking findings; else PENDING.
-- **필수 증거:** High R29 score review linking external IDs and code SHA.
+- **필수 증거:** Instant R29 score review linking external IDs and code SHA.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`
 
@@ -271,16 +271,16 @@
 - **변경·참고 경로:** `.github/workflows/python-tests.yml`, `.github/workflows/final-blueprint-gate.yml`
 
 **G85-03 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `G85-02`  
-- **실행:** Only if five full acceptance proofs exist and independent High item reviews agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.
+- **실행:** Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.
 - **완료 조건:** Score mechanically equals 85/100, 33 items and 100 denominator unchanged, all five VERIFIED and other six PENDING; publish audit diff.
 - **필수 증거:** Scorecard JSON diff, exact SHA score command and evidence links.
 - **검증:** `python blueprint_score.py` / `python -m unittest test_blueprint_score -v`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`, `blueprint_score.py`
 
-**G85-04 — HIGH / QUEUED_DEPENDENCIES** · 선행 `G85-03`  
-- **실행:** High final milestone gate: confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.
+**G85-04 — INSTANT / QUEUED_DEPENDENCIES** · 선행 `G85-03`  
+- **실행:** Instant 85 milestone evidence gate (High final review only after 100): confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.
 - **완료 조건:** Authorize 85 report only when all five complete; otherwise return blocked IDs to Instant and preserve prior score; keep RELEASE HOLD.
-- **필수 증거:** High acceptance memo with item verdicts, STATUS/HANDOFF consistency.
+- **필수 증거:** Instant acceptance memo with item verdicts, STATUS/HANDOFF consistency.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `STATUS.md`, `HANDOFF.md`
 
@@ -351,10 +351,10 @@
 - **차단:** `NATIVE_RELEASE_RIGHTS_SIGNING_APPROVAL`; 실제 외부/사용자 확인 전 완료·점수변경 금지
 
 ### 단계별 최종 검증 게이트
-**G95-01 — HIGH / FUTURE_STAGE** · 선행 `B23-02 → B27-02 → B30-02 → B32-02`  
+**G95-01 — INSTANT / FUTURE_STAGE** · 선행 `B23-02 → B27-02 → B30-02 → B32-02`  
 - **실행:** Review R23=3,R27=2,R30=2,R32=3 full evidence, rerun score/CI and update only verified items through Instant.
 - **완료 조건:** If and only if four complete items accepted, confirmed score=95/100; sale still HOLD.
-- **필수 증거:** High milestone review, revised exact SHA scorecard/CI and handoff.
+- **필수 증거:** Instant milestone review, revised exact SHA scorecard/CI and handoff.
 - **검증:** `python blueprint_score.py`  
 - **변경·참고 경로:** `data/final_blueprint_scorecard_v1.json`, `STATUS.md`
 
@@ -427,7 +427,7 @@
 - **G85-04:** R07/R21/R25/R26/R29 **모두 전체 증거**, 85점 scorecard fixed 100, CodeQL+Windows/Ubuntu+Chrome/Edge/Chromium exact tested SHA, 독립 R29 외부 감사·재검증 확인, RIGHTS/PII/RETENTION 실제 증빙 확인. 출시/판매는 여전히 HOLD.
 - **G95-01:** R23/R27/R30/R32 전체 실제 사용자/운영/재현 빌드 수용 및 95점. Customer Win10/11 및 필요한 macOS/Linux는 hosted CI로 대체 불가.
 - **G100-02:** R06·R33까지 전체 수용, 33개 요구 전수 감사, 소스 SHA=실행 증거/패키지와 일치, 원본 불변, 고객 계약·환불/재배포·저작권 증거 점검, 100점 진위 검증. **100점 자체가 실제 판매 게시/유료 결제/접근권 변경의 포괄적 승인 아님.**
-- 최종 검수자가 발견한 반례는 `FAIL/BLOCKED`로 기록하고 근거 없는 기존점수 조정 금지. 최소 수정은 Instant 담당으로 되돌리고 동일 인수기준으로 재검수.
+- 100점 이후 High 최종 검수자가 발견한 반례는 `FAIL/BLOCKED`로 기록하고 근거 없는 기존점수 조정 금지. 최소 수정은 Instant 담당으로 되돌리고 동일 인수기준으로 재검수.
 
 ## 9. 최초 수행 범위·수용 증거의 차이
 - **이미 있음(재작성 금지):** Python stdlib CSV/TSV/JSON/XLSX, GUI 단일·배치/승인 리셋, create-only HTML/ZIP/receipt, 3브라우저 호스팅 E2E, 샘플 기반 507 Windows PASS, 사전권리/개인정보 익명 분류, 운영자 7일 보관 점검, R21 source pins 및 shipping preflight, CodeQL/R29 내부 synthetic preaudit. **이 모두가 실 고객/외부 법률·감사 수용을 보증하지 않음.**

@@ -270,7 +270,7 @@
       "id": "A07-05",
       "stage": "M85",
       "requirement": "R07",
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "A07-01",
         "A07-03",
@@ -278,8 +278,8 @@
       ],
       "work": "Review rights/consent provenance and source-before/after SHA, exact tested code SHA and residual privacy limits.",
       "acceptance": "Entire R07 source preservation + actual rights/consent satisfied; otherwise leave R07 PENDING.",
-      "evidence": "Signed/referenced High item-level review without customer data in repo.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Signed/referenced Instant item-level review without customer data in repo.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -412,15 +412,15 @@
       "id": "A21-06",
       "stage": "M85",
       "requirement": "R21",
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "A21-03",
         "A21-05"
       ],
       "work": "Review owner/third-party rights proof, final shipped bytes and license text/NOTICE obligations, migration, exact-SHA CI.",
       "acceptance": "Entire R21 including real commercial use permission and v1/v2 verifier correctness accepted or 4 points stay pending.",
-      "evidence": "High item review and exact rights decision reference, not hypothetical license.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant item review and exact rights decision reference, not hypothetical license.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -500,15 +500,15 @@
       "id": "A25-04",
       "stage": "M85",
       "requirement": "R25",
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "A25-01",
         "A25-03"
       ],
       "work": "Compare actual operator evidence with source-preservation, duration and manual-only protocol; check legal exceptions not silently bypassed.",
       "acceptance": "Complete R25 policy notice and actual accountable practice satisfied; else hold.",
-      "evidence": "High item review plus retention acceptance reference.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant item review plus retention acceptance reference.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -590,15 +590,15 @@
       "id": "A26-04",
       "stage": "M85",
       "requirement": "R26",
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "A26-02",
         "A26-03"
       ],
       "work": "Verify privacy scope and actual permission against implementation and plaintext warnings; never treat program checkbox alone as legal agreement.",
       "acceptance": "Full R26 personally sensitive data handling/rejection and real consent scope accepted; otherwise pending.",
-      "evidence": "High item review plus consent reference.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant item review plus consent reference.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -745,15 +745,15 @@
       "id": "A29-07",
       "stage": "M85",
       "requirement": "R29",
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "A29-04",
         "A29-06"
       ],
-      "work": "Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate High with external.",
+      "work": "Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate Instant with external.",
       "acceptance": "Complete R29 acceptance only after external signoff and verified no blocking findings; else PENDING.",
-      "evidence": "High R29 score review linking external IDs and code SHA.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant R29 score review linking external IDs and code SHA.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -823,7 +823,7 @@
       "depends_on": [
         "G85-02"
       ],
-      "work": "Only if five full acceptance proofs exist and independent High item reviews agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.",
+      "work": "Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.",
       "acceptance": "Score mechanically equals 85/100, 33 items and 100 denominator unchanged, all five VERIFIED and other six PENDING; publish audit diff.",
       "evidence": "Scorecard JSON diff, exact SHA score command and evidence links.",
       "evidence_class": "TECHNICAL",
@@ -843,14 +843,14 @@
       "id": "G85-04",
       "stage": "M85",
       "requirement": null,
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "G85-03"
       ],
-      "work": "High final milestone gate: confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.",
+      "work": "Instant 85 milestone evidence gate (High final review only after 100): confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.",
       "acceptance": "Authorize 85 report only when all five complete; otherwise return blocked IDs to Instant and preserve prior score; keep RELEASE HOLD.",
-      "evidence": "High acceptance memo with item verdicts, STATUS/HANDOFF consistency.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant acceptance memo with item verdicts, STATUS/HANDOFF consistency.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -1037,7 +1037,7 @@
       "id": "G95-01",
       "stage": "M95",
       "requirement": null,
-      "assignee": "HIGH",
+      "assignee": "INSTANT",
       "depends_on": [
         "B23-02",
         "B27-02",
@@ -1046,8 +1046,8 @@
       ],
       "work": "Review R23=3,R27=2,R30=2,R32=3 full evidence, rerun score/CI and update only verified items through Instant.",
       "acceptance": "If and only if four complete items accepted, confirmed score=95/100; sale still HOLD.",
-      "evidence": "High milestone review, revised exact SHA scorecard/CI and handoff.",
-      "evidence_class": "INTERNAL_HIGH_REVIEW",
+      "evidence": "Instant milestone review, revised exact SHA scorecard/CI and handoff.",
+      "evidence_class": "INSTANT_ITEM_EVIDENCE_REVIEW",
       "commands": [
         "python blueprint_score.py"
       ],
@@ -1230,7 +1230,12 @@
       "A29-01"
     ],
     "finish_each_turn": "actual task artifact or verified blocker; exact tests/results; GitHub commit if changed; STATUS/HANDOFF; next task; score and RELEASE HOLD",
-    "high_final_review_trigger": "G85-04/G95-01/G100-02, not by normal plan-only task",
-    "external_evidence_not_delegable": true
+    "high_final_review_trigger": "G100-02 only, after Instant completes 100-point design implementation and all evidence gates",
+    "external_evidence_not_delegable": true,
+    "instant_interim_gates": [
+      "G85-04",
+      "G95-01",
+      "G100-01"
+    ]
   }
 }

@@ -1,3 +1,7 @@
+## 2026-11-14 KST — 최종 역할 수정: Instant는 100점까지 중간 점검 자체 진행, High는 100점 이후 1회 검수
+- 첫 High 실행계획에서 `A07-05/A21-06/A25-04/A26-04/A29-07/G85-04/G95-01`를 High로 둔 것은 사용자의 **Instant가 100점까지 작업한다**는 요구와 충돌했다. 위 7개 Task를 **INSTANT 담당**으로 정정하고 역할·선행·증거·승인 구분을 보존했다. **High 담당은 `G100-02` 하나**다. 외부 독립 감사(R29)는 제3자 EXTERNAL 그대로, 사용자·고객 권리/개인정보 동의는 OWNER 그대로.
+- 최종 실행계획 50개(준비4/85단계30/95단계9/100단계7), 72→85(+13)→95(+10)→100(+5) 점수는 실제 증거 외 가산 금지. 공식72/100, [작업중], RELEASE HOLD / SALE NO-GO. 기존 코드는 미변경, docs-only [skip ci].
+
 ## 2026-11-14 KST — GPT-6 High 72→85→95→100 전체 WBS 설계·GitHub 공시 (점수 불변)
 - 사용자 지시: High는 R01–R33 최종설계 기준으로 85까지 전체 업무를 원자 작업·선행조건·주체·수용 근거로 분해하여 GitHub에 공시; Instant는 이후 구현/테스트/GitHub 최신화로 100까지 계속, High는 최종 검수. [실행계획](docs/GPT6_HIGH_TO_INSTANT_R01_R33_72_TO_100_EXECUTION_PLAN_20261114.md) / [작업 JSON](data/gpt6_execution_plan_r01_r33_v1.json) / [AGENTS.md 역할 고정](AGENTS.md).
 - 소스 기준: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113` 설계 시작 HEAD `bd2500a703d82420a542145ec2804ee1303355b9`. 마지막 실기능 CI 검증 SHA `1be21c6a3f4ba2426c93a71201d96e274ce22ee7`; [Windows/Ubuntu/browser Actions #43595570078](https://github.com/hibi89/data2web_studio/actions/runs/43595570078) Windows 507/507, Ubuntu 506 PASS+1 SKIP, 4/4 SUCCESS; CodeQL [#43595570039](https://github.com/hibi89/data2web_studio/actions/runs/43595570039) SUCCESS, score gate [#43595570534](https://github.com/hibi89/data2web_studio/actions/runs/43595570534) SUCCESS. **이번은 설계/문서만, 새 기능/CI 검증을 했다는 뜻 아님**.
