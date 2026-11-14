@@ -7,11 +7,11 @@ All generated artifacts stay inside a newly created directory.
 from __future__ import annotations
 import hashlib
 from pathlib import Path
-from data2web import build, read_table
+from data2web import build, read_table, MAX_BYTES
 from data2web_web import render_html
 from delivery import package_html
 from receipt_utils import write_receipt
-from path_policy import assert_no_links
+from path_policy import assert_no_links, read_bounded_source
 
 PRIVACY_MODES=("NO_PERSONAL_DATA_REVIEWED","OWNER_APPROVED_LOCAL_ONLY")
 
@@ -64,6 +64,10 @@ def deliver_single(source, new_directory, *,
     receipt["privacy_classification"]=privacy_classification
     receipt["status"]="SINGLE_OWNER_APPROVED_LOCAL_DELIVERY_RELEASE_HOLD"
     receipt["package"]=package_html(destination/"index.html",destination/"delivery.zip",receipt)
+    # ZIP creation can take time. Abort receipt generation if the source
+    # changed during packaging; a partial new folder remains HOLD for review.
+    if hashlib.sha256(read_bounded_source(source,max_bytes=MAX_BYTES)).hexdigest()!=expected_sha256:
+        raise ValueError("Source modified during package creation; output HOLD")
     receipt["receipt_file"]=write_receipt(destination/"receipt.json",receipt)
     receipt["delivery_folder_created"]=True
     receipt["sale_approved"]=False

@@ -193,6 +193,11 @@ def _build_approved_append_doc(doc,approval_manifest,html_path,*,
     }
     if zip_path is not None:
         receipt["package"]=package_html(html_path,zip_path,receipt)
+        # The pre-write checks are not sufficient when packaging races a
+        # source edit. The receipt is issued only after the post-ZIP hashes.
+        for path,sha in files:
+            if hashlib.sha256(read_bounded_source(path,max_bytes=MAX_BYTES)).hexdigest()!=sha:
+                raise ValueError("Approved source modified during ZIP packaging; output HOLD")
     if receipt_path is not None:
         receipt["receipt_file"]=write_receipt(receipt_path,receipt)
     return receipt

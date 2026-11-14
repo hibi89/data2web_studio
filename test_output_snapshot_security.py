@@ -45,6 +45,25 @@ class OutputSnapshotSecurity(unittest.TestCase):
                 self.build_single()
         self.assertTrue(self.html.exists())
 
+    def test_single_source_mutated_during_zip_never_issues_receipt(self):
+        from data2web_single import deliver_single
+        import data2web_single
+        genuine=data2web_single.package_html
+        dest=self.root / "single-customer"
+        def mutate_during_zip(*args,**kwargs):
+            result=genuine(*args,**kwargs)
+            self.csv.write_text("id,title,category\nS1,Changed item,A\n", encoding="utf-8")
+            return result
+        with patch.object(data2web_single,"package_html",side_effect=mutate_during_zip):
+            with self.assertRaisesRegex(ValueError,"during package creation"):
+                deliver_single(self.csv,dest,expected_sha256=self.ssha,
+                    id_column="id",title_column="title",category_column="category",
+                    confirm="APPROVE",ack_plaintext=True,
+                    privacy_classification="NO_PERSONAL_DATA_REVIEWED")
+        self.assertTrue((dest/"index.html").exists())
+        self.assertTrue((dest/"delivery.zip").exists())
+        self.assertFalse((dest/"receipt.json").exists())
+
     def test_single_oversize_html_rejected_without_any_output(self):
         with patch("data2web_web.render_html", return_value="X" * 20_000_001):
             with self.assertRaisesRegex(ValueError, "Output HTML exceeds"):
@@ -71,6 +90,26 @@ class OutputSnapshotSecurity(unittest.TestCase):
         }
         manifest.write_text(json.dumps(document), encoding="utf-8")
         return manifest
+
+    def test_append_source_mutated_during_zip_never_issues_receipt(self):
+        import data2web_append
+        manifest=self.setup_approved_append()
+        zip_path=self.root/"fresh.zip"
+        receipt_path=self.root/"receipt.json"
+        second=self.root/"second.csv"
+        genuine=data2web_append.package_html
+        def mutate_during_zip(*args,**kwargs):
+            result=genuine(*args,**kwargs)
+            second.write_text("id,title,category\nS2,Changed second,B\n",encoding="utf-8")
+            return result
+        with patch.object(data2web_append,"package_html",side_effect=mutate_during_zip):
+            with self.assertRaisesRegex(ValueError,"during ZIP packaging"):
+                data2web_append.build_approved_append(
+                    manifest,self.html,confirm="APPROVE",ack_plaintext=True,
+                    zip_path=zip_path,receipt_path=receipt_path)
+        self.assertTrue(self.html.exists())
+        self.assertTrue(zip_path.exists())
+        self.assertFalse(receipt_path.exists())
 
     def test_append_uses_bounded_output_fd_not_pathlib_read_bytes(self):
         manifest = self.setup_approved_append()
