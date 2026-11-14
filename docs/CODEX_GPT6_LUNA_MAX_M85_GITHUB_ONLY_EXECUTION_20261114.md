@@ -1,10 +1,11 @@
-## 2026-11-15 KST — 최신 exact-SHA 실행 상태
+## 2026-11-15 KST — latest exact-SHA status
 
-- [Python/browser #43609470587](https://github.com/hibi89/data2web_studio/actions/runs/43609470587) SUCCESS at `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`: Windows 522/522 PASS; Ubuntu 522 run, 521 PASS + 1 Windows-only SKIP; Chrome/Edge and Chromium hosted browser flows PASS, including synthetic Tk single/batch consent reset.
-- [macOS offline #43609470565](https://github.com/hibi89/data2web_studio/actions/runs/43609470565) SUCCESS: 522 run, 521 PASS + 1 Windows-only SKIP; offline Chromium, local-file and A4 checks PASS.
-- [CodeQL #43609470563](https://github.com/hibi89/data2web_studio/actions/runs/43609470563) SUCCESS; [final blueprint gate #43609470850](https://github.com/hibi89/data2web_studio/actions/runs/43609470850) SUCCESS, but reports no approved evidence manifest and no official score.
+- [Python/browser #43611527779](https://github.com/hibi89/data2web_studio/actions/runs/43611527779) SUCCESS at `d3aef514f0847b9f05789ad0e9eb4acf6b503105`: Windows 522/522 PASS; Ubuntu 522 run, 521 PASS + 1 Windows-only SKIP. P00 11/11, P01 15/15, A25 19/19, A26 24/24 and R29 preaudit 7/7 PASS; hosted Chrome/Edge, Chromium, Tk single/batch and file:// flows PASS.
+- [macOS offline #43611527786](https://github.com/hibi89/data2web_studio/actions/runs/43611527786) SUCCESS: full suite 521 PASS + 1 Windows-only SKIP; direct P00 11/11, P01 15/15, A25 19/19, A26 24/24 and preaudit 7/7 PASS; offline Chromium/file URL/A4 PASS.
+- [CodeQL #43611527768](https://github.com/hibi89/data2web_studio/actions/runs/43611527768) SUCCESS.
+- [Final blueprint gate #43611527971](https://github.com/hibi89/data2web_studio/actions/runs/43611527971) SUCCESS, but the log states no approved evidence manifest and no official score.
 
-기준 scorecard는 33/100, 22 VERIFIED, 11 PENDING, 72/100(+0)이다. 검증 코드/워크플로우 SHA는 `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`; 문서 갱신은 docs-only `[skip ci]`이다. 전체 522-test discovery와 A25 19/19, A26 24/24, R29 synthetic preaudit 7/7을 Windows/Ubuntu/macOS에서 통과했다. Exact browser/UI checks와 CodeQL도 성공했으며 final gate는 evidence manifest가 없어 공식 점수를 주지 않았다. 실제 owner/customer/independent-audit evidence는 미확보로 계속 차단한다.
+Official score remains 72/100 (22 VERIFIED, 11 PENDING; 0 points added). Last product code is `4e6808b`; verified workflow/test SHA is `d3aef514f0847b9f05789ad0e9eb4acf6b503105`. The docs refresh is docs-only `[skip ci]`. No customer data, new spend, permission changes, or deployment.
 
 # DATA2WEB Studio — Codex GPT-6 Luna Max · GitHub-only M85 실행 공시
 
@@ -51,7 +52,7 @@
 
 아래 `RECORDED_*`는 기존 문서 이력이고 현 SHA의 기능 PASS는 아니다. `CODE_AND_TEST_COMMITTED_CI_PENDING`은 **코드가 있다고 하여 테스트 완료가 아님**을 뜻한다. 원본 작업의 `blocked_by`는 유지. 완전 수용되지 않는 작업별 부분 가점은 전부 0.
 
-### P00 · PREP/GATE · Codex · COMPLETE_READ_ONLY_RECHECK
+### P00 · PREP/GATE · Codex · PASS_EXACT_SHA
 - 선행: 없음. 
 - 실행: Read HANDOFF→STATUS→AGENTS→REQUIREMENTS→FINAL_DESIGN→scorecard→latest source; compare repo branch and PR SHA.
 - 수용: Enumerate actual 33/100, 22 VERIFIED, 11 PENDING, latest tested code SHA separately from docs HEAD.
@@ -60,7 +61,8 @@
 - 관련 파일: `HANDOFF.md`, `STATUS.md`, `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
 - 11/15 exact-SHA recheck: HEAD/PR/scorecard and the historical 100-point baseline were read from GitHub; `blueprint_score.py` returned 72/100. `test_blueprint_score` ran under full unittest discovery; its standalone command was not invoked separately.
-### P01 · PREP/GATE · Codex · RECORDED_RECHECK
+- 11/15: `python blueprint_score.py` returned 72/100; standalone `python -m unittest test_blueprint_score -v` passed 11/11 on Windows/Ubuntu/macOS at `d3aef514f0847b9f05789ad0e9eb4acf6b503105`.
+### P01 · PREP/GATE · Codex · PASS_EXACT_SHA
 - 선행: P00. 
 - 실행: Secure previous non-destructive rollback reference and inventory customer/REA_Web protected paths; check auth identity, existing branch and CI budget.
 - 수용: Explicit rollback SHA and original/no-overwrite boundary; no new branch/release/repo/rights change.
@@ -68,7 +70,8 @@
 - GitHub Actions 내부 테스트: `python -m unittest test_customer_folder -v`.
 - 관련 파일: `AGENTS.md`, `docs/ORIGIN_AND_LICENSE.md`. **작업 자체 가점: 0**.
 
-### P02 · PREP/GATE · Codex · RECORDED_RECHECK
+- 11/15: standalone `python -m unittest test_customer_folder -v` passed 15/15 on Windows/Ubuntu/macOS at `d3aef514f0847b9f05789ad0e9eb4acf6b503105`; source rollback anchor `4e6808b` and protected path boundary were rechecked in AGENTS/ORIGIN docs.
+### P02 · PREP/GATE · Codex · EVIDENCE_INDEX_COMPLETE
 - 선행: P00. 
 - 실행: Open evidence index per R with unique opaque IDs and a public-safe checklist; no customer names, data, screenshots, private paths or permission tokens.
 - 수용: Each R07/R21/R25/R26/R29 evidence indexed as VERIFIED/INCOMPLETE/MISSING without assigning points.
@@ -76,6 +79,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`, `docs/FINAL_BLUEPRINT_R01_R33_ACCEPTANCE_20261113.md`. **작업 자체 가점: 0**.
 
+- 11/15: the five-row public-safe R07/R21/R25/R26/R29 evidence index records VERIFIED/INCOMPLETE/MISSING without partial points or private materials.
 ### P03 · PREP/GATE · Codex · PASS_EXACT_SHA_CI
 - 선행: P00. 
 - 실행: Freeze regression commands against the last feature SHA; classify existing hosted/synthetic results as such, no buyer-acceptance assertion.
@@ -86,7 +90,8 @@
 - 관련 파일: `test_blueprint_score.py`, `shipping_rights_preflight.py`. **작업 자체 가점: 0**.
 
 - 11/15 exact-SHA `635db258ee3e8b5d1e8f0418c8a3db8cd19ed661`: full discovery, `shipping_rights_preflight.py`, `zero_cost_gate.py`, source provenance, focused A25/A26 modules, browser/UI and synthetic preaudit completed; OS-specific PASS/SKIP and run URLs are in STATUS/HANDOFF. This remains synthetic/hosted evidence, not buyer acceptance.
-### A07-01 · R07 · Codex · STATIC_EVIDENCE_RECHECK
+- 11/15: full discovery, score/retention/privacy/customer-folder modules, source/shipping checks, browser/UI, CodeQL and final evidence gate all have exact-SHA runs; PASS/SKIP scope is recorded above.
+### A07-01 · R07 · Codex · TECHNICAL_RECHECK_PASS_EXACT_SHA
 - 선행: P02. 
 - 실행: Map raw-source custody, user-of-record, owner-created copies, browser plaintext output and shared-data rights; reuse existing order_intake_preflight to avoid duplicate workflow.
 - 수용: Data flow states input rights, no cloud upload, source hash invariance, unsafe types HOLD; missing legal rights clearly isolated.
@@ -94,6 +99,7 @@
 - GitHub Actions 내부 테스트: `python -m unittest test_order_intake_preflight -v`.
 - 관련 파일: `order_intake_preflight.py`, `docs/A_CUSTOMER_INTAKE_AND_DELIVERY_QA_DRAFT_20261114.md`. **작업 자체 가점: 0**.
 
+- 11/15: A26/A07 preflight module passed 24/24 on Windows/Ubuntu/macOS; unsafe privacy scope remains HOLD and customer rights remain pending.
 ### A07-02 · R07 · Codex · TEMPLATE_RECORDED
 - 선행: A07-01. 
 - 실행: Prepare per-order right-to-use/transform/distribute confirmation checklist, user/third-party shared rights distinction, plaintext delivery and revocation triggers; only anonymous template.
@@ -120,7 +126,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`. **작업 자체 가점: 0**.
 
-### A07-05 · R07 · Codex · REVALIDATE
+### A07-05 · R07 · Codex · BLOCKED_OWNER_EVIDENCE_PENDING
 - 선행: A07-01, A07-03, A07-04. 
 - 실행: Review rights/consent provenance and source-before/after SHA, exact tested code SHA and residual privacy limits.
 - 수용: Entire R07 source preservation + actual rights/consent satisfied; otherwise leave R07 PENDING.
@@ -128,6 +134,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
+- 11/15: technical preflight is tested at `d3aef514f0847b9f05789ad0e9eb4acf6b503105`; actual source authority and customer-specific consent are still absent, so item acceptance remains blocked.
 ### A21-01 · R21 · Codex · TECHNICAL_RECHECK_PASS_EXACT_SHA
 - 선행: P01, P02. 
 - 실행: Reconcile actual zipped HTML, manifest and README with local receipt, source Git blob pins, all shipped CSS/JS/vendor assets, excluded EXE/test deps.
@@ -155,7 +162,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`. **작업 자체 가점: 0**.
 
-### A21-04 · R21 · Codex · REVALIDATE
+### A21-04 · R21 · Codex · BLOCKED_OWNER_RIGHTS_DECISION
 - 선행: A21-03. 
 - 실행: Only after verified rights decision: choose (1) no extra member when legally justified; or (2) versioned approved LICENSE/NOTICE packaging contract, migrating builder/verifier/receipt together without breaking v1.
 - 수용: Allowed contents match actual authorized rights text and deterministic ZIP, versioned v2 when needed; no overwrite, no invented license.
@@ -163,7 +170,8 @@
 - GitHub Actions 내부 테스트: `python -m unittest test_shipping_rights_preflight -v`, `python -m unittest test_customer_folder -v`.
 - 관련 파일: `delivery.py`, `verify_delivery.py`, `verify_customer_folder.py`. **작업 자체 가점: 0**.
 
-### A21-05 · R21 · Codex · REVALIDATE
+- 11/15: waits for A21-03 rights-holder and LICENSE/NOTICE decision; no license text is invented.
+### A21-05 · R21 · Codex · BLOCKED_OWNER_RIGHTS_DECISION
 - 선행: A21-04. 
 - 실행: Run synthetic allowed/forbidden license member, duplicate/ZIP-slip/modified notice, old v1 compatibility, receipt hash and create-only failure rollback.
 - 수용: Valid authorized package passes independent verifier; malicious/unapproved member and old-data corruption fail closed, old v1 still accepted.
@@ -171,7 +179,8 @@
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`, `python shipping_rights_preflight.py`.
 - 관련 파일: `test_shipping_rights_preflight.py`, `test_customer_folder.py`. **작업 자체 가점: 0**.
 
-### A21-06 · R21 · Codex · REVALIDATE
+- 11/15: packaging/license regression is dependent on A21-04; do not test or create unapproved license content.
+### A21-06 · R21 · Codex · BLOCKED_OWNER_RIGHTS_DECISION
 - 선행: A21-03, A21-05. 
 - 실행: Review owner/third-party rights proof, final shipped bytes and license text/NOTICE obligations, migration, exact-SHA CI.
 - 수용: Entire R21 including real commercial use permission and v1/v2 verifier correctness accepted or 4 points stay pending.
@@ -179,6 +188,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
+- 11/15: technical source pins pass, but complete commercial rights evidence required for acceptance is unavailable.
 ### A25-01 · R25 · Codex · PASS_EXACT_SHA_CI
 - 선행: P02. 
 - 실행: Map owner-approved max 7-day temporary operator copy, earlier purpose-completion handling, legal exceptions, originals/outputs never auto-delete; compare current retention utility.
@@ -207,7 +217,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`. **작업 자체 가점: 0**.
 
-### A25-04 · R25 · Codex · REVALIDATE
+### A25-04 · R25 · Codex · BLOCKED_REAL_CUSTODY_EVIDENCE
 - 선행: A25-01, A25-03. 
 - 실행: Compare actual operator evidence with source-preservation, duration and manual-only protocol; check legal exceptions not silently bypassed.
 - 수용: Complete R25 policy notice and actual accountable practice satisfied; else hold.
@@ -215,6 +225,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
+- 11/15: prior seven policy approvals and synthetic disposal test remain accepted; actual customer custody/retention/return/disposal evidence is missing.
 ### A26-01 · R26 · Codex · TECHNICAL_MATRIX_AND_TESTS_PASS_EXACT_SHA
 - 선행: P02. 
 - 실행: Reconcile personal/sensitive/medical/payment identifiers, shared/confidential, unknown scope, allowed nonpersonal only; map plaintext and offline exposure.
@@ -241,7 +252,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/OWNER_APPROVAL_PACKET_A_20261114.md`. **작업 자체 가점: 0**.
 
-### A26-04 · R26 · Codex · REVALIDATE
+### A26-04 · R26 · Codex · BLOCKED_CUSTOMER_PRIVACY_EVIDENCE
 - 선행: A26-02, A26-03. 
 - 실행: Verify privacy scope and actual permission against implementation and plaintext warnings; never treat program checkbox alone as legal agreement.
 - 수용: Full R26 personally sensitive data handling/rejection and real consent scope accepted; otherwise pending.
@@ -249,6 +260,7 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
+- 11/15: technical GUI and privacy tests pass; customer-specific lawful basis and consent are missing.
 ### A29-01 · R29 · Codex · INTERNAL_PREAUDIT_PASS_EXACT_SHA_EXTERNAL_PENDING
 - 선행: P01, P02. 
 - 실행: Freeze independent evaluator's threat scope: XSS/CSP/CSV formula, XLSX zip bomb and XML entities, ZIP/receipt, TOCTOU symlink/hardlink/junction, interruptions, offline network.
@@ -284,7 +296,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`. **작업 자체 가점: 0**.
 
-### A29-05 · R29 · Codex · REVALIDATE
+### A29-05 · R29 · Codex · BLOCKED_EXTERNAL_FINDINGS_PENDING
 - 선행: A29-04. 
 - 실행: Implement least-invasive fixes for confirmed external findings, preserve originals/v1 ZIP and no-network contract, add reproducing regressions.
 - 수용: Each finding has fix commit or documented accepted blocker, Windows/Ubuntu/browser CI on exact fix SHA.
@@ -292,6 +304,7 @@
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`, `python blueprint_score.py`.
 - 관련 파일: `path_policy.py`, `verify_delivery.py`, `verify_customer_folder.py`. **작업 자체 가점: 0**.
 
+- 11/15: no independent findings exist to remediate; internal preaudit cannot satisfy this prerequisite.
 ### A29-06 · R29 · EXTERNAL · BLOCKED_EXTERNAL
 - 선행: A29-05. **차단:** EXTERNAL_RETEST_AND_SIGNOFF.
 - 실행: Same independent evaluator retests fixes on new SHA, records unfixable risks, gaps, and signoff/remaining-blocker status.
@@ -300,7 +313,7 @@
 - GitHub Actions 내부 테스트: 해당 없음(OWNER/EXTERNAL 인증을 자체 테스트로 대체 불가).
 - 관련 파일: `docs/R29_INDEPENDENT_SECURITY_ACCEPTANCE_SCOPE_20261114.md`. **작업 자체 가점: 0**.
 
-### A29-07 · R29 · Codex · REVALIDATE
+### A29-07 · R29 · Codex · BLOCKED_EXTERNAL_RETEST_SIGNOFF_PENDING
 - 선행: A29-04, A29-06. 
 - 실행: Independently review external reviewer identity, scope completeness, outstanding findings, SHA and field/OS limits; don't conflate Instant with external.
 - 수용: Complete R29 acceptance only after external signoff and verified no blocking findings; else PENDING.
@@ -308,7 +321,8 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`. **작업 자체 가점: 0**.
 
-### G85-01 · PREP/GATE · Codex · REVALIDATE
+- 11/15: independent external findings and retest/signoff are not available; CodeQL/High/Codex do not replace them.
+### G85-01 · PREP/GATE · Codex · BLOCKED_OWNER_EXTERNAL_EVIDENCE
 - 선행: A07-05, A21-06, A25-04, A26-04, A29-07. 
 - 실행: Assemble five complete item-level evidence packets with provenance and no private material in repo; reconcile 2+4+2+2+3 points.
 - 수용: Each requirement fully accepted independently; none receives partial point for templates, self tests or false attestations.
@@ -316,7 +330,8 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`.
 - 관련 파일: `docs/FINAL_BLUEPRINT_WEIGHTING_100_APPROVED_20261114.md`. **작업 자체 가점: 0**.
 
-### G85-02 · PREP/GATE · Codex · REVALIDATE
+- 11/15: all five complete item-level evidence packets are still required.
+### G85-02 · PREP/GATE · Codex · EXACT_SHA_CI_PASS_G85_01_BLOCKED
 - 선행: G85-01. 
 - 실행: Run last exact-code-SHA Windows/Ubuntu Python, Chrome/Edge/Chromium, portable v1/v2, privacy/R21/R29 regression and CodeQL using existing free runners.
 - 수용: All required CI jobs SUCCESS at exact code SHA with PASS/FAIL/SKIP, browser assets/API/zip/receipt intact; buyer acceptance separate.
@@ -324,7 +339,8 @@
 - GitHub Actions 내부 테스트: `python -m unittest discover -v`, `python blueprint_score.py`, `python shipping_rights_preflight.py`.
 - 관련 파일: ` .github/workflows/python-tests.yml`, `.github/workflows/final-blueprint-gate.yml`. **작업 자체 가점: 0**.
 
-### G85-03 · PREP/GATE · Codex · REVALIDATE
+- 11/15: exact-SHA CI/browser/CodeQL/gate passed at `d3aef514f0847b9f05789ad0e9eb4acf6b503105`, but G85-01 remains blocked on external acceptance evidence.
+### G85-03 · PREP/GATE · Codex · BLOCKED_G85_01_OWNER_EVIDENCE
 - 선행: G85-02. 
 - 실행: Only if five full acceptance proofs exist and Instant item evidence checks agree, update those five R states in existing 100-point locked scorecard; no weight changes; run score checker.
 - 수용: Score mechanically equals 85/100, 33 items and 100 denominator unchanged, all five VERIFIED and other six PENDING; publish audit diff.
@@ -332,7 +348,8 @@
 - GitHub Actions 내부 테스트: `python blueprint_score.py`, `python -m unittest test_blueprint_score -v`.
 - 관련 파일: `data/final_blueprint_scorecard_v1.json`, `blueprint_score.py`. **작업 자체 가점: 0**.
 
-### G85-04 · PREP/GATE · Codex · REVALIDATE
+- 11/15: do not change the scorecard without accepted evidence for all five requirements.
+### G85-04 · PREP/GATE · Codex · BLOCKED_G85_03_ACCEPTANCE
 - 선행: G85-03. 
 - 실행: Instant 85 milestone evidence gate (High final review only after 100): confirm source SHA CI, complete real rights/consent/retention/legal/independent audit evidence, no sale or customer upload authorized by score.
 - 수용: Authorize 85 report only when all five complete; otherwise return blocked IDs to Instant and preserve prior score; keep RELEASE HOLD.
@@ -348,3 +365,5 @@
 - 최종 결과는 `verified_score`, `technical_ready_items`, `nondelegable_blockers`, `exact_code_sha`, `ci_runs`, `main_unchanged`, `release_status`, `next_ids`로 보고. High 검수는 Codex의 기록된 코드/SHA/실증 한계에 대해 수행하며 독립 법률·감사 승인으로 둔갑하지 않는다.
 
 **M85 작업 범위는 문서와 연결된 JSON 34개가 기준.** 과거 표의 담당 `INSTANT`는 이번 실행에서 Codex로 승계하나 OWNER와 EXTERNAL 태스크는 승계하지 않는다.
+
+- 11/15: no 85-point acceptance memo until G85-03 is validly complete.
