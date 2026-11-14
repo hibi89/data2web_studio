@@ -63,16 +63,29 @@ def _folder_identity(root):
             info.st_size, info.st_mtime_ns, info.st_ctime_ns)
 
 
+def _member_identity(path):
+    """Fingerprint the on-disk regular file, not merely its validated bytes.
+
+    A same-byte rename/replacement can pass final checksum reads. Tracking
+    file identity and metadata narrows that race even if the parent directory
+    metadata does not reliably signal member replacement (not a file lock).
+    """
+    assert_no_links(path)
+    info=Path(path).lstat()
+    if not stat.S_ISREG(info.st_mode):
+        raise ValueError("Customer folder member is not a regular file")
+    return (info.st_dev, info.st_ino, info.st_mode, info.st_size,
+            info.st_mtime_ns, info.st_ctime_ns)
+
+
 def verify_customer_folder(destination):
     root=Path(destination)
     starting_identity=_folder_identity(root)
     items=list(root.iterdir())
     if len(items)!=3 or {p.name for p in items}!=EXPECTED:
         raise ValueError("Unexpected, missing, or duplicated delivery folder member")
-    for path in items:
-        assert_no_links(path)
-        if not path.is_file():
-            raise ValueError("Customer folder contains a non-file entry")
+    # Capture all three member identities before any expensive hashing/parsing.
+    starting_members={name:_member_identity(root/name) for name in EXPECTED}
 
     html=read_bounded_source(root/"index.html",max_bytes=20_000_000)
     if not html.startswith(b"<!doctype html>") or len(html)>20_000_000:
@@ -154,6 +167,8 @@ def verify_customer_folder(destination):
     ):
         if read_bounded_source(root/name, max_bytes=limit) != snapshot:
             raise ValueError("Customer artifact changed during verification")
+        if _member_identity(root/name) != starting_members[name]:
+            raise ValueError("Customer artifact identity changed during verification")
     if _folder_identity(root) != starting_identity:
         raise ValueError("Customer folder changed during final inventory")
     return {
