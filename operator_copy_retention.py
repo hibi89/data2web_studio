@@ -202,9 +202,27 @@ def validate_result(record):
             type(record["manual_disposal_action_due"]) is not bool or
             type(record["operator_copy_present_claimed"]) is not bool):
         raise ValueError("Invalid status or policy values")
-    _parse_utc(record["reviewed_at_utc"])
-    if record["retention_due_utc"] is not None:
-        _parse_utc(record["retention_due_utc"])
+    reviewed = _parse_utc(record["reviewed_at_utc"])
+    due_text = record["retention_due_utc"]
+    if record["operator_copy_present_claimed"]:
+        if due_text is None:
+            raise ValueError("Copy-present report must include retention deadline")
+        due = _parse_utc(due_text)
+        if due > reviewed + timedelta(days=7):
+            raise ValueError("Retention deadline cannot exceed seven days from review")
+        if record["reason_code"] == "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
+            raise ValueError("Copy-present report cannot claim no copy")
+    else:
+        if due_text is not None or record["manual_disposal_action_due"]:
+            raise ValueError("Copy-absent report cannot claim deadline or action due")
+        if record["reason_code"] != "NO_OPERATOR_COPY_REPORTED_NOT_VERIFIED":
+            raise ValueError("Copy-absent report must retain unverified status")
+    if record["manual_disposal_action_due"] and record["reason_code"] != (
+            "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE"):
+        raise ValueError("Manual disposal flag and reason disagree")
+    if record["reason_code"] == "MANUAL_DISPOSAL_ACTION_DUE_NO_AUTO_DELETE" and not (
+            record["manual_disposal_action_due"]):
+        raise ValueError("Disposal-due report cannot suppress manual action")
     return record
 
 
