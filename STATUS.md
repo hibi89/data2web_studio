@@ -1,3 +1,8 @@
+## 2026-11-14 KST — A21-02 source identity and dependency inspection
+- Direct GitHub fetch confirmed **6/6** current producer blob SHA-1 values match `data/r21_source_provenance_v1.json`; evidence `docs/A21_02_SOURCE_ORIGIN_AND_DEPENDENCY_REVIEW_20261114.md`, commit `0629ab5d8b17c9b864c9eb903384b7068e8aa98d`.
+- Reviewed direct imports of six producers: Python stdlib + internal modules, inline HTML/CSS/JS in `data2web_web.py`; customer A ZIP excludes Python producers and EXE. Import scan is NOT SBOM or copyright clearance. Authorship, derived templates, upstream rights and NOTICE still require actual evidence.
+- No executable tests/CI this turn. A07-03 regression still unexecuted. R21 PENDING, official 72/100, RELEASE HOLD. Next: obtain executable CI evidence and independent rights-holder review (A21-03), without inferring legal approval from blob equality.
+
 ## 2026-11-14 KST — A21-01 source/package reconciliation; test execution blocked by missing checkout
 - Inspected `delivery.py`, `verify_delivery.py`, `verify_customer_folder.py`, `shipping_rights_preflight.py`, `r21_source_provenance.py`, two R21 inventories. Confirmed three ZIP names, three customer folder names and six pinned source producers; detailed [A21-01 reconciliation](docs/A21_01_SHIPPING_MEMBER_RECONCILIATION_20261114.md), commit `0801b42de8ebe6364b94cc819e8dcb0d289676c6`.
 - Local private repository checkout unavailable in current runtime (git remote could not resolve github.com); exact current-turn regression test/CI **not executed**. Prior consent reset code commit `9d5d71a9757b19e014f46abf7a1c607292c35bdd`, static test commit `630c1eb4028a6c326e750bdd4fb99d900c08be26`; both still awaiting execution. Do not assert PASS or alter score.
