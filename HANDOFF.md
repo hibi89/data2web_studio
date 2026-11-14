@@ -1,3 +1,15 @@
+## 최신 인수인계 — 2026-11-14 KST · 0원 일괄 위임/무상 코드보안 게이트
+1. 목표/기술: A 오프라인 HTML+ZIP+receipt 서비스 우선, B unsigned EXE 판매 후순위, 33개100점/현재72/85목표.
+2. 소유자 결정: 현금지출0원 한도의 무료 내부 운영 정책·가격 BASIC49,000/PRO129,000/BUSINESS249,000 및 보수적 데이터 취급/최대7일 수동 파기·법정환불권 보존 기본안 승인. 사용자 실제 결제/유료감사·서버/API/서명 구매0. 고객 동의·제3자 권리의 법적 증명은 불가.
+3. 변경/테스트: `zero_cost_gate.py`·정책JSON·7회귀·CodeQL 소스 분석 workflow. 신규 정확 SHA CI는 **커밋 직후 확인 필요**; 기존 기준 `ea29ecec1a1fc272ed968e4f703d64d341086944` Python/browser4/4 + score gate1/1 SUCCESS. CodeQL은 사람이 수행한 독립감사가 아님.
+4. 완료/대기: 이전 기술기능 보존, 고정 VERIFIED22=72/100, PENDING11=28, 85까지13 부족, R29=0, [작업중]/RELEASE HOLD/SALE NO-GO/크몽 미등록.
+5. 위험/피벗: 유료 외부 감사 경로는 0원 조건 위반으로 배제; 무료 CodeQL 정적 분석 + 실제 무료 독립 검토자 모집으로 전환. 무료 독립자 미확보 시 R29 PENDING. 안전한 실제 IP/NOTICE·고객자료 처리 증거 없는 R07/R21/25/26/27도 PENDING.
+6. repo: `hibi89/data2web_studio@feature/final-blueprint-p85-evidence-20261113`; 변경 전 HEAD `ea29ecec1a1fc272ed968e4f703d64d341086944`; 새 커밋 SHA 및 CI 직접 재확인. 주요 `docs/ZERO_COST_OWNER_AUTHORIZATION_20261114.md`, `data/zero_cost_owner_policy_v1.json`.
+7. 실행/프로덕션: `python zero_cost_gate.py`, `python -m unittest test_zero_cost_gate -v`, `python -m unittest discover -v`; GitHub hosted 공개 repo standard runner/CodeQL; Vercel/웹 Production 해당 없음, 고객 EXE 배포0.
+8. 원본/백업: main, 구 scorer, 고객 데이터·외부 비밀/라이선스·NOTICE/기존 ZIP 계약 변경0. 복구 기준 변경 전 HEAD 위 명시. 무료 CodeQL에 이미 공개된 저장소 코드와 합성 fixture 외 자료 제공 금지.
+9. 다음: 새 SHA CI/CodeQL 결과 확인→경고 분류/수정→권리 증빙·실고객 동의 정리→무상 외부 독립 보안평가자 확보 시 감사→최종설계 점수만 증거 후 갱신→중앙 크몽 원장에 [작업중] 동기화. 유료 선택 자동 거부.
+10. 갱신: 2026-11-14 KST; 이 문서는 커밋 전 설계/변경 개요, **새 SHA CI 결과는 후속 검증 후 보완**.
+
 # DATA2WEB Studio — HANDOFF · 2026-11-14 KST · 100점 가중치 소유자 위임 확정
 
 ## 최신 인수인계 — 2026-11-14 KST · R29 synthetic preaudit 및 Chrome CI 장애 회복 확증

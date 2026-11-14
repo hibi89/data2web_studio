@@ -1,3 +1,8 @@
+## 2026-11-14 KST · 현금지출 0원 승인에 따른 무료 보안/운영 게이트 설정
+- 사용자 무료 조건부 일괄위임 반영: A 납품 우선, B EXE 상용화 후순위, 무료 표준 GitHub Actions/공개 소스 CodeQL, 유료 API/감사/인증서/runner/외부 서비스 구매 금지. 기본 SKU·보관/파기/고객 권리 체크의 **내부 운영 정책 승인**과 실제 사용권/고객 동의/출시 승인 구분. `docs/ZERO_COST_OWNER_AUTHORIZATION_20261114.md`.
+- 신규 `data/zero_cost_owner_policy_v1.json`, `zero_cost_gate.py`, `test_zero_cost_gate.py`, `.github/workflows/codeql-zero-cost.yml` 예정. **커밋 이후 새 정확 SHA와 CodeQL/기존 CI 판정 재확인 필요**; 코드 정적분석과 독립 사람 감사 혼동 금지.
+- 고정 R01–R33 **72/100**, 목표85에13점 부족. R29 독립 외부검토 아직 없음, 고객/제3자 IP 증빙 없음, [작업중], RELEASE HOLD/SALE NO-GO, PR#4 Draft, Vercel 미적용.
+
 # DATA2WEB Studio — STATUS
 
 ## 2026-11-14 KST · R29 합성보안 사전검증 + Chrome 간헐 시작장애 해결, 정확 SHA CI 4/4 SUCCESS
