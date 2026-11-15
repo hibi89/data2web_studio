@@ -13,6 +13,7 @@ import hashlib
 import io
 import json
 import re
+import re
 import tempfile
 from pathlib import Path
 from html.parser import HTMLParser
@@ -123,6 +124,55 @@ def main():
                 raise AssertionError("Local browser output lost rows")
             if errors or remote:
                 raise AssertionError("Browser errors or unexpected network attempts")
+
+            # R29-ID-001: synthetic real-browser identity spoof. The static JS
+            # calls getElementById("dataset"); untrusted extra div must not
+            # be able to shadow the original approved JSON script.
+            pristine = index.read_bytes()
+            m = re.search(
+                rb'<script type="application/json" id="dataset">(.*?)</script>',
+                pristine, re.DOTALL,
+            )
+            if m is None:
+                raise AssertionError("Expected approved dataset missing")
+            forged = json.loads(m.group(1))
+            forged["rows"] = [dict(forged["rows"][0])]
+            forged["rows"][0]["title"] = "SYNTHETIC_UNVERIFIED_DISPLAY"
+            injected = (
+                b'<div id="dataset">'
+                + json.dumps(forged, ensure_ascii=True, separators=(",", ":")).encode("utf-8")
+                + b"</div>"
+            )
+            attack_html = pristine.replace(
+                b"</main>", injected + b"</main>", 1
+            )
+            if attack_html == pristine:
+                raise AssertionError("Synthetic fixed-id mutation missing")
+            try:
+                assert_passive_offline_html_markup(attack_html)
+            except ValueError:
+                guard_rejected = True
+            else:
+                guard_rejected = False
+            if not guard_rejected:
+                raise AssertionError("High guard accepted shadowed dataset identity")
+
+            attack_file = root / "synthetic-unverified-shadow.html"
+            attack_file.write_bytes(attack_html)
+            probe = context.new_page()
+            probe.on("pageerror", lambda err: errors.append(str(err)))
+            probe.on("request", lambda req:
+                     remote.append(req.url) if req.url.startswith(
+                         ("http:", "https:")) else None)
+            probe.goto(attack_file.as_uri())
+            expect(probe.locator("#count")).to_have_text("1건")
+            expect(probe.locator("#body tr")).to_contain_text(
+                "SYNTHETIC_UNVERIFIED_DISPLAY")
+            # The real JS was unmodified, but chose the forged DOM id.
+            if errors or remote:
+                raise AssertionError("Synthetic spoof browser errors/network attempt")
+            print("R29_ACTUAL_BROWSER_DOM_ID_SHADOW_REPRODUCED channel=" + args.channel +
+                  " unverified_display=true guard_rejected=true network0=true")
             browser.close()
         if original.read_bytes() != original_bytes:
             raise AssertionError("Original approved source changed")
