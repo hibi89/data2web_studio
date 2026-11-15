@@ -159,6 +159,21 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
             b'<div id="chart-bars" style="background:url(https://invalid.example/a)"',
             1))
 
+    def test_fixed_id_shadowing_is_not_permitted_in_passive_dynamic_dom(self):
+        base = self.original
+        for mutation in (
+            b'<div id="dataset">{"rows":[]}</div>',
+            b'<div id="search">text</div>',
+            b'<div id="unreviewed">text</div>',
+            b'<span id="category">shadow</span>',
+            b'<div id="dataset"></div><div id="dataset"></div>',
+        ):
+            with self.subTest(id_injection=mutation):
+                self.assert_unsafe(base.replace(
+                    b"</main>", mutation + b"</main>", 1))
+        self.assert_unsafe(base.replace(
+            b'<div id="chart-bars"', b'<div class="untrusted"', 1))
+
     def test_invalid_markup_encoding_and_type_rejected(self):
         for bad in (b"", b"not html", b"\\xff", "not-bytes", None):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):
