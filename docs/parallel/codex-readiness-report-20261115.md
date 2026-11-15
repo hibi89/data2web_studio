@@ -69,3 +69,15 @@ That combined regression remains **NOT_RUN**: both PRs are Draft and unmerged, a
 The shared `.github/workflows/parallel-branch-ci.yml` added on Codex and High branches has identical blob SHA `fc8cd118f9733898f549c4e0981f08197f198398`; the current integration base has no copy. PR #6 reports mergeable, while PR #7 currently reports `mergeable_state=dirty` against its recorded base SHA `cfc56fe4492f445d7f6a1fd12bb8d45c422de46e`. The integration branch itself is at `e03681b433b921bfe1eb0a0ada50145b7de3c078`. High owns any PR #7 conflict resolution; Codex has not altered its files or PR base.
 
 No acceptance score follows from the review or hosted runs. R06 real-device evidence, R29 independent audit, and the eventual combined integration SHA regression remain separate gates.
+
+
+## R29 shipping-verifier remediation — 2026-11-15
+
+High's synthetic PR #6 findings were fixed in Codex-owned `verify_delivery.verify_zip`. The verifier now imports the unchanged High-reviewed passive surface guard (High/Codex shared blob `450a2266b02583e9ebae197c2032d6ee857a5fac`), and the portable runtime embeds it. Added shipping-verifier tests cover NAV/ID/STRUCT/DISC rehash bypasses, matching-CSP script tampering, CSS mutation, and a legitimate dynamic saved-DOM fixture.
+
+- Tested product/source SHA: `d42cb27f5f03d01f0af96af7b5e20deddbc982d6`, 5/5 jobs PASS in [#43716967874](https://github.com/hibi89/data2web_studio/actions/runs/43716967874).
+- Latest branch HEAD including WBS evidence: `d3925e0500a59c3bf79a707431f9cf534dc0e06b`; [#43717198314](https://github.com/hibi89/data2web_studio/actions/runs/43717198314) 5/5 PASS. Windows/macOS/Ubuntu each ran 546 tests (Windows 1 SKIP; macOS/Ubuntu 4 SKIP); hosted Chromium, Chrome and Edge checks PASS.
+- [Final blueprint gate #43717198578](https://github.com/hibi89/data2web_studio/actions/runs/43717198578) completed with `UNASSESSED`, as there is no approved acceptance manifest. CodeQL was not emitted for this branch (**SKIP**).
+- Official score stays 72/100, 22/33 VERIFIED, 11 PENDING; no points added. R29 independent external audit and retest/signoff remain EXTERNAL_PENDING. PR #6 is Draft/Open/Unmerged and exact combined integration SHA remains NOT_RUN.
+
+The initial exact run #43716878911 found a print-notice fixture grammar mismatch; that synthetic fixture was corrected and the full follow-up runs passed. These results validate the hosted synthetic guard and shipping verifier, not customer files, real-device buyer acceptance, source ownership, or independent external audit.
