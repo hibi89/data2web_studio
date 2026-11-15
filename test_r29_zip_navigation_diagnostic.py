@@ -9,6 +9,8 @@ class NavigationDiagnostic(unittest.TestCase):
         report = assess_rehashed_navigation()
         self.assertEqual(report["contract"], CONTRACT)
         self.assertTrue(report["synthetic_control_verified"])
+        self.assertTrue(report["high_guard_accepted_pristine_html"])
+        self.assertTrue(report["high_guard_rejected_modified_html"])
         self.assertEqual(report["zip_member_count"], 3)
         self.assertFalse(report["actual_browser_navigation_tested"])
         self.assertFalse(report["external_network_request_performed"])
