@@ -1,3 +1,18 @@
+## 2026-11-15 KST — auditor notice: R29 synthetic fixture validity tightened (current evidence)
+
+Prior R29 synthetic probe fixtures could pass on unrelated malformed-OOXML / extra-ZIP-member errors. **Do not use the earlier standalone 14/14 result as attack-specific rejection evidence.** The High-owned generator now begins with `test_xlsx_fixtures.workbook_bytes()` (valid normal control), mutates one attack dimension at a time, checks named parser errors, and creates canonical three-member ZIP mutations instead of trivially adding a fourth member. Status forgery preserves ZIP envelope and exercises the manifest status guard.
+
+**Exact tested SHA `99246c0813263cdcdc95cf557ed7649341d224bb`** — [3 OS + browser CI 5/5 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43685811003): 546 Python tests on each OS (Windows 543 PASS/3 SKIP; Ubuntu/macOS 542 PASS/4 SKIP), Chromium/Chrome/Edge PASS. New `test_r29_probe_specificity.py` adds 4 cases (accepted normal XLSX control; three specific XLSX attack causes and actual ratio; canonical three-member ZIP status/traversal/link rejection; unrelated errors do not count as attack-blocking).
+
+Replay before external audit:
+
+```bash
+python -m unittest test_r29_probe_specificity test_security_audit_preaudit -v
+python security_audit_preaudit.py
+```
+
+The independent evaluator must still challenge whether additional HTML elements (including `meta http-equiv=refresh`) are accepted after a same-container manifest rehash. That possible flaw is assigned to Codex-owned `verify_delivery.py` with a request for separate reproduction/fix. No real security certification, seller approval, external data transfer or score increase is claimed.
+
 # DATA2WEB Studio — R29 external security assessor replay packet (synthetic only)
 
 **Prepared:** 2026-11-15 KST. **Owner of this preparation:** GPT-6 High, not an independent auditor.
