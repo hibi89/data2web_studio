@@ -81,18 +81,11 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
             b'<tbody id="body"></tbody>',
             b'<tbody id="body"><tr tabindex="0" aria-label="Synthetic">'
             b'<td>synthetic</td><td>&lt;/script&gt;</td></tr></tbody>', 1)
-        html = html.replace(
-            b'<div id="chart-bars" role="img" aria-label="',
-            b'<div id="chart-bars" role="img" aria-label="', 1)
         # Add a passive chart row to the data-browser body, no navigation.
         chart = (b'<div class="chart-row"><span class="chart-key">A</span>'
                  b'<div class="bar-track"><div class="bar-fill" '
                  b'style="width: 25%;"></div></div>'
                  b'<span class="chart-value">1</span></div>')
-        html = html.replace(b'<div id="chart-bars" role="img" '
-                            b'aria-label="\\ubc94\\uc8fc\\ubcc4',
-                            b'<div id="chart-bars" role="img" '
-                            b'aria-label="\\ubc94\\uc8fc\\ubcc4', 1)
         # Insert into chart container after its opening tag using a safe
         # regular expression; the container is present in the real template.
         html, n = re.subn(
@@ -101,9 +94,9 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
         )
         self.assertEqual(n, 1)
         html = html.replace(
-            b'<option value="" selected>',
-            b'<option value="" selected=""><option data-all="true" '
-            b'value="" selected="">All</option>', 1,
+            b'</select>',
+            b'<option data-all="true" value="" selected="">All</option></select>',
+            1,
         )
         html = html.replace(
             b'<button id="prev" type="button">',
