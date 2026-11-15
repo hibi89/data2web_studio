@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29 H20 실개발·합성 14건·CI 통과 인수인계 (10항)
+
+1. **목표·최종설계·용도:** DATA2WEB Studio R01–R33 오프라인 A HTML/ZIP/receipt 제품, 100점 확정. 이번 수행은 H20/R29 내부 사전 보안 검증 확장, 외부 감사 준비. R29 독립감사를 스스로 수행한 것으로 보지 않으며 공식 72점 유지.
+2. **완료 기능/근거:** `security_audit_preaudit.py` 합성 사전검사 7→14종(XSS/CSP SHA·위험 네트워크 마크업, ZIP Slip/링크, XLSX external relationship/zipbomb/macro, 기존 원본 보존 등), `test_security_audit_preaudit.py` 신규 부정·검수 세 가지. 생성 보고서는 결과만 노출, 고객원본·토큰·경로 불포함. 외부 평가자용 합성 재현 패킷 `docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md`.
+3. **테스트/증빙:** 코드+테스트 정확 SHA `dd77d7c68a8c79f45e1439f3d59cb85131bfbac3`; [CI 5/5 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43685167287); Windows 542=539PASS/3SKIP, Ubuntu/macOS 542=538PASS/4SKIP, Chromium·Chrome·Edge hosted PASS. 검사 리포트는 `INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING`, 0점.
+4. **완료/진행/대기:** High H20 코드·테스트 및 패킷 작성 완료; R29 외부 독립감사·재시험 미진행, R06 고객 Win10/11 실기기 미진행. 사용자 IP/개인정보·고객 수용도 미검증. RELEASE HOLD/SALE NO-GO.
+5. **실패 근거·원인·조치:** 첫 코드 단독 CI에서 내부검사 수 14개와 구 테스트 기대값 7개 불일치로 구 테스트 2개 실패. 이어 테스트 문구/부정 검증 추가 후 full CI 5/5 PASS. 별개 의심 가설: `verify_delivery.py`의 재해시된 HTML 내 추가 meta refresh가 ZIP 검사 통과 가능(미재현), Codex PR #6 comment #6890324060에 합성 재현·기술 조치 의뢰. High가 Codex 소스 변경 금지.
+6. **GitHub/브랜치/SHA:** `hibi89/data2web_studio` / `work/high-data2web-security-r06-r29-20261115` PR #7; 코드 검증 SHA `dd77d7c68a8c79f45e1439f3d59cb85131bfbac3`, packet commit `17f1a3a61c409eb3011a091be6295a25c38e19f6`; Codex PR #6 Draft 미병합. 마스터/중앙 통합 브랜치 미수정.
+7. **Production·환경:** 로컬 오프라인 Python 3.11+ 대상. Hosted Windows/macOS/Linux 및 Chromium/Chrome/Edge 검증. 실제 고객 Production URL/Vercel 미적용; 외부 사용자 OS 수용·실거래 검증하지 않음.
+8. **원본·백업·비밀:** 기존 GitHub 커밋 이력과 R21 v1/v2 보존, 고객 원본/비밀정보 GitHub 업로드 없음. 실험은 임시 합성자료만 사용; 이전 정상 산출물 변경/삭제 없음. rollback은 SHA 기반 정상 revert, force push 불허.
+9. **다음 작업/승인:** Codex PR #6 의심 사항 확인·재현, 필요하면 Codex가 소유 경로 최소 수정; 이후 High가 병합 아닌 diff 검수와 승인된 통합 SHA 기준 full CI. 외부 보안 감사 업체/비용/자료전송, 사용권·프라이버시·판매는 소유자 별도 승인 필요. 점수 +3은 독립감사 충족 증빙 후에만.
+10. **갱신·범위:** 2026-11-15 KST, 외부 평가 없는 호스팅 합성 테스트 한정. 근거 SHA `dd77d7c68a8c79f45e1439f3d59cb85131bfbac3`, CI #43685167287, 감사 패킷 `docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md`. 문서 갱신 SHA는 검증 코드 SHA와 별개로 뒤따름.
+
 ## 2026-11-15 KST — GPT-6 High H10 실구현 + exact-SHA 5/5 CI PASS 인수인계 (10항)
 
 1. **목표:** DATA2WEB Studio 확정 R01–R33 전체 100점, 오프라인 A 상품 R06 입력 TOCTOU 보안 강화. 공식 72점·출시 HOLD.
