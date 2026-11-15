@@ -12,6 +12,7 @@ import csv
 import hashlib
 import io
 import json
+import re
 import tempfile
 from pathlib import Path
 
@@ -84,6 +85,13 @@ def main():
             saved = root / "browser-saved.html"
             downloaded.value.save_as(str(saved))
             raw = saved.read_bytes()
+            # This tool only ever handles generated synthetic records.
+            # Redact all source values; print bounded *style attributes*
+            # to diagnose browser serializer compatibility, never paths.
+            styles = re.findall(rb'\\bstyle="([^"]*)"', raw)
+            print("R29_SYNTHETIC_BROWSER_INLINE_STYLES=" +
+                  json.dumps([v.decode("ascii", "replace")[:100]
+                              for v in styles[:15]]))
             checked = assert_passive_offline_html_markup(raw)
             if checked.get("passive_template_surface_verified") is not True:
                 raise AssertionError("Saved HTML guard returned an invalid result")
