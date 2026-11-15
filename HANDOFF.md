@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High H20 R29 공격 샘플 정확도 보강 인수인계 (필수 10항)
+
+1. **목표·최종설계·기술:** DATA2WEB Studio A 오프라인 HTML/ZIP/receipt R01–R33 100점 수용 중 R29 자체 보안 사전감사 오탐 위험 최소화. 공식 72/100 변경 없음.
+2. **실제 변경:** High 소유 `security_audit_preaudit.py`의 XLSX 악성 검사에 유효 OOXML 대조군·단일 변형·예상 원인 확인 도입. ZIP 검사에 정규 3개 멤버 유지·ZipSlip·symlink·승인상태 변조 별 원인 판정 적용. `test_r29_probe_specificity.py` 신규 테스트 4종; 이전 14개 범위 유지.
+3. **검증 명령/결과:** `python -m unittest test_r29_probe_specificity test_security_audit_preaudit -v`; 전체 `python -m unittest discover -v`. Exact SHA `99246c0813263cdcdc95cf557ed7649341d224bb`, [CI #43685811003](https://github.com/hibi89/data2web_studio/actions/runs/43685811003) 5/5 SUCCESS. Windows 546=543 PASS/3 SKIP; Ubuntu/macOS 546=542 PASS/4 SKIP; Chromium, Chrome, Edge PASS. 실제 고객 장비/외부 감사는 미검증.
+4. **완료/진행/차단:** 기술 H20 검사 정확도 수정과 호스팅 CI 완료. R29 독립 자격 보안감사/재시험 PENDING, R06 실제 Win10/11 PENDING, R01–R33 최종 72점, 출시/판매 HOLD.
+5. **근거·원인·대안:** 이전 악성 OOXML의 잘못된 기본 구조 및 ZipSlip에 네 번째 ZIP 멤버를 추가하는 오탐 위험 확인. 공격 자체의 원인에만 반응하는 정상대조군+single-mutation 방식으로 전환. Codex 소유 ZIP HTML meta-refresh 의심 사항은 **미재현**으로 두고 Codex PR #6 comment #6890324060에 재현·수정 요청. 임의 우회·위험 테스트 범위 축소 없음.
+6. **GitHub/브랜치/SHA/파일:** `hibi89/data2web_studio` / `work/high-data2web-security-r06-r29-20261115` Draft PR #7, 검증 코드 SHA `99246c0813263cdcdc95cf557ed7649341d224bb`; 수정 `security_audit_preaudit.py`, 신규 `test_r29_probe_specificity.py`, 감사 패킷 `docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md`. Codex PR #6 별도.
+7. **Production/환경:** 오프라인 제품, Vercel 미적용; GitHub hosted Windows/macOS/Ubuntu 및 브라우저 자동 테스트만 완료, 실제 시장 배포/구매자 프로그램 검수 미적용.
+8. **원본/백업/인증/금지:** 임시 합성 데이터만 이용, 원본 GitHub 이력 보존, 원본 고객 파일·개인정보·토큰 무사용/미전송, 자동 덮어쓰기/삭제·force push·무단 병합·출시 금지.
+9. **다음 우선순위·승인:** Codex가 담당 ZIP HTML 메타-refresh 의심 사례 재현·원인 분석 후 필요한 수정; High 독립 검수 및 승인된 통합 SHA 테스트. R29 독립 외부 인력·비용·외부공유/보안 조치는 사용자 별도 승인. 고객 권리, 동의 및 상업적 판매승인 별도.
+10. **갱신/시점/검증범위:** 2026-11-15 KST GitHub exact source SHA `99246c0813263cdcdc95cf557ed7649341d224bb`/Actions #43685811003 근거; 문서 후속 커밋은 같은 소스 검증 SHA가 아니므로 구분. 72/100 고정·SALE NO-GO.
+
 ## 2026-11-15 KST — GPT-6 High R29 H20 실개발·합성 14건·CI 통과 인수인계 (10항)
 
 1. **목표·최종설계·용도:** DATA2WEB Studio R01–R33 오프라인 A HTML/ZIP/receipt 제품, 100점 확정. 이번 수행은 H20/R29 내부 사전 보안 검증 확장, 외부 감사 준비. R29 독립감사를 스스로 수행한 것으로 보지 않으며 공식 72점 유지.
