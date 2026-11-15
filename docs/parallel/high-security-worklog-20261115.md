@@ -1,3 +1,12 @@
+## 2026-11-15 KST — H10 R06 actual implementation (hosted CI pending)
+
+- Confirmed baseline defects: absent hardlink count guard; POSIX FIFO substitution between precheck and open could block. No customer material used.
+- Fixed `path_policy.py`: require single-link regular source at pre/post checks; nonblocking POSIX source open with post-open regular-file validation.
+- Added 5 synthetic tests in `test_r06_source_race.py`: normal source, existing hardlink, injected new hardlink, POSIX FIFO swap, equal-length POSIX atomic replacement.
+- Exact **source/test SHA**: `7576e3291981e7bffc2eda0b059ccb7931bf6f5f`; baseline `ded01ce3576a3ea06769fc8e18e917bd98b54ab2`. Threat/tradeoff/evidence: `docs/parallel/H10_R06_SECURITY_THREAT_REPRO_20261115.md`.
+- GitHub parallel CI: https://github.com/hibi89/data2web_studio/actions/runs/43683639426 (**PENDING at this record's write**); predecessor code-only CI https://github.com/hibi89/data2web_studio/actions/runs/43683637215 (superseded/cancel in progress). Evidence gate on exact source/test SHA SUCCESS, but **UNASSESSED** for acceptance; no score uplift.
+- Remains: confirm 5/5 hosted jobs, Windows 10/11 real-device negative acceptance, ancestor race analysis / independent R29 audit. Official 72/100, R06 PENDING, SALE NO-GO.
+
 # High DATA2WEB R06/R29 security and integration evidence log
 
 - Owner: GPT-6 High in this ChatGPT conversation; no unattended background execution
