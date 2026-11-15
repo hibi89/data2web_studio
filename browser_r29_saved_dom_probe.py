@@ -15,6 +15,7 @@ import json
 import re
 import tempfile
 from pathlib import Path
+from html.parser import HTMLParser
 
 from playwright.sync_api import expect, sync_playwright
 
@@ -88,10 +89,19 @@ def main():
             # This tool only ever handles generated synthetic records.
             # Redact all source values; print bounded *style attributes*
             # to diagnose browser serializer compatibility, never paths.
-            styles = re.findall(rb'\\bstyle="([^"]*)"', raw)
+            class _SyntheticStyleAudit(HTMLParser):
+                def __init__(self):
+                    super().__init__()
+                    self.styles = []
+
+                def handle_starttag(self, tag, attrs):
+                    for name, value in attrs:
+                        if name == "style":
+                            self.styles.append((tag, (value or "")[:100]))
+            debug = _SyntheticStyleAudit()
+            debug.feed(raw.decode("utf-8"))
             print("R29_SYNTHETIC_BROWSER_INLINE_STYLES=" +
-                  json.dumps([v.decode("ascii", "replace")[:100]
-                              for v in styles[:15]]))
+                  json.dumps(debug.styles[:20]))
             checked = assert_passive_offline_html_markup(raw)
             if checked.get("passive_template_surface_verified") is not True:
                 raise AssertionError("Saved HTML guard returned an invalid result")
