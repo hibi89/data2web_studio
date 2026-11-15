@@ -157,7 +157,7 @@
         "A07-03",
         "A07-04"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
@@ -221,7 +221,7 @@
       "dependent_on": [
         "A21-03"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
@@ -237,7 +237,7 @@
       "dependent_on": [
         "A21-04"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
@@ -254,7 +254,7 @@
         "A21-03",
         "A21-05"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
@@ -318,7 +318,7 @@
         "A25-01",
         "A25-03"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
@@ -383,7 +383,7 @@
         "A26-02",
         "A26-03"
       ],
-      "blocking_evidence": null,
+      "blocking_evidence": "NON_DELEGABLE_PER_CUSTOMER_PRIVACY_CONSENT",
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
       "points_from_task": 0,
       "execution_status": "OWNER_PENDING"
