@@ -21,7 +21,49 @@ from html.parser import HTMLParser
 from playwright.sync_api import expect, sync_playwright
 
 from data2web_single import deliver_single
-from r29_html_surface_policy import assert_passive_offline_html_markup
+from r29_html_surface_policy import (
+    APPROVED_FIXED_INPUTS, APPROVED_STATIC_NOTICES,
+    assert_passive_offline_html_markup,
+)
+
+
+def _redacted_synthetic_surface_diagnostic(raw):
+    # Test-only troubleshooting: print fixed contract IDs, never content.
+    class Audit(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.inputs = {}
+            self.notices = {}
+            self.active = None
+
+        def handle_starttag(self, tag, attrs):
+            attr = dict(attrs)
+            identity = attr.get("id")
+            if tag == "input" and identity in APPROVED_FIXED_INPUTS:
+                self.inputs[identity] = attr
+            if tag == "p" and identity in APPROVED_STATIC_NOTICES:
+                self.active = identity
+                self.notices[identity] = []
+
+        def handle_data(self, data):
+            if self.active is not None:
+                self.notices[self.active].append(data)
+
+        def handle_endtag(self, tag):
+            if tag == "p":
+                self.active = None
+
+    probe = Audit()
+    probe.feed(raw.decode("utf-8", errors="strict"))
+    probe.close()
+    altered_inputs = sorted(k for k, v in APPROVED_FIXED_INPUTS.items()
+                            if probe.inputs.get(k) != v)
+    altered_notices = sorted(k for k, v in APPROVED_STATIC_NOTICES.items()
+                             if "".join(probe.notices.get(k, [])) != v)
+    print("R29_SYNTHETIC_SAVED_CONTROL_MISMATCH_IDS=" +
+          json.dumps(altered_inputs))
+    print("R29_SYNTHETIC_SAVED_NOTICE_MISMATCH_IDS=" +
+          json.dumps(altered_notices))
 
 
 def _synthetic_csv(rows):
@@ -103,7 +145,11 @@ def main():
             debug.feed(raw.decode("utf-8"))
             print("R29_SYNTHETIC_BROWSER_INLINE_STYLES=" +
                   json.dumps(debug.styles[:20]))
-            checked = assert_passive_offline_html_markup(raw)
+            try:
+                checked = assert_passive_offline_html_markup(raw)
+            except ValueError:
+                _redacted_synthetic_surface_diagnostic(raw)
+                raise
             if checked.get("passive_template_surface_verified") is not True:
                 raise AssertionError("Saved HTML guard returned an invalid result")
             if checked.get("commercial_release_approved") is not False:
