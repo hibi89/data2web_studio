@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High 병렬 H10 실제 수정 인수인계 (10항, 공식 72/100)
+
+1. **목표·확정설계·기술:** DATA2WEB R01–R33 100점 정본·A 오프라인 로컬 산출물. 이번 범위 H10 R06 입력 경합/하드링크/FIFO 위험만. 원본·점수·상업 승인 변경 없음.
+2. **변경/판단:** `path_policy.py` 단일링크 정규 파일 확인(사전·파일핸들·사후), POSIX O_NONBLOCK 열기 후 fstat로 FIFO 변조 HOLD. 전략 A 거부+HOLD 우선(표준라이브러리/저비용), 전략 B 핸들 기반 전 경로 고정은 별도 감사 후 검토. 신규 `test_r06_source_race.py` 5종.
+3. **테스트·증거:** `python -m unittest test_r06_source_race -v` / `python -m unittest discover -v`. Hosted CI run https://github.com/hibi89/data2web_studio/actions/runs/43683639426 은 이 기록 당시 PENDING으로 미검증; 기존 코드 검증 SHA `9c8cfdcb1c10482ad6184a581991626b7e42138c`의 3 OS PASS와 혼동 금지. 합성 시험만이며 고객 Win10/11·제3자 감사 미검증.
+4. **완료/진행/차단:** 소스 수정 및 테스트 코드 GitHub 반영 완료; 정확 SHA 전체 CI 결과와 R06 외부 시험 대기. R29 미시작. 공식 72점 그대로; 출시 HOLD.
+5. **위험·오류·대안:** 하드링크를 통한 입력 경로 별칭, POSIX FIFO 교체시 blocking open. 원본 보존, 무한 재시도 금지. POSIX 동일 UID 악성 디렉터리 치환은 여전히 위협; 디렉터리 FD 고정 대안은 미구현/미검증.
+6. **저장소·브랜치·SHA:** `hibi89/data2web_studio` / `work/high-data2web-security-r06-r29-20261115` / 수정 SHA `87bdf58196a50c91898781217786fb942d05a8d7`, 신규 테스트 SHA `7576e3291981e7bffc2eda0b059ccb7931bf6f5f`, 설명 문서 SHA `e73abd24cce34e2e1b4df5299b388c7b736b45a8`. Codex PR #6는 별도 소유.
+7. **배포·환경:** 제품 로컬/오프라인, Production·Vercel 배포 대상 미적용. Hosted 3 OS CI + Chrome/Edge/Chromium이 실행될 예정이며 완료 전 성공 단정 금지.
+8. **원본·백업·민감정보:** 되돌리기 기준 `ded01ce3576a3ea06769fc8e18e917bd98b54ab2`, GitHub 기존 이력 불변. 고객파일/토큰 미사용·외부 전송 없음. R21 역사적 provenance v1 원본 유지.
+9. **다음 작업·완료 기준·승인:** CI 5 jobs 완료 확인, 실패 시 코드 최소 수정·재실행; R06 외부 Windows 실기기 증거·R29 독립 보안감사 및 권리/고객 동의는 사용자별 별도 관문. PR 자동 병합·점수 변경·판매 금지.
+10. **시간·검증 경계:** 2026-11-15 KST, 코드/합성 회귀테스트 파일 생성 완료·Hosted 최신 실행 미완료; 현재 인수인계 기준은 후속 문서 수정 커밋으로 최신화될 수 있음. 상세 위협표 `docs/parallel/H10_R06_SECURITY_THREAT_REPRO_20261115.md`.
+
 ## 2026-11-15 KST — GPT-6 직접 수리 최종 인수인계 (10항, exact-SHA 검증 PASS)
 
 1. **목표·용도·확정 요구·기술:** DATA2WEB Studio A는 사용자 최종설계 R01–R33 전체 고정100점의 로컬 CSV/JSON/XLSX/TSV→오프라인 HTML/ZIP/receipt 제품. 이번 직접 작업은 85점 가점이 아니라 기술 복구 B0(R21 소스 출처 핀 충돌)+B1(R25 과거 승인 상태 문구 수정). 출처는 `REQUIREMENTS.md`, `docs/FINAL_DESIGN.md`, `data/final_blueprint_scorecard_v1.json`이며 기술 범위 임의 축소/점수 변경 없음.
