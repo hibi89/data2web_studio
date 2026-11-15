@@ -76,7 +76,7 @@ class ZipOfflineCsp(unittest.TestCase):
                           b'class="warning" hidden="">',1)
         html=html.replace(
             "인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.".encode(),
-            "인쇄 범위: 1건 중 화면 1/1 페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.".encode(),
+            "인쇄 범위: 1건 중 화면 1/1페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.".encode(),
             1)
         self.assertTrue(verify_zip(self.rebuild_with_html(html))["verified"])
 
