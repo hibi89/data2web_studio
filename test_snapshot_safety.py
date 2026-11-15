@@ -55,33 +55,39 @@ class SnapshotSafety(unittest.TestCase):
             os.link(self.source,alias)
         except (OSError,NotImplementedError) as error:
             self.skipTest(f"Hard link unavailable: {type(error).__name__}")
-        self.assertTrue(self.source.samefile(alias))
-        original_bytes=self.source.read_bytes()
-        initial_mtime_ns=alias.stat().st_mtime_ns
+        original=self.source.read_bytes()
+        # R06 now rejects the alias before opening; no potentially mutable
+        # source is read and neither the source nor the alias is modified.
+        with self.assertRaisesRegex(ValueError,"single-link"):
+            read_bounded_source(self.source)
+        self.assertEqual(alias.read_bytes(),original)
+        self.assertEqual(self.source.read_bytes(),original)
+
+    def test_direct_source_mutation_during_read_is_denied_or_detected(self):
+        original=self.source.read_bytes()
+        initial_mtime_ns=self.source.stat().st_mtime_ns
         original_read=os.read
         mutated=[False]
         write_denied=[]
 
-        def mutate_through_alias(fd,size):
+        def mutate_original(fd,size):
             data=original_read(fd,size)
             if not mutated[0]:
                 mutated[0]=True
                 try:
-                    with alias.open("r+b") as stream:
+                    with self.source.open("r+b") as stream:
                         stream.write(b"X")
                 except PermissionError as error:
                     write_denied.append(error)
                 else:
-                    changed=alias.stat()
-                    # POSIX has no mandatory share-deny lock. Pin a distinct
-                    # mtime so the metadata-change path is deterministic.
+                    changed=self.source.stat()
                     os.utime(
-                        alias,
+                        self.source,
                         ns=(changed.st_atime_ns,initial_mtime_ns+10_000_000_000),
                     )
             return data
 
-        with patch("os.read",side_effect=mutate_through_alias):
+        with patch("os.read",side_effect=mutate_original):
             if os.name=="nt":
                 snapshot=read_bounded_source(self.source)
             else:
@@ -92,12 +98,12 @@ class SnapshotSafety(unittest.TestCase):
         self.assertTrue(mutated[0])
         if os.name=="nt":
             self.assertEqual(len(write_denied),1)
-            self.assertEqual(snapshot,original_bytes)
-            self.assertEqual(self.source.read_bytes(),original_bytes)
+            self.assertEqual(snapshot,original)
+            self.assertEqual(self.source.read_bytes(),original)
         else:
             self.assertFalse(write_denied)
-            self.assertNotEqual(alias.read_bytes(),original_bytes)
-            self.assertNotEqual(alias.stat().st_mtime_ns,initial_mtime_ns)
+            self.assertNotEqual(self.source.read_bytes(),original)
+            self.assertNotEqual(self.source.stat().st_mtime_ns,initial_mtime_ns)
 
     def test_read_table_rejects_source_mutated_during_parse(self):
         original=self.source.read_bytes()
