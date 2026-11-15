@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from order_intake_preflight import BASIC_FORMATS, CANDIDATE_REASONS, FORMATS
 
 ROOT = Path(__file__).resolve().parent
 POLICY_PATH = ROOT / "docs" / "COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md"
@@ -64,9 +65,26 @@ def _table_rows(markdown):
     return rows
 
 
+def validate_preorder_catalog(skus, candidate_reasons=None, basic_formats=None, formats=None):
+    """Bind pre-order candidate prices and accepted formats to approved defaults."""
+    candidate_reasons = CANDIDATE_REASONS if candidate_reasons is None else candidate_reasons
+    basic_formats = BASIC_FORMATS if basic_formats is None else basic_formats
+    formats = FORMATS if formats is None else formats
+    expected_reasons = {
+        name: (name + "_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", sku["price_krw"])
+        for name, sku in skus.items()
+    }
+    if dict(candidate_reasons) != expected_reasons:
+        raise ValueError("Pre-order candidate names/prices disagree with approved SKU defaults")
+    if set(basic_formats) != {"CSV", "TSV", "JSON"} or set(formats) != {
+            "CSV", "TSV", "JSON", "XLSX"}:
+        raise ValueError("Pre-order format scope disagrees with commercial matrix")
+
+
 def validate_commercial_terms(markdown, internal_policy):
     """Raise ValueError on drift; otherwise return a non-sale approval report."""
     skus = _internal_skus(internal_policy)
+    validate_preorder_catalog(skus)
     rows = _table_rows(markdown)
     if set(rows) != set(skus):
         raise ValueError("Commercial policy SKU rows disagree with approved defaults")

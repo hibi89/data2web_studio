@@ -2,7 +2,7 @@
 
 ## Decision source and scope
 
-The owner-approved zero-cost policy is the source for internal SKU defaults: `data/zero_cost_owner_policy_v1.json`. The matching policy draft is `docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md`. `commercial_terms_consistency.py` checks the published internal matrix against that source and rejects price, source-count, row/column, revision, or defect-support drift.
+The owner-approved zero-cost policy is the source for internal SKU defaults: `data/zero_cost_owner_policy_v1.json`. The matching policy draft is `docs/COMMERCIAL_OPERATION_POLICY_DRAFT_20261114.md`. `commercial_terms_consistency.py` checks the internal matrix against that source and rejects price, source-count, row/column, revision, or defect-support drift. It also cross-checks pre-order candidate SKU prices and the allowed CSV/TSV/JSON/XLSX formats; existing `test_order_intake_preflight.py` covers the executable source/row/column boundaries.
 
 This is a private internal operating baseline. It is not a marketplace listing, customer quote, executed contract, legal/tax determination, or authorization to sell. No item below adds final-blueprint points or releases the HOLD.
 

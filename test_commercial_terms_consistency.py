@@ -3,7 +3,8 @@ import copy
 import json
 from pathlib import Path
 import unittest
-from commercial_terms_consistency import validate_commercial_terms
+from commercial_terms_consistency import validate_commercial_terms, validate_preorder_catalog
+from order_intake_preflight import BASIC_FORMATS, CANDIDATE_REASONS, FORMATS
 
 ROOT = Path(__file__).resolve().parent
 
@@ -22,6 +23,16 @@ class CommercialTermsConsistencyTests(unittest.TestCase):
         self.assertFalse(result["tax_or_legal_review_completed"])
         self.assertFalse(result["sale_approved"])
         self.assertEqual(result["score_added"], 0)
+
+    def test_preorder_price_and_format_catalog_matches_defaults(self):
+        skus = {item["name"]: item for item in self.defaults["skus"]}
+        validate_preorder_catalog(skus)
+        changed = copy.deepcopy(CANDIDATE_REASONS)
+        changed["PRO"] = ("PRO_CANDIDATE_REAL_SOURCE_REVIEW_PENDING", 1)
+        with self.assertRaises(ValueError):
+            validate_preorder_catalog(skus, changed, BASIC_FORMATS, FORMATS)
+        with self.assertRaises(ValueError):
+            validate_preorder_catalog(skus, CANDIDATE_REASONS, {"CSV"}, FORMATS)
 
     def test_price_revision_support_and_scope_drift_rejected(self):
         changes = (
