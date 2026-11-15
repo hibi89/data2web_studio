@@ -128,6 +128,24 @@ class StrictR29ZipVerification(unittest.TestCase):
         # would select the earlier injected identity, not the signed data.
         self._assert_guard_blocks_but_legacy_accepts(modified)
 
+    def test_rehashed_csp_meta_moved_from_head_is_rejected(self):
+        original = self.members["index.html"]
+        meta = re.search(rb'<meta http-equiv="Content-Security-Policy"[^>]*>',
+                         original)
+        self.assertIsNotNone(meta)
+        altered = original.replace(meta.group(), b"", 1).replace(
+            b"<body><main>", b"<body>" + meta.group() + b"<main>", 1)
+        self._assert_guard_blocks_but_legacy_accepts(altered)
+
+    def test_rehashed_script_moved_before_main_is_rejected(self):
+        original = self.members["index.html"]
+        start = original.index(b"<script>")
+        end = original.index(b"</script>", start) + len(b"</script>")
+        script = original[start:end]
+        altered = original.replace(script, b"", 1).replace(
+            b"<body><main>", b"<body>" + script + b"<main>", 1)
+        self._assert_guard_blocks_but_legacy_accepts(altered)
+
     def test_source_bytes_changed_during_strict_verification_hold(self):
         snapshot = self.archive.read_bytes()
         with patch("r29_strict_zip_verifier.read_bounded_source",

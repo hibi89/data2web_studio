@@ -114,6 +114,8 @@ class _HTMLSurfaceParser(HTMLParser):
         self.declaration_count = 0
         self.total_tags = 0
         self.seen_fixed_ids = set()
+        self.head_closed = False
+        self.main_closed = False
 
     def handle_decl(self, decl):
         if decl.lower().strip() != "doctype html":
@@ -146,6 +148,29 @@ class _HTMLSurfaceParser(HTMLParser):
         if self.total_tags > 15_000:
             raise ValueError("HTML element count exceeded")
         self.tags[tag] += 1
+        # Counts alone do not prove a CSP meta is in HEAD or that runtime
+        # JavaScript executes only after its controls have been parsed.
+        parent = tuple(self.stack)
+        if tag == "html":
+            if parent:
+                raise ValueError("Unapproved document structure")
+        elif tag == "head":
+            if parent != ("html",) or self.head_closed:
+                raise ValueError("Unapproved head position")
+        elif tag == "body":
+            if parent != ("html",) or not self.head_closed:
+                raise ValueError("Unapproved body position")
+        elif tag in {"meta", "title", "style"}:
+            if parent != ("html", "head"):
+                raise ValueError("Unapproved head element position")
+        elif tag == "main":
+            if parent != ("html", "body") or self.main_closed:
+                raise ValueError("Unapproved main position")
+        elif tag == "script":
+            if parent != ("html", "body") or not self.main_closed:
+                raise ValueError("Unapproved script position")
+        elif "main" not in parent:
+            raise ValueError("Unapproved body element position")
         if tag in DYNAMIC_COUNTS:
             if self.tags[tag] > DYNAMIC_COUNTS[tag][1]:
                 raise ValueError("Dynamic HTML element count exceeded")
@@ -185,7 +210,8 @@ class _HTMLSurfaceParser(HTMLParser):
             # bounds rows at 10,000, so even an extreme valid aggregation
             # has a finite <= 1,000,000% computed style. Never allow other
             # CSS properties, URLs, units, infinities or negative widths.
-            if (tag != "div" or not width or
+            if (tag != "div" or attributes.get("class") != "bar-fill"
+                    or "id" in attributes or not width or
                     not 0 <= float(width.group(1)) <= 1_000_000):
                 raise ValueError("Inline HTML styles outside the chart contract")
         if tag == "html" and (
@@ -216,6 +242,8 @@ class _HTMLSurfaceParser(HTMLParser):
                 kind = "static"
             else:
                 raise ValueError("Unexpected script attributes")
+            if kind == "static" and "data" not in self.scripts:
+                raise ValueError("Executable HTML script precedes approved data")
             if kind in self.scripts:
                 raise ValueError("Duplicate HTML script")
             self.scripts.add(kind)
@@ -228,6 +256,10 @@ class _HTMLSurfaceParser(HTMLParser):
             raise ValueError("Unexpected HTML closing element")
         if not self.stack or self.stack.pop() != tag:
             raise ValueError("Malformed HTML nesting")
+        if tag == "head":
+            self.head_closed = True
+        elif tag == "main":
+            self.main_closed = True
 
 
 def assert_passive_offline_html_markup(html_bytes):

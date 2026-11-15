@@ -174,6 +174,28 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
         self.assert_unsafe(base.replace(
             b'<div id="chart-bars"', b'<div class="untrusted"', 1))
 
+    def test_csp_meta_moved_into_body_is_rejected(self):
+        meta = re.search(rb'<meta http-equiv="Content-Security-Policy"[^>]*>',
+                         self.original)
+        self.assertIsNotNone(meta)
+        altered = self.original.replace(meta.group(), b"", 1).replace(
+            b"<body><main>", b"<body>" + meta.group() + b"<main>", 1)
+        self.assert_unsafe(altered)
+
+    def test_executable_js_cannot_precede_body_controls(self):
+        start = self.original.index(b"<script>")
+        end = self.original.index(b"</script>", start) + len(b"</script>")
+        script = self.original[start:end]
+        altered = self.original.replace(script, b"", 1).replace(
+            b"<body><main>", b"<body>" + script + b"<main>", 1)
+        self.assert_unsafe(altered)
+
+    def test_chart_inline_style_cannot_target_fixed_id(self):
+        altered = self.original.replace(
+            b'<div id="chart-bars" role="img"',
+            b'<div id="chart-bars" class="bar-fill" style="width: 0%;" role="img"', 1)
+        self.assert_unsafe(altered)
+
     def test_invalid_markup_encoding_and_type_rejected(self):
         for bad in (b"", b"not html", b"\\xff", "not-bytes", None):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):
