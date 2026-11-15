@@ -1,3 +1,12 @@
+## 2026-11-15 KST — H20 R29 internal adversarial harness extended; 5/5 hosted CI PASS
+
+- High-owned `security_audit_preaudit.py`: internal synthetic R29 probe set expanded 7 -> 14 (new fixed static CSP script hash, absent network markup, ZIP ZipSlip/symlink, XLSX external relationship/ratio bomb/macro-part rejection). Uses only ephemeral synthetic bytes and isolated local folder; no client data or external transfers. Report contract V1 retained with additive check names; no score addition.
+- High-owned `test_security_audit_preaudit.py`: updated scope/count expectations and added three negative/guard tests, including fail-closed report creation when a ZIP/XLSX verifier no longer rejects an attack.
+- **Exact code + tests SHA `dd77d7c68a8c79f45e1439f3d59cb85131bfbac3`**, [parallel full CI #43685167287](https://github.com/hibi89/data2web_studio/actions/runs/43685167287) **5/5 SUCCESS**: Windows 542 tests = 539 PASS/3 SKIP; Ubuntu/macOS each 542 = 538 PASS/4 SKIP; Chromium/Chrome/Edge hosted smoke SUCCESS. Initial pre-test synchronization CI on only the first code commit failed because old tests still required 7; resolved with test update; no persistent defect observed on final SHA.
+- Redacted synthetic replay packet: [R29 assessor packet](docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md), GitHub doc commit `17f1a3a61c409eb3011a091be6295a25c38e19f6`. This is **not** an independent external audit.
+- **Potential unconfirmed CODEX-owned gap:** ZIP verifier appears not to reject injected meta-refresh navigation when HTML SHA is rehashed and static CSP hash unchanged. Requested a synthetic reproduction and constrained fix on Codex PR #6 via comment `6890324060`. No claim of exploited/confirmed vulnerability or acceptance; no overlapping CODEX file edit.
+- Official 72/100, R29 PENDING/EXTERNAL_PENDING, R06 independent Win10/11 PENDING. Draft PRs unmerged. Next: Codex reproduction review → exact combined SHA regression if approved, then external independent assessor and customer consent evidence.
+
 ## 2026-11-15 KST — H10 CI failure repaired, exact-SHA full regression PASS
 
 - 1st CI SHA `7576e3291981e7bffc2eda0b059ccb7931bf6f5f`: five new R06 tests passed on Ubuntu/macOS; existing `test_snapshot_safety.test_hardlink_alias_mutation_during_bounded_read_is_rejected` failed because the stronger preflight rejected the hardlink earlier than the old expected post-read exception. Confirmed actual log failure, not a source data regression.
