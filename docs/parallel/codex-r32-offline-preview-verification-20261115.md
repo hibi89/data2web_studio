@@ -13,7 +13,7 @@ Use a clean checkout of the exact source commit under test and a new empty desti
 ```powershell
 py -3.11 --version
 py -3.11 -m unittest test_windows_bundle -v
-$target = Join-Path $PWD "work\new-windows-bundle"
+$target = Join-Path ([System.IO.Path]::GetTempPath()) ("data2web-bundle-" + [guid]::NewGuid().ToString("N"))
 py -3.11 package_windows_bundle.py create $target
 py -3.11 package_windows_bundle.py verify $target
 Get-FileHash (Join-Path $target "BUNDLE_MANIFEST.json") -Algorithm SHA256
