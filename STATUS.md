@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High R29 보안 검사 오탐 위험 보완·정확 SHA CI 5/5 PASS (공식 72/100)
+
+- 실제 발견: 기존 R29 XLSX 악성 샘플의 정상 대조군이 없고 ZIP 경로공격 샘플은 허용 파일 3개에 임의 4번째를 추가하여, **의도한 공격 방어가 아닌 단순 구조 오류**로 검사 PASS 가능. 이는 기존 사전감사 증거 품질 문제였으며 사용자 데이터 노출이나 실공격 성공의 증거가 아님.
+- High 전용 `security_audit_preaudit.py` 수정: 정상 합성 OOXML 기반 각 XLSX 공격 1요소만 변형, 외부관계/180배 압축률/매크로 구조 거부의 정확 사유 확인. ZIP도 세 멤버 유지, 경로·링크·승인 상태 재해시 변조별 정확 사유 검사. `test_r29_probe_specificity.py` 신규 회귀 4개. 원본·코덱스 소유 파일·점수표 불변.
+- **검증 코드 SHA `99246c0813263cdcdc95cf557ed7649341d224bb`** / [Actions #43685811003](https://github.com/hibi89/data2web_studio/actions/runs/43685811003) **5/5 Job SUCCESS**: Windows 546=543 PASS/3 SKIP, Ubuntu/macOS 546=542 PASS/4 SKIP, Chromium/Chrome/Edge PASS. 이전 H20 14종 자체감사 상태를 유지하되 이제 타겟별 실제 거부 근거로 강화.
+- Codex PR #6의 변조 HTML ZIP 검증 메타-refresh 통과 가능성은 여전히 독립 재현 **미확인 가설**이며 Codex 댓글 #6890324060로 요청됨. R29 외부 독립 감사·R06 실기기 검증은 미수행, **공식 72/100**, SALE NO-GO / RELEASE HOLD.
+
 ## 2026-11-15 KST — High H20 R29 합성 보안 사전검사 14종 / 3 OS·브라우저 CI 5/5 PASS · 공식 72 유지
 
 - 개발 브랜치 `work/high-data2web-security-r06-r29-20261115` Draft PR #7. 수정 소스 `security_audit_preaudit.py`, `test_security_audit_preaudit.py`: R29 XSS/CSP 스크립트 SHA256·네트워크 마크업 확인, ZIP ZipSlip/링크, XLSX 외부 관계·압축 폭탄·매크로 구성요소 음성검증을 **7→14종**으로 확장. 외부 데이터 전송·고객 원본 사용 없음.
