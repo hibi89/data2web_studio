@@ -83,9 +83,10 @@ def _tamper_zip(archive, target):
         members = {name: old.read(name) for name in old.namelist()}
     manifest = json.loads(members["manifest.json"])
     manifest["status"] = "APPROVED_FOR_SALE"
-    members["manifest.json"] = (json.dumps(
-        manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ) + "\\n").encode("utf-8").replace(b"\\\\n", bytes([10]))
+    members["manifest.json"] = (
+        json.dumps(manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + chr(10)
+    ).encode("utf-8")
     _canonical_test_zip(target, members)
 
 
