@@ -89,6 +89,22 @@ class WindowsBundle(unittest.TestCase):
         p.write_text(json.dumps(doc),encoding="utf-8")
         with self.assertRaises(ValueError):verify_windows_bundle(self.target)
 
+    def test_manifest_unknown_fields_rejected(self):
+        self.make()
+        p=self.target/"BUNDLE_MANIFEST.json"
+        doc=json.loads(p.read_text(encoding="utf-8"))
+        doc["installer_available"]=True
+        p.write_text(json.dumps(doc),encoding="utf-8")
+        with self.assertRaises(ValueError):verify_windows_bundle(self.target)
+
+    def test_manifest_nonfinite_values_rejected(self):
+        self.make()
+        p=self.target/"BUNDLE_MANIFEST.json"
+        raw=p.read_text(encoding="utf-8").replace('"sale_approved":false',
+                     '"sale_approved":false,"build_epoch":NaN',1)
+        p.write_text(raw,encoding="utf-8")
+        with self.assertRaises(ValueError):verify_windows_bundle(self.target)
+
     def test_manifest_duplicate_keys_rejected(self):
         self.make()
         p=self.target/"BUNDLE_MANIFEST.json"

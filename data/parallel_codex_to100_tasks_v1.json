@@ -29,7 +29,8 @@
       "dependent_on": [],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "P01",
@@ -44,7 +45,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "P02",
@@ -59,7 +61,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "P03",
@@ -74,7 +77,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A07-01",
@@ -89,7 +93,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A07-02",
@@ -104,7 +109,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A07-03",
@@ -119,7 +125,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A07-04",
@@ -152,7 +159,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A21-01",
@@ -168,7 +176,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A21-02",
@@ -183,7 +192,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A21-03",
@@ -213,7 +223,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A21-05",
@@ -228,7 +239,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A21-06",
@@ -244,7 +256,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A25-01",
@@ -259,7 +272,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A25-02",
@@ -274,7 +288,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A25-03",
@@ -305,7 +320,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A26-01",
@@ -320,7 +336,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A26-02",
@@ -335,7 +352,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "TECHNICAL_PASS"
     },
     {
       "id": "A26-03",
@@ -367,7 +385,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "OWNER_PENDING"
     },
     {
       "id": "A29-01",
@@ -553,7 +572,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "NOT_RUN"
     },
     {
       "id": "B23-02",
@@ -583,7 +603,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "NOT_RUN"
     },
     {
       "id": "B27-02",
@@ -614,7 +635,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "NOT_RUN"
     },
     {
       "id": "B30-02",
@@ -644,7 +666,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "NOT_RUN"
     },
     {
       "id": "B32-02",
@@ -753,7 +776,8 @@
       ],
       "blocking_evidence": null,
       "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
-      "points_from_task": 0
+      "points_from_task": 0,
+      "execution_status": "NOT_RUN"
     },
     {
       "id": "G100-01",
@@ -848,5 +872,6 @@
     "allow_scorecard_changes": false,
     "each_worker_separate_branch": true
   },
-  "evidence": "GitHub-hosted synthetic tests are technical only, not a substitute for real buyer, rights-holder or independent human auditing."
+  "evidence": "GitHub-hosted synthetic tests are technical only, not a substitute for real buyer, rights-holder or independent human auditing.",
+  "execution_evidence": "Codex technical preparation and exact-SHA hosted results are recorded in docs/parallel/codex-worklog-20261115.md"
 }
