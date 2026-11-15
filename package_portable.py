@@ -14,6 +14,7 @@ RUNTIME=(
     "data2web.py","data2web_tabular.py","data2web_web.py",
     "data2web_profile.py","data2web_append.py",
     "receipt_utils.py","path_policy.py","secure_output.py","data2web_single.py","data2web_desktop.py","client_local_rehearsal.py","studio.py","delivery.py","verify_delivery.py","verify_customer_folder.py",
+    "r29_html_surface_policy.py",
 )
 MAIN=b"from studio import main\nraise SystemExit(main())\n"
 

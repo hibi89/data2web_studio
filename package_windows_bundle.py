@@ -15,6 +15,8 @@ from secure_output import create_output_directory, create_output_file
 
 FILE_NAMES={"DATA2WEB.pyz","RUN_DESKTOP.cmd","RUN_SELFCHECK.cmd","VERIFY_CUSTOMER.cmd",
             "README_LOCAL_KO.txt","BUNDLE_MANIFEST.json"}
+MANIFEST_KEYS={"contract","status","customer_data_included","sale_approved",
+               "signed_executable","requires","files"}
 MAX_FILE=2_000_000
 STATUS="UNSIGNED_PYTHON_311_LOCAL_ONLY_RELEASE_HOLD"
 
@@ -116,6 +118,10 @@ def create_windows_bundle(directory, *, source_directory=None):
 
 
 
+def _reject_nonfinite(value):
+    raise ValueError("Non-finite bundle manifest number forbidden")
+
+
 def _reject_duplicates(pairs):
     out={}
     for k,v in pairs:
@@ -138,8 +144,9 @@ def verify_windows_bundle(directory):
             raise ValueError("Bundle contains a non-file member")
         contents[name]=read_bounded_source(path,max_bytes=MAX_FILE if name=="DATA2WEB.pyz" else 100_000)
     doc=json.loads(contents["BUNDLE_MANIFEST.json"].decode("utf-8"),
-                   object_pairs_hook=_reject_duplicates)
-    if (not isinstance(doc,dict) or doc.get("contract")!="DATA2WEB_WINDOWS_BUNDLE_V1"
+                   object_pairs_hook=_reject_duplicates,parse_constant=_reject_nonfinite)
+    if (not isinstance(doc,dict) or set(doc)!=MANIFEST_KEYS
+            or doc.get("contract")!="DATA2WEB_WINDOWS_BUNDLE_V1"
             or doc.get("status")!=STATUS or doc.get("customer_data_included") is not False
             or doc.get("signed_executable") is not False or doc.get("sale_approved") is not False):
         raise ValueError("Unapproved or malformed local Windows bundle manifest")

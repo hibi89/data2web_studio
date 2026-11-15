@@ -1,10 +1,12 @@
-"""Reject ZIPs with changed CSP even when their manifest SHA is recomputed.
+"""Reject rehashed offline HTML mutations and keep saved DOM compatible.
 
-All sources synthetic. This tests structural CSP compatibility, NOT signing
-or publisher/source authenticity and not an independent human security audit.
+All sources synthetic. This tests the shipping verifier's reviewed static
+surface, NOT publisher/source authenticity or an external human security audit.
 """
 from __future__ import annotations
+import base64
 import hashlib
+import re
 import json
 import struct
 import tempfile
@@ -50,6 +52,97 @@ class ZipOfflineCsp(unittest.TestCase):
                 info.external_attr=0o100600<<16
                 z.writestr(info,members[name])
         return output
+
+    def test_browser_saved_dynamic_dom_remains_verifiable(self):
+        # Browser "Save page" serializes the rendered table, chart and controls.
+        html=self.members["index.html"].replace(
+            b'<tbody id="body"></tbody>',
+            b'<tbody id="body"><tr tabindex="0" aria-label="Synthetic">'
+            b'<td>synthetic</td><td>&lt;/script&gt;</td></tr></tbody>',1)
+        chart=(b'<div class="chart-row"><span class="chart-key">A</span>'
+               b'<div class="bar-track"><div class="bar-fill" '
+               b'style="width: 25%;"></div></div>'
+               b'<span class="chart-value">1</span></div>')
+        html,n=re.subn(rb'(<div id="chart-bars"[^>]*>)',
+                       lambda match:match.group(1)+chart,html,count=1)
+        self.assertEqual(n,1)
+        html=html.replace(
+            b'</select>',
+            b'<option data-all="true" value="" selected="">All</option></select>',1)
+        html=html.replace(
+            b'<button id="prev" type="button">',
+            b'<button id="prev" type="button" disabled="">',1)
+        html=html.replace(b'class="warning" hidden>',
+                          b'class="warning" hidden="">',1)
+        html=html.replace(
+            "인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.".encode(),
+            "인쇄 범위: 1건 중 화면 1/1페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.".encode(),
+            1)
+        self.assertTrue(verify_zip(self.rebuild_with_html(html))["verified"])
+
+    def test_rehashed_navigation_and_layout_mutations_are_rejected(self):
+        html=self.members["index.html"]
+        mutations=[]
+        mutations.append(html.replace(
+            b"</head>",
+            b'<meta http-equiv="refresh" content="0;url=https://invalid.example/">'
+            b"</head>",1))
+        csp=re.search(rb'<meta http-equiv="Content-Security-Policy" content="[^"]+">',
+                      html)
+        self.assertIsNotNone(csp)
+        moved=html.replace(csp.group(0),b"",1)
+        mutations.append(moved.replace(b"<body>",b"<body>"+csp.group(0),1))
+        script=re.search(rb"<script>.*?</script>",html,flags=re.DOTALL)
+        self.assertIsNotNone(script)
+        moved=html.replace(script.group(0),b"",1)
+        mutations.append(moved.replace(b"<main>",script.group(0)+b"<main>",1))
+        for index,changed in enumerate(mutations):
+            with self.subTest(mutation_index=index):
+                with self.assertRaises(ValueError):
+                    verify_zip(self.rebuild_with_html(changed))
+
+    def test_rehashed_script_with_matching_csp_is_rejected(self):
+        html=self.members["index.html"].replace(
+            b"<script>",b"<script>window.unapproved_test=true;",1)
+        script=re.search(rb"<script>(.*?)</script>",html,flags=re.DOTALL)
+        self.assertIsNotNone(script)
+        digest=base64.b64encode(hashlib.sha256(script.group(1)).digest())
+        html,n=re.subn(rb"script-src 'sha256-[^']+'",
+                       b"script-src 'sha256-"+digest+b"'",html,count=1)
+        self.assertEqual(n,1)
+        with self.assertRaises(ValueError):
+            verify_zip(self.rebuild_with_html(html))
+
+    def test_rehashed_style_change_is_rejected(self):
+        html=self.members["index.html"].replace(
+            b"<style>",b"<style>body{background:url(https://invalid.example/)}",1)
+        with self.assertRaises(ValueError):
+            verify_zip(self.rebuild_with_html(html))
+
+    def test_shadowed_dataset_identity_is_rejected(self):
+        html=self.members["index.html"].replace(
+            b"</main>",
+            b'<div id="dataset">{"contract":"DATA2WEB_HTML_V1","rows":[]}</div>'
+            b"</main>",1)
+        with self.assertRaises(ValueError):
+            verify_zip(self.rebuild_with_html(html))
+
+    def test_changed_import_warning_or_ack_semantics_is_rejected(self):
+        warning=(
+            "현재 데이터는 브라우저에서 교체한 로컬 CSV입니다. "
+            "원본 SHA·이전 납품 ZIP 무결성 증거가 새 데이터에 적용되지 않습니다. "
+            "배포 전 판매자 재검증이 필요합니다."
+        ).encode()
+        changed_warning=self.members["index.html"].replace(
+            warning,"데이터는 이미 판매자가 검증했습니다.".encode(),1)
+        self.assertNotEqual(changed_warning,self.members["index.html"])
+        with self.assertRaises(ValueError):
+            verify_zip(self.rebuild_with_html(changed_warning))
+        changed_ack=self.members["index.html"].replace(
+            b'id="ack" type="checkbox"',b'id="ack" type="text"',1)
+        self.assertNotEqual(changed_ack,self.members["index.html"])
+        with self.assertRaises(ValueError):
+            verify_zip(self.rebuild_with_html(changed_ack))
 
     def test_valid_exact_offline_csp_and_delivery_verified(self):
         self.assertTrue(verify_zip(self.archive)["verified"])

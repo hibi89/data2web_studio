@@ -8,6 +8,7 @@ import re
 from io import BytesIO
 from pathlib import Path
 from path_policy import assert_no_links, read_bounded_source
+from r29_html_surface_policy import assert_passive_offline_html_markup
 from zipfile import ZipFile, ZIP_STORED, BadZipFile
 
 ALLOWED = {"index.html", "manifest.json", "README_KO.txt"}
@@ -35,10 +36,9 @@ def _is_sha256(value):
 def _validate_offline_html_csp(html):
     """Validate the HTML's single-static-script CSP safety contract.
 
-    This is a *structural* security check, not a publisher signature.
-    An attacker who can rewrite the ZIP AND recompute every SHA256 may
-    replace both script and matching CSP hash. Source authenticity and
-    reviewer trust still require separate out-of-band evidence.
+    This CSP check is paired with an independent pinned passive-markup
+    policy below. Neither check is a publisher signature or source-rights
+    proof; customer source authenticity and legal authority remain separate.
     """
     # Only the generator's data JSON script and one static executable script
     # may be present; injection or duplicate policy tags are rejected.
@@ -120,6 +120,7 @@ def verify_zip(path):
             if not html.startswith(b"<!doctype html>") or b"DATA2WEB" not in html:
                 raise ValueError("Invalid standalone HTML")
             _validate_offline_html_csp(html)
+            assert_passive_offline_html_markup(html)
             if type(manifest.get("rows")) is not int or manifest["rows"] < 0:
                 raise ValueError("Invalid manifest row count")
             if manifest.get("sheet") is not None and not isinstance(manifest["sheet"], str):
