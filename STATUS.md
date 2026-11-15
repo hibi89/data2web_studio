@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High R29-ID-001 신규 DOM ID 우회 실제 브라우저 재현·차단, CI 7/7 jobs PASS · 공식 72 유지
+
+- 기존 Codex Draft PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` 그대로이며 제품 기본 `verify_zip` 수정 없음. High 전용 코드에서 **R29-ID-001** 신규 합성 무결성 우회 확인: 정상 JSON script 앞에 `div id="dataset"`을 삽입하고 ZIP manifest HTML 해시 재계산하면 기존 제품 검증기가 ZIP을 승인하는데, 브라우저 JS가 앞쪽의 위조 데이터를 표시함.
+- `r29_html_surface_policy.py`: 30개 고정 ID·태그 관계의 일치·유일성·필수 존재 검증 추가, 동적 div로 dataset/control ID 가로채기·미승인 ID 삽입 거부. `test_r29_html_surface_policy.py`, `test_r29_strict_zip_verifier.py` 회귀 테스트. `browser_r29_saved_dom_probe.py`에서 실제 hosted Chromium·Chrome·Edge가 유효 source 대신 위조 합성 행을 표시한 것을 확인하고 High guard에서 거부. 실제 외부 요청 0·원본 미변경, 정상 browser-saved HTML 동작 유지.
+- **Exact tested code SHA `157ff0b1490f9f4d858e175fdf4e5f77b0f79e6c`**. [기술 CI #43690034894](https://github.com/hibi89/data2web_studio/actions/runs/43690034894) **5/5 SUCCESS**: Windows 568(565PASS/3SKIP), Ubuntu/macOS 각 568(564PASS/4SKIP). [실제 브라우저 #43690034843](https://github.com/hibi89/data2web_studio/actions/runs/43690034843) **2/2 SUCCESS**: Chromium Linux + Windows Chrome/Edge 3채널 `unverified_display=true guard_rejected=true network0=true`. 이 성공은 취약점 탐지와 High 독립 가드 유효성의 증거일 뿐, 제품 기본 검증기 보안 패치 성공 아님.
+- Codex PR #6 댓글 #6891084878에 신규 R29-ID-001 및 R29-NAV-001 통합 보안 수정 요청. High는 Codex 소유 `verify_delivery.py` 수정 안 함; PR 병합 없음. 독립 외부 전문감사/구매자 실제 Win10/11·권리·판매·법률 검증 미수행. **공식 72/100**, RELEASE HOLD/SALE NO-GO 유지.
+
 ## 2026-11-15 KST — High R29 실제 Chromium·Chrome·Edge 저장 HTML 검수 전부 PASS / 공식 72 유지
 
 - Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00`에서 `verify_delivery.py` 기본 배송 ZIP 검증기 수정 **미반영**, R29-NAV-001 재해시 HTML 공격 수용 결함 OPEN. 사용자 승인 없는 자동 병합·출시 금지.
