@@ -24,14 +24,14 @@ ALLOWED_ATTRS = {
     "html": {"lang", "data-theme"},
     "meta": {"charset", "name", "content", "http-equiv"},
     "small": {"id", "class"},
-    "p": {"id", "class", "aria-live", "role"},
+    "p": {"id", "class", "aria-live", "role", "hidden"},
     "section": {"class", "aria-label", "id"},
     "div": {"class", "id", "role", "aria-label"},
     "span": {"class", "id"},
     "strong": {"id"},
     "input": {"id", "type", "placeholder", "accept"},
-    "select": {"id", "size", "aria-label"},
-    "option": {"value"},
+    "select": {"id", "size", "aria-label", "multiple"},
+    "option": {"value", "selected"},
     "button": {"id", "type"},
     "table": {"aria-label"},
     "thead": {"id"},
@@ -41,6 +41,8 @@ ALLOWED_ATTRS = {
     "script": {"type", "id"},
 }
 VOID_TAGS = {"meta", "input"}
+BOOLEAN_ATTRS = {"p": {"hidden"}, "select": {"multiple"},
+                 "option": {"selected"}}
 THEMES = {"office", "cafe", "inventory"}
 
 
@@ -83,9 +85,13 @@ class _HTMLSurfaceParser(HTMLParser):
         self.tags[tag] += 1
         if self.tags[tag] > EXPECTED_TAGS[tag]:
             raise ValueError("HTML element count exceeded")
-        if any((name is None or name not in ALLOWED_ATTRS.get(tag, set())
-                or value is None) for name, value in attrs):
-            raise ValueError("Unapproved HTML attribute")
+        for name, value in attrs:
+            if (name is None or name not in ALLOWED_ATTRS.get(tag, set())
+                or (value is None and
+                    name not in BOOLEAN_ATTRS.get(tag, set())) or
+                (value is not None and
+                 name in BOOLEAN_ATTRS.get(tag, set()))):
+                raise ValueError("Unapproved HTML attribute")
         names = [name for name, _ in attrs]
         if len(names) != len(set(names)):
             raise ValueError("Duplicate HTML attribute")
