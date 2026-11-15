@@ -1,3 +1,11 @@
+## 2026-11-15 KST — High R29 보안 가드 정밀화·읽기 전용 ZIP 보강 5/5 PASS, 기본 검증기 미수정 (공식 72/100)
+
+- Codex PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` 불변, `verify_delivery.py` 기본 ZIP 검증기의 R29-NAV-001 우회 문제 **열림**. Codex 소유 경로 수정/병합 없음.
+- High 소유 `r29_html_surface_policy.py` 고도화: 브라우저 로컬 저장본의 동적 표/옵션/차트 HTML에 대응하도록 제한적 수용, 정적 실행 JavaScript 및 CSS의 **독립 검토 SHA256 고정**으로 재해시 변조 거부. 이전의 엄격한 고정 태그 수 방식은 정상 저장 DOM을 차단할 수 있어 호환성 수정. 실제 저장 파일 테스트는 미검증(합성 구조 테스트만).
+- 신규 `r29_strict_zip_verifier.py` + `test_r29_strict_zip_verifier.py` 6종: read-only 내부 감사용 엄격 ZIP 검증, 소스 변경 재읽기 HOLD, 고객 경로 출력 비노출, 변조 메타 이동/스크립트+CSP/CSS와 재계산된 manifest SHA에 대한 **명시적 거부**. 기본 `verify_zip`는 같은 공격을 수용하므로 이것은 배송 경로 수정이 아닌 **별도 검수 대안**.
+- 검증 코드+테스트 SHA `7fef5cb7af3e66d98206d48c8940e505a89aab15` / [Actions #43688532026](https://github.com/hibi89/data2web_studio/actions/runs/43688532026) **5/5 SUCCESS**: Windows 565(562 PASS/3 SKIP), Ubuntu/macOS 각각 565(561 PASS/4 SKIP), Chromium/Chrome/Edge SUCCESS. Codex PR #6 댓글 #6890876238에 실제 통합·R21 출처 버전·Windows 번들 요구 전달.
+- R29 독립 외부 인간 감사, 실제 고객 브라우저 저장본/Windows10·11 수용, 개인정보·권리·판매 동의 미완료. **공식 72/100**, R29-NAV-001 OPEN, RELEASE HOLD / SALE NO-GO, Vercel 미적용.
+
 ## 2026-11-15 KST — High R29 정적 HTML 구조 가드·동일 ZIP 공격 교차 검증 5/5 PASS (공식 72 유지)
 
 - Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00`에서 R29-NAV-001 검증기 수정 미반영 확인. 사용자 승인 없는 Codex 전용 코드/PR 병합 금지.
