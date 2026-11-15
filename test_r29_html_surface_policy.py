@@ -5,6 +5,9 @@ High-owned tests; no real browser navigation or external network operation.
 from __future__ import annotations
 
 import unittest
+import base64
+import hashlib
+import re
 
 from data2web_web import render_html
 from r29_html_surface_policy import assert_passive_offline_html_markup
@@ -70,7 +73,73 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
         self.assert_unsafe(self.original.replace(
             b"</main>", b"</section>", 1))
         self.assert_unsafe(self.original.replace(
-            b"<main>", b"<main><div></div>", 1))
+            b"<main>", b"<main><header></header>", 1))
+
+    def test_browser_saved_dynamic_table_options_and_chart_are_accepted(self):
+        # The runtime saves the *rendered* DOM, not just the initial template.
+        html = self.original.replace(
+            b'<tbody id="body"></tbody>',
+            b'<tbody id="body"><tr tabindex="0" aria-label="Synthetic">'
+            b'<td>synthetic</td><td>&lt;/script&gt;</td></tr></tbody>', 1)
+        html = html.replace(
+            b'<div id="chart-bars" role="img" aria-label="',
+            b'<div id="chart-bars" role="img" aria-label="', 1)
+        # Add a passive chart row to the data-browser body, no navigation.
+        chart = (b'<div class="chart-row"><span class="chart-key">A</span>'
+                 b'<div class="bar-track"><div class="bar-fill" '
+                 b'style="width: 25%;"></div></div>'
+                 b'<span class="chart-value">1</span></div>')
+        html = html.replace(b'<div id="chart-bars" role="img" '
+                            b'aria-label="\\ubc94\\uc8fc\\ubcc4',
+                            b'<div id="chart-bars" role="img" '
+                            b'aria-label="\\ubc94\\uc8fc\\ubcc4', 1)
+        # Insert into chart container after its opening tag using a safe
+        # regular expression; the container is present in the real template.
+        html, n = re.subn(
+            rb'(<div id="chart-bars"[^>]*>)', lambda m: m.group(1) + chart,
+            html, count=1,
+        )
+        self.assertEqual(n, 1)
+        html = html.replace(
+            b'<option value="" selected>',
+            b'<option value="" selected=""><option data-all="true" '
+            b'value="" selected="">All</option>', 1,
+        )
+        html = html.replace(
+            b'<button id="prev" type="button">',
+            b'<button id="prev" type="button" disabled="">', 1,
+        )
+        html = html.replace(
+            b'class="warning" hidden>',
+            b'class="warning" hidden="">', 1,
+        )
+        result = assert_passive_offline_html_markup(html)
+        self.assertTrue(result["passive_template_surface_verified"])
+
+    def test_self_rehashed_script_and_css_mutations_are_still_rejected(self):
+        original = self.original
+        script = re.findall(rb"<script>(.*?)</script>", original, re.DOTALL)[0]
+        mutated_script = script + b"window.EVIL_SYNTHETIC=1;"
+        old_hash = base64.b64encode(hashlib.sha256(script).digest())
+        new_hash = base64.b64encode(hashlib.sha256(mutated_script).digest())
+        payload = original.replace(b"<script>" + script + b"</script>",
+                                   b"<script>" + mutated_script + b"</script>", 1)
+        payload = payload.replace(old_hash, new_hash, 1)
+        self.assert_unsafe(payload)
+        css = re.findall(rb"<style>(.*?)</style>", original, re.DOTALL)[0]
+        self.assert_unsafe(original.replace(
+            b"<style>" + css + b"</style>",
+            b"<style>" + css + b"body{display:none}" + b"</style>", 1))
+
+    def test_active_attribute_in_dynamic_table_rejected(self):
+        self.assert_unsafe(self.original.replace(
+            b'<tbody id="body"></tbody>',
+            b'<tbody id="body"><tr onclick="evil()">'
+            b'<td>A</td></tr></tbody>', 1))
+        self.assert_unsafe(self.original.replace(
+            b'<div id="chart-bars"',
+            b'<div id="chart-bars" style="background:url(https://invalid.example/a)"',
+            1))
 
     def test_invalid_markup_encoding_and_type_rejected(self):
         for bad in (b"", b"not html", b"\\xff", "not-bytes", None):
