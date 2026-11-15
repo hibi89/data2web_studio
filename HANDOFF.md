@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29 엄격 ZIP 검수 진전 인수인계 (10항)
+
+1. **목표/확정 요구/기술:** DATA2WEB Studio A 로컬 HTML/ZIP/receipt R01–R33 100점 최종설계, R29-NAV-001(재해시 HTML ZIP 변조 검증기 수용) 보완. 공식 72/100, RELEASE HOLD 유지.
+2. **실제 변경/선택 이유:** High 소유 `r29_html_surface_policy.py`를 정규 V1 실행 JS/CSS 고정 SHA256 + 안전한 브라우저 DOM 옵션·표·차트 변경 허용으로 개선. 고정 태그 수 방식은 브라우저 `outerHTML` 저장 정상 자료와 호환 불가할 가능성이 있어 보완. `r29_strict_zip_verifier.py` read-only 독립 검수 경로 및 `test_r29_strict_zip_verifier.py` 합성 방어/상태 회귀 6개 추가. Codex 소유 기본 ZIP 검증기 변경 없음.
+3. **시험명령·성공/실패:** `python -m unittest test_r29_html_surface_policy test_r29_strict_zip_verifier -v`, 전체 `python -m unittest discover -v`. 정확 SHA `7fef5cb7af3e66d98206d48c8940e505a89aab15` / [CI #43688532026](https://github.com/hibi89/data2web_studio/actions/runs/43688532026) 5/5 SUCCESS: Windows 565=562 PASS/3 SKIP, Ubuntu/macOS 565=561 PASS/4 SKIP; Chromium+Chrome/Edge PASS. 별도 strict 검수는 원본 ZIP 허용, meta-refresh / JS+CSP 재해시 / CSS 재해시 변조 거부, 원본 바이트 유지; 실제 browser-saved ZIP/고객 장비 미검증.
+4. **완료/진행/대기/차단:** High 독립 검사기·테스트·CI 완료. 기본 `verify_delivery.py` / Windows bundle 연동 미수정, Codex 별도 처리 필요. R29 외부 독립감사, R06 실제 Windows10/11 악성 경로, 고객 수용·실구매·권리 미검증. 72/100 HOLD.
+5. **실패 근거·원인·pivot·대안:** 원래 High 정적 고정 태그 수 가드는 브라우저가 `document.documentElement.outerHTML`으로 저장하는 동적 테이블/차트/옵션을 오탐 가능. 고정 보안요소+유한 동적 요소 정책으로 피벗하고 JS/CSS 검토 SHA를 고정; 합성 동적 DOM 검증 통과. 실 브라우저 생성 HTML은 추가 검사 필요. 기존 shipping verifier의 자동 이동·스크립트 변조 수용은 재현 확인, Codex PR #6 댓글 #6890876238로 정확 수정 요구. 무단 기본 코드 수정 금지.
+6. **GitHub/브랜치/SHA/파일:** `hibi89/data2web_studio`, High `work/high-data2web-security-r06-r29-20261115` Draft PR #7; 정확 코드 SHA `7fef5cb7af3e66d98206d48c8940e505a89aab15`, 추가·수정 `r29_html_surface_policy.py`, `r29_strict_zip_verifier.py`, `test_r29_html_surface_policy.py`, `test_r29_strict_zip_verifier.py`. Codex Draft PR #6 HEAD 확인 `afe6ed055cf4b9405da91d1028f9889555b41e00`; 둘 다 미병합.
+7. **Production/환경/URL:** 오프라인 A 제품이므로 Vercel Production URL·배포 미적용. GitHub-hosted Windows/macOS/Ubuntu 및 Chromium/Chrome/Edge CI 통과; 독립 고객 Win10/11/네트워크 경로·실 브라우저 저장 HTML의 High guard 호환성 미검증.
+8. **원본 위치/백업/권한:** 이전 GitHub 커밋 이력 및 원본·R21 승인 v1/v2 보존, 합성 자료만 사용, 고객 원본/개인정보/토큰 미수집·미전송. 공유, 유료 결제, 권한 변경, 원본 덮어쓰기, force push 및 PR 무단 병합 불허.
+9. **다음 작업/사용자 승인/완료 기준:** Codex가 자체 `verify_delivery.py` 수정 및 테스트, 필요 시 신규 가드 모듈을 Windows/portable 포함시키고 R21 버전 출처 계약을 정당하게 갱신. High는 그 정확 결합 SHA에서 메타 이동·JS/CSP·CSS 공격 기본 검증기 거부 여부와 정상 브라우저 저장본을 재검수. 외부 독립 보안감사, 고객 권리·판매 승인은 별도 사용자 승인/객관 증거 필요. 72→상향 임의 금지.
+10. **KST 갱신/확인 시점/범위:** 2026-11-15 KST, 코드 SHA `7fef5cb7af3e66d98206d48c8940e505a89aab15` 및 Actions #43688532026, Codex comment #6890876238. 이후 docs-only HEAD는 소스 검증 SHA와 반드시 구분. 공식 72/100, R29-NAV-001 OPEN, RELEASE HOLD / SALE NO-GO.
+
 ## 2026-11-15 KST — GPT-6 High R29 정적 HTML 가드 및 우회 재검증 인수인계 (10항)
 
 1. **목표/확정 요구/기술:** DATA2WEB Studio 2026 R01–R33 100점 A 오프라인 HTML/ZIP/receipt, R29-NAV-001 검증기 HTML 활성 마크업 우회 방어를 High 소유 범위에서 준비. 공식 72점·외부 감사 PENDING.
