@@ -29,7 +29,7 @@ class CommercialTermsConsistencyTests(unittest.TestCase):
             ("**1회**", "**9회**"),
             ("**7일**", "**30일**"),
             ("최대 1,000행·20열", "최대 1,001행·20열"),
-            ("최대 3개", "최대 4개"),
+            ("최대 **3개", "최대 **4개"),
         )
         for old, new in changes:
             with self.subTest(old=old):
@@ -48,8 +48,9 @@ class CommercialTermsConsistencyTests(unittest.TestCase):
                 validate_commercial_terms(self.markdown, changed)
 
     def test_removed_rights_and_refund_disclosures_rejected(self):
-        for phrase in ("법률상", "전면 환불불가 금지", "SALE NO-GO"):
-            changed = self.markdown.replace(phrase, "삭제", 1)
+        for phrase in ("전면 환불불가 금지", "법령상 청약철회·환불·손해배상 권리는 제한하지 않는다", "SALE NO-GO"):
+            self.assertIn(phrase, self.markdown)
+            changed = self.markdown.replace(phrase, "삭제")
             with self.subTest(phrase=phrase), self.assertRaises(ValueError):
                 validate_commercial_terms(changed, self.defaults)
 
