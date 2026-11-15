@@ -1,3 +1,11 @@
+## 2026-11-15 KST — High R29 정적 HTML 구조 가드·동일 ZIP 공격 교차 검증 5/5 PASS (공식 72 유지)
+
+- Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00`에서 R29-NAV-001 검증기 수정 미반영 확인. 사용자 승인 없는 Codex 전용 코드/PR 병합 금지.
+- High 전용 `r29_html_surface_policy.py` 신규: DATA2WEB V1 정적 HTML의 태그 수·속성·문서 메타·스크립트 형태·중첩 검사, 이벤트 핸들러·meta refresh·iframe/외부 태그 거부. `test_r29_html_surface_policy.py` 8종. 정상 템플릿 불리언 속성 `hidden/multiple/selected`에 대한 최초 오탐은 태그별 좁은 예외로 개선.
+- 동일 **재해시 변조 ZIP**에 대해 실제 `verify_zip`은 `verified=true`, 신설 High guard는 정상본 `accepted=true`, 악성 HTML `rejected=true`로 판정. `r29_zip_navigation_diagnostic.py` 및 테스트에서 세 결과 동시 검증. 브라우저 원격 이동/네트워크·고객정보 유출은 시험하지 않았음.
+- 검증 코드+테스트 SHA `1e34652b0bf105c85835c7e3bc04a576cadfbf08`, [Actions #43687114162](https://github.com/hibi89/data2web_studio/actions/runs/43687114162) **5/5 JOB SUCCESS**: Windows 556(553 PASS/3 SKIP), Ubuntu/macOS 각각 556(552 PASS/4 SKIP), Chromium/Chrome/Edge SUCCESS. CI는 가드와 **취약점 탐지** PASS이지 실제 배송 검증기의 취약점 수정 PASS가 아님.
+- Codex PR #6 comment #6890564392에 후보 가드·수정 요구 전달. R29 외부 독립 감사·R06 Win10/11 실제 공격 수용 미검증. 전체 공식 **72/100**, RELEASE HOLD / SALE NO-GO 유지.
+
 ## 2026-11-15 KST — R29 ZIP 변조 HTML 검증기 우회 합성 재현·3 OS CI PASS · 보안 HOLD (72/100 유지)
 
 - R29-NAV-001 **확인된 기술 결함:** 정규 ZIP 3개 멤버 내부 HTML에 meta refresh 구성요소를 추가하고 manifest HTML SHA256을 재계산한 합성 공격 파일이 현재 `verify_delivery.py::verify_zip`에서 `verified=true`로 인정됨. Windows/macOS/Ubuntu 자동 테스트 로그에서 각각 독립 관찰. 단 **실제 브라우저 외부 이동, 네트워크 전송, 고객정보 유출**은 시험/확인되지 않았으며 성공 주장 금지.
