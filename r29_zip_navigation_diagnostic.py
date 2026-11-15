@@ -14,6 +14,7 @@ from zipfile import ZIP_STORED, ZipFile, ZipInfo
 
 from data2web_single import deliver_single
 from verify_delivery import verify_zip
+from r29_html_surface_policy import assert_passive_offline_html_markup
 
 CONTRACT = "DATA2WEB_R29_REHASHED_NAVIGATION_DIAGNOSTIC_V1"
 
@@ -41,6 +42,11 @@ def assess_rehashed_navigation():
             members = {name: z.read(name) for name in z.namelist()}
         marker = b"</head>"
         original_html = members["index.html"]
+        # Independent high-lane defense-in-depth policy is not yet called by
+        # the CODEX-owned shipping ZIP verifier.
+        pristine_allowed = assert_passive_offline_html_markup(
+            original_html
+        )["passive_template_surface_verified"]
         if original_html.count(marker) != 1:
             raise AssertionError("Unexpected generated HTML head structure")
         navigation = (
@@ -50,6 +56,14 @@ def assess_rehashed_navigation():
         modified_html = original_html.replace(marker, navigation + marker, 1)
         if modified_html == original_html:
             raise AssertionError("Synthetic navigation mutation not applied")
+        try:
+            assert_passive_offline_html_markup(modified_html)
+        except ValueError:
+            high_guard_rejected_modified = True
+        else:
+            high_guard_rejected_modified = False
+        if not pristine_allowed or not high_guard_rejected_modified:
+            raise AssertionError("Independent passive markup guard regressed")
         members["index.html"] = modified_html
         manifest = json.loads(members["manifest.json"])
         manifest["html_sha256"] = hashlib.sha256(modified_html).hexdigest()
@@ -80,6 +94,8 @@ def assess_rehashed_navigation():
                        else "MODIFIED_NAVIGATION_REJECTED_BY_VERIFIER"),
             "verifier_accepted_rehashed_navigation": accepted,
             "synthetic_control_verified": True,
+            "high_guard_accepted_pristine_html": pristine_allowed,
+            "high_guard_rejected_modified_html": high_guard_rejected_modified,
             "zip_member_count": len(names),
             "external_network_request_performed": False,
             "actual_browser_navigation_tested": False,
