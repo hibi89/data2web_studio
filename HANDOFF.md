@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29-NAV-001 보안 발견·HOLD 인수인계 (10항)
+
+1. **목표·최종설계·용도:** DATA2WEB A 로컬 오프라인 HTML/ZIP/receipt R01–R33 100점; 이번 작업은 R29 변조 HTML ZIP 검증기 공격 재현·보안 상태 기록, 외부감사 자체완료 아님.
+2. **완료 기능·근거:** High 소유 `r29_zip_navigation_diagnostic.py` + `test_r29_zip_navigation_diagnostic.py` 합성 재현, `security_audit_preaudit.py`의 위험 보류 표시와 `test_security_audit_preaudit.py` 발견 은폐 회귀 테스트. 정규 ZIP에서 HTML meta refresh 삽입 및 해시 재계산 후 verifier `verified=true` 확인. 테스트는 외부 네트워크 요청 없음.
+3. **검증·테스트:** 정확 SHA `87d0038a2d7650a8b5010ba54802e3004ac4db58` / [GitHub Actions #43686263198](https://github.com/hibi89/data2web_studio/actions/runs/43686263198) 5/5 SUCCESS. Windows Python 548=545 PASS/3 SKIP, Ubuntu/macOS 548=544 PASS/4 SKIP; Chromium·Chrome·Edge PASS. `R29_NAVIGATION_DIAGNOSTIC`에서 수용 여부 true 및 `SECURITY_HOLD_CANDIDATE_CONFIRMED` 확인. 이는 보안 취약점의 **탐지·기록** PASS이며 안전성/수정/실고객 검증 PASS가 아님.
+4. **완료·진행·차단:** 공격 재현·증빙·HOLD 출력 완료; Codex 소유 ZIP verifier 수정 미완료, 실제 브라우저 네트워크 경로 및 외부 독립 보안감사 미검증. R06 Windows 실제 고객 환경·권리/동의/상품 운영 결재도 남음. 공식 72/100, SALE NO-GO.
+5. **오류·원인·시도·대안:** 검사기가 정적 스크립트 CSP와 manifest SHA는 확인하지만 추가 meta refresh HTML 요소는 구조적으로 거부하지 못함. 합성 입력으로 재현. CODEX에 허용 HTML 구조/활성 태그를 최소 안전 범위로 제한하는 수정 및 부정 테스트 의뢰(comment #6890445038). 검증기 파일 병렬 수정 금지. 변경 없이 출시하는 선택 금지.
+6. **GitHub/브랜치/SHA:** `hibi89/data2web_studio` / `work/high-data2web-security-r06-r29-20261115` Draft PR #7, 정확 테스트 SHA `87d0038a2d7650a8b5010ba54802e3004ac4db58`, 관련 경로 위 4개 + `docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md`. Codex PR #6 별도/미병합.
+7. **Production/환경:** GitHub hosted Windows, macOS, Ubuntu, Chromium/Chrome/Edge 결과 있음; 실제 고객 Production/Vercel 미적용(로컬 A 제품), 실제 원격 내비게이션 테스트 안함.
+8. **원본·백업·기밀:** 합성 데이터와 임시 테스트 출력만 사용; 고객 원본·개인정보·토큰 미사용·미전송. 기존 GitHub 이력 불변, 강제 푸시/자동병합/파일 덮어쓰기 금지. 현재 소스 점수표 변경 금지.
+9. **다음 작업·완료 기준·승인:** Codex 소유 `verify_delivery.py` 및 `test_zip_offline_csp.py`에서 R29-NAV-001 수정→재현 테스트로 거부 PASS→High가 exact combined SHA CI 전수검수. 외부 독립 감사, 데이터·소스 외부 전송, 라이선스·고객 권리, 판매는 각 별도 사용자 승인 후 진행. R29 가점은 외부감사 완료 전 0.
+10. **KST 갱신·검증 범위:** 2026-11-15 KST / 코드 SHA `87d0038a2d7650a8b5010ba54802e3004ac4db58` / CI #43686263198 / Codex PR #6 댓글 #6890445038. 문서 커밋은 뒤이어 진행해 문서 HEAD와 정확 테스트 코드 SHA를 구분. 공식 72/100 RELEASE HOLD 유지.
+
 ## 2026-11-15 KST — GPT-6 High H20 R29 공격 샘플 정확도 보강 인수인계 (필수 10항)
 
 1. **목표·최종설계·기술:** DATA2WEB Studio A 오프라인 HTML/ZIP/receipt R01–R33 100점 수용 중 R29 자체 보안 사전감사 오탐 위험 최소화. 공식 72/100 변경 없음.
