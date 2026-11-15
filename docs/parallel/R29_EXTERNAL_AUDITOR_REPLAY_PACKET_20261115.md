@@ -1,3 +1,23 @@
+## 2026-11-15 KST — verified read-only strict R29 ZIP fallback (not shipping/production approval)
+
+An important compatibility correction was completed: the browser saves `document.documentElement.outerHTML` **after** dynamically rendering chart rows, table rows/cells, category and sort options, and changed disabled/selection flags. A prior independent High validator required static counts and would incorrectly reject legitimate saved DOM. The High-owned `r29_html_surface_policy.py` now keeps static security-sensitive counts while allowing bounded passive dynamic tags and generated style widths. This was exercised with **synthetically constructed saved-DOM variants**, not actual downloaded Playwright browser file acceptance.
+
+New independent reviewed hash anchors:
+- Static executable JS SHA256: `88eb85f18024b12dee9b0a80b5df63c5fe62657cf3fa207c18dff57178dd3a14`.
+- Static CSS SHA256: `4cd3dc81e7efb0fc1fe60b072f5fa0e81ed40f8cfc22c0aea863e42f49a1f597`.
+- These constants intentionally differ from the attacker-controllable ZIP manifest HTML hash and self-recomputed CSP hash. They match the current V1 renderer at the exact review SHA. If the renderer changes, **review then version** any approved hash updates; never silently skip the guard.
+
+A separate HIGH-only `r29_strict_zip_verifier.py` offers a **read-only strict reviewer command** that runs the original `verify_zip` and applies the pinned HTML/CSS/JS policy to the same bounded SHA-identified ZIP snapshot. It does not alter the shipping `verify_delivery.py`, does not verify publisher/authenticity and does not remove external R29 audit gates. It additionally checks for file change across reads, but cannot guarantee atomicity against privileged concurrent mutation.
+
+```bash
+python -m unittest test_r29_html_surface_policy test_r29_strict_zip_verifier -v
+python r29_strict_zip_verifier.py path/to/local-synthetic-delivery.zip
+```
+
+**Exact code/tests SHA `7fef5cb7af3e66d98206d48c8940e505a89aab15`**, [hosted CI #43688532026](https://github.com/hibi89/data2web_studio/actions/runs/43688532026) **5/5 jobs SUCCESS**: Windows 565 Python tests (562 PASS/3 SKIP); Ubuntu/macOS 565 (561 PASS/4 SKIP); Chromium and Windows Chrome/Edge PASS. Independent strict checker rejected three synthetic *canonical, manifest-rehashed* ZIPs that existing shipping ZIP verifier accepted: inserted HTML meta refresh, changed executable script+matching CSP digest, changed CSS. Unmodified synthetic delivery accepted. This proves a supplemental detector works; it **does not** prove that standard product `verify_zip` is repaired or a real-world browser exfiltration occurs.
+
+Codex Draft PR #6 at last checked HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` has no shipping-verifier fix. Detailed code and integration requirements sent in PR comment #6890876238. CODEX must update its owned `verify_delivery.py` / regression tests and Windows bundle module inclusion, while preserving R21 source provenance versioning, then HIGH must independently verify the exact combined SHA. Real browser-saved file acceptance is still pending; external independent assessor, owner data rights and commercial approvals all remain separate PENDING gates. R29-NAV-001 **OPEN**, official 72/100 and RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-15 KST — HIGH passive HTML structure guard and exact-attack differential validation
 
 The Codex-owned `verify_delivery.py` remained unmodified in PR #6 at HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` (reviewed today). The previously confirmed canonical three-member ZIP with recomputed manifest HTML SHA and injected meta-refresh **still verifies as true** in the shipping verifier. The issue is open.
