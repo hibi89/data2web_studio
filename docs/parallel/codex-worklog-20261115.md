@@ -101,3 +101,26 @@ Files changed: `commercial_terms_consistency.py`, `test_commercial_terms_consist
 - Combined exact integration-SHA test is **NOT_RUN** because no authorized integrated SHA exists while both Draft PRs remain unmerged. Separate CI evidence must not be presented as combined validation.
 - Compared shared workflow content read-only: `.github/workflows/parallel-branch-ci.yml` has identical blob SHA `fc8cd118f9733898f549c4e0981f08197f198398` in Codex and High branches; the integration base lacks that file. PR #6 is mergeable; PR #7 reports `dirty` against recorded base `cfc56fe4492f445d7f6a1fd12bb8d45c422de46e` while the target branch has advanced to `e03681b433b921bfe1eb0a0ada50145b7de3c078`. PR #7 conflict resolution is High-owned; Codex made no change to High-owned files, central HANDOFF/STATUS, or either PR base.
 - High's exact R06 source/test SHA `88c9123be526e947ec2fae5955f6933daf9fadee` has full hosted 3OS/browser PASS [#43684105120](https://github.com/hibi89/data2web_studio/actions/runs/43684105120); that is separate from external R06 device acceptance and R29 human-audit/retest.
+
+
+## 2026-11-15 KST — High R29 findings applied to Codex shipping verifier
+
+### Finding and scope
+High review comments on PR #6 (#6891084878, #6891312965, #6891493486) reproduced synthetic rehashed-ZIP acceptance in shipping `verify_delivery.verify_zip`: meta-refresh / matching-CSP executable changes, shadowed `dataset` identity, CSP or executable-script relocation, misleading CSV replacement disclosure, and altered rights-acknowledgement semantics. These are synthetic integrity-bypass reproductions, not evidence of a real customer incident, outbound data exfiltration, or external audit.
+
+### Changes on this Codex branch
+- Reused High's reviewed `r29_html_surface_policy.py` **byte-identically** (blob `450a2266b02583e9ebae197c2032d6ee857a5fac`); the Codex and High `data2web_web.py` source blobs were also identical (`65bd8fe16d7b284f553d5185ed369650cc83d82f`).
+- `verify_delivery.py` now applies the pinned passive HTML contract after the existing CSP/member/dataset checks and before returning `verified=true`.
+- `package_portable.py` includes the guard module in the reproducible Python zipapp runtime.
+- `test_zip_offline_csp.py` adds shipping-`verify_zip` regressions for rehashed navigation/layout changes, a modified script with a recomputed matching CSP, CSS mutation, shadowed dataset, changed disclosure/ack semantics, and acceptance of a browser-saved dynamic-DOM fixture. The tests use synthetic records only.
+- Existing R21 provenance and rights gates were not changed. No scorecard, central STATUS/HANDOFF, High-owned source/workflow, base branch, or main changes.
+
+### Exact-SHA verification
+- Initial test SHA `7c2b3b02313d83be23996430cd1f38022d7c132e`, run [#43716878911](https://github.com/hibi89/data2web_studio/actions/runs/43716878911), exposed one fixture-only mismatch: the dynamic print notice omitted the reviewed space rule. The fixture was corrected to the High-reviewed `1/1페이지` grammar; the follow-up product/test SHA is `d42cb27f5f03d01f0af96af7b5e20deddbc982d6`.
+- At `d42cb27f5f03d01f0af96af7b5e20deddbc982d6`, [branch CI #43716967874](https://github.com/hibi89/data2web_studio/actions/runs/43716967874) passed **5/5 jobs**: Ubuntu/macOS/Windows each ran 546 tests (4 skips on Ubuntu and macOS; 1 on Windows); Linux Chromium and Windows Chrome/Edge passed with local-network count zero.
+- Latest WBS-evidence HEAD `d3925e0500a59c3bf79a707431f9cf534dc0e06b), [branch CI #43717198314](https://github.com/hibi89/data2web_studio/actions/runs/43717198314): **5/5 jobs PASS**, same 546 tests per OS and same skip counts; Chromium, Chrome, and Edge PASS.
+- [Final blueprint evidence gate #43717198578](https://github.com/hibi89/data2web_studio/actions/runs/43717198578) workflow PASS; report is **UNASSESSED**, no approved acceptance manifest. Official score remains **72/100**, 22 VERIFIED / 11 PENDING; this remediation adds **0 points**. RELEASE HOLD / SALE NO-GO unchanged.
+- CodeQL did not emit a check for this feature-branch head (**SKIP / not run**). The final WBS HEAD run is hosted test verification, not a customer device run or external security audit.
+
+### Remaining acceptance and review
+High's independent source review of the Codex remediation is requested. R29 still requires owner-authorized independent human audit, findings remediation/retest and signoff; this code review does not satisfy it. Genuine customer Win10/11 acceptance, R07 source-use rights/consent, R21 commercial rights and approved LICENSE/NOTICE, R25 actual customer custody/disposal, R26 customer-specific privacy basis/consent, R27 final seller terms, R30 independent buyer flow, R32 real installation/signing decisions, and R33 real rights/payment/refund/marketplace evidence remain OWNER/EXTERNAL_PENDING as applicable. PR #6 remains Draft/Open/Unmerged; combined integration-SHA validation is NOT_RUN.
