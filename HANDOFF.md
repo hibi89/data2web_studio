@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29-DISC-001 안내문 무결성·브라우저 저장 호환성 보안 인수인계 (필수 10항)
+
+1. **목표·확정 요구·기술:** DATA2WEB Studio R01–R33 오프라인 HTML/ZIP·receipt 제품, High R06/R29 보안 독립 개발·검수. 사용자 확정 100점 기준 공식 72/100. 외부감사·판매/권리 승인 없는 RELEASE HOLD.
+2. **변경·설계 이유:** `r29_html_surface_policy.py`에서 Excel 원시·캐시 경고, 수식 경고, 로컬 CSV 교체 재검증 고지문을 독립 고정. 권리확인 체크박스 `ack`, `csv` 파일 입력 및 `search` 입력 유형도 검증. `print-scope`는 원래 정적 원본 문구 또는 검증된 JS 생성 동적 문구만 허용 (0~10,000행, 페이지당 50, 현재 페이지/총 페이지 일치). 보안 전용 `test_r29_html_surface_policy.py`, `test_r29_strict_zip_verifier.py`에서 합성 재해시 ZIP 수용 대비 High 거부 증빙. `browser_r29_saved_dom_probe.py` 합성·고정 ID만 출력하는 진단 보강. Codex 소유 제품 검증기 미수정.
+3. **실제 테스트·수:** `python -m unittest discover -v`; `python browser_r29_saved_dom_probe.py --channel chromium|chrome|msedge` 정확 SHA `ba0854184928738281011904e17d00efd6cafb22`. [hosted Actions #43692928390](https://github.com/hibi89/data2web_studio/actions/runs/43692928390) 5/5 SUCCESS: Windows 578 total=575PASS/3SKIP, Ubuntu/macOS 각 578=574PASS/4SKIP, 기본 Chromium/Chrome/Edge PASS. [실브라우저 #43692928374](https://github.com/hibi89/data2web_studio/actions/runs/43692928374) 2/2 SUCCESS: 76행/12범주·표50·차트10·저장/재열기/무네트워크/기존 ID-shadow guard PASS.
+4. **완료·대기·차단:** High 독립 고지문/동의 UI 의미 가드 개발·hosted CI PASS. 기본 제품 `verify_zip`는 재해시 고지문/동의 속성 변경 수용하므로 신규 R29-DISC-001 OPEN, 기존 NAV-001/ID-001/STRUCT-001도 OPEN. 외부 독립감사·Win10/11 구매자/법적 권리·판매 증빙 PENDING. 72/100, RELEASE HOLD/SALE NO-GO.
+5. **실패·원인·재시도·전환:** 최초 strict 고정 인쇄 문구는 브라우저 JS가 필터/페이지를 반영한 인쇄 문구를 만드는 정상 동작과 충돌, browser-saved workflow 2/2 FAIL. 고객내용 없는 ID 불일치 진단으로 `print-scope` 단독 원인 확인; 숫자/페이지 구조를 검증하는 dynamic-safe 계약으로 수정. 정규식 이스케이프 오기 교정 후 exact SHA 성공. 무조건 고정 문구 재도입 금지.
+6. **저장소·브랜치·SHA:** `hibi89/data2web_studio`, High `work/high-data2web-security-r06-r29-20261115` Draft PR #7; 정확 tested code SHA `ba0854184928738281011904e17d00efd6cafb22`; Codex `work/codex-data2web-to100-20261115` Draft PR #6 마지막 확인 `afe6ed055cf4b9405da91d1028f9889555b41e00`, 통합 목표 `feature/final-blueprint-p85-evidence-20261113`. 병합 없음.
+7. **서비스/환경:** GitHub hosted Python 3.11 Win/macOS/Ubuntu, 실제 테스트 브라우저 Linux Chromium, Windows Chrome·Edge `file://` 로컬 파일 저장/재열기. Production/Vercel **미적용**. 고객 실 Windows10/11 **미검증**.
+8. **원본·백업·보안:** 이전 GitHub SHA/원본 R21 v1/v2 유지, 합성 데이터만 사용. 고객 원본·비밀/개인정보 업로드·토큰·외부 서비스 전송 없음. PR 자동병합·보안권한 변경·force push·상용 배포/판매 금지.
+9. **다음 우선순위/완료 기준·승인:** Codex가 제품 소유 `verify_delivery.py`/ZIP·portable 번들에 NAV, ID, STRUCT, DISC 4개 R29 검증을 정책적으로 결합하고 정확 SHA의 정상·부정 테스트 PASS → High가 합쳐진 정확 SHA에 독립 ZIP 재해시 공격 거부·브라우저 저장 재열기·Windows 포함 모듈/R21 출처 확인. 외부 R29 감사/실 고객 수용·판매/권리 승인은 별도 인증·증빙과 사용자 승인 필요.
+10. **갱신/검증 범위/문서 기준:** 2026-11-15 KST; 코드 SHA `ba0854184928738281011904e17d00efd6cafb22`, 3OS browser CI #43692928390 및 dedicated browser #43692928374 PASS. 1차 실패 #43692497701·진단 #43692736451·교정 근거 보존. 현재 문서 전용 커밋 SHA는 코드 SHA와 분리. 공식 72/100, RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-15 KST — GPT-6 High R29-STRUCT-001 독립 보안 가드 보강 인수인계 (필수 10항)
 
 1. **목표·확정 요구·기술:** DATA2WEB Studio R01–R33 오프라인 HTML/ZIP/receipt 제품, High 소유 R06/R29 보안 개발·독립 검수. 사용자 확정 100점 기준 공식 72/100, 외부감사·출시권리 미승인.

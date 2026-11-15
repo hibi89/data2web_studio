@@ -1,3 +1,12 @@
+## 2026-11-15 KST — High R29-DISC-001 고지문·동의 UI 의미 변조 방어, hosted 3OS/browser 7/7 PASS, 공식 72 유지
+
+- Codex Draft PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` 확인: 제품 기본 `verify_delivery.py::verify_zip`에 R29-NAV-001 / ID-001 / STRUCT-001 / 신규 DISC-001 방어 수정 없음. High PR #7 분리 유지, PR 병합·출시 없음.
+- **신규 합성 R29-DISC-001:** 재해시한 정규 3멤버 ZIP에서 로컬 CSV 교체 후 재검증 필요 고지문을 허위 검증완료 문구로 변경하거나 `ack` 동의 체크박스를 text 입력으로 변형해도 이전 기본 `verify_zip`가 수용하는 문제를 합성 회귀에서 확인. 사용자 피해·외부 네트워크/실공격 성공은 확인하지 않음.
+- High 보조 검사기 `r29_html_surface_policy.py`는 출처·Excel 캐시·CSV 교체 주의문 3종과 필수 `ack`/`csv`/`search` 입력 속성을 독립 상수로 고정. 실제 브라우저에서 검색·페이지 상태에 따라 바뀌는 `print-scope`는 정확한 문구 형식·행수 상한 10,000·페이지수 `ceil(표시행/50)`·현재 페이지 범위를 검증하고 정상 저장본 수용. 신규 테스트 5개(안내문·입력 조작·ZIP 재해시, 정상 동적 페이지).
+- **검수 중 발견한 오탐 및 수리:** 첫 [실브라우저 CI #43692497701](https://github.com/hibi89/data2web_studio/actions/runs/43692497701) 2/2 FAIL(정상 `print-scope` 문구까지 정적으로 고정), 합성 브라우저 전용 비민감 ID 진단 [#43692736451](https://github.com/hibi89/data2web_studio/actions/runs/43692736451)에서 불일치 ID `print-scope`만 확인. 동적 계약으로 보완, regex 이스케이프 교정 후 최종 PASS. 진단 로그에는 고객 원본/문구값 미출력.
+- **정확 검증 코드 SHA `ba0854184928738281011904e17d00efd6cafb22`**. [3OS·기본 브라우저 #43692928390](https://github.com/hibi89/data2web_studio/actions/runs/43692928390) **5/5 SUCCESS**: 각 OS 578 tests, Windows 575PASS/3SKIP, Ubuntu·macOS 574PASS/4SKIP; Ubuntu Chromium, Windows Chrome·Edge 기본 PASS. [실브라우저 저장본 #43692928374](https://github.com/hibi89/data2web_studio/actions/runs/43692928374) **2/2 SUCCESS**: Linux Chromium·Windows Chrome/Edge, 76행·12분류·표50행·차트10, 재열기 PASS, High guard PASS, 과거 shadow ID 재현/거부, 네트워크0/원본불변. [증거 gate #43692928622](https://github.com/hibi89/data2web_studio/actions/runs/43692928622) workflow SUCCESS ≠ 실구매자 독립 수용; UNASSESSED 유지.
+- R29-DISC-001은 **제품 기본 검증 경로 OPEN**. 기존 NAV-001/ID-001/STRUCT-001도 OPEN. 외부 인간 독립 R29 감사·R06 구매자 Win10/11·라이선스/권리/판매 검증 PENDING. 공식 **72/100**, RELEASE HOLD / SALE NO-GO. 본 문서 커밋은 테스트 코드 SHA와 별도 기록.
+
 ## 2026-11-15 KST — High R29-STRUCT-001 구조 이동 우회 차단, 정확 SHA 3 OS/브라우저 CI 7/7 SUCCESS (공식 72 유지)
 
 - 현재 Codex Draft PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` **미변경**, 기존 제품 기본 `verify_zip`의 R29-NAV-001/R29-ID-001 미수정. High PR #7 별도 미병합, Codex 소유 코드 수정 없음.

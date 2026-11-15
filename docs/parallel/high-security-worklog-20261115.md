@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High R29-DISC-001 redacted fixed-disclosure and consent input guard
+
+- Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00` remains unchanged; shipping `verify_delivery.py::verify_zip` accepts rehashed ZIP with a falsified mandatory CSV replacement/reverification notice or changed `ack` input `checkbox→text`. High strict checker rejects. Not a confirmed external exploit/customer loss.
+- Added HIGH-owned `APPROVED_STATIC_NOTICES` and `APPROVED_FIXED_INPUTS` to independent R29 guard; four initial regression tests (policy + ZIP) plus dynamic print-scope unit. Browser-only redacted mismatch ID diagnostics found `print-scope` is legitimately rewritten by trusted application JS as data/filter/page changes. Strict static text was an over-rejection: failed browser workflow #43692497701. Converted into finite 10k-row, 50/page, exact notice pattern with page consistency. Test-only diagnostic IDs: no customer data or notice values printed.
+- **Exact PASS code SHA `ba0854184928738281011904e17d00efd6cafb22`**, [3OS 5/5 jobs #43692928390](https://github.com/hibi89/data2web_studio/actions/runs/43692928390): 578 tests each, Win575/3SKIP, Ubuntu/macOS574/4SKIP, built-in browsers PASS. [actual saved browser 2/2 #43692928374](https://github.com/hibi89/data2web_studio/actions/runs/43692928374): Chromium/Chrome/Edge saved DOM PASS with 76 synthetic rows, network0 and independent guard. Evidence workflow #43692928622 success != acceptance proof (UNASSESSED).
+- Pending: Codex shipping verifier replacement and future combined SHA CI, external independent audit/customer Win10/11 evidence and rights/sales approvals. Score 72/100 HOLD.
+
 ## 2026-11-15 KST — High R29-STRUCT-001 CSP/JS 위치 변조 차단, 3 OS + browser 7/7 jobs success
 
 - Codex PR #6 unchanged at `afe6ed055cf4b9405da91d1028f9889555b41e00`; both PRs separate and Draft. Existing ZIP product verifier allows rehashed canonical HTML with CSP meta relocated out of head or fixed executable script before main; no direct browser exploit/egress claimed.
