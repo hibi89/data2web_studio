@@ -1,3 +1,11 @@
+## 2026-11-15 KST — H20 passive HTML markup guard + differential replay, 5/5 CI PASS
+
+- Codex PR #6 last checked at `afe6ed055cf4b9405da91d1028f9889555b41e00`: no `verify_delivery.py` change, confirmed R29-NAV-001 open. To avoid interfering with CODEX-owned files, High created `r29_html_surface_policy.py` and `test_r29_html_surface_policy.py` with a fixed static tag/attribute/metadata/script contract and 8 test cases.
+- Baseline CI at `889f723068eaf1eabda2d50165cf2832446a1ec5` failed normal HTML due to legitimate boolean `hidden`, `multiple`, `selected`. Fixed only these whitelisted tag-specific forms at `0698eccb31dfc97b1e62dd9ecb5b7151906a497c` -> full [CI #43687004043](https://github.com/hibi89/data2web_studio/actions/runs/43687004043) 5/5 PASS.
+- H20 differential replay amended `r29_zip_navigation_diagnostic.py` and `test_r29_zip_navigation_diagnostic.py` to verify the **same** meta-refresh tampered bytes: High guard rejects while legacy ZIP verifier accepts. Hosted 3 OS logs report `high_guard_accepted_pristine_html=true`, `high_guard_rejected_modified_html=true`, `verifier_accepted_rehashed_navigation=true`. No network request performed.
+- **Latest exact full-code/test SHA `1e34652b0bf105c85835c7e3bc04a576cadfbf08`**, [CI #43687114162](https://github.com/hibi89/data2web_studio/actions/runs/43687114162) **5/5 jobs SUCCESS**. Python Windows 556=553 PASS/3 SKIP, Ubuntu/macOS 556=552 PASS/4 SKIP. Chromium/Chrome/Edge hosted PASS. The vulnerable production verifier is **not fixed yet**; this is detection and safe reusable guard, not acceptance.
+- Candidate independent guard handed to Codex PR #6 via comment #6890564392. Codex owns `verify_delivery.py` and `test_zip_offline_csp.py` and is responsible for shipping integration and regression. PRs remain Draft, no merge. R29 external independent assessment PENDING, R06 Win10/11 owner acceptance PENDING, score **72/100**, release HOLD.
+
 ## 2026-11-15 KST — R29-NAV-001 reproduced and security HOLD reported; exact-SHA 5/5 hosted CI PASS
 
 - HIGH-owned `r29_zip_navigation_diagnostic.py` generates new, synthetic, canonical three-member ZIP; injects meta-refresh into HTML; recomputes manifest HTML SHA; calls real `verify_zip`; never opens a browser or performs external requests. `test_r29_zip_navigation_diagnostic.py` records verdict without mislabeling insecurity as a security PASS.
