@@ -30,7 +30,10 @@ def _open_source_readonly(path, flags):
     """Open a source so other processes cannot write/delete it during the read."""
     import os
     if os.name!="nt":
-        return os.open(path,flags)
+        # A validated regular pathname can be replaced by a FIFO before open.
+        # O_NONBLOCK makes the subsequent fstat type check fail closed instead
+        # of leaving a background build hung on an attacker-controlled pipe.
+        return os.open(path,flags|getattr(os,"O_NONBLOCK",0))
 
     import ctypes
     import msvcrt
@@ -85,14 +88,18 @@ def read_bounded_source(path, *, max_bytes=8_000_000):
     import os
     path=assert_no_links(path)
     before=path.lstat()
-    if not stat.S_ISREG(before.st_mode) or before.st_size>max_bytes:
-        raise ValueError("Source must be a bounded regular file")
+    if (not stat.S_ISREG(before.st_mode) or before.st_size>max_bytes or
+            before.st_nlink != 1):
+        # Hardlinks permit an alias outside the reviewed source path, including
+        # a concurrent writer; an approved pathname alone cannot guard it.
+        raise ValueError("Source must be a bounded single-link regular file")
     flags=os.O_RDONLY|getattr(os,"O_BINARY",0)|getattr(os,"O_NOFOLLOW",0)
     descriptor=_open_source_readonly(path,flags)
     try:
         start=os.fstat(descriptor)
-        if not stat.S_ISREG(start.st_mode) or start.st_size>max_bytes:
-            raise ValueError("Source changed type or exceeded limit")
+        if (not stat.S_ISREG(start.st_mode) or start.st_size>max_bytes or
+                start.st_nlink != 1):
+            raise ValueError("Source changed type, link count or exceeded limit")
         if (start.st_dev,start.st_ino)!=(before.st_dev,before.st_ino):
             raise ValueError("Source path was replaced before reading")
         chunks=[]
@@ -112,6 +119,7 @@ def read_bounded_source(path, *, max_bytes=8_000_000):
     first=(start.st_dev,start.st_ino,start.st_size,start.st_mtime_ns,start.st_ctime_ns)
     second=(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns)
     final=(end.st_dev,end.st_ino,end.st_size,end.st_mtime_ns,end.st_ctime_ns)
-    if first!=second or first!=final or total!=start.st_size:
+    if (first!=second or first!=final or total!=start.st_size or
+            after.st_nlink != 1 or end.st_nlink != 1):
         raise ValueError("Source changed during bounded file-handle read")
     return b"".join(chunks)
