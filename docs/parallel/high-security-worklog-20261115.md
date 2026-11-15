@@ -1,3 +1,12 @@
+## 2026-11-15 KST — H20 R29-ID-001 confirmed, fixed-ID DOM identity allowlist and real-browser regression
+
+- Checked unchanged Codex PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00`; no shipping `verify_delivery.py` correction. Only High-owned security helper/test files changed.
+- Found a second independent rehash bypass: High's previous passive tag/attribute policy allowed an additional dynamic `div id="dataset"` with a shadow JSON record. Original trusted executable JS `document.getElementById("dataset")` selected injected DIV even when approved JSON script, CSP and JS were unchanged. Existing shipping `verify_zip` accepted the rehashed canonical ZIP; no actual customer data or external requests used.
+- Implemented immutable `APPROVED_FIXED_IDS` map of 30 expected ID→tag pairs, rejecting duplicate, unknown, misplaced and missing fixed IDs in `r29_html_surface_policy.py`, with unit/regression cases in `test_r29_html_surface_policy.py` and `test_r29_strict_zip_verifier.py`.
+- Extended `browser_r29_saved_dom_probe.py`: actual file:// page shows forged synthetic title and 1 row instead of original 3, then confirms High guard rejection, browser no-network, while normal 76-row saved & re-opened HTML remains supported.
+- **Exact tested code+test SHA `157ff0b1490f9f4d858e175fdf4e5f77b0f79e6c`**: [CI 5/5 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43690034894) Windows 568 tests = 565 PASS/3 SKIP, Ubuntu/macOS each 568 = 564 PASS/4 SKIP, baseline browsers PASS. [Dedicated actual browser 2/2 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43690034843) Chromium hosted Linux, Chrome & Edge hosted Windows each logged `R29_ACTUAL_BROWSER_DOM_ID_SHADOW_REPRODUCED ... unverified_display=true guard_rejected=true network0=true`.
+- Escalated independent R29-ID-001 to Codex PR #6 comment #6891084878. Shipping ZIP verifier still open for both R29-ID-001/R29-NAV-001. Official 72/100, release/rights/audit gates HOLD.
+
 ## 2026-11-15 KST — H20 browser-save DOM cross-browser proof / numeric chart style false positive fixed
 
 - Reviewed unchanged Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00`, no CODEX-owned `verify_delivery.py` patch yet. Remained in High-only security code lane.
