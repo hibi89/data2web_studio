@@ -1,3 +1,11 @@
+## 2026-11-15 KST — High R29-STRUCT-001 구조 이동 우회 차단, 정확 SHA 3 OS/브라우저 CI 7/7 SUCCESS (공식 72 유지)
+
+- 현재 Codex Draft PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` **미변경**, 기존 제품 기본 `verify_zip`의 R29-NAV-001/R29-ID-001 미수정. High PR #7 별도 미병합, Codex 소유 코드 수정 없음.
+- **추가 합성 검증기 허점 R29-STRUCT-001:** 정상 ZIP의 고정 CSP 메타를 `head`에서 `body`로 이동하거나 고정 실행 JS를 `main` 생성 이전으로 이동하고 manifest HTML SHA를 갱신해도 기본 `verify_zip`가 수용함(신규 테스트가 기존 검증기 수용을 명시적으로 확인). CSP 실제 무효화·원격 이동·고객정보 유출은 실브라우저 공격으로 증명한 상태가 아니며 성공 주장 금지.
+- High 전용 `r29_html_surface_policy.py`에서 head/body/main 배치, CSP head-only, data JSON→실행 JS 순서 강제; 동적 차트 width 스타일은 `bar-fill` 클래스·ID 없음으로 한정. 보안·ZIP 회귀 테스트 **5개 추가**, 정상 HTML·76행/12분류 브라우저 저장/재열기 기능 보존.
+- **정확 코드/테스트 SHA `3e99a3e3f8092b0c00a7d7617bf5b5d3637a3aa8`**. [3 OS+기본 브라우저 CI #43691609448](https://github.com/hibi89/data2web_studio/actions/runs/43691609448) **5/5 jobs SUCCESS**: Windows 573=570PASS/3SKIP, Ubuntu/macOS 573=569PASS/4SKIP; 기본 Chromium 및 Windows Chrome/Edge PASS. [별도 실브라우저 #43691609471](https://github.com/hibi89/data2web_studio/actions/runs/43691609471) **2/2 jobs SUCCESS**: Chromium Linux, Chrome·Edge Windows 실제 저장본 검증 PASS; 기존 ID-shadow 합성 위조 표시 재현/High guard 차단 유지. [증거 게이트 #43691609658](https://github.com/hibi89/data2web_studio/actions/runs/43691609658) workflow SUCCESS이나 구매자 수용증거 없어 UNASSESSED 취급.
+- 기본 제품 `verify_delivery.py` 구조/재해시 검증 방어는 Codex 담당으로 **OPEN**. 외부 독립 R29 감사, 실제 구매자 Windows10/11 검증, 권리/개인정보·출시/판매 승인 PENDING. **공식 72/100**, RELEASE HOLD / SALE NO-GO. 이 문서 기록 커밋은 위 검증 코드 SHA와 구분.
+
 ## 2026-11-15 KST — High R29-ID-001 신규 DOM ID 우회 실제 브라우저 재현·차단, CI 7/7 jobs PASS · 공식 72 유지
 
 - 기존 Codex Draft PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` 그대로이며 제품 기본 `verify_zip` 수정 없음. High 전용 코드에서 **R29-ID-001** 신규 합성 무결성 우회 확인: 정상 JSON script 앞에 `div id="dataset"`을 삽입하고 ZIP manifest HTML 해시 재계산하면 기존 제품 검증기가 ZIP을 승인하는데, 브라우저 JS가 앞쪽의 위조 데이터를 표시함.

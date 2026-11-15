@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High R29-STRUCT-001 CSP/JS 위치 변조 차단, 3 OS + browser 7/7 jobs success
+
+- Codex PR #6 unchanged at `afe6ed055cf4b9405da91d1028f9889555b41e00`; both PRs separate and Draft. Existing ZIP product verifier allows rehashed canonical HTML with CSP meta relocated out of head or fixed executable script before main; no direct browser exploit/egress claimed.
+- High-owned source `r29_html_surface_policy.py` pins head, body, main, script and dataset ordering, avoids allowing numeric width style on fixed DOM IDs. Added 3 policy and 2 real ZIP rehash rejection tests in High-owned test modules; old `verify_zip` acceptance and High strict rejection tested explicitly.
+- Exact code SHA `3e99a3e3f8092b0c00a7d7617bf5b5d3637a3aa8`, 3 OS Python 573/573 executed each (Windows 570PASS/3SKIP, Ubuntu/macOS 569PASS/4SKIP), 5/5 jobs PASS [#43691609448](https://github.com/hibi89/data2web_studio/actions/runs/43691609448). Actual saved DOM Chromium/Chrome/Edge 2/2 jobs PASS [#43691609471](https://github.com/hibi89/data2web_studio/actions/runs/43691609471). R29 ID-shadow reproduced/blocked, network0. Evidence gate [#43691609658](https://github.com/hibi89/data2web_studio/actions/runs/43691609658) workflow success != approved acceptance; UNASSESSED.
+- Product shipping `verify_delivery.py` and Windows portable source inclusion remain Codex-owned and unpatched, external auditor and buyer acceptance pending. Official 72/100, HOLD.
+
 ## 2026-11-15 KST — H20 R29-ID-001 confirmed, fixed-ID DOM identity allowlist and real-browser regression
 
 - Checked unchanged Codex PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00`; no shipping `verify_delivery.py` correction. Only High-owned security helper/test files changed.

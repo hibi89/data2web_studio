@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29-STRUCT-001 독립 보안 가드 보강 인수인계 (필수 10항)
+
+1. **목표·확정 요구·기술:** DATA2WEB Studio R01–R33 오프라인 HTML/ZIP/receipt 제품, High 소유 R06/R29 보안 개발·독립 검수. 사용자 확정 100점 기준 공식 72/100, 외부감사·출시권리 미승인.
+2. **실제 완료 변경·근거:** 정상 HTML의 tag·속성·CSP/JS 해시를 보존하되 `head → body/main → dataset → runtime JS` 구조를 강제. `r29_html_surface_policy.py`, `test_r29_html_surface_policy.py`, `test_r29_strict_zip_verifier.py` 총 3개 High 파일 변경, 신규 회귀 5종. 차트 width 인라인은 `div.bar-fill` + no-id만 허용. Codex 제품 기본 ZIP 검증기와 생성기 미수정.
+3. **테스트 명령·성공/실패·실제 결과:** `python -m unittest discover -v`, `python browser_r29_saved_dom_probe.py --channel chromium|chrome|msedge`. 정확 테스트 SHA `3e99a3e3f8092b0c00a7d7617bf5b5d3637a3aa8`. [Actions #43691609448](https://github.com/hibi89/data2web_studio/actions/runs/43691609448) 5/5 SUCCESS Windows 570 PASS/3 SKIP, Ubuntu/macOS 각각 569 PASS/4 SKIP (각 OS 573 total), Chromium+Chrome/Edge 기본 PASS. [Actions #43691609471](https://github.com/hibi89/data2web_studio/actions/runs/43691609471) 2/2 SUCCESS 실제 브라우저 saved DOM/ID-shadow 회귀 PASS.
+4. **완료/진행/대기/차단:** High standalone 가드가 새 위치변조 2종, 고정 차트 스타일 변조를 거부; 재해시 ZIP 공격을 기존 기본 `verify_zip`는 여전히 수용. **R29-STRUCT-001, R29-NAV-001, R29-ID-001 기본 제품 경로 OPEN.** 외부 독립 R29 감사·실고객 Windows10/11·법률/판매 증빙 PENDING. 공식 72, HOLD.
+5. **원인·재현·시도·대안:** 기존 가드는 tag/count/attribute/JS·CSS SHA·고정 ID를 보았으나 HEAD 메타와 script 위치는 명시적 검증 안 함. 헤더 CSP 메타 이동/실행 JS 선이동은 같은 tag 개수·JS 해시로 이전 구조 허용. 새 보조 가드는 위치를 검사하고 정상 browser-saved DOM 회귀 PASS. 이 자체로 실제 CSP 무효화나 외부 네트워크 실행을 검증한 것은 아님. 제품 기본 verifier는 Codex가 통합 또는 동등 방어 구현해야 함.
+6. **저장소·브랜치·SHA·경로:** `hibi89/data2web_studio` High `work/high-data2web-security-r06-r29-20261115` Draft PR #7, exact source SHA `3e99a3e3f8092b0c00a7d7617bf5b5d3637a3aa8`; Codex `work/codex-data2web-to100-20261115` Draft PR #6 last SHA `afe6ed055cf4b9405da91d1028f9889555b41e00`. 통합 기준 `feature/final-blueprint-p85-evidence-20261113`. 둘 다 미병합.
+7. **실행 환경·Production URL:** GitHub-hosted Python 3.11 Windows/macOS/Ubuntu, Linux Chromium 및 Windows Chrome/Edge 실제 `file://` 테스트. 웹 Production/Vercel **미적용**. 고객 Windows10/11 실기기 수용 **미검증**.
+8. **원본·백업·인증·수정 금지:** 이전 커밋 이력과 원본 R21 계약 보존, 합성 파일만 사용, 고객 원본·개인정보·토큰 업로드 없음. Git commit author/committer `hibi89` 매핑 확인. 원본 덮어쓰기·force push·권한 변경·자동병합·판매/배포 금지.
+9. **다음 작업·완료 기준·승인 사항:** Codex가 `verify_delivery.py`/ZIP 공격 regression/Windows 번들에 R29-NAV-001, ID-001 및 STRUCT-001의 구조 불변성 차단을 적용→Codex 정확 SHA 테스트→High가 변경 diff 독립 검수→결합 SHA 실제 기본 `verify_zip`에서 재해시 공격 거부·정상 브라우저 저장본 수용, 전체 CI. 외부 감사·구매자 실증·권리·출시·판매는 사용자 별도 승인과 실증 필수.
+10. **갱신·범위·문서 기준 커밋:** 2026-11-15 KST. 정확 검증 코드 `3e99a3e3f8092b0c00a7d7617bf5b5d3637a3aa8`, CI #43691609448/#43691609471, 증거 gate #43691609658는 UNASSESSED. 이후 STATUS/HANDOFF 문서-only 커밋 SHA는 코드 SHA와 별도 기록. 공식 72/100, RELEASE HOLD/SALE NO-GO 유지.
+
 ## 2026-11-15 KST — GPT-6 High R29-ID-001 실브라우저 표시 무결성 우회 증빙 인수인계 (필수 10항)
 
 1. **목표·용도·요구·기술:** DATA2WEB Studio R01–R33 오프라인 A 제품/HTML·ZIP·receipt, High 독립 R29 보안 검수. 사용자 확정 100점 중 공식 72점; 출시/권리 승인 없음.
