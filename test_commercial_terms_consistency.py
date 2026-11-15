@@ -48,7 +48,7 @@ class CommercialTermsConsistencyTests(unittest.TestCase):
                 validate_commercial_terms(self.markdown, changed)
 
     def test_removed_rights_and_refund_disclosures_rejected(self):
-        for phrase in ("법률상", "일괄 환불 불가", "SALE NO-GO"):
+        for phrase in ("법률상", "전면 환불불가 금지", "SALE NO-GO"):
             changed = self.markdown.replace(phrase, "삭제", 1)
             with self.subTest(phrase=phrase), self.assertRaises(ValueError):
                 validate_commercial_terms(changed, self.defaults)

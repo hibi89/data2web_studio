@@ -88,7 +88,7 @@ def validate_commercial_terms(markdown, internal_policy):
             raise ValueError("Commercial policy row disagrees with internal SKU: " + name)
     disclosures = (
         "내부 기준가", "실제 게시/판매를 허용하지 않는다", "플랫폼 수수료",
-        "부가세", "법률상", "일괄 환불 불가", "RELEASE HOLD", "SALE NO-GO",
+        "부가세", "법률상", "전면 환불불가 금지", "RELEASE HOLD", "SALE NO-GO",
     )
     if any(term not in markdown for term in disclosures):
         raise ValueError("Commercial policy boundary or consumer-rights disclosure is missing")
