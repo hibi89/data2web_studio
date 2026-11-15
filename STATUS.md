@@ -1,3 +1,11 @@
+## 2026-11-15 KST — High R29 실제 Chromium·Chrome·Edge 저장 HTML 검수 전부 PASS / 공식 72 유지
+
+- Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00`에서 `verify_delivery.py` 기본 배송 ZIP 검증기 수정 **미반영**, R29-NAV-001 재해시 HTML 공격 수용 결함 OPEN. 사용자 승인 없는 자동 병합·출시 금지.
+- High 소유 `browser_r29_saved_dom_probe.py`, `.github/workflows/r29-high-browser-saved-dom.yml` 추가: 실제 hosted browser `file://`에서 합성 76행/12분류 CSV 승인→교체→차트10·표50행→HTML 다운로드→High 정적 JS/CSS/수동 URL 금지 검사→재열기·출처 교체 표시 검증, 원본 불변·네트워크 요청0·브라우저 JS 오류0.
+- **발견·수정:** 첫 전용 브라우저 CI는 정상 그룹 차트 폭 `257.143%`를 High 보안 가드가 100% 초과로 차단해 FAIL. 신설 HTML 가드에서 **정확한 숫자형 width%만 0~1,000,000** 범위 허용(10k행·CSS max-width:100% 계약), 그 외 CSS/URL/범위 초과/inf/calc 거부 검증. 정상 기능 보존 후 실제 브라우저 재시험 성공.
+- **실 브라우저 테스트 SHA `d6c8b2954998daafcb0b5a72ed2f76f0a3f95f26`** / [CI #43689432791](https://github.com/hibi89/data2web_studio/actions/runs/43689432791) **2/2 jobs PASS**: Ubuntu Chromium, hosted Windows Chrome·Edge 모두 `R29_ACTUAL_BROWSER_SAVED_DOM_PASS`. **코드+회귀 테스트 SHA `6b3d074b5f63e67c22740525bbf77a32139bd098`** / [CI #43689435394](https://github.com/hibi89/data2web_studio/actions/runs/43689435394) **5/5 jobs SUCCESS**: Windows 566(563 PASS/3 SKIP), Ubuntu/macOS 각각 566(562 PASS/4 SKIP), 기본 Chromium/Chrome/Edge PASS. 두 SHA 간 테스트 파일 1개만 변경·소스 불변.
+- Codex PR #6 comment #6891000965 전달, `hibi89` author/committer 확인. R29 독립 외부 전문가 감사·기본 제품 ZIP 검증기 취약점 수정·R06 실제 Win10/11 고객 수용·권리/개인정보/판매 결재 **미완료**. 공식 **72/100**, RELEASE HOLD / SALE NO-GO. 실제 외부 감사·고객 자료 없음.
+
 ## 2026-11-15 KST — High R29 보안 가드 정밀화·읽기 전용 ZIP 보강 5/5 PASS, 기본 검증기 미수정 (공식 72/100)
 
 - Codex PR #6 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00` 불변, `verify_delivery.py` 기본 ZIP 검증기의 R29-NAV-001 우회 문제 **열림**. Codex 소유 경로 수정/병합 없음.
