@@ -57,8 +57,45 @@ class SyntheticPreauditTests(unittest.TestCase):
         self.assertFalse(r["commercial_release_approved"])
         self.assertFalse(r["external_transfer_performed"])
         self.assertFalse(r["customer_source_inspected"])
-        self.assertEqual(r["status"], "INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING")
+        self.assertIn(r["status"], (
+            "INTERNAL_SYNTHETIC_SECURITY_HOLD_EXTERNAL_AUDIT_PENDING",
+            "INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING",
+        ))
+        self.assertIs(r["technical_security_clearance"], False)
+        self.assertEqual(bool(r["open_security_findings"]),
+                         r["status"].startswith("INTERNAL_SYNTHETIC_SECURITY_HOLD"))
         self.assertEqual(r["production_status"], "RELEASE_HOLD_SALE_NO_GO")
+
+    def test_navigation_finding_cannot_be_concealed_by_clean_original_probes(self):
+        for accepted in (False, True):
+            with self.subTest(rehashed_navigation_accepted=accepted):
+                synthetic = {
+                    "verifier_accepted_rehashed_navigation": accepted,
+                    "external_network_request_performed": False,
+                    "actual_browser_navigation_tested": False,
+                    "status": ("SECURITY_HOLD_CANDIDATE_CONFIRMED" if accepted
+                               else "MODIFIED_NAVIGATION_REJECTED_BY_VERIFIER"),
+                }
+                with patch.object(a, "assess_rehashed_navigation",
+                                  return_value=synthetic):
+                    result = a.report()
+                self.assertIs(result["technical_security_clearance"], False)
+                self.assertEqual(bool(result["open_security_findings"]), accepted)
+                self.assertEqual(result["rehashed_navigation_probe"],
+                                 synthetic["status"])
+                self.assertFalse(result["independent_security_audit_completed"])
+                self.assertFalse(result["commercial_release_approved"])
+                self.assertEqual(result["score_addition"], 0)
+                if accepted:
+                    self.assertEqual(
+                        result["status"],
+                        "INTERNAL_SYNTHETIC_SECURITY_HOLD_EXTERNAL_AUDIT_PENDING",
+                    )
+                else:
+                    self.assertEqual(
+                        result["status"],
+                        "INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING",
+                    )
 
     def test_report_is_explicit_create_only_and_never_overwrites(self):
         with tempfile.TemporaryDirectory() as temp:
