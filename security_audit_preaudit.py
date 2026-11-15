@@ -25,6 +25,7 @@ from path_policy import assert_no_links
 from secure_output import create_output_file
 from verify_customer_folder import verify_customer_folder
 from verify_delivery import verify_zip
+from r29_zip_navigation_diagnostic import assess_rehashed_navigation
 
 CONTRACT = "DATA2WEB_R29_INTERNAL_PREAUDIT_V1"
 SCOPE = ("XSS_SCRIPT_END_TAG", "CSV_FORMULA_TEXT", "ORIGINAL_BYTES_PRESERVED",
@@ -266,11 +267,26 @@ def report():
     checks = internal_synthetic_probes()
     if not all(checks.values()):
         raise AssertionError("Internal synthetic threat probes not all passing")
-    # Only bounded enumerated check names/results, no source rows, device paths,
-    # machine ID, environment variables, tokens, logs or external audit claims.
+    navigation = assess_rehashed_navigation()
+    # One recomputed-manifest active-markup mutation is intentionally tracked
+    # separately from the 14 original generated-template probes. It is a
+    # real observed verifier-acceptance finding, NOT an approved security gate.
+    navigation_accepted = navigation["verifier_accepted_rehashed_navigation"]
+    if navigation["external_network_request_performed"] or navigation["actual_browser_navigation_tested"]:
+        raise AssertionError("Synthetic navigation probe attempted an external action")
+    # Only enumerated, redacted findings/results; never source rows, paths,
+    # device identity or customer authorization artifacts.
     return {
         "contract": CONTRACT,
-        "status": "INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING",
+        "status": ("INTERNAL_SYNTHETIC_SECURITY_HOLD_EXTERNAL_AUDIT_PENDING"
+                   if navigation_accepted else
+                   "INTERNAL_SYNTHETIC_ONLY_EXTERNAL_AUDIT_PENDING"),
+        "technical_security_clearance": False,
+        "open_security_findings": (
+            ["R29_REHASHED_ZIP_HTML_NAVIGATION_ACCEPTED"]
+            if navigation_accepted else []
+        ),
+        "rehashed_navigation_probe": navigation["status"],
         "scope": "A_OFFLINE_HTML_ZIP_RECEIPT",
         "checks": checks,
         "check_count": len(checks),
