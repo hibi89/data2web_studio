@@ -109,6 +109,31 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
         result = assert_passive_offline_html_markup(html)
         self.assertTrue(result["passive_template_surface_verified"])
 
+    def test_aggregated_chart_width_above_100_percent_stays_numeric_only(self):
+        # Real CSSOM emits >100% when grouped remaining categories outrank
+        # the largest individual category; max-width:100% caps drawing.
+        html, n = re.subn(
+            rb'(<div id="chart-bars"[^>]*>)',
+            lambda m: m.group(1) +
+                b'<div class="chart-row"><div class="bar-fill" '
+                b'style="width: 257.143%;"></div></div>',
+            self.original, count=1,
+        )
+        self.assertEqual(n, 1)
+        self.assertTrue(
+            assert_passive_offline_html_markup(html)[
+                "passive_template_surface_verified"]
+        )
+        for forbidden in (
+            b'width: -1%;',
+            b'width: 1000001%;',
+            b'width: inf%;',
+            b'width: 257%; background:url(https://invalid.example/x);',
+            b'width: calc(99% + 1px);',
+        ):
+            with self.subTest(unsafe=forbidden):
+                self.assert_unsafe(html.replace(b'width: 257.143%;', forbidden, 1))
+
     def test_self_rehashed_script_and_css_mutations_are_still_rejected(self):
         original = self.original
         script = re.findall(rb"<script>(.*?)</script>", original, re.DOTALL)[0]
