@@ -1,3 +1,10 @@
+## 2026-11-15 KST — H20 R29 provenance-grade fixture specificity regression (PASS)
+
+- **Found test-quality defect (not evidence of a live exploitation):** earlier `_adversarial_xlsx` samples lacked a valid worksheet/sheet list, and ZIP Slip added a fourth member. As a result, the internal probe might accept an unrelated rejection as evidence that a *specific* attack was blocked.
+- Fixed High-owned `security_audit_preaudit.py`: valid synthetic OOXML workbook baseline, single mutation per XLSX attack (external relationship, 180x compression bomb, macro part), canonical three-member ZIP malformed path/symlink, semantic forged-status manifest with canonical ZIP structure, exact cause matching rather than generic ValueError. Added `test_r29_probe_specificity.py` 4 tests and valid-control assertions. Existing 14 internal flags and external-audit PENDING semantics unchanged.
+- Code/test exact SHA `99246c0813263cdcdc95cf557ed7649341d224bb`: [CI https://github.com/hibi89/data2web_studio/actions/runs/43685811003](https://github.com/hibi89/data2web_studio/actions/runs/43685811003) **5/5 SUCCESS**. Windows 546 tests 543 PASS/3 SKIP, Ubuntu/macOS 546 tests 542 PASS/4 SKIP, Chromium & Windows Chrome/Edge PASS. No customer data used.
+- Codex PR #6 `afe6ed055cf4b9405da91d1028f9889555b41e00` remained Draft at observation; previous potential ZIP modified-HTML/meta-refresh concern still a **hypothesis**, delegated to Codex comment #6890324060. No merging or code-owner overlap. Current official 72/100, R29 EXTERNAL_PENDING and RELEASE HOLD.
+
 ## 2026-11-15 KST — H20 R29 internal adversarial harness extended; 5/5 hosted CI PASS
 
 - High-owned `security_audit_preaudit.py`: internal synthetic R29 probe set expanded 7 -> 14 (new fixed static CSP script hash, absent network markup, ZIP ZipSlip/symlink, XLSX external relationship/ratio bomb/macro-part rejection). Uses only ephemeral synthetic bytes and isolated local folder; no client data or external transfers. Report contract V1 retained with additive check names; no score addition.
