@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High H10 R06 보안 실제 패치·회귀테스트 공시 (공식 72/100 유지)
+
+- 대상: `hibi89/data2web_studio@work/high-data2web-security-r06-r29-20261115` / Draft PR #7. Codex PR #6와 소스 파일 중복 수정 없음. 공통 CI YAML은 병렬 준비 단계의 양측 변경으로 통합 시 대조 필요.
+- 발견·수정: 입력 파일 하드링크 개수 미검사, POSIX 사전 검사 후 FIFO 교체 시 블로킹 가능성. `path_policy.py`에서 단일 링크 확인·POSIX 비차단 열기 후 실제 정규파일 검증 추가. 임시 합성자료로 기존 원본 보존.
+- `test_r06_source_race.py` 신규 5종. 코드+테스트 exact SHA `7576e3291981e7bffc2eda0b059ccb7931bf6f5f`; 위협 표·선택 근거 `docs/parallel/H10_R06_SECURITY_THREAT_REPRO_20261115.md`. Hosted CI https://github.com/hibi89/data2web_studio/actions/runs/43683639426 최초 확인 시 PENDING; 외부 Win10/11 및 독립 감사 미검증. 기존 정상 CI 결과는 보존.
+- 문서 기록용 SHA `e73abd24cce34e2e1b4df5299b388c7b736b45a8`; 이는 코드 검증 SHA가 아님. R06·R29 아직 PENDING, 점수표 불변 **72/100**, RELEASE HOLD / SALE NO-GO. 다음: exact-SHA CI 확인 → 실패 시 수정 → R29 독립 감사를 위한 합성 재현 패키지.
+
 ## 2026-11-15 KST — GPT-6 직접 복구 완료: R21 소스 핀 오류 제거·3 OS CI PASS, 공식 72 유지
 
 - **실제 코드·워크플로 검증 SHA:** `9c8cfdcb1c10482ad6184a581991626b7e42138c`. 원본 v1 `data/r21_source_provenance_v1.json` 보존, 현행 `data/r21_source_provenance_v2.json` 추가, `r21_source_provenance.py` 활성 원장 갱신, 역사 v1/현행 v2/권리 HOLD·변조 회귀 테스트 추가. `data/final_blueprint_scorecard_v1.json`의 R25 "운영 정책 사용자 미승인" 잘못된 과거 문구를 실제 본인 운영 책임·내부 정책 7개 승인·합성 파기 사실에 맞게 정정했으나 R25 여전히 PENDING.
