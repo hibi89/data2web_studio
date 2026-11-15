@@ -1,3 +1,10 @@
+## 2026-11-15 KST — R29 ZIP 변조 HTML 검증기 우회 합성 재현·3 OS CI PASS · 보안 HOLD (72/100 유지)
+
+- R29-NAV-001 **확인된 기술 결함:** 정규 ZIP 3개 멤버 내부 HTML에 meta refresh 구성요소를 추가하고 manifest HTML SHA256을 재계산한 합성 공격 파일이 현재 `verify_delivery.py::verify_zip`에서 `verified=true`로 인정됨. Windows/macOS/Ubuntu 자동 테스트 로그에서 각각 독립 관찰. 단 **실제 브라우저 외부 이동, 네트워크 전송, 고객정보 유출**은 시험/확인되지 않았으며 성공 주장 금지.
+- High 소유 `r29_zip_navigation_diagnostic.py`, `test_r29_zip_navigation_diagnostic.py` 신규; `security_audit_preaudit.py`는 기존 14 검사 PASS와 별개로 **`INTERNAL_SYNTHETIC_SECURITY_HOLD_EXTERNAL_AUDIT_PENDING`**, `open_security_findings`, `technical_security_clearance=false`를 출력하도록 보강. `test_security_audit_preaudit.py`에서 발견 미은폐 검사 보강. Codex 소유 검증기/테스트 경로는 변경 없음.
+- **검증 SHA `87d0038a2d7650a8b5010ba54802e3004ac4db58`**, [Actions #43686263198](https://github.com/hibi89/data2web_studio/actions/runs/43686263198) 5/5 JOB SUCCESS: Windows 548=545 PASS/3 SKIP, Ubuntu/macOS 각각 548=544 PASS/4 SKIP, Chromium/Chrome/Edge PASS. 이 CI PASS는 발견 여부와 HOLD 기록의 자동 검증일 뿐 취약점 수정 성공은 아님. 보안 수정이 필요함.
+- Codex Draft PR #6 comment #6890445038에 실제 재현 SHA·합성 검증 지시 전달. Codex 수정 SHA 확보 후 High 독립 검수·통합 SHA 재시험이 필요. R29 EXTERNAL_PENDING, R06 실기기 EXTERNAL_PENDING, **공식 72/100**, RELEASE HOLD / SALE NO-GO 유지.
+
 ## 2026-11-15 KST — High R29 보안 검사 오탐 위험 보완·정확 SHA CI 5/5 PASS (공식 72/100)
 
 - 실제 발견: 기존 R29 XLSX 악성 샘플의 정상 대조군이 없고 ZIP 경로공격 샘플은 허용 파일 3개에 임의 4번째를 추가하여, **의도한 공격 방어가 아닌 단순 구조 오류**로 검사 PASS 가능. 이는 기존 사전감사 증거 품질 문제였으며 사용자 데이터 노출이나 실공격 성공의 증거가 아님.
