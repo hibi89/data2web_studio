@@ -196,6 +196,30 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
             b'<div id="chart-bars" class="bar-fill" style="width: 0%;" role="img"', 1)
         self.assert_unsafe(altered)
 
+    def test_static_notices_cannot_claim_approval_or_change_print_scope(self):
+        for before, after in (
+            ("배포 전 판매자 재검증이 필요합니다.", "판매자 검증이 완료되었습니다."),
+            ("캐시가 올바른지는 보장하지 않습니다.", "캐시 검증 완료."),
+            ("최대 50행만 포함합니다.", "모든 행이 포함됩니다."),
+        ):
+            with self.subTest(text=before):
+                payload = self.original.replace(
+                    before.encode("utf-8"), after.encode("utf-8"), 1)
+                self.assert_unsafe(payload)
+
+    def test_ack_csv_and_search_types_are_pinned(self):
+        for before, after in (
+            (b'<input id="ack" type="checkbox">',
+             b'<input id="ack" type="text">'),
+            (b'<input id="csv" type="file" accept=".csv,text/csv">',
+             b'<input id="csv" type="search" accept=".csv,text/csv">'),
+            (b'<input id="search" type="search" placeholder="',
+             b'<input id="search" type="file" placeholder="'),
+        ):
+            with self.subTest(control=before):
+                self.assertIn(before, self.original)
+                self.assert_unsafe(self.original.replace(before, after, 1))
+
     def test_invalid_markup_encoding_and_type_rejected(self):
         for bad in (b"", b"not html", b"\\xff", "not-bytes", None):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):

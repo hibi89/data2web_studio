@@ -146,6 +146,18 @@ class StrictR29ZipVerification(unittest.TestCase):
             b"<body><main>", b"<body>" + script + b"<main>", 1)
         self._assert_guard_blocks_but_legacy_accepts(altered)
 
+    def test_rehashed_forged_import_disclosure_is_rejected(self):
+        html = self.members["index.html"].replace(
+            "배포 전 판매자 재검증이 필요합니다.".encode("utf-8"),
+            "판매자 검증이 완료되었습니다.".encode("utf-8"), 1)
+        self._assert_guard_blocks_but_legacy_accepts(html)
+
+    def test_rehashed_replaced_ack_checkbox_is_rejected(self):
+        html = self.members["index.html"].replace(
+            b'<input id="ack" type="checkbox">',
+            b'<input id="ack" type="text">', 1)
+        self._assert_guard_blocks_but_legacy_accepts(html)
+
     def test_source_bytes_changed_during_strict_verification_hold(self):
         snapshot = self.archive.read_bytes()
         with patch("r29_strict_zip_verifier.read_bounded_source",

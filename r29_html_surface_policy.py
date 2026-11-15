@@ -102,6 +102,18 @@ VOID_TAGS = {"meta", "input"}
 BOOLEAN_ATTRS = {"p": {"hidden"}, "select": {"multiple"},
                  "option": {"selected"}, "button": {"disabled"}}
 THEMES = {"office", "cafe", "inventory"}
+# Reviewer-pinned obligations. Never derive them from the package under test.
+APPROVED_STATIC_NOTICES = {
+    "sheet-warning": "이 자료는 Excel 셀의 원시/캐시 값을 문자로 표시합니다. 날짜·숫자 표시형식·수식 재계산은 재현하지 않으므로 원본과 대조하십시오.",
+    "formula-warning": "수식 셀이 발견되어 명시적으로 승인한 캐시값만 읽었습니다. 수식은 계산되지 않았고 캐시가 올바른지는 보장하지 않습니다.",
+    "import-warning": "현재 데이터는 브라우저에서 교체한 로컬 CSV입니다. 원본 SHA·이전 납품 ZIP 무결성 증거가 새 데이터에 적용되지 않습니다. 배포 전 판매자 재검증이 필요합니다.",
+    "print-scope": "인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.",
+}
+APPROVED_FIXED_INPUTS = {
+    "ack": {"id": "ack", "type": "checkbox"},
+    "csv": {"id": "csv", "type": "file", "accept": ".csv,text/csv"},
+    "search": {"id": "search", "type": "search", "placeholder": "모든 열에서 검색"},
+}
 
 
 class _HTMLSurfaceParser(HTMLParser):
@@ -116,6 +128,8 @@ class _HTMLSurfaceParser(HTMLParser):
         self.seen_fixed_ids = set()
         self.head_closed = False
         self.main_closed = False
+        self.active_notice = None
+        self.notice_parts = {}
 
     def handle_decl(self, decl):
         if decl.lower().strip() != "doctype html":
@@ -133,6 +147,10 @@ class _HTMLSurfaceParser(HTMLParser):
         # CDATA. Do not make exclusions by parsing untrusted comment content.
         raise ValueError("Unexpected HTML comment")
 
+    def handle_data(self, data):
+        if self.active_notice is not None:
+            self.notice_parts[self.active_notice].append(data)
+
     def handle_starttag(self, tag, attrs):
         self._start(tag, attrs)
 
@@ -148,6 +166,8 @@ class _HTMLSurfaceParser(HTMLParser):
         if self.total_tags > 15_000:
             raise ValueError("HTML element count exceeded")
         self.tags[tag] += 1
+        if self.active_notice is not None:
+            raise ValueError("Static disclosure cannot contain child markup")
         # Counts alone do not prove a CSP meta is in HEAD or that runtime
         # JavaScript executes only after its controls have been parsed.
         parent = tuple(self.stack)
@@ -194,6 +214,12 @@ class _HTMLSurfaceParser(HTMLParser):
                 fixed_id in self.seen_fixed_ids):
                 raise ValueError("Unapproved, misplaced or duplicate HTML identity")
             self.seen_fixed_ids.add(fixed_id)
+            if (fixed_id in APPROVED_FIXED_INPUTS
+                    and attributes != APPROVED_FIXED_INPUTS[fixed_id]):
+                raise ValueError("Critical input semantics changed")
+            if fixed_id in APPROVED_STATIC_NOTICES:
+                self.active_notice = fixed_id
+                self.notice_parts[fixed_id] = []
         if tag == "option" and "data-all" in attributes and attributes["data-all"] != "true":
             raise ValueError("Unexpected dynamic option metadata")
         if tag == "tr" and "tabindex" in attributes and attributes["tabindex"] != "0":
@@ -256,6 +282,8 @@ class _HTMLSurfaceParser(HTMLParser):
             raise ValueError("Unexpected HTML closing element")
         if not self.stack or self.stack.pop() != tag:
             raise ValueError("Malformed HTML nesting")
+        if tag == "p" and self.active_notice is not None:
+            self.active_notice = None
         if tag == "head":
             self.head_closed = True
         elif tag == "main":
@@ -288,7 +316,10 @@ def assert_passive_offline_html_markup(html_bytes):
         or parser.stack
         or parser.metas != {"charset", "viewport", "csp"}
         or parser.scripts != {"data", "static"}
-        or parser.seen_fixed_ids != set(APPROVED_FIXED_IDS)):
+        or parser.seen_fixed_ids != set(APPROVED_FIXED_IDS)
+        or parser.active_notice is not None
+        or {k: "".join(v) for k, v in parser.notice_parts.items()}
+        != APPROVED_STATIC_NOTICES):
 
         raise ValueError("HTML does not match approved passive surface")
     # Static JS and CSS must match REVIEWED bytes, not attacker-controlled ZIP
