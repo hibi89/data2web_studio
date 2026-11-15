@@ -1,0 +1,852 @@
+{
+  "contract": "DATA2WEB_PARALLEL_GPT6_HIGH_CODEX_TO100_OWNERSHIP_V1",
+  "date_kst": "2026-11-15",
+  "repository": "hibi89/data2web_studio",
+  "integration_branch": "feature/final-blueprint-p85-evidence-20261113",
+  "immutable_base_sha": "cfc56fe4492f445d7f6a1fd12bb8d45c422de46e",
+  "codex_branch": "work/codex-data2web-to100-20261115",
+  "high_branch": "work/high-data2web-security-r06-r29-20261115",
+  "codex_instructions": "docs/parallel/CODEX_TO100_EXECUTION_20261115.md",
+  "high_instructions": "docs/parallel/HIGH_SECURITY_AND_INTEGRATION_20261115.md",
+  "baseline": {
+    "official_score": 72,
+    "total_score": 100,
+    "verified_reqs": 22,
+    "pending_reqs": 11,
+    "real_acceptance": "OWNER_AND_EXTERNAL_EVIDENCE_REQUIRED",
+    "last_verified_source_sha": "9c8cfdcb1c10482ad6184a581991626b7e42138c",
+    "release": "RELEASE_HOLD_SALE_NO_GO"
+  },
+  "task_mapping": [
+    {
+      "id": "P00",
+      "stage": "PREP",
+      "requirement": null,
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_EXACT_SHA",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "P01",
+      "stage": "PREP",
+      "requirement": null,
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_NO_OVERWRITE_BOUNDARY_RECORDED",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P00"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "P02",
+      "stage": "PREP",
+      "requirement": null,
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "EVIDENCE_INDEX_COMPLETE",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P00"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "P03",
+      "stage": "PREP",
+      "requirement": null,
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_EXACT_SHA_HOSTED_ALL_PLATFORMS",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P00"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A07-01",
+      "stage": "M85",
+      "requirement": "R07",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "EVIDENCE_RECHECK_COMPLETE_RIGHTS_PENDING",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A07-02",
+      "stage": "M85",
+      "requirement": "R07",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "TEMPLATE_RECORDED",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A07-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A07-03",
+      "stage": "M85",
+      "requirement": "R07",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_EXACT_SHA",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A07-02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A07-04",
+      "stage": "M85",
+      "requirement": "R07",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A07-02",
+        "A07-03"
+      ],
+      "blocking_evidence": "NON_DELEGABLE_RIGHTS_AND_CUSTOMER_CONSENT",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A07-05",
+      "stage": "M85",
+      "requirement": "R07",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_OWNER_EVIDENCE",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A07-01",
+        "A07-03",
+        "A07-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-01",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_TECHNICAL_PIN_AND_PACKAGE_EXACT_SHA",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P01",
+        "P02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-02",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_TECHNICAL_SOURCE_HISTORY_RIGHTS_BLOCKED",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A21-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-03",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A21-02"
+      ],
+      "blocking_evidence": "RIGHTSHOLDER_IP_THIRD_PARTY_LICENSE_NOTICES",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-04",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_DEPENDENCY",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A21-03"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-05",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_DEPENDENCY",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A21-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A21-06",
+      "stage": "M85",
+      "requirement": "R21",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_DEPENDENCY",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A21-03",
+        "A21-05"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A25-01",
+      "stage": "M85",
+      "requirement": "R25",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_EXACT_SHA",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A25-02",
+      "stage": "M85",
+      "requirement": "R25",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "TEMPLATE_COMPLETE_REAL_CUSTOMER_RECORD_PENDING",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A25-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A25-03",
+      "stage": "M85",
+      "requirement": "R25",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "POLICY_APPROVED_SYNTHETIC_PASS_REAL_EVIDENCE_BLOCKED",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A25-02"
+      ],
+      "blocking_evidence": "NON_DELEGABLE_OPERATOR_RETENTION_AND_DISPOSAL_EVIDENCE",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A25-04",
+      "stage": "M85",
+      "requirement": "R25",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_REAL_CUSTOMER_EVIDENCE",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A25-01",
+        "A25-03"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A26-01",
+      "stage": "M85",
+      "requirement": "R26",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "SCOPE_RECHECK_COMPLETE_CUSTOMER_BASIS_PENDING",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A26-02",
+      "stage": "M85",
+      "requirement": "R26",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "PASS_EXACT_SHA",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A26-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A26-03",
+      "stage": "M85",
+      "requirement": "R26",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A26-01",
+        "A26-02"
+      ],
+      "blocking_evidence": "NON_DELEGABLE_PER_CUSTOMER_PRIVACY_CONSENT",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A26-04",
+      "stage": "M85",
+      "requirement": "R26",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "BLOCKED_CUSTOMER_EVIDENCE",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A26-02",
+        "A26-03"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-01",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "P01",
+        "P02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-02",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-03",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-02"
+      ],
+      "blocking_evidence": "INDEPENDENT_REVIEWER_AND_EXTERNAL_DISCLOSURE_APPROVAL",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-04",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-03"
+      ],
+      "blocking_evidence": "REAL_INDEPENDENT_HUMAN_AUDIT_REQUIRED",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-05",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-06",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL_RETEST",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-05"
+      ],
+      "blocking_evidence": "EXTERNAL_RETEST_AND_SIGNOFF",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "A29-07",
+      "stage": "M85",
+      "requirement": "R29",
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A29-04",
+        "A29-06"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G85-01",
+      "stage": "M85",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "A07-05",
+        "A21-06",
+        "A25-04",
+        "A26-04",
+        "A29-07"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G85-02",
+      "stage": "M85",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G85-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G85-03",
+      "stage": "M85",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G85-02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G85-04",
+      "stage": "M85",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G85-03"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B23-01",
+      "stage": "M95",
+      "requirement": "R23",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": true,
+      "dependent_on": [
+        "G85-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B23-02",
+      "stage": "M95",
+      "requirement": "R23",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "B23-01"
+      ],
+      "blocking_evidence": "REAL_INDEPENDENT_BUYER_DEVICE_NEEDED",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B27-01",
+      "stage": "M95",
+      "requirement": "R27",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": true,
+      "dependent_on": [
+        "G85-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B27-02",
+      "stage": "M95",
+      "requirement": "R27",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "B27-01"
+      ],
+      "blocking_evidence": "OWNER_PRICING_PLATFORM_LEGAL_REVIEW",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B30-01",
+      "stage": "M95",
+      "requirement": "R30",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": true,
+      "dependent_on": [
+        "B23-02",
+        "B27-02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B30-02",
+      "stage": "M95",
+      "requirement": "R30",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "B30-01"
+      ],
+      "blocking_evidence": "EXTERNAL_CUSTOMER_E2E_REVIEW",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B32-01",
+      "stage": "M95",
+      "requirement": "R32",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": true,
+      "dependent_on": [
+        "G85-04"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "B32-02",
+      "stage": "M95",
+      "requirement": "R32",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "B32-01"
+      ],
+      "blocking_evidence": "NATIVE_RELEASE_RIGHTS_SIGNING_APPROVAL",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G95-01",
+      "stage": "M95",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "B23-02",
+        "B27-02",
+        "B30-02",
+        "B32-02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "C06-01",
+      "stage": "M100",
+      "requirement": "R06",
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G95-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "C06-02",
+      "stage": "M100",
+      "requirement": "R06",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "C06-01"
+      ],
+      "blocking_evidence": "INDEPENDENT_OS_RACE_PROOF",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "C33-01",
+      "stage": "M100",
+      "requirement": "R33",
+      "owner": "OWNER",
+      "prior_assignee": "OWNER",
+      "previous_state": "BLOCKED_OWNER",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G95-01"
+      ],
+      "blocking_evidence": "REAL_COMMERCIAL_RIGHTS_AND_OWNER_APPROVAL",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "C33-02",
+      "stage": "M100",
+      "requirement": "R33",
+      "owner": "EXTERNAL",
+      "prior_assignee": "EXTERNAL",
+      "previous_state": "BLOCKED_EXTERNAL",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "C33-01"
+      ],
+      "blocking_evidence": "REAL_CUSTOMER_PURCHASE_AND_REFUND_PROCESS",
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "C33-03",
+      "stage": "M100",
+      "requirement": "R33",
+      "owner": "CODEX",
+      "prior_assignee": "INSTANT",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": true,
+      "dependent_on": [
+        "C33-01",
+        "C33-02"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G100-01",
+      "stage": "M100",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "INSTANT",
+      "previous_state": "HIGH_OWNED_NOT_CODEX",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "C06-02",
+        "C33-03"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    },
+    {
+      "id": "G100-02",
+      "stage": "M100",
+      "requirement": null,
+      "owner": "HIGH",
+      "prior_assignee": "HIGH",
+      "previous_state": "FUTURE_STAGE",
+      "ready_for_parallel_prep": false,
+      "dependent_on": [
+        "G100-01"
+      ],
+      "blocking_evidence": null,
+      "source_of_truth": "data/gpt6_execution_plan_r01_r33_v1.json",
+      "points_from_task": 0
+    }
+  ],
+  "owner_counts": {
+    "CODEX": 24,
+    "OWNER": 8,
+    "HIGH": 12,
+    "EXTERNAL": 6
+  },
+  "independent_prep_priority": [
+    "B23-01",
+    "B27-01",
+    "B30-01",
+    "B32-01",
+    "C33-03"
+  ],
+  "codex_conditional_acceptance_related": [
+    "A07-05",
+    "A21-04",
+    "A21-05",
+    "A21-06",
+    "A25-04",
+    "A26-04"
+  ],
+  "high_immediate_security": [
+    "A29-01",
+    "A29-02",
+    "C06-01"
+  ],
+  "high_final_gates": [
+    "G85-01",
+    "G85-02",
+    "G85-03",
+    "G85-04",
+    "G95-01",
+    "G100-01",
+    "G100-02"
+  ],
+  "hard_rules": {
+    "owner_approval_required": [
+      "R07",
+      "R21",
+      "R25",
+      "R26",
+      "R27",
+      "R32",
+      "R33"
+    ],
+    "external_independent_required": [
+      "R06",
+      "R23",
+      "R29",
+      "R30",
+      "R32",
+      "R33"
+    ],
+    "no_unverified_score_awards": true,
+    "no_external_sensitive_data_transfer": true,
+    "allow_paid_services": false,
+    "allow_merges": false,
+    "allow_release": false,
+    "allow_scorecard_changes": false,
+    "each_worker_separate_branch": true
+  },
+  "evidence": "GitHub-hosted synthetic tests are technical only, not a substitute for real buyer, rights-holder or independent human auditing."
+}
