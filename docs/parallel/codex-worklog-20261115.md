@@ -75,3 +75,13 @@ Files changed: `commercial_terms_consistency.py`, `test_commercial_terms_consist
 - Windows Chrome, Windows Edge and Ubuntu Chromium browser jobs: **PASS**.
 - Final evidence gate [#43682690998](https://github.com/hibi89/data2web_studio/actions/runs/43682690998): workflow SUCCESS, gate value **UNASSESSED**; no approved acceptance manifest was present.
 - Task map at this SHA records 18 CODEX tasks as TECHNICAL_PASS and 6 as OWNER_PENDING. None of this changes the frozen 72/100 official score or RELEASE HOLD / SALE NO-GO.
+
+
+## C40/C70 closeout supplement — 2026-11-15
+
+- Added `docs/parallel/codex-r32-offline-preview-verification-20261115.md`: Windows 10/11 owner-run build/verify commands, Python/Tk boundary, deterministic member hash comparison, create-only preservation, and no-installer/no-signature limits. It does not claim customer-device acceptance.
+- Added `docs/parallel/codex-readiness-report-20261115.md`: M85/M95/M100 requirement-level readiness, separating completed Codex engineering from OWNER_PENDING and EXTERNAL_PENDING acceptance.
+- Existing negative guards for fake commercial/license claims were reused: `test_shipping_rights_preflight.py` rejects fabricated rights or sale approval; `receipt_utils.py` emits integrity-only receipts with `sale_approved=false`; existing receipt/customer-folder tests reject tampering. No additional commerce “GO” implementation was added.
+- Exact tested product-source + WBS SHA remains `a13de6a2d498788d14e69b480899398c0257c18d`, branch CI [#43682690804](https://github.com/hibi89/data2web_studio/actions/runs/43682690804) 5/5 PASS, and final gate [#43682690998](https://github.com/hibi89/data2web_studio/actions/runs/43682690998) SUCCESS / UNASSESSED at that SHA. Later branch changes in this closeout are documentation only; no product source or task-map status changed, so focused tests were not rerun for Markdown-only edits.
+- Current tracked Codex WBS remains 18 `TECHNICAL_PASS`, six `OWNER_PENDING`; no official score change. The 72/100 baseline, RELEASE HOLD, SALE NO-GO, and every owner/external gate remain intact.
+- PR #6 and PR #7 had no submitted review or inline review threads at the time of recheck. PR #7 still identifies its High-owned R06/R29 work as a separate lane; Codex did not edit those files.
