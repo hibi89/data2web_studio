@@ -51,3 +51,10 @@ Existing shipping preflight tests reject unsupported license/sale claims and kee
 - No scorecard, scoring weights, release state, protected central status, or main branch was changed.
 - No customer originals, private approval documents, credentials, paid services, or external-audit claims were added.
 - **Overall: PARTIAL / OWNER_PENDING / EXTERNAL_PENDING. Official score remains 72/100.**
+
+
+## Cross-branch verification update — 2026-11-15 06:09 KST
+
+High's separate PR #7 now has R06 source/test changes at head `88c9123be526e947ec2fae5955f6933daf9fadee`. Its exact-head branch CI [#43684105120](https://github.com/hibi89/data2web_studio/actions/runs/43684105120) completed **5/5 PASS**: Python 539 total per OS (Windows 536 PASS / 3 SKIP; macOS 535 PASS / 4 SKIP; Ubuntu 535 PASS / 4 SKIP), plus Windows Chrome, Windows Edge, and Ubuntu Chromium PASS. The separate evidence gate [#43684105380](https://github.com/hibi89/data2web_studio/actions/runs/43684105380) completed with `UNASSESSED` because no approved acceptance manifest exists.
+
+An earlier High-run failure at `7576e3291981e7bffc2eda0b059ccb7931bf6f5f` was caused by the existing snapshot-race test expecting a later error after the new single-link guard rejected the hardlink earlier. That failure is resolved in High's current exact-head run. This only establishes hosted technical regression coverage: R06 remains `EXTERNAL_PENDING` for real-device race acceptance; R29 remains `EXTERNAL_PENDING` for the independent human audit and retest. Codex made no edits to High-owned files. PR #6 still has no submitted review.
