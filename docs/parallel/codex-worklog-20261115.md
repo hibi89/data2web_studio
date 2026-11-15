@@ -65,3 +65,13 @@ Files changed: `commercial_terms_consistency.py`, `test_commercial_terms_consist
 - **OWNER_PENDING:** per-order rights/consent (R07/R26), actual rightsholder/vendor redistribution scope (R21), real retention/disposal record (R25), final platform/tax/listing choices (R27), native rights/signing/release choices (R32), and actual commercial approval (R33).
 - **EXTERNAL_PENDING:** independent Win10 and Win11 customer device runs, actual independent macOS/Linux review (R23), independent buyer E2E acceptance (R30), external human security audit/retest (R29), actual marketplace order/payment/refund record (R33).
 - Codex technical preparation is complete for the independent work currently possible. Continue on receipt of the missing genuine evidence; keep 85/95/100 points blocked until the authorized independent acceptance gate evaluates it.
+
+
+## Exact-SHA revalidation after WBS status update
+
+- **Commit tested:** `a13de6a2d498788d14e69b480899398c0257c18d` (includes the WBS metadata update; product source is unchanged from the passing source SHA above).
+- Branch technical CI [#43682690804](https://github.com/hibi89/data2web_studio/actions/runs/43682690804): **5/5 jobs PASS** at this exact SHA.
+- Python suite on Windows: **540 total / 539 PASS / 1 SKIP**; macOS: **540 / 536 PASS / 4 SKIP**; Ubuntu: **540 / 536 PASS / 4 SKIP**.
+- Windows Chrome, Windows Edge and Ubuntu Chromium browser jobs: **PASS**.
+- Final evidence gate [#43682690998](https://github.com/hibi89/data2web_studio/actions/runs/43682690998): workflow SUCCESS, gate value **UNASSESSED**; no approved acceptance manifest was present.
+- Task map at this SHA records 18 CODEX tasks as TECHNICAL_PASS and 6 as OWNER_PENDING. None of this changes the frozen 72/100 official score or RELEASE HOLD / SALE NO-GO.
