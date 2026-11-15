@@ -93,3 +93,11 @@ Files changed: `commercial_terms_consistency.py`, `test_commercial_terms_consist
 - High's earlier exact run [#43683639426](https://github.com/hibi89/data2web_studio/actions/runs/43683639426) failed the hardlink snapshot test because the new single-link guard correctly rejected the input before the older expected error point. High's later commit/test run resolves that CI failure.
 - This is High-branch technical progress, not Codex requirement acceptance. R06 real-device race acceptance and R29 independent audit/retest remain EXTERNAL_PENDING; no points added. Codex-owned product-source/WBS SHA and CI remain `a13de6a2d498788d14e69b480899398c0257c18d` / [#43682690804](https://github.com/hibi89/data2web_studio/actions/runs/43682690804), 5/5 PASS.
 - No new review has been submitted on Codex PR #6. All owner/customer evidence gates remain as listed above.
+
+
+## High review / integration gate — 2026-11-15
+
+- High's partial integration review [#6890141705](https://github.com/hibi89/data2web_studio/pull/6#issuecomment-6890141705) found no blocking defect in the reviewed Codex files. It requires the combined package/desktop/receipt regression at the exact eventual integration SHA because High's R06 change updates `path_policy.py`, which the portable bundle embeds.
+- Combined exact integration-SHA test is **NOT_RUN** because no authorized integrated SHA exists while both Draft PRs remain unmerged. Separate CI evidence must not be presented as combined validation.
+- Compared shared workflow content read-only: `.github/workflows/parallel-branch-ci.yml` has identical blob SHA `fc8cd118f9733898f549c4e0981f08197f198398` in Codex and High branches; the integration base lacks that file. PR #6 is mergeable; PR #7 reports `dirty` against recorded base `cfc56fe4492f445d7f6a1fd12bb8d45c422de46e` while the target branch has advanced to `e03681b433b921bfe1eb0a0ada50145b7de3c078`. PR #7 conflict resolution is High-owned; Codex made no change to High-owned files, central HANDOFF/STATUS, or either PR base.
+- High's exact R06 source/test SHA `88c9123be526e947ec2fae5955f6933daf9fadee` has full hosted 3OS/browser PASS [#43684105120](https://github.com/hibi89/data2web_studio/actions/runs/43684105120); that is separate from external R06 device acceptance and R29 human-audit/retest.
