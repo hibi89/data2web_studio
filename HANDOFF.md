@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High H10 실구현 + exact-SHA 5/5 CI PASS 인수인계 (10항)
+
+1. **목표:** DATA2WEB Studio 확정 R01–R33 전체 100점, 오프라인 A 상품 R06 입력 TOCTOU 보안 강화. 공식 72점·출시 HOLD.
+2. **완료:** `path_policy.py` 하드링크 파일 차단·POSIX FIFO nonblocking 검증, `test_r06_source_race.py` 5종 신규, `test_snapshot_safety.py` 과거 경합 시험 업데이트(직접 쓰기 탐지 테스트 보존). 위협·비용 대안 `docs/parallel/H10_R06_SECURITY_THREAT_REPRO_20261115.md`.
+3. **검증:** exact SHA `88c9123be526e947ec2fae5955f6933daf9fadee` / [CI 5/5 SUCCESS](https://github.com/hibi89/data2web_studio/actions/runs/43684105120); Windows 539=536PASS/3SKIP, Ubuntu/macOS 각각 539=535PASS/4SKIP, Chromium/Chrome/Edge PASS. 최초 SHA `7576e329...`는 기존 예상 오류 문구 충돌로 FAIL → 재현·수정 완료.
+4. **현재 단계:** High H10 기술패치/호스팅 검증 PASS; R06 최종 외부 실기기·R29 독립 보안감사 및 권리/동의는 PENDING. 72/100 유지, PR #7 Draft 미병합.
+5. **오류·복구:** 첫 CI가 기존 `test_snapshot_safety`에서 새 조기 HARDLINK HOLD 예외 문구와 불일치. 강화된 방어를 되돌리지 않고 테스트 행위를 분리해 해결. POSIX 동일 UID 부모 경로 악성 이동은 잔여 경계이며 별도 외부검증 필요. 강제 푸시·자동병합 금지.
+6. **GitHub 기준:** `hibi89/data2web_studio` `work/high-data2web-security-r06-r29-20261115` PR #7, 테스트 검증 SHA `88c9123be526e947ec2fae5955f6933daf9fadee`; 최초 기반 `ded01ce3576a3ea06769fc8e18e917bd98b54ab2`. Codex PR #6 현재 마지막 확인 `6a849fbf1446ebb9f3ab4d4a87eb9a20bc1195bf`(이후 변경 가능), 기술 PASS SHA `a13de6a2d498788d14e69b480899398c0257c18d`.
+7. **배포·환경:** GitHub hosted Windows/macOS/Ubuntu, Chromium/Chrome/Edge PASS; Vercel Production 미적용(오프라인 제품). 실제 고객 Win10/11 검증 아님.
+8. **원본·백업:** 고객파일·토큰 없음, GitHub 기존 이력/원본 데이터·과거 R21 registry v1 보존. 원본 변경/삭제 없음; 되돌리기는 GitHub history 기반 정상 revert만 사용.
+9. **다음 작업:** R29 합성 XSS/CSP/ZIP/XLSX 위협 회귀·외부감사 증빙; Codex PR #6 요청 내용과 소스 재대조; 승인 후 최종 통합 SHA 3 OS/브라우저 CI. 사용자 별도 승인 필요: 실제 데이터, 라이선스, 고객기기, 외부 보안 감사, 판매.
+10. **갱신/증빙:** 2026-11-15 KST, 실구현+합성 호스팅 CI까지 검증. Codex 부분 검수 댓글 #6890141705, CI run #43684105120, 기록 보안 위협 문서. 공식 수용점수 불변.
+
 ## 2026-11-15 KST — GPT-6 High 병렬 H10 실제 수정 인수인계 (10항, 공식 72/100)
 
 1. **목표·확정설계·기술:** DATA2WEB R01–R33 100점 정본·A 오프라인 로컬 산출물. 이번 범위 H10 R06 입력 경합/하드링크/FIFO 위험만. 원본·점수·상업 승인 변경 없음.
