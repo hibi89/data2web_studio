@@ -1,3 +1,11 @@
+## 2026-11-15 KST — R29-NAV-001 reproduced and security HOLD reported; exact-SHA 5/5 hosted CI PASS
+
+- HIGH-owned `r29_zip_navigation_diagnostic.py` generates new, synthetic, canonical three-member ZIP; injects meta-refresh into HTML; recomputes manifest HTML SHA; calls real `verify_zip`; never opens a browser or performs external requests. `test_r29_zip_navigation_diagnostic.py` records verdict without mislabeling insecurity as a security PASS.
+- **Confirmed across 3 hosted OS environments:** `verifier_accepted_rehashed_navigation=true`, `status=SECURITY_HOLD_CANDIDATE_CONFIRMED`. This demonstrates a verifier input-validation gap; actual network navigation/exfiltration not tested.
+- HIGH-owned `security_audit_preaudit.py` exposes redacted finding and `technical_security_clearance=false`, with targeted test in `test_security_audit_preaudit.py` to ensure open finding cannot be concealed by original 14 passing probes. The acceptance score, rights, external audit status and release remain unchanged.
+- Tested exact code/test SHA `87d0038a2d7650a8b5010ba54802e3004ac4db58`: [CI https://github.com/hibi89/data2web_studio/actions/runs/43686263198](https://github.com/hibi89/data2web_studio/actions/runs/43686263198) **5/5 SUCCESS**: Windows Python 548 = 545 PASS/3 SKIP; Ubuntu/macOS 548 = 544 PASS/4 SKIP, Chromium/Chrome/Edge PASS. This is diagnostic PASS only, not R29 security clearance.
+- Codex PR #6 explicitly notified (comment #6890445038); CODEX ownership of `verify_delivery.py` and `test_zip_offline_csp.py` preserved, no concurrent edits or automatic merge. Next: Codex fix SHA + focused negative tests → High exact-SHA independent retest → external auditor. Official **72/100**, RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-15 KST — H20 R29 provenance-grade fixture specificity regression (PASS)
 
 - **Found test-quality defect (not evidence of a live exploitation):** earlier `_adversarial_xlsx` samples lacked a valid worksheet/sheet list, and ZIP Slip added a fourth member. As a result, the internal probe might accept an unrelated rejection as evidence that a *specific* attack was blocked.
