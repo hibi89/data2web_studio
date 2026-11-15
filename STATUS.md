@@ -1,3 +1,9 @@
+## 2026-11-15 KST — High H10 R06 보안 변경 정확 SHA 전체 CI 5/5 SUCCESS · 공식 72 유지
+
+- **실제 검증 SHA** `88c9123be526e947ec2fae5955f6933daf9fadee`; [GitHub Actions #43684105120](https://github.com/hibi89/data2web_studio/actions/runs/43684105120) 5/5 Job SUCCESS. Windows Python 539(536 PASS/3 SKIP), Ubuntu·macOS Python 각각 539(535 PASS/4 SKIP), Chromium·Chrome·Edge PASS.
+- 개선: 다중 하드링크 사전/파일핸들/사후 차단, POSIX FIFO 치환의 무기한 대기 위험 완화. `path_policy.py`, `test_r06_source_race.py`(신규 5종), `test_snapshot_safety.py`(기존 경합 검증 의도 보존) 수정. 1차 CI의 구 테스트 예상문구 충돌 1건은 해결했고 2차 전체 CI PASS. 고객 원본 변경 없음.
+- Codex PR #6 별도 기술 SHA `a13de6a2d498788d14e69b480899398c0257c18d` 5/5 CI PASS; High가 일부 코드 독립 검수 후 PR comment #6890141705 공시. Codex/High 통합 SHA는 아직 미검증이며 PR 자동병합 없음. R06 실고객 Windows 10/11 공격 시험·R29 제3자 외부 보안감사 미수행. 점수표 `72/100`, RELEASE HOLD / SALE NO-GO 유지.
+
 ## 2026-11-15 KST — High H10 R06 보안 실제 패치·회귀테스트 공시 (공식 72/100 유지)
 
 - 대상: `hibi89/data2web_studio@work/high-data2web-security-r06-r29-20261115` / Draft PR #7. Codex PR #6와 소스 파일 중복 수정 없음. 공통 CI YAML은 병렬 준비 단계의 양측 변경으로 통합 시 대조 필요.
