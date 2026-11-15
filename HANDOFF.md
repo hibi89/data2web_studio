@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29-ID-001 실브라우저 표시 무결성 우회 증빙 인수인계 (필수 10항)
+
+1. **목표·용도·요구·기술:** DATA2WEB Studio R01–R33 오프라인 A 제품/HTML·ZIP·receipt, High 독립 R29 보안 검수. 사용자 확정 100점 중 공식 72점; 출시/권리 승인 없음.
+2. **실제 변경·근거:** High 소유 `r29_html_surface_policy.py`에 30개 정적 DOM ID→허용 태그 유형과 유일성·필수 존재 가드 추가. `test_r29_html_surface_policy.py`, `test_r29_strict_zip_verifier.py`에서 임의/중복/위치변경/누락 id 및 정규 재해시 ZIP shadow DIV 변조 거부 회귀. `browser_r29_saved_dom_probe.py`에 실제 브라우저 위조 데이터 표시 재현 추가.
+3. **테스트 명령·성공 수:** `python -m unittest discover -v`, `python browser_r29_saved_dom_probe.py --channel chromium|chrome|msedge`. Exact tested SHA `157ff0b1490f9f4d858e175fdf4e5f77b0f79e6c`. [GitHub Actions #43690034894](https://github.com/hibi89/data2web_studio/actions/runs/43690034894) 5/5 SUCCESS: Windows 568=565PASS/3SKIP, Ubuntu/macOS 568=564PASS/4SKIP; [browser #43690034843](https://github.com/hibi89/data2web_studio/actions/runs/43690034843) 2/2 SUCCESS, 3 browser channels 실제 파일 저장/재열기와 `R29_ACTUAL_BROWSER_DOM_ID_SHADOW_REPRODUCED` 증빙.
+4. **완료·진행·대기·차단:** R29-ID-001 탐지/독립 가드 보강/3 브라우저 합성 재현 완료. Codex 배송 ZIP 기본 `verify_zip`는 위조된 zip 수용, 제품 기본 보호 미완료. R29-NAV-001 역시 OPEN. 외부 독립 보안 감사, 실제 구매자 Windows10/11, 라이선스·개인정보·상업 승인은 PENDING. 공식 72/100 RELEASE HOLD/SALE NO-GO.
+5. **오류 근거·원인·시도·대안:** 검증기는 ZIP HTML SHA 및 static JSON script 검증, 재해시된 HTML에 추가 shadow `div id=dataset`은 검사하지 않음. JS `getElementById("dataset")`가 첫 DOM 노드를 선택해 위조 자료 1행을 표시; 원본은 3행 정상. High identity map이 차단. 해당 보조 가드를 Codex shipping `verify_delivery.py`에 정당하게 적용해야 하고 오작동하는 임의 허용목록 축소·보안 우회 금지. 데이터외부 유출·고객 피해 추정 금지.
+6. **저장소/브랜치/SHA/주요 경로:** `hibi89/data2web_studio` High branch `work/high-data2web-security-r06-r29-20261115` Draft PR #7, exact CI code SHA `157ff0b1490f9f4d858e175fdf4e5f77b0f79e6c`. Codex `work/codex-data2web-to100-20261115` Draft PR #6 (마지막 확인 `afe6ed055cf4b9405da91d1028f9889555b41e00`). R29 경로 위 세 파일 + `r29_strict_zip_verifier.py`.
+7. **Production URL/Vercel·환경:** 로컬 오프라인 제품, Vercel 미적용. GitHub hosted Ubuntu Chromium, Windows Chrome/Edge 실제 `file://` 브라우저 수행 및 3 OS Python 3.11 CI. 사용자 PC 실제 Win10/11/상업 Production 검증 미적용.
+8. **원본·백업·인증·수정 금지:** GitHub 커밋 버전과 문서 유지, 합성 데이터만 사용, 고객 파일·비밀정보·토큰 미업로드/미전송. Git author/committer 연결 과거 확인. 원본 덮어쓰기·자동 PR merge·권한 변경·force push·무단 배포 금지.
+9. **다음 작업·우선순위·승인·완료 기준:** Codex가 `verify_delivery.py`/테스트/Windows 번들에 확정된 R29-ID-001·R29-NAV-001 보안 방어 통합하고 실제 기본 `verify_zip`에서 재해시 shadow ID·meta-refresh·JS+CSP·CSS 변조 모두 REJECT, 정상 browser-saved HTML ACCEPT; 정확 combined SHA hosted 3OS/browser CI 확인→High 독립 코드·소스·결과 검수. R29 전문 외부 감사/고객 동의/판매는 사용자 별도 승인·증빙 필요, 공식 점수 임의 추가 금지. Codex PR #6 comment #6891084878 근거.
+10. **KST 갱신/검증범위/기준 SHA:** 2026-11-15 KST; GitHub `157ff0b1490f9f4d858e175fdf4e5f77b0f79e6c`, CI #43690034894 및 #43690034843; 문서 커밋 SHA는 해당 검증 SHA와 분리하여 표기. R29-NAV-001/ID-001 OPEN, 72/100, RELEASE HOLD/SALE NO-GO.
+
 ## 2026-11-15 KST — GPT-6 High R29 브라우저 저장본 실증 + 차트 폭 오탐 수정 인수인계 (필수 10항)
 
 1. **목표·용도·확정요구·기술:** DATA2WEB Studio R01–R33 A 오프라인 HTML/ZIP/receipt 최종 100점 요건 중 High R29 독립 HTML 안전성 검사기가 실제 Chromium/Chrome/Edge 다운로드된 로컬 저장본을 지원하는지 실증. 공식 72/100 변경 금지.
