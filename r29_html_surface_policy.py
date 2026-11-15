@@ -116,6 +116,24 @@ APPROVED_FIXED_INPUTS = {
 }
 
 
+def _approved_print_scope(value):
+    # The source template is static, but the reviewed runtime updates this
+    # sentence on every filter/pagination event before HTML download.
+    # Accept only the exact reviewed syntax and internally consistent pages.
+    if value == APPROVED_STATIC_NOTICES["print-scope"]:
+        return True
+    match = re.fullmatch(
+        r"인쇄 범위: (\\d{1,5})건 중 화면 ([1-9]\\d{0,2})/([1-9]\\d{0,2})"
+        r"페이지의 최대 50행\\. 전체 데이터는 오프라인 HTML을 이용하세요\\.",
+        value,
+    )
+    if not match:
+        return False
+    total, page, pages = (int(part) for part in match.groups())
+    return (total <= 10_000 and pages == max(1, (total + 49) // 50)
+            and page <= pages)
+
+
 class _HTMLSurfaceParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -318,8 +336,12 @@ def assert_passive_offline_html_markup(html_bytes):
         or parser.scripts != {"data", "static"}
         or parser.seen_fixed_ids != set(APPROVED_FIXED_IDS)
         or parser.active_notice is not None
-        or {k: "".join(v) for k, v in parser.notice_parts.items()}
-        != APPROVED_STATIC_NOTICES):
+        or set(parser.notice_parts) != set(APPROVED_STATIC_NOTICES)
+        or any("".join(parser.notice_parts[k]) != expected
+               for k, expected in APPROVED_STATIC_NOTICES.items()
+               if k != "print-scope")
+        or not _approved_print_scope(
+            "".join(parser.notice_parts["print-scope"]))):
 
         raise ValueError("HTML does not match approved passive surface")
     # Static JS and CSS must match REVIEWED bytes, not attacker-controlled ZIP

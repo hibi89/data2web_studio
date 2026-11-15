@@ -220,6 +220,23 @@ class PassiveHTMLSurfacePolicy(unittest.TestCase):
                 self.assertIn(before, self.original)
                 self.assert_unsafe(self.original.replace(before, after, 1))
 
+    def test_browser_runtime_print_scope_has_bounded_page_contract(self):
+        original = "인쇄는 현재 화면의 최대 50행만 포함합니다. 전체 자료는 오프라인 HTML에서 확인하세요.".encode("utf-8")
+        correct = "인쇄 범위: 76건 중 화면 1/2페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.".encode("utf-8")
+        self.assertIn(original, self.original)
+        accepted = self.original.replace(original, correct, 1)
+        self.assertTrue(assert_passive_offline_html_markup(accepted)[
+            "passive_template_surface_verified"])
+        for forged in (
+            "인쇄 범위: 76건 중 화면 3/2페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.",
+            "인쇄 범위: 76건 중 화면 1/1페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.",
+            "인쇄 범위: 10001건 중 화면 1/201페이지의 최대 50행. 전체 데이터는 오프라인 HTML을 이용하세요.",
+            "인쇄 범위: 76건 중 화면 1/2페이지의 최대 500행. 전체 데이터는 오프라인 HTML을 이용하세요.",
+        ):
+            with self.subTest(text=forged):
+                self.assert_unsafe(self.original.replace(
+                    original, forged.encode("utf-8"), 1))
+
     def test_invalid_markup_encoding_and_type_rejected(self):
         for bad in (b"", b"not html", b"\\xff", "not-bytes", None):
             with self.subTest(bad=repr(bad)), self.assertRaises(ValueError):
