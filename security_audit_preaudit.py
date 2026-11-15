@@ -20,6 +20,7 @@ from zipfile import ZipFile, ZipInfo, ZIP_STORED, ZIP_DEFLATED
 
 from data2web_single import deliver_single
 from data2web_tabular import list_xlsx_sheets
+from test_xlsx_fixtures import workbook_bytes
 from path_policy import assert_no_links
 from secure_output import create_output_file
 from verify_customer_folder import verify_customer_folder
@@ -61,74 +62,80 @@ def _sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def _canonical_test_zip(target, members, *, renamed=None, link_name=None):
+    """Construct a three-member canonical synthetic ZIP with one selected mutation.
+
+    No extraction; no extra fourth member that could trivially mask ZipSlip.
+    """
+    with ZipFile(target, "w", compression=ZIP_STORED, allowZip64=False) as archive:
+        for name in ("index.html", "manifest.json", "README_KO.txt"):
+            member_name = renamed if name == "README_KO.txt" and renamed else name
+            entry = ZipInfo(member_name, date_time=(1980, 1, 1, 0, 0, 0))
+            entry.compress_type = ZIP_STORED
+            entry.external_attr = (
+                0o120777 if name == link_name else 0o100600
+            ) << 16
+            archive.writestr(entry, members[name])
+
+
 def _tamper_zip(archive, target):
     with ZipFile(archive, "r") as old:
         members = {name: old.read(name) for name in old.namelist()}
     manifest = json.loads(members["manifest.json"])
     manifest["status"] = "APPROVED_FOR_SALE"
-    members["manifest.json"] = json.dumps(manifest, sort_keys=True).encode("utf-8")
-    with ZipFile(target, "w", compression=ZIP_STORED) as new:
-        for name, data in members.items():
-            new.writestr(name, data)
+    members["manifest.json"] = (json.dumps(
+        manifest, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ) + "\\n").encode("utf-8").replace(b"\\\\n", bytes([10]))
+    _canonical_test_zip(target, members)
 
 
 def _adversarial_zip(legitimate, target, *, extra_name=None, symlink=False):
-    """Create an intentionally invalid synthetic ZIP, never extract it."""
+    """Mutate exactly one approved ZIP entry; retain three total members."""
     with ZipFile(legitimate, "r") as original:
         entries = {name: original.read(name) for name in original.namelist()}
-    with ZipFile(target, "w", compression=ZIP_STORED, allowZip64=False) as z:
-        for name, data in entries.items():
-            item = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
-            item.compress_type = ZIP_STORED
-            item.external_attr = (0o120777 if symlink and name == "index.html"
-                                  else 0o100600) << 16
-            z.writestr(item, data)
-        if extra_name is not None:
-            z.writestr(extra_name, b"synthetic-no-extraction")
+    _canonical_test_zip(target, entries, renamed=extra_name,
+                        link_name="index.html" if symlink else None)
 
 
 def _adversarial_xlsx(*, external=False, compress_bomb=False, macro=False):
-    """Bounded in-memory OOXML negatives, without filesystem extraction."""
-    rel = (b'<Relationships xmlns="http://schemas.openxmlformats.org/'
-           b'package/2006/relationships"><Relationship Id="rId1" '
-           b'Type="http://schemas.openxmlformats.org/officeDocument/'
-           b'2006/relationships/worksheet" '
-           + (b'TargetMode="External" Target="https://invalid.example/private"'
-              if external else b'Target="worksheets/sheet1.xml"')
-           + b'/></Relationships>')
-    workbook = (b'<workbook xmlns="http://schemas.openxmlformats.org/'
-                b'spreadsheetml/2006/main"><sheets/></workbook>')
-    if compress_bomb:
-        workbook = b"A" * 200_000  # High compression ratio, tiny ZIP input.
-    parts = {
-        "[Content_Types].xml": b"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
-        "xl/_rels/workbook.xml.rels": rel,
-        "xl/workbook.xml": workbook,
-    }
+    """Mutate a *valid* synthetic workbook, preserving all other parts."""
+    if sum((external, compress_bomb, macro)) > 1:
+        raise ValueError("Only one synthetic attack dimension per fixture")
+    if external:
+        return workbook_bytes(external=True)
     if macro:
-        parts["xl/vbaProject.bin"] = b"not-real-macro"
-    stream = io.BytesIO()
-    with ZipFile(stream, "w", compression=ZIP_DEFLATED, allowZip64=False) as z:
-        for name, contents in parts.items():
-            z.writestr(name, contents)
-    return stream.getvalue()
+        return workbook_bytes(extra_part="xl/vbaProject.bin")
+    ordinary = workbook_bytes()
+    if not compress_bomb:
+        return ordinary
+    result = io.BytesIO()
+    with ZipFile(io.BytesIO(ordinary), "r") as source:
+        with ZipFile(result, "w", compression=ZIP_DEFLATED,
+                     allowZip64=False) as output:
+            for name in source.namelist():
+                payload = source.read(name)
+                if name == "xl/worksheets/sheet1.xml":
+                    # XML whitespace outside the root is legal; the workbook
+                    # remains otherwise valid but compresses beyond policy.
+                    payload += b" " * 250_000
+                output.writestr(name, payload)
+    return result.getvalue()
 
 
-def _rejected_xlsx(raw):
+def _rejected_xlsx(raw, expected_reason=None):
     try:
         list_xlsx_sheets(raw)
-    except ValueError:
-        return True
+    except ValueError as exc:
+        return expected_reason is None or expected_reason in str(exc)
     return False
 
 
-def _rejected_zip(path):
+def _rejected_zip(path, expected_reason=None):
     try:
         verify_zip(path)
-    except ValueError:
-        return True
+    except ValueError as exc:
+        return expected_reason is None or expected_reason in str(exc)
     return False
-
 
 def internal_synthetic_probes():
     checks = {name: False for name in SCOPE}
@@ -222,23 +229,28 @@ def internal_synthetic_probes():
             )
         altered = root / "synthetic-unauthorized.zip"
         _tamper_zip(dest / "delivery.zip", altered)
-        checks["ZIP_STATUS_FORGERY_BLOCKED"] = _rejected_zip(altered)
+        checks["ZIP_STATUS_FORGERY_BLOCKED"] = _rejected_zip(
+            altered, "Invalid or unauthorized package manifest")
 
         traversal = root / "synthetic-zip-slip.zip"
         _adversarial_zip(dest / "delivery.zip", traversal,
                          extra_name="../outside.txt")
-        checks["ZIP_SLIP_BLOCKED"] = _rejected_zip(traversal)
+        checks["ZIP_SLIP_BLOCKED"] = _rejected_zip(
+            traversal, "Unexpected, duplicated, or unsafe ZIP members")
 
         link = root / "synthetic-zip-link.zip"
         _adversarial_zip(dest / "delivery.zip", link, symlink=True)
-        checks["ZIP_SYMLINK_BLOCKED"] = _rejected_zip(link)
+        checks["ZIP_SYMLINK_BLOCKED"] = _rejected_zip(link, "Linked ZIP entry")
 
         checks["XLSX_EXTERNAL_REL_BLOCKED"] = _rejected_xlsx(
-            _adversarial_xlsx(external=True))
+            _adversarial_xlsx(external=True),
+            "External workbook relationship rejected")
         checks["XLSX_ZIP_BOMB_BLOCKED"] = _rejected_xlsx(
-            _adversarial_xlsx(compress_bomb=True))
+            _adversarial_xlsx(compress_bomb=True),
+            "XLSX decompression safety limit")
         checks["XLSX_MACRO_MEMBER_BLOCKED"] = _rejected_xlsx(
-            _adversarial_xlsx(macro=True))
+            _adversarial_xlsx(macro=True),
+            "Unsupported or unsafe XLSX ZIP member")
         altered_html = dest / "index.html"
         with altered_html.open("ab") as f:
             f.write(b"<!-- tampered synthetic only -->")
