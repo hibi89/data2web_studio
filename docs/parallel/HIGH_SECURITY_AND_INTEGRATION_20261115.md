@@ -8,7 +8,7 @@
 - **This High branch:** `work/high-data2web-security-r06-r29-20261115`. The **Codex branch:** `work/codex-data2web-to100-20261115`.
 - Last trusted exact tested technical code SHA `9c8cfdcb1c10482ad6184a581991626b7e42138c`: Python/Browser [#43647752145](https://github.com/hibi89/data2web_studio/actions/runs/43647752145) 4/4 jobs PASS, macOS [#43647752125](https://github.com/hibi89/data2web_studio/actions/runs/43647752125) PASS, CodeQL [#43647752124](https://github.com/hibi89/data2web_studio/actions/runs/43647752124) PASS. All hosted/synthetic, not external acceptance. Score evidence gate #43647752518 UNASSESSED.
 - Read before any change: HANDOFF.md → STATUS.md → AGENTS.md → REQUIREMENTS.md → docs/FINAL_DESIGN.md → data/final_blueprint_scorecard_v1.json → data/gpt6_execution_plan_r01_r33_v1.json → current exact source/tests. Current official **72/100**: 22/33 VERIFIED + 11 pending, 85 +13, 95 +10, 100 +5. Scorecard denominator/weights/states immutable until real complete acceptance proof.
-- Existing PR #4 is Draft and unmerged against main; THIS High branch's PR and Codex branch's PR should be Draft against integration base. Never touch main or force-push.
+- Existing upstream PR #4 is Draft/unmerged and currently targets `feature/p85-ui-crossbrowser-20261113` (not main); THIS High branch's PR and Codex branch's PR should be Draft against integration base. Never touch main or force-push.
 
 ## 2. The technical HIGH work (do concurrently with CODEX)
 **H00 Baseline & lockfiles (0 points):**
