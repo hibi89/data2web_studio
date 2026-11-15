@@ -1,3 +1,10 @@
+## 2026-11-15 KST — H10 CI failure repaired, exact-SHA full regression PASS
+
+- 1st CI SHA `7576e3291981e7bffc2eda0b059ccb7931bf6f5f`: five new R06 tests passed on Ubuntu/macOS; existing `test_snapshot_safety.test_hardlink_alias_mutation_during_bounded_read_is_rejected` failed because the stronger preflight rejected the hardlink earlier than the old expected post-read exception. Confirmed actual log failure, not a source data regression.
+- `test_snapshot_safety.py` updated at SHA `88c9123be526e947ec2fae5955f6933daf9fadee` to expect early hardlink HOLD **and** separately retain direct-source POSIX mutation detection / Windows write-denial test. No rollback of hardlink defense.
+- **Exact source/test SHA `88c9123be526e947ec2fae5955f6933daf9fadee`**: https://github.com/hibi89/data2web_studio/actions/runs/43684105120 **5/5 jobs SUCCESS**. Python Windows 539 total / 536 PASS / 3 SKIP; Ubuntu/macOS each 539 / 535 PASS / 4 SKIP. Chromium, Chrome, Edge hosted offline probes PASS. Expected customer Win10/11 & independent R29 remain UNVERIFIED.
+- Codex technical SHA `a13de6a2d498788d14e69b480899398c0257c18d`: separate 5/5 CI PASS. Later Codex PR #6 HEAD `6a849fbf1446ebb9f3ab4d4a87eb9a20bc1195bf` differs by docs only (verified compare). Partial independent PR comment #6890141705 requests exact combined-SHA test after integration; no merge approval. Official 72/100 and SALE NO-GO.
+
 ## 2026-11-15 KST — H10 R06 actual implementation (hosted CI pending)
 
 - Confirmed baseline defects: absent hardlink count guard; POSIX FIFO substitution between precheck and open could block. No customer material used.
