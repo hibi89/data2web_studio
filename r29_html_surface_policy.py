@@ -123,8 +123,8 @@ def _approved_print_scope(value):
     if value == APPROVED_STATIC_NOTICES["print-scope"]:
         return True
     match = re.fullmatch(
-        r"인쇄 범위: (\\d{1,5})건 중 화면 ([1-9]\\d{0,2})/([1-9]\\d{0,2})"
-        r"페이지의 최대 50행\\. 전체 데이터는 오프라인 HTML을 이용하세요\\.",
+        r"인쇄 범위: (\d{1,5})건 중 화면 ([1-9]\d{0,2})/([1-9]\d{0,2})"
+        r"페이지의 최대 50행\. 전체 데이터는 오프라인 HTML을 이용하세요\.",
         value,
     )
     if not match:
