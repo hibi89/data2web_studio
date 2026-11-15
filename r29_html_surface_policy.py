@@ -40,6 +40,43 @@ APPROVED_CSP = (
     "'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; " +
     "form-action 'none'; base-uri 'none'"
 )
+# IDs are executable JS lookup keys (getElementById). A duplicated or
+# shadowed dataset ID can redirect display to unverified rows even when the
+# original dataset script and ZIP receipt remain unchanged.
+# This map is reviewed independently of an untrusted package's HTML.
+APPROVED_FIXED_IDS = {
+    "sheet-warning": "p",
+    "formula-warning": "p",
+    "import-warning": "p",
+    "source-line": "p",
+    "total-rows": "strong",
+    "filtered-rows": "strong",
+    "category-total": "strong",
+    "search": "input",
+    "category": "select",
+    "sort": "select",
+    "direction": "button",
+    "count": "p",
+    "print-scope": "p",
+    "head": "thead",
+    "body": "tbody",
+    "prev": "button",
+    "page": "span",
+    "next": "button",
+    "metric": "select",
+    "chart-note": "small",
+    "chart-bars": "div",
+    "chart-summary": "p",
+    "detail-panel": "section",
+    "details": "pre",
+    "csv": "input",
+    "ack": "input",
+    "replace": "button",
+    "save": "button",
+    "notice": "p",
+    "dataset": "script",
+}
+
 ALLOWED_ATTRS = {
     "html": {"lang", "data-theme"},
     "meta": {"charset", "name", "content", "http-equiv"},
@@ -76,6 +113,7 @@ class _HTMLSurfaceParser(HTMLParser):
         self.scripts = set()
         self.declaration_count = 0
         self.total_tags = 0
+        self.seen_fixed_ids = set()
 
     def handle_decl(self, decl):
         if decl.lower().strip() != "doctype html":
@@ -124,6 +162,13 @@ class _HTMLSurfaceParser(HTMLParser):
         if len(names) != len(set(names)):
             raise ValueError("Duplicate HTML attribute")
         attributes = dict(attrs)
+        if "id" in attributes:
+            fixed_id = attributes["id"]
+            if (fixed_id not in APPROVED_FIXED_IDS or
+                APPROVED_FIXED_IDS[fixed_id] != tag or
+                fixed_id in self.seen_fixed_ids):
+                raise ValueError("Unapproved, misplaced or duplicate HTML identity")
+            self.seen_fixed_ids.add(fixed_id)
         if tag == "option" and "data-all" in attributes and attributes["data-all"] != "true":
             raise ValueError("Unexpected dynamic option metadata")
         if tag == "tr" and "tabindex" in attributes and attributes["tabindex"] != "0":
@@ -210,7 +255,9 @@ def assert_passive_offline_html_markup(html_bytes):
     if (parser.declaration_count != 1
         or parser.stack
         or parser.metas != {"charset", "viewport", "csp"}
-        or parser.scripts != {"data", "static"}):
+        or parser.scripts != {"data", "static"}
+        or parser.seen_fixed_ids != set(APPROVED_FIXED_IDS)):
+
         raise ValueError("HTML does not match approved passive surface")
     # Static JS and CSS must match REVIEWED bytes, not attacker-controlled ZIP
     # manifest or dynamic CSP text. The JSON data may change after local CSV.
