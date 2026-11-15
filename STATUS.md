@@ -1,3 +1,10 @@
+## 2026-11-15 KST — High H20 R29 합성 보안 사전검사 14종 / 3 OS·브라우저 CI 5/5 PASS · 공식 72 유지
+
+- 개발 브랜치 `work/high-data2web-security-r06-r29-20261115` Draft PR #7. 수정 소스 `security_audit_preaudit.py`, `test_security_audit_preaudit.py`: R29 XSS/CSP 스크립트 SHA256·네트워크 마크업 확인, ZIP ZipSlip/링크, XLSX 외부 관계·압축 폭탄·매크로 구성요소 음성검증을 **7→14종**으로 확장. 외부 데이터 전송·고객 원본 사용 없음.
+- **정확 코드/테스트 SHA `dd77d7c68a8c79f45e1439f3d59cb85131bfbac3`**, [GitHub Actions #43685167287](https://github.com/hibi89/data2web_studio/actions/runs/43685167287) **5/5 SUCCESS**, Windows 542(539 PASS/3 SKIP), Ubuntu·macOS 각각 542(538 PASS/4 SKIP), Chromium/Chrome/Edge PASS. 중간 코드 단독 커밋 CI에서 기존 검사 7개를 기대하던 테스트 2개가 FAIL하였으며 테스트·코드 일치 커밋에서 해결.
+- 합성 보안 외부감사 재현 패킷 `docs/parallel/R29_EXTERNAL_AUDITOR_REPLAY_PACKET_20261115.md` 공시(독립감사 수행/수용은 아님). Codex 전용 `verify_delivery.py` ZIP 수정 후 HTML 메타 리프레시 차단 여부는 **미확인 가설**로 PR #6 comment #6890324060에 검토·재현·수정 의뢰. Codex 소유 파일 미변경.
+- R29 외부 독립 인간 감사와 복구 재검수, R06 고객 Windows10/11 수용, 법적 사용권·고객 동의·상업 승인 미충족. 공식 점수표 72/100, RELEASE HOLD / SALE NO-GO, 배포 미적용 유지.
+
 ## 2026-11-15 KST — High H10 R06 보안 변경 정확 SHA 전체 CI 5/5 SUCCESS · 공식 72 유지
 
 - **실제 검증 SHA** `88c9123be526e947ec2fae5955f6933daf9fadee`; [GitHub Actions #43684105120](https://github.com/hibi89/data2web_studio/actions/runs/43684105120) 5/5 Job SUCCESS. Windows Python 539(536 PASS/3 SKIP), Ubuntu·macOS Python 각각 539(535 PASS/4 SKIP), Chromium·Chrome·Edge PASS.
