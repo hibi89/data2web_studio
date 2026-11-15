@@ -105,6 +105,29 @@ class StrictR29ZipVerification(unittest.TestCase):
             b"</style>", b"body{display:none}</style>", 1,
         ))
 
+    def test_rehashed_shadow_dataset_div_is_rejected_by_strict_verifier(self):
+        # Inject an early shadow for document.getElementById("dataset")
+        # without modifying the actual approved JSON script contents.
+        original = self.members["index.html"]
+        data_match = re.search(
+            rb'<script type="application/json" id="dataset">(.*?)</script>',
+            original, re.DOTALL,
+        )
+        self.assertIsNotNone(data_match)
+        forged = json.loads(data_match.group(1))
+        forged["rows"][0]["title"] = "SYNTHETIC_UNVERIFIED_DISPLAY"
+        injected = (b'<div id="dataset">'
+                    + json.dumps(forged, ensure_ascii=True,
+                                 separators=(",", ":")).encode("utf-8")
+                    + b"</div>")
+        modified = original.replace(
+            b"</main>", injected + b"</main>", 1
+        )
+        # Old package checks can still read the original dataset script
+        # and accept the rehashed modified HTML container. The browser
+        # would select the earlier injected identity, not the signed data.
+        self._assert_guard_blocks_but_legacy_accepts(modified)
+
     def test_source_bytes_changed_during_strict_verification_hold(self):
         snapshot = self.archive.read_bytes()
         with patch("r29_strict_zip_verifier.read_bounded_source",
