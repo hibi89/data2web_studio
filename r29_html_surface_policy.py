@@ -134,7 +134,14 @@ class _HTMLSurfaceParser(HTMLParser):
                 r"\s*width:\s*(\d+(?:\.\d+)?(?:e-?\d+)?)%\s*;?\s*",
                 styling, flags=re.I,
             ) if styling is not None else None
-            if tag != "div" or not width or not 0 <= float(width.group(1)) <= 100:
+            # Aggregated "other" categories may exceed the largest
+            # individual category, e.g. 257.143%; the approved stylesheet
+            # separately sets max-width:100% on chart bars. The importer
+            # bounds rows at 10,000, so even an extreme valid aggregation
+            # has a finite <= 1,000,000% computed style. Never allow other
+            # CSS properties, URLs, units, infinities or negative widths.
+            if (tag != "div" or not width or
+                    not 0 <= float(width.group(1)) <= 1_000_000):
                 raise ValueError("Inline HTML styles outside the chart contract")
         if tag == "html" and (
             attributes != {"lang": "ko", "data-theme": attributes.get("data-theme")}
