@@ -1,3 +1,16 @@
+## 2026-11-15 KST — GPT-6 High R29 정적 HTML 가드 및 우회 재검증 인수인계 (10항)
+
+1. **목표/확정 요구/기술:** DATA2WEB Studio 2026 R01–R33 100점 A 오프라인 HTML/ZIP/receipt, R29-NAV-001 검증기 HTML 활성 마크업 우회 방어를 High 소유 범위에서 준비. 공식 72점·외부 감사 PENDING.
+2. **기능/변경/판단:** `r29_html_surface_policy.py` + `test_r29_html_surface_policy.py` 신규. 정규 V1 태그·속성·메타·스크립트 형식 허용목록 검증으로 meta refresh/iframe/form/link/base/svg/event 속성 거부. Codex 소유 ZIP 검증기는 수정하지 않음. 단순 문자열 차단보다 검증 범위 넓으나 템플릿 변경시 재검토 필요.
+3. **테스트/성공/실패/검증:** 첫 CI에서 기존 템플릿 정상 불리언 `hidden`, `multiple`, `selected`를 잘못 거부→태그별 허용으로 수정. 정확 코드 SHA `1e34652b0bf105c85835c7e3bc04a576cadfbf08`, [CI 5/5 PASS](https://github.com/hibi89/data2web_studio/actions/runs/43687114162) Windows 556=553 PASS/3 SKIP, Ubuntu/macOS 556=552 PASS/4 SKIP, Chromium·Windows Chrome/Edge PASS. 동일 재해시 ZIP에서 구 ZIP 검증기 허용=true, 신규 High 검사 정상 허용=true·악성 거부=true 세 OS 로그 확인. 고객 실기기 미검증.
+4. **완료/진행/대기/차단:** High 새 가드 기술·합성 테스트 완료. Codex ZIP shipping verifier 연동·수정/재검증 미완료; R29 제3자 독립감사·고객 Windows10/11 테스트 및 사용권/동의 미완료. 공식 72/100 RELEASE HOLD/SALE NO-GO.
+5. **오류·근거·시도·대안:** R29-NAV-001은 기존 ZIP 검증이 해시 재계산 후 meta-refresh HTML을 유효하다고 인정. 신설 parser guard는 해당 HTML 거부, 현재 shipping path에는 미통합. 최초 boolean 속성 오탐은 1회 정확 원인 수정 후 CI PASS. 향후 CODEX 경로는 승인 없이 High가 직접 수정 금지; PR #6 comment #6890564392에 실증 및 수정 요청.
+6. **저장소/브랜치/SHA/주요 경로:** `hibi89/data2web_studio`; High `work/high-data2web-security-r06-r29-20261115` Draft PR #7, 검증 SHA `1e34652b0bf105c85835c7e3bc04a576cadfbf08`. Codex `work/codex-data2web-to100-20261115` PR #6 최종 확인 HEAD `afe6ed055cf4b9405da91d1028f9889555b41e00`, 변경 가능. 주요 신규 코드/테스트 및 `r29_zip_navigation_diagnostic.py`.
+7. **Production/URL/Vercel/환경:** Offline Python 3.11+ 제품; Hosted GitHub Windows/macOS/Ubuntu, Chromium/Chrome/Edge PASS. 배포·Vercel Production 미적용, 실고객/실브라우저 외부 내비게이션 시험 없음.
+8. **원본/백업/인증:** GitHub 기존 원본/태그·커밋 이력 보존, 합성 데이터만 사용. 고객 원본, ID·권리증빙, 계정토큰, 비밀정보 무사용·외부전송 없음. force push/자동 merge/무단 권한 변경 금지.
+9. **다음 작업 우선/승인/완료:** Codex가 `verify_delivery.py` 및 `test_zip_offline_csp.py`에 방어 연동/동등 구현→정확 SHA 3 OS 테스트→High가 다시 동일 공격 `verifier_accepted_rehashed_navigation=false` 확인 후 CODEX+HIGH 통합 SHA 기술 검수. 실제 감사/라이선스·실거래/고객승인은 사용자 별도 승인 및 독립 증거 필요. 검증 없는 72 상향 금지.
+10. **갱신 일시/검증범위/문서 기준 SHA:** 2026-11-15 KST, exact-code/test SHA `1e34652b0bf105c85835c7e3bc04a576cadfbf08` 및 GitHub Actions #43687114162. 이 문서는 후속 문서 커밋으로 인한 새로운 HEAD가 발생해도 위 **코드 검증 SHA**와 구분. 공식 72/100, 보안 FINDING OPEN, 출시 HOLD.
+
 ## 2026-11-15 KST — GPT-6 High R29-NAV-001 보안 발견·HOLD 인수인계 (10항)
 
 1. **목표·최종설계·용도:** DATA2WEB A 로컬 오프라인 HTML/ZIP/receipt R01–R33 100점; 이번 작업은 R29 변조 HTML ZIP 검증기 공격 재현·보안 상태 기록, 외부감사 자체완료 아님.
