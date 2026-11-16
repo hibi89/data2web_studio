@@ -1,3 +1,5 @@
+> **[HANDOFF-STARTUP-V2 | ACTIVE | 2026-11-16]** **먼저** `data2web_studio@feature/final-blueprint-p85-evidence-20261113` 역할/최신 HEAD와 `AGENTS.md` 상단의 [OWNER-DEV-EXECUTION-V2](https://github.com/hibi89/hackathon-command-center-2026/blob/kmong-productization/docs/strategy/OWNER_DEV_EXECUTION_CANONICAL_20261116.md)를 확인한 뒤 본 HANDOFF 최신 진행·차단/STATUS/REQUIREMENTS/최종설계/실코드·큐를 대조하라. 아래 2026-11-14~15 구형 'Codex 구현 단독', 'High 단독', '중간 전수 CI' 지시는 **당시 기록**이며 현재 실행 모델은 **웹 Sol High 최초 설계 → 웹 Sol Instant 대량 구현 → 일괄 CI → Codex Sol Max·Astra Max 독립검수 → High 최종인수 → GO 뒤 Luna Extra High 등록**. 이전 PR·파일 소유권·고객 권리·보안 HOLD/공식 점수 보존. 이 문서 개정 자체는 구현/검증/등록 진전 없음.
+
 ## 2026-11-15 KST — 사용자 승인 GPT-6 High + Codex Luna Extra High 병렬 개발 총괄 인수인계 (10항)
 
 1. **목표·용도·요구사항·기술:** 사용자 지정 DATA2WEB Studio R01–R33 고정 33개/100점 최종설계, A) 로컬 CSV/JSON/XLSX/TSV→오프라인 HTML+ZIP+검증영수증 납품 우선, B) Windows EXE 상품화는 후순위. 정본 `REQUIREMENTS.md`, `docs/FINAL_DESIGN.md`, `data/final_blueprint_scorecard_v1.json`, 원래 50원자 작업 `data/gpt6_execution_plan_r01_r33_v1.json`. 사용자 2026-11-15에 High와 Codex 동시 작업·브랜치 구성 및 Codex 100점까지 기술 WBS 전체 위임 승인.
