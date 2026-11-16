@@ -12,9 +12,9 @@ MAX_ROWS = 10000
 MAX_COLS = 40
 MAX_CELL = 16000
 
-def read_table(path):
+def read_table(path, *, sheet=None, header_row=1, allow_cached_formulas=False):
     path = Path(path)
-    if path.is_symlink() or not path.is_file() or path.suffix.lower() not in (".csv", ".json"):
+    if path.is_symlink() or not path.is_file() or path.suffix.lower() not in (".csv", ".json", ".tsv", ".xlsx"):
         raise ValueError("Unsupported or unsafe input")
     if path.stat().st_size > MAX_BYTES:
         raise ValueError("Input too large")
@@ -30,6 +30,13 @@ def read_table(path):
             if not fields:
                 raise ValueError("Missing header")
             rows = list(reader)
+    elif path.suffix.lower() == ".tsv":
+        from data2web_tabular import parse_tsv
+        fields, rows = parse_tsv(raw)
+    elif path.suffix.lower() == ".xlsx":
+        from data2web_tabular import parse_xlsx
+        fields, rows, _ = parse_xlsx(raw, sheet=sheet, header_row=header_row,
+                                     allow_cached_formulas=allow_cached_formulas)
     else:
         def unique_pairs(pairs):
             obj = {}
@@ -67,10 +74,13 @@ def read_table(path):
         raise ValueError("Input changed during read")
     return fields, normalized, digest
 
-def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office'):
+def build(input_file, output_file, id_column, title_column, category_column, approved=False, expected_sha256=None, name='DATA2WEB', theme='office', sheet=None, header_row=1, allow_cached_formulas=False):
     if not approved:
         raise ValueError("Explicit plaintext/ownership approval required")
-    fields, rows, digest = read_table(input_file)
+    if Path(input_file).suffix.lower() == ".xlsx" and not sheet:
+        raise ValueError("XLSX requires explicit owner sheet selection")
+    fields, rows, digest = read_table(input_file, sheet=sheet, header_row=header_row,
+                                     allow_cached_formulas=allow_cached_formulas)
     if expected_sha256 is not None and digest != expected_sha256:
         raise ValueError("Source SHA256 changed since owner inspection")
     mapping = [id_column, title_column, category_column]
@@ -83,7 +93,9 @@ def build(input_file, output_file, id_column, title_column, category_column, app
     if target.suffix.lower() != ".html" or target.is_symlink() or target.exists() or not target.parent.is_dir() or target.parent.is_symlink():
         raise FileExistsError("Output must be a new file in an existing directory")
     from data2web_web import render_html
-    markup = render_html(fields, rows, mapping, digest, name=name, theme=theme)
+    markup = render_html(fields, rows, mapping, digest, name=name, theme=theme,
+                         source_sheet=sheet, source_header_row=header_row,
+                         cached_formulas=allow_cached_formulas)
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     fd = os.open(target, flags, 0o600)
     with os.fdopen(fd, "wb") as stream:
@@ -95,7 +107,8 @@ def build(input_file, output_file, id_column, title_column, category_column, app
         raise ValueError("Output integrity mismatch; output HOLD")
     return {"source_sha256": digest, "output_sha256": output_digest, "rows": len(rows),
             "columns": fields, "mapping": {"id": id_column, "title": title_column, "category": category_column},
-            "theme": theme, "sale_approved": False}
+            "theme": theme, "sheet": sheet, "header_row": header_row,
+            "cached_formulas": allow_cached_formulas, "sale_approved": False}
 
 def main():
     parser = argparse.ArgumentParser()

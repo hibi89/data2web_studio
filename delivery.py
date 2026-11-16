@@ -26,7 +26,10 @@ def package_html(html_path, zip_path, receipt):
     manifest = {
         "contract":"DATA2WEB_PACKAGE_V1", "source_sha256":receipt["source_sha256"],
         "html_sha256":hashlib.sha256(html).hexdigest(), "guide_sha256":hashlib.sha256(GUIDE).hexdigest(),
-        "rows":receipt["rows"], "plaintext_ack":True, "sale_approved":False,
+        "rows":receipt["rows"], "sheet":receipt.get("sheet"),
+        "header_row":receipt.get("header_row",1),
+        "cached_formulas":receipt.get("cached_formulas",False),
+        "plaintext_ack":True, "sale_approved":False,
         "status":"RELEASE_HOLD",
     }
     encoded = (json.dumps(manifest,ensure_ascii=False,sort_keys=True,separators=(",",":"))+"\n").encode("utf-8")

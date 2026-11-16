@@ -27,7 +27,9 @@ small{color:var(--muted)}.warning{border-left:3px solid #e9b46f;padding-left:12p
 </style></head>
 <body><main>
 <header><small>DATA2WEB Studio · LOCAL ONLY</small><h1>__TITLE__</h1>
-<p>승인된 표 데이터로 만든 독립 HTML입니다. 서버·계정·외부 통신이 없으며 데이터는 이 HTML 파일에 평문으로 포함됩니다.</p></header>
+<p>승인된 표 데이터로 만든 독립 HTML입니다. 서버·계정·외부 통신이 없으며 데이터는 이 HTML 파일에 평문으로 포함됩니다.</p>
+<p id="sheet-warning" class="warning" hidden>이 자료는 Excel 셀의 원시/캐시 값을 문자로 표시합니다. 날짜·숫자 표시형식·수식 재계산은 재현하지 않으므로 원본과 대조하십시오.</p>
+<p id="formula-warning" class="warning" hidden>수식 셀이 발견되어 명시적으로 승인한 캐시값만 읽었습니다. 수식은 계산되지 않았고 캐시가 올바른지는 보장하지 않습니다.</p></header>
 <section class="surface" aria-label="표 검색">
 <div class="controls"><label>검색 <input id="search" type="search" placeholder="모든 열에서 검색"></label>
 <label>분류 <select id="category"><option value="">전체</option></select></label>
@@ -51,6 +53,8 @@ const $=id=>document.getElementById(id);
 const d=JSON.parse($("dataset").textContent);
 const state={rows:d.rows.slice(),columns:d.columns.slice(),mapping:d.mapping.slice(),sourceSha:d.source_sha256,changed:false};
 const [idKey,titleKey,categoryKey]=state.mapping;
+if(d.source_sheet!==null){$("sheet-warning").hidden=false}
+if(d.cached_formulas){$("formula-warning").hidden=false}
 let page=0,descending=false;
 const PAGE=50,MAX_FILE=8000000,MAX_ROWS=10000,MAX_CELL=16000;
 const collator=new Intl.Collator("ko",{numeric:true,sensitivity:"base"});
@@ -129,13 +133,15 @@ categoryOptions();render();window.DATA2WEB_READY=true;
 })();
 </script></body></html>'''
 
-def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office"):
+def render_html(columns, rows, mapping, source_sha256, *, name="DATA2WEB", theme="office", source_sheet=None, source_header_row=1, cached_formulas=False):
     if theme not in THEMES or not name.strip() or len(name) > 100:
         raise ValueError("Invalid theme/title")
     payload = {
         "contract": "DATA2WEB_HTML_V1", "columns": columns, "rows": rows,
         "mapping": mapping, "source_sha256": source_sha256,
         "import_status": "OWNER_APPROVED_LOCAL_BUILD",
+        "source_sheet": source_sheet, "source_header_row": source_header_row,
+        "cached_formulas": cached_formulas,
     }
     safe_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     for original, escaped in (("&", r"\u0026"), ("<", r"\u003c"), (">", r"\u003e"),

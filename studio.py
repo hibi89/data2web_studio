@@ -8,12 +8,17 @@ from delivery import package_html
 from verify_delivery import verify_zip
 
 def main(argv=None):
-    p=argparse.ArgumentParser(description="DATA2WEB local-only CSV/JSON HTML creator")
+    p=argparse.ArgumentParser(description="DATA2WEB local-only CSV/JSON/TSV/XLSX HTML creator")
     sub=p.add_subparsers(dest="action",required=True)
     pi=sub.add_parser("inspect");pi.add_argument("source",type=Path)
+    pi.add_argument("--sheet");pi.add_argument("--header-row",type=int,default=1)
+    pi.add_argument("--allow-cached-formulas",action="store_true")
     pb=sub.add_parser("build")
     pb.add_argument("source",type=Path);pb.add_argument("output",type=Path)
     pb.add_argument("--source-sha256",required=True)
+    pb.add_argument("--sheet")
+    pb.add_argument("--header-row",type=int,default=1)
+    pb.add_argument("--allow-cached-formulas",action="store_true")
     pb.add_argument("--id",required=True);pb.add_argument("--title",required=True)
     pb.add_argument("--category",required=True)
     pb.add_argument("--confirm",choices=["APPROVE"],required=True)
@@ -25,16 +30,31 @@ def main(argv=None):
     args=p.parse_args(argv)
     try:
         if args.action=="inspect":
-            cols,rows,digest=read_table(args.source)
-            result={"status":"LOCAL_INSPECT_NOT_APPROVED","source_sha256":digest,
-                    "columns":cols,"rows":len(rows),
-                    "plaintext_warning":True,"source_modified":False}
+            if args.source.suffix.lower()==".xlsx" and args.sheet is None:
+                import hashlib
+                from data2web_tabular import list_xlsx_sheets
+                if (args.source.is_symlink() or not args.source.is_file()
+                        or args.source.stat().st_size>8_000_000):
+                    raise ValueError("Unsafe XLSX source")
+                raw=args.source.read_bytes()
+                if len(raw)>8_000_000: raise ValueError("Unsafe XLSX size")
+                result={"status":"XLSX_SHEETS_REQUIRE_EXPLICIT_SELECTION",
+                        "source_sha256":hashlib.sha256(raw).hexdigest(),
+                        "sheets":list_xlsx_sheets(raw),"plaintext_warning":True}
+            else:
+                cols,rows,digest=read_table(args.source,sheet=args.sheet,
+                    header_row=args.header_row,allow_cached_formulas=args.allow_cached_formulas)
+                result={"status":"LOCAL_INSPECT_NOT_APPROVED","source_sha256":digest,
+                        "columns":cols,"rows":len(rows),"sheet":args.sheet,
+                        "header_row":args.header_row,"cached_formulas":args.allow_cached_formulas,
+                        "plaintext_warning":True,"source_modified":False}
         elif args.action=="build":
             if not args.ack_plaintext:
                 raise ValueError("Explicit plaintext acknowledgment required")
             result=build(args.source,args.output,args.id,args.title,args.category,
                          approved=True,expected_sha256=args.source_sha256,
-                         name=args.name,theme=args.theme)
+                         name=args.name,theme=args.theme,sheet=args.sheet,
+                         header_row=args.header_row,allow_cached_formulas=args.allow_cached_formulas)
             result["status"]="LOCAL_HTML_BUILT_NOT_RELEASE_APPROVED"
             if args.zip_path: result["package"]=package_html(args.output,args.zip_path,result)
         else:

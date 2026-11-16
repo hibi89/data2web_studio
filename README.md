@@ -1,37 +1,48 @@
-# DATA2WEB Studio
+# DATA2WEB Studio — 오프라인 XLSX / TSV / CSV / JSON 웹앱 생성기
 
-CSV/flat JSON 파일을 **고객의 컴퓨터에서 직접** 검수한 뒤 독립 실행형 오프라인 HTML과 무결성 검증 ZIP으로 변환하는 도구입니다. 기존 REA_Web의 웹사이트 분석 기능과 별개입니다. 고객 데이터 업로드·계정·API·서버가 없습니다.
+**CSV·평면 JSON·TSV·보수적 Excel `.xlsx` 값 파일**을 사용자 PC에서 명시적 검수 후 독립 검색/분류/정렬/상세 HTML과 검증 ZIP으로 전환. 기존 REA_Web 웹사이트 분석 제품과 무관하며 원본 데이터를 서버/AI로 전송하지 않습니다. Python 3.11+ 기본 모듈만 사용하며 인터넷·계정·결제·데이터베이스 불필요.
 
-> **2026-11-13 상태:** CSV/JSON 기술 P50 핵심 경로 자동 검증 완료([97×2 Python + Chromium `file://` PASS](https://github.com/hibi89/data2web_studio/actions/runs/43377913444), 소스 `90da878ffa29926dda39f6c67913353ec7a3b390`). XLSX/TSV·상용 권리·실고객 Windows 검증은 미구현/미검증. 사용자 최종설계 기준 공식 완성률은 **UNASSESSED**, RELEASE HOLD.
+> **2026-11-13:** 기술 단계 P70 구현/검증([Windows145/145, Ubuntu145/145, Linux Chromium CSV·XLSX·TSV `file://` PASS](https://github.com/hibi89/data2web_studio/actions/runs/43381537805), 정확 코드 `42b832c5e18521d3edcf53b69cbf92c272f245cb`). 최종설계 전체의 공식 완성률은 **UNASSESSED**, 상업적 판매/납품 **RELEASE HOLD**.
 
-## 실행 (Python 3.11+, 판매자 컴퓨터)
+## XLSX inspect → 시트 명시 승인 → build
 
 ```bash
-# 먼저 헤더·행수·SHA 확인. 실제 셀 값은 stdout에 표시되지 않습니다.
-python studio.py inspect sample.csv
-
-# 출력된 SHA와 실제 소유권/평문 포함 여부를 검토한 다음 승인
-python studio.py build sample.csv output.html \
-  --source-sha256 <검수한 SHA256> --id id --title title --category category \
-  --confirm APPROVE --ack-plaintext --theme office --name "내 목록" \
-  --zip-path output.zip
-
-# 독립 ZIP 허용 목록/CRC/SHA/크기 검증
-python studio.py verify output.zip
+python studio.py inspect workbook.xlsx
+# status XLSX_SHEETS_REQUIRE_EXPLICIT_SELECTION, sheets + source_sha256
+python studio.py inspect workbook.xlsx --sheet "Inventory" --header-row 1
+python studio.py build workbook.xlsx new.html --source-sha256 <INSPECT의 실제 SHA256> \
+  --sheet "Inventory" --header-row 1 \
+  --id id --title title --category category \
+  --confirm APPROVE --ack-plaintext --theme office --zip-path new.zip
+python studio.py verify new.zip
 ```
 
-새 HTML은 Chrome/Edge에서 네트워크 없이 열 수 있습니다. 검색·분류·정렬·상세·페이지와 3개 테마가 제공됩니다. 로컬 CSV 교체는 정확히 같은 헤더/순서와 명시적 평문 승인만 허용하며, **새 HTML 다운로드 후 다시 열어야** 반영됩니다. 기존 출력·원본은 자동 삭제하거나 덮어쓰지 않습니다. 변경·백업된 HTML 모두 **자료 평문 포함**이므로 안전한 파일 취급이 필요합니다.
+셀 수식이 있는 경우 **기본 거절(HOLD)**. 캐시값을 사용해도 되는 소유자만 **inspect와 build 양쪽**에 `--allow-cached-formulas`를 별도 명시할 수 있습니다. 캐시가 없는 수식은 항상 거절하며 **Excel 수식/날짜 표시형식은 재계산·재현하지 않습니다**. 출력 HTML은 고객자료 **평문 포함**입니다.
+
+## CSV/JSON/TSV
+
+```bash
+python studio.py inspect data.tsv
+python studio.py build data.tsv app.html --source-sha256 <INSPECT의 실제 SHA256> \
+  --id id --title title --category category \
+  --confirm APPROVE --ack-plaintext --zip-path delivery.zip
+```
+
+CSV·JSON도 동일 명령에서 입력 확장자만 변경합니다. 새 HTML과 ZIP은 기존 경로를 **절대 덮어쓰지 않습니다**. HTML에는 3테마, 로컬 검색·카테고리·정렬·상세·페이징, **동일 헤더 CSV**의 사용자 동의 후 새 HTML 생성 기능이 포함됩니다. 생성·재저장 파일의 평문 포함과 공유 위험을 인지해야 합니다.
+
+## 지원 XLSX 보안 범위와 한계
+
+- **지원:** `.xlsx` Open XML 기본 시트, inline/shared strings, 숫자 원시 문자열, Boolean, 헤더 1–50행, 시트명 명시 선택, 최대 10,000 데이터행·40열·16,000자/셀, SHA256 핀·ZIP CRC/압축비·외부 요청 방지.
+- **거절:** 매크로/XLSM, OLE/임베디드 첨부, 외부 관계/하이퍼링크, DTD/ENTITY, 관계 경로 위조, 압축 폭탄, 중복 ZIP·열·헤더, 병합 셀, 숨김 시트, 미지원 OOXML 파트, Excel error, 수식 캐시 누락/명시 승인 없음. 서식·수식 계산·날짜 변환·연결/동적 배열은 완전 호환되지 않습니다.
+- **실행 비용:** Python stdlib 0 추가 패키지/원격 API 비용0, 검증 CI에만 Playwright Chromium 별도 설치.
+- **아직 미검증:** 실제 고객 Microsoft Excel·LibreOffice의 다양한 확장 포맷, 물리 Windows10/11 Edge·Chrome, 큰 데이터 10k×20 성능/원본 Lite real-runtime, 권리·라이선스·상용 판매 승인.
 
 ## 개발 검증
-
 ```bash
 python -m unittest discover -v
-# 브라우저 추가 테스트에만: pip install playwright==1.56.0 && python -m playwright install chromium
+# 브라우저 테스트 전용: pip install playwright==1.56.0; python -m playwright install chromium
 python browser_probe.py
+python browser_tabular_probe.py
 ```
 
-## 범위·제약
-- 구현: CSV UTF-8/UTF-8 BOM, flat JSON 배열, 제한된 셀/컬럼/행/파일 크기, 입력 SHA, ID 중복 검사, HTML XSS 안전 이스케이프, 사용자 필드 매핑, 서버 없는 로컬 뷰어, create-only ZIP·독립 무결성 확인.
-- **아직 미구현:** XLSX/TSV, 차트·고객 폴더 패키징/라이선스 안내의 최종 사용승인, 원본 Lite 직접 동등성 재현, 10k×20 성능 인수, 실제 구매자 Windows10/11 Chrome/Edge 검수, 데이터 사용권/판매 승인.
-- SHA/CRC는 전송 손상 검출이지 암호학적 배포자 신원 보증·서명이 아닙니다. 다운로드/생성 HTML에 고객 데이터가 평문 포함됩니다.
-- 기획·최종설계 [REQUIREMENTS.md](REQUIREMENTS.md), [docs/FINAL_DESIGN.md](docs/FINAL_DESIGN.md), 실제 검증 [docs/P50_ACCEPTANCE_EVIDENCE_20261113.md](docs/P50_ACCEPTANCE_EVIDENCE_20261113.md), 인수 [HANDOFF.md](HANDOFF.md). 원본 REA_Web은 변경하지 않았습니다.
+정본: [REQUIREMENTS.md](REQUIREMENTS.md), [docs/FINAL_DESIGN.md](docs/FINAL_DESIGN.md). 정확 검증 [P70 증거](docs/P70_XLSX_TSV_ACCEPTANCE_20261113.md), 현재 상태 [STATUS.md](STATUS.md), 인수인계 [HANDOFF.md](HANDOFF.md). 출고 금지 `RELEASE HOLD`.
