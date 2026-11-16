@@ -1,7 +1,7 @@
 name: DATA2WEB Python and browser acceptance
 on:
   push:
-    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import", "feature/p85-ui-crossbrowser-20261113"]
+    branches: ["feature/lite-independent-migration", "feature/xlsx-tsv-import", "feature/p85-ui-crossbrowser-20261113", "feature/final-blueprint-p85-evidence-20261113"]
   pull_request:
     branches: [main]
 permissions:
@@ -18,8 +18,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Focused P00 scorecard contract regressions
+        run: python -m unittest test_blueprint_score -v
+      - name: Focused P01 customer-folder preservation regressions
+        run: python -m unittest test_customer_folder -v
+      - name: Focused R25 operator-copy retention regressions
+        run: python -m unittest test_operator_copy_retention -v
+      - name: Focused R26 privacy-scope and consent preflight regressions
+        run: python -m unittest test_order_intake_preflight -v
+      - name: R29 internal synthetic security preaudit (external audit remains pending)
+        run: python security_audit_preaudit.py
       - name: Run standalone synthetic and packaging regressions
         run: python -m unittest discover -v
+      - name: Verify zero-cost policy constraints
+        run: python zero_cost_gate.py
+      - name: Verify pinned shipped-producer provenance
+        run: python r21_source_provenance.py
+      - name: Run synthetic-only shipped asset preflight
+        run: python shipping_rights_preflight.py
+      - name: Inspect fixed owner-approved R01-R33 100-point scoring contract
+        run: python blueprint_score.py
+      - name: Stdlib-only synthetic customer-device preparation (no real user data)
+        run: python studio.py self-check
   browser:
     runs-on: ubuntu-24.04
     steps:
@@ -29,7 +49,7 @@ jobs:
           python-version: '3.11'
       - name: Install test-only Chromium and Playwright
         run: |
-          python -m pip install playwright==1.56.0
+          python -m pip install playwright==1.56.0 pypdf==5.9.0
           python -m playwright install --with-deps chromium
       - name: Real file:// Chromium end-to-end
         run: python browser_probe.py
@@ -37,8 +57,23 @@ jobs:
         run: python browser_tabular_probe.py
       - name: Real P85 dashboard and local download acceptance
         run: python browser_p85_probe.py --channel chromium
+      - name: A4 PDF print plus keyboard accessibility acceptance in Chromium
+        run: python browser_print_accessibility_probe.py --channel chromium
       - name: Synthetic 10k x 20 performance envelope
         run: python browser_perf_probe.py
+      - name: Multi-source CSV TSV XLSX approval and browser re-export provenance
+        run: python browser_final_blueprint_probe.py --channel chromium
+      - name: Single-source local customer folder and JSON acceptance
+        run: python browser_single_delivery_probe.py --channel chromium
+      - name: Checkout read-only pinned public REA Lite source for live golden (no source copied into repository)
+        uses: actions/checkout@v4
+        with:
+          repository: hibi89/REA_Web
+          ref: 7b6b68111efd906f9d929b5e2f577699b26399ee
+          path: .upstream-rea-golden
+          persist-credentials: false
+      - name: Execute actual original Lite CLI and browser golden comparison
+        run: python upstream_runtime_golden.py
   windows-browsers:
     runs-on: windows-latest
     steps:
@@ -47,12 +82,32 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install test-only Playwright library
-        run: python -m pip install playwright==1.56.0
+        run: python -m pip install playwright==1.56.0 pypdf==5.9.0
       - name: Real installed Google Chrome file:// owner flow
         run: python browser_p85_probe.py --channel chrome
       - name: Real installed Microsoft Edge file:// owner flow
         run: python browser_p85_probe.py --channel msedge
+      - name: Real installed Chrome A4 PDF print and keyboard accessibility
+        run: python browser_print_accessibility_probe.py --channel chrome
+      - name: Real installed Edge A4 PDF print and keyboard accessibility
+        run: python browser_print_accessibility_probe.py --channel msedge
       - name: Real Chrome XLSX TSV OOXML file:// flow
         run: python browser_tabular_probe.py --channel chrome
       - name: Real Edge XLSX TSV OOXML file:// flow
         run: python browser_tabular_probe.py --channel msedge
+      - name: Real Windows Chrome multi-source append browser flow
+        run: python browser_final_blueprint_probe.py --channel chrome
+      - name: Real Windows Edge multi-source append browser flow
+        run: python browser_final_blueprint_probe.py --channel msedge
+      - name: Single-source folder Chrome file local owner acceptance
+        run: python browser_single_delivery_probe.py --channel chrome
+      - name: Single-source folder Edge file local owner acceptance
+        run: python browser_single_delivery_probe.py --channel msedge
+      - name: Render actual Tkinter owner desktop UI on hosted Windows
+        run: python desktop_ui_smoke.py
+      - name: Actual Tkinter customer button flow with CSV and XLSX, no cloud
+        run: python desktop_ui_owner_flow_probe.py
+      - name: Actual Tkinter multi-source CSV TSV XLSX owner wizard and consent reset
+        run: python desktop_ui_batch_probe.py
+      - name: Native installed Chrome Edge self-check with no Playwright at runtime
+        run: python studio.py self-check --browsers

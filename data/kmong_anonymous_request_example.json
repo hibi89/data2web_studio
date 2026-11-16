@@ -1,0 +1,17 @@
+{
+  "contract": "DATA2WEB_ANONYMOUS_PREORDER_V1",
+  "sources": [
+    {
+      "format": "CSV",
+      "estimated_bytes": 400,
+      "estimated_rows": 8,
+      "estimated_columns": 4
+    }
+  ],
+  "rights_claimed": true,
+  "contains_personal_or_sensitive": false,
+  "contains_third_party_confidential": false,
+  "plaintext_ack": true,
+  "mapping_3_distinct_columns": true,
+  "same_headers": true
+}

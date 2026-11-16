@@ -1,0 +1,36 @@
+# DATA2WEB — backend + frontend multi-source owner wizard and source-consent safety (2026-11-14 KST)
+
+## Goal and fixed scope
+Current user priority: **complete the frontend and backend**, not Kmong seller listing. Preserve existing single-source CLI/Tk, browser offline HTML, REA_Web upstream/main, deterministic ZIP and exact existing source data. Cost 0 KRW, no cloud, customer data upload, external services or Vercel. Original R01–R33 fixed total100. Official verified72/100, remaining 11 PENDING28 from rights, legal/independent audit/customer real devices and sale approval. New code is not external review and does not raise the score.
+
+## Technical design alternatives
+A. Reuse the current approved append backend and add a Tk batch wizard with in-memory (never on-disk) per-source approval document. **Selected:** preserves existing fail-closed source SHA/schema/ID/ZIP/receipt checks, zero Python extra dependencies, supports full 2–10 files and per-XLSX sheet/header/cache.
+B. Build a new standalone batch formatter or a localhost HTTP service. Rejected: duplicate validation, more maintenance, port/CORS/CSRF and accidental network risks.
+The selected backend factors the existing manifest-driven CLI append core into shared validated helpers while retaining the original public CLI entrypoints unchanged.
+
+## Implemented frontend & backend
+- **Tk consent safety (1f85d5d276d8a2465cadf6c0462cf3c6cb3ccc27):** switching source or Excel sheet/header/cache invalidates the reviewed SHA, mapping and rights/plaintext/privacy acknowledgements. Switching ID/title/category mapping revokes previous consent. Windows actual Tk source-switch probe attempts an unapproved second delivery and verifies it did not appear, then requires fresh approval to generate. Source preview does not log customer values.
+- **Browser CSV data fidelity (593c50cda1233350f226ef79d1233749b6182b96):** local replacement parses strict UTF-8 with TextDecoder(fatal:true), rather than silently replacing invalid byte sequences using File.text(). Each newly chosen CSV unchecks rights/plaintext acknowledgment. Browser E2E injects malformed UTF-8 and observes HOLD + unchanged four-row output, then valid replacement requires new consent and works after approval. Same offline file:// Chrome, Edge, Chromium with no new network.
+- **Backend reusable in-memory append (2251f89bda62724e859b5d4e2f1320e00631aea9):** data2web_append.py now validates approval docs once through shared logic, reuses original approval manifest CLI paths, and exposes deliver_reviewed_sources(). The in-memory reference path is never created/read; input files remain untouched, source SHA + headers/ordered schema + no duplicate cross-file IDs + row/output limits rechecked before create-only folder, deterministic HTML/ZIP/receipt regenerated and independently checked.
+- **Batch owner controller (14c886531d3339b11a60d4bd25357efd8b2b5fbd):** inspect_owner_batch and deliver_reviewed_batch validate two to ten same-parent files, per-XLSX exact visible sheet selection/header row/optional cached formula policy, exact ordered header equality, 10k row maximum, explicit three distinct ID/title/category columns plus rights/plaintext/privacy.
+- **Tk batch wizard (6058528afb5fe9e71d0123307be98bac8de04e55):** Toplevel launched from existing owner GUI; select 2–10 CSV/TSV/flat JSON/XLSX sources; XLSX per-file visible worksheet, header and formula-cache prompt; review exact SHA and total rows/columns with no cell values displayed; choose mapping, title, theme, new output parent/folder; confirm all source rights/plaintext/privacy, create-only whole customer folder and independently verify ZIP and receipt. Existing single-source GUI and CLI preserved.
+- **Tests (c5ee5beda1c09eaea19779fb6a297761f02f67b1 + d5c09f07d6e0d7173c6e9babb8bb0765a019ab85):** 12 batch controller unit regressions: CSV+TSV, CSV+XLSX, source mutation, cross-source duplicate ID, reordered headers, mixed dirs, duplicate source, source count, consent, mapping, overwrite, invalid non-Excel cached policy. New hosted-Windows REAL Tk probe invokes actual batch UI and completes CSV+TSV and CSV+XLSX with mapping-change re-consent, exact synthetic source byte preservation, no temp approval manifest, full folder verifier.
+
+## GitHub evidence and quality
+- Exact final functional SHA **d5c09f07d6e0d7173c6e9babb8bb0765a019ab85**.
+- [Windows/Linux/browser CI #43556540886](https://github.com/hibi89/data2web_studio/actions/runs/43556540886): **4/4 SUCCESS**, Windows **415/415 PASS**, Ubuntu **414 PASS /1 SKIP**, real Chrome/Edge/Chromium and two actual Tk multi-source GUI runs. CI log marker `HOSTED_WINDOWS_REAL_TK_MULTI_SOURCE_GUI_PASS CSV+TSV CSV+XLSX...`.
+- [CodeQL #43556540904](https://github.com/hibi89/data2web_studio/actions/runs/43556540904) SUCCESS; [100-point policy gate #43556541144](https://github.com/hibi89/data2web_studio/actions/runs/43556541144) SUCCESS.
+- Previous exact functional/source SHA **6058528afb5fe9e71d0123307be98bac8de04e55** contained full Tk wizard code before the extra probe/workflow-only SHA. At that SHA [macOS offline #43556456120](https://github.com/hibi89/data2web_studio/actions/runs/43556456120), [native Windows owner preview #43556456144](https://github.com/hibi89/data2web_studio/actions/runs/43556456144), Win/Linux/browser #43556456211, CodeQL #43556456108 and score #43556456486 were SUCCESS. Actual independent customer Win10/11 physical QA and signed commercial EXE not performed.
+- Browser invalid-UTF8/reconsent test first verified at [SHA 593c50c / CI #43555943525](https://github.com/hibi89/data2web_studio/actions/runs/43555943525); same regression remained in latest Win/Linux/browser PASS.
+
+## Safety, compatibility and remaining gates
+- No data migrations, existing source data/REA_Web/main no edits, no deletion/overwriting of existing outputs. Erroring during new delivery may leave a partial new folder for owner inspection, as required; no automatic deletion.
+- New Tk batch controls are extra UI, existing single-source forms and manifest-CLI are backward-compatible and were retested.
+- This creates local offline HTML+ZIP+receipt only and **never sells/re-distributes the builder/exe**. Client owns responsibility for input data permissions; HTML embeds plaintext approved values; ZIP hash does not imply legal rights, publisher signature or encryption.
+- R06 real Windows10/11 TOCTOU, R07/R21/R25/R26/R27/R33 owner rights/NOTICE/retention/customer permission, R23/R30/R32 actual independent buyer OS/packaging acceptance, R29 independent human audit remain PENDING. Frozen score **72/100**, [작업중], RELEASE HOLD, SALE NO-GO; no real Kmong listing.
+- User explicitly deferred Kmong listing to a later Codex task. No new user PC work requested in this frontend/backend development turn.
+
+## Reproduce on a real authorized development host
+`python -m unittest test_desktop_batch test_desktop_controller -v`
+`python -m unittest discover -v`
+`python studio.py desktop` → single-file or "다중 파일(2~10) 검수·납품". On Windows Python3.11 + Tcl/Tk, `python desktop_ui_batch_probe.py` runs only fictional data, not real customer or legal acceptance. Browser probes require installed test-only Playwright; see CI logs for pinned dependency. Mac GUI rendering was not personally verified; hosted Mac Python/browser tests passed on SHA 6058528.

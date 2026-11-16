@@ -1,0 +1,61 @@
+{
+  "contract": "DATA2WEB_SHIPPED_ASSET_RIGHTS_INVENTORY_V1",
+  "source_scope": "A_OFFLINE_HTML_ZIP_RECEIPT_ONLY_NOT_WINDOWS_EXE",
+  "rights_approval_state": "PENDING_OWNER_AND_THIRD_PARTY_REVIEW",
+  "rights_owner_attested": false,
+  "commercial_distribution_approved": false,
+  "any_customer_source_inspected": false,
+  "third_party_vendor_inventory_complete": false,
+  "artifacts": [
+    {
+      "name": "index.html",
+      "location": "folder_and_zip",
+      "origin": "data2web_web.py self-contained renderer + reviewed source data",
+      "rights_state": "PENDING_IP_AND_SOURCE_DATA_RIGHTS",
+      "vendor_notice_reviewed": false
+    },
+    {
+      "name": "manifest.json",
+      "location": "zip_only",
+      "origin": "delivery.py deterministic manifest",
+      "rights_state": "PENDING_IP_REVIEW",
+      "vendor_notice_reviewed": false
+    },
+    {
+      "name": "README_KO.txt",
+      "location": "zip_only",
+      "origin": "delivery.py GUIDE",
+      "rights_state": "PENDING_IP_REVIEW",
+      "vendor_notice_reviewed": false
+    },
+    {
+      "name": "receipt.json",
+      "location": "folder_only",
+      "origin": "receipt_utils.py",
+      "rights_state": "PENDING_IP_REVIEW",
+      "vendor_notice_reviewed": false
+    }
+  ],
+  "excluded_assets": [
+    {
+      "name": "DATA2WEB-LOCAL.exe",
+      "reason": "B_FUTURE_OWNER_PRIVATE_UNSIGNED_NOT_A_CUSTOMER_SHIPPING"
+    },
+    {
+      "name": "REA_Web upstream code",
+      "reason": "READ_ONLY_GOLDEN_TEST_SOURCE_NOT_A_DELIVERY_MEMBER"
+    },
+    {
+      "name": "Python Tcl Tk PyInstaller",
+      "reason": "USED_FOR_OWNER_BUILDER_EXE_NOT_A_DELIVERED_ASSET"
+    },
+    {
+      "name": "Playwright pypdf",
+      "reason": "HOSTED_TEST_DEPENDENCIES_NOT_A_DELIVERY_MEMBER"
+    }
+  ],
+  "actual_shipped_license_notice_files": [],
+  "future_license_notice_action": "ONLY_AFTER_OWNER_IP_AND_THIRD_PARTY_APPROVAL_THEN_VERSIONED_PACKAGE_AND_INDEPENDENT_VERIFIER_MIGRATION",
+  "audit_is_independent": false,
+  "scorecard_change_requested": false
+}

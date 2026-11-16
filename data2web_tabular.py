@@ -125,9 +125,10 @@ def _metadata(archive):
             if not SHEET_PART.fullmatch(canonical) or canonical not in archive.namelist():
                 raise ValueError("Worksheet path not permitted")
             lookup[ident] = canonical
-    sheet_node = workbook.find(X + "sheets")
-    if sheet_node is None:
-        raise ValueError("Workbook has no sheets")
+    sheet_nodes = workbook.findall(X + "sheets")
+    if len(sheet_nodes) != 1:
+        raise ValueError("Workbook must have exactly one sheet list")
+    sheet_node = sheet_nodes[0]
     sheets = []
     seen = set()
     paths = set()
@@ -175,8 +176,17 @@ def _col_index(letter):
     return value - 1
 
 def _value(node, strings, allow_cached_formulas):
+    # Element.find() picks only the first matching child; a second payload
+    # could otherwise be hidden in an accepted workbook without review.
+    if any(len(node.findall(X + part)) > 1 for part in ("f", "v", "is")):
+        raise ValueError("Duplicate XLSX cell payload")
     formula = node.find(X + "f")
     cached = node.find(X + "v")
+    inline = node.find(X + "is")
+    if inline is not None and (
+            node.get("t", "n") != "inlineStr" or cached is not None
+            or formula is not None):
+        raise ValueError("Ambiguous XLSX inline cell payload")
     if formula is not None and not allow_cached_formulas:
         raise ValueError("XLSX formula found; explicit cached-value approval required")
     if formula is not None and (cached is None or cached.text is None):
@@ -232,6 +242,21 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
         root = _xml(archive, selected["part"])
         if root.find(X + "mergeCells") is not None:
             raise ValueError("Merged worksheet cells are unsupported")
+        # Hidden worksheet content may contain values the owner did not review.
+        # Never silently publish or discard it; require a new visible-source SHA.
+        if (len(root.findall(X + "sheetFormatPr")) > 1
+                or len(root.findall(X + "cols")) > 1
+                or len(root.findall(X + "sheetData")) != 1):
+            raise ValueError("Repeated or missing XLSX worksheet structure")
+        sheet_format = root.find(X + "sheetFormatPr")
+        if (sheet_format is not None and
+                sheet_format.get("zeroHeight", "0").strip().lower() not in ("0", "false")):
+            raise ValueError("Hidden XLSX default rows: unhide and re-approve source")
+        cols = root.find(X + "cols")
+        if cols is not None:
+            for col in cols.findall(X + "col"):
+                if col.get("hidden", "0").strip().lower() not in ("0", "false"):
+                    raise ValueError("Hidden XLSX columns: unhide and re-approve source")
         sheetdata = root.find(X + "sheetData")
         if sheetdata is None:
             raise ValueError("Missing worksheet rows")
@@ -249,9 +274,16 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 raise ValueError("Unsorted, repeated, or oversized worksheet row")
             row_seen.add(number)
             previous_row = number
+            if node.get("hidden", "0").strip().lower() not in ("0", "false"):
+                raise ValueError("Hidden XLSX rows: unhide and re-approve source")
             if number < header_row:
                 continue
             cells = {}
+            # Formatting-only empty cells are not data. A deliberately present
+            # empty XML string/value is data and must not be dropped as an
+            # invisible blank row (a missing mapped ID must then HOLD).
+            explicit_values = False
+            explicit_columns = set()
             for cell in node.findall(X + "c"):
                 address = cell.get("r", "")
                 m = CELL.fullmatch(address)
@@ -261,6 +293,10 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 if col >= MAX_COLS or col in cells:
                     raise ValueError("Duplicate or oversized worksheet column")
                 cells[col] = _value(cell, strings, allow_cached_formulas)
+                cached_value = cell.find(X + "v")
+                if cell.find(X + "is") is not None or cached_value is not None:
+                    explicit_values = True
+                    explicit_columns.add(col)
             if number == header_row:
                 if not cells:
                     raise ValueError("Empty worksheet header")
@@ -270,10 +306,11 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
                 headers = [cells[i] for i in range(last + 1)]
                 if any(not h or len(h) > 200 for h in headers) or len(set(headers)) != len(headers):
                     raise ValueError("Invalid or duplicate XLSX headers")
-            elif cells and any(v != "" for v in cells.values()):
+            elif cells and (explicit_values or any(v != "" for v in cells.values())):
                 if headers is None:
                     raise ValueError("Selected header row does not exist")
-                if any(col >= len(headers) and value for col, value in cells.items()):
+                if any(col >= len(headers) and (value or col in explicit_columns)
+                       for col, value in cells.items()):
                     raise ValueError("Data extends beyond approved headers")
                 rowdata.append({h: cells.get(i, "") for i, h in enumerate(headers)})
                 if len(rowdata) > MAX_ROWS:
@@ -285,16 +322,20 @@ def parse_xlsx(raw, *, sheet=None, header_row=1, allow_cached_formulas=False):
 def parse_tsv(raw):
     try:
         text = raw.decode("utf-8-sig")
-        rows = list(csv.reader(io.StringIO(text, newline=""), delimiter="\t", strict=True))
+        with io.StringIO(text, newline="") as stream:
+            reader = csv.reader(stream, delimiter="\t", strict=True)
+            headers = next(reader, None)
+            if not headers or len(headers) > MAX_COLS:
+                raise ValueError("TSV requires bounded nonempty header")
+            if any(not x or len(x) > 200 for x in headers) or len(set(headers)) != len(headers):
+                raise ValueError("Duplicate or empty TSV header")
+            rows = []
+            for record in reader:
+                if len(rows) >= MAX_ROWS:
+                    raise ValueError("TSV row count limit")
+                if len(record) != len(headers):
+                    raise ValueError("TSV row has inconsistent column count")
+                rows.append(dict(zip(headers, record)))
     except (UnicodeDecodeError, csv.Error) as e:
         raise ValueError("Invalid TSV encoding or quoting") from e
-    if not rows or not rows[0] or len(rows[0]) > MAX_COLS:
-        raise ValueError("TSV requires bounded nonempty header")
-    headers = rows[0]
-    if any(not x or len(x) > 200 for x in headers) or len(set(headers)) != len(headers):
-        raise ValueError("Duplicate or empty TSV header")
-    if len(rows) - 1 > MAX_ROWS:
-        raise ValueError("TSV row count limit")
-    if any(len(r) != len(headers) for r in rows[1:]):
-        raise ValueError("TSV row has inconsistent column count")
-    return headers, [dict(zip(headers, record)) for record in rows[1:]]
+    return headers, rows
