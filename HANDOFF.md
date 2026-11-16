@@ -1,3 +1,5 @@
+> **[HANDOFF-STARTUP-V2 | ACTIVE | 2026-11-16]** **먼저** `data2web_studio@work/high-data2web-security-r06-r29-20261115` 역할/최신 HEAD와 `AGENTS.md` 상단의 [OWNER-DEV-EXECUTION-V2](https://github.com/hibi89/hackathon-command-center-2026/blob/kmong-productization/docs/strategy/OWNER_DEV_EXECUTION_CANONICAL_20261116.md)를 확인한 뒤 본 HANDOFF 최신 진행·차단/STATUS/REQUIREMENTS/최종설계/실코드·큐를 대조하라. 아래 2026-11-14~15 구형 'Codex 구현 단독', 'High 단독', '중간 전수 CI' 지시는 **당시 기록**이며 현재 실행 모델은 **웹 Sol High 최초 설계 → 웹 Sol Instant 대량 구현 → 일괄 CI → Codex Sol Max·Astra Max 독립검수 → High 최종인수 → GO 뒤 Luna Extra High 등록**. 이전 PR·파일 소유권·고객 권리·보안 HOLD/공식 점수 보존. 이 문서 개정 자체는 구현/검증/등록 진전 없음.
+
 ## 2026-11-15 KST — GPT-6 High R29-DISC-001 안내문 무결성·브라우저 저장 호환성 보안 인수인계 (필수 10항)
 
 1. **목표·확정 요구·기술:** DATA2WEB Studio R01–R33 오프라인 HTML/ZIP·receipt 제품, High R06/R29 보안 독립 개발·검수. 사용자 확정 100점 기준 공식 72/100. 외부감사·판매/권리 승인 없는 RELEASE HOLD.
